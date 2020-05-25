@@ -56,6 +56,10 @@ dotnet publish --configuration Release --output bin
 ```
 4. Place the resulting file in the `plugins` folder under the program data directory or inside the portable install directory
 
+## Required Libraries
+- [Html Agility Pack](https://github.com/zzzprojects/html-agility-pack)
+- [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
+
 Supported Networks
 ------------------
 To view the full list of supported sites, [check out the sitelist doc](./docs/sitelist.md).
