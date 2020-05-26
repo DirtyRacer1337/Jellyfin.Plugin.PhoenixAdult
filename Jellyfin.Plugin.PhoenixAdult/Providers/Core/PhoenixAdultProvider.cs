@@ -40,7 +40,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 return result;
 
             var site = GetSiteFromTitle(searchInfo.Name);
-            if (site.Key[0] > -1)
+            if (site.Key != null)
             {
                 string searchTitle = GetClearTitle(searchInfo.Name, site.Value),
                        encodedTitle,
@@ -133,7 +133,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (possibleSites.Count > 0)
                 return possibleSites.OrderByDescending(x => x.Value.Length).First();
 
-            return new KeyValuePair<int[], string>(new int[] { -1, -1 }, "");
+            return new KeyValuePair<int[], string>(null, null);
         }
 
         public static string GetClearTitle(string title, string siteName)
