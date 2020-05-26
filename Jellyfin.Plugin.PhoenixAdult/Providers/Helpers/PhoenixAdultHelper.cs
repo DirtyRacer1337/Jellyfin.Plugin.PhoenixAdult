@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,12 +78,12 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
         }
 
         public static string Encode(string text)
-            => Convert.ToBase64String(Encoding.UTF8.GetBytes(text)).Replace('=', '#');
+            => Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
 
         public static string Decode(string base64Text)
         {
             if (base64Text != null)
-                return Encoding.UTF8.GetString(Convert.FromBase64String(base64Text.Replace('#', '=')));
+                return Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
             return null;
         }
 
@@ -92,5 +93,54 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
                 CancellationToken = cancellationToken,
                 Url = url
             });
+    }
+}
+
+public static class Base58
+{
+    private const string DIGITS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+    public static string EncodePlain(byte[] data)
+    {
+        if (data == null)
+            return null;
+
+        var intData = data.Aggregate<byte, BigInteger>(0, (current, t) => current * 256 + t);
+
+        var result = string.Empty;
+        while (intData > 0)
+        {
+            var remainder = (int)(intData % 58);
+            intData /= 58;
+            result = DIGITS[remainder] + result;
+        }
+
+        for (var i = 0; i < data.Length && data[i] == 0; i++)
+            result = '1' + result;
+
+        return result;
+    }
+
+    public static byte[] DecodePlain(string data)
+    {
+        if (data == null)
+            return null;
+
+        BigInteger intData = 0;
+        for (var i = 0; i < data.Length; i++)
+        {
+            var digit = DIGITS.IndexOf(data[i], StringComparison.CurrentCultureIgnoreCase);
+
+            if (digit < 0)
+                throw new FormatException($"Invalid Base58 character `{data[i]}` at position {i}");
+
+            intData = intData * 58 + digit;
+        }
+
+        var leadingZeroCount = data.TakeWhile(c => c == '1').Count();
+        var leadingZeros = Enumerable.Repeat((byte)0, leadingZeroCount);
+        var bytesWithoutLeadingZeros = intData.ToByteArray().Reverse().SkipWhile(b => b == 0);
+        var result = leadingZeros.Concat(bytesWithoutLeadingZeros).ToArray();
+
+        return result;
     }
 }
