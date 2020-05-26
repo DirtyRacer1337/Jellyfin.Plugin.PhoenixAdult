@@ -126,7 +126,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 foreach (var siteData in site.Value)
                 {
                     string clearSite = Regex.Replace(siteData.Value[0], @"\W", "");
-                    if (clearName.StartsWith(clearSite, StringComparison.CurrentCultureIgnoreCase))
+                    if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                         possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
                 }
 
@@ -145,13 +145,13 @@ namespace Jellyfin.Plugin.PhoenixAdult
             clearName = Regex.Replace(clearName, @"(?!\|)\W", "");
             clearSite = Regex.Replace(clearSite, @"(?!\|)\W", "");
 
-            if (clearName.StartsWith(clearSite, StringComparison.CurrentCultureIgnoreCase))
+            if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
             {
                 searchTitle = Regex.Replace(clearName, clearSite, "", RegexOptions.IgnoreCase);
                 searchTitle = Regex.Replace(searchTitle, @"(\w)([A-Z])", @"$1 $2");
                 searchTitle = Regex.Replace(searchTitle, @"([A-Z])([A-Z])", @"$1 $2");
                 searchTitle = Regex.Replace(searchTitle, @"(\d+)", @" $1");
-                searchTitle = searchTitle.Replace("|", "", StringComparison.CurrentCultureIgnoreCase).Trim();
+                searchTitle = searchTitle.Replace("|", "", StringComparison.OrdinalIgnoreCase).Trim();
             }
 
             return searchTitle;
