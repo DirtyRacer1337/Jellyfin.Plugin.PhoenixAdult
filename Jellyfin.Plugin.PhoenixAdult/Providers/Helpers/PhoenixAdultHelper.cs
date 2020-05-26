@@ -124,7 +124,7 @@ public static class Base58
         BigInteger intData = 0;
         for (var i = 0; i < data.Length; i++)
         {
-            var digit = DIGITS.IndexOf(data[i], StringComparison.CurrentCultureIgnoreCase);
+            var digit = DIGITS.IndexOf(data[i], StringComparison.Ordinal);
 
             if (digit < 0)
                 throw new FormatException($"Invalid Base58 character `{data[i]}` at position {i}");
