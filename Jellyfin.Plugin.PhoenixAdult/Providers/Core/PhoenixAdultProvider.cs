@@ -94,9 +94,12 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     sceneID = searchResults.First().ProviderIds;
             }
 
-            string[] curID = sceneID.GetValueOrDefault(Name, "-1$-1").Split('$');
-            Log.LogInformation(curID[2]);
-            if (curID.Length < 2)
+            var externalID = sceneID.GetValueOrDefault(Name);
+            if (string.IsNullOrEmpty(externalID))
+                return result;
+
+            var curID = externalID.Split('$');
+            if (curID.Length < 3)
                 return result;
 
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
@@ -119,13 +122,13 @@ namespace Jellyfin.Plugin.PhoenixAdult
 
         public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
         {
-            string clearName = Regex.Replace(title, @"\W", "");
+            string clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
 
             foreach (var site in PhoenixAdultList.SiteList)
                 foreach (var siteData in site.Value)
                 {
-                    string clearSite = Regex.Replace(siteData.Value[0], @"\W", "");
+                    string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
                     if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                         possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
                 }
@@ -142,16 +145,16 @@ namespace Jellyfin.Plugin.PhoenixAdult
                    clearSite = Regex.Replace(siteName, @"(\d+)", @"|$1"),
                    searchTitle = title;
 
-            clearName = Regex.Replace(clearName, @"(?!\|)\W", "");
-            clearSite = Regex.Replace(clearSite, @"(?!\|)\W", "");
+            clearName = Regex.Replace(clearName, @"(?!\|)\W", string.Empty);
+            clearSite = Regex.Replace(clearSite, @"(?!\|)\W", string.Empty);
 
             if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
             {
-                searchTitle = Regex.Replace(clearName, clearSite, "", RegexOptions.IgnoreCase);
+                searchTitle = Regex.Replace(clearName, clearSite, string.Empty, RegexOptions.IgnoreCase);
                 searchTitle = Regex.Replace(searchTitle, @"(\w)([A-Z])", @"$1 $2");
                 searchTitle = Regex.Replace(searchTitle, @"([A-Z])([A-Z])", @"$1 $2");
                 searchTitle = Regex.Replace(searchTitle, @"(\d+)", @" $1");
-                searchTitle = searchTitle.Replace("|", "", StringComparison.OrdinalIgnoreCase).Trim();
+                searchTitle = searchTitle.Replace("|", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
             }
 
             return searchTitle;
@@ -162,14 +165,14 @@ namespace Jellyfin.Plugin.PhoenixAdult
             string searchDate,
                    searchTitle = title,
                    regExRule = @"\b\d{4} \d{2} \d{2}\b";
-            string[] searchData = new string[2] { searchTitle, "" };
+            string[] searchData = new string[2] { searchTitle, string.Empty };
 
             var regEx = Regex.Match(searchTitle, regExRule);
             if (regEx.Groups.Count > 0)
                 if (DateTime.TryParse(regEx.Groups[0].Value, out DateTime date))
                 {
                     searchDate = date.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
-                    searchTitle = Regex.Replace(searchTitle, regExRule, "").Trim();
+                    searchTitle = Regex.Replace(searchTitle, regExRule, string.Empty).Trim();
 
                     searchData = new string[2] { searchTitle, searchDate };
                 }
