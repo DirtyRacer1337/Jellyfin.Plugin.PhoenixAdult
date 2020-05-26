@@ -81,11 +81,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             => Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
 
         public static string Decode(string base64Text)
-        {
-            if (base64Text != null)
-                return Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
-            return null;
-        }
+            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
 
         public static Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
             => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
