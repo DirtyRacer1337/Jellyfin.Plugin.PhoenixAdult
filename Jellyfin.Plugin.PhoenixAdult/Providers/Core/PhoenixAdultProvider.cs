@@ -65,7 +65,9 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 {
                     result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDate, cancellationToken).ConfigureAwait(false);
                     if (result.Count > 0)
-                        if (DateTime.TryParse(searchDate, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
+                        if (result.Any(scene => scene.IndexNumber.HasValue))
+                            result = result.OrderByDescending(scene => scene.IndexNumber).ToList();
+                        else if (DateTime.TryParse(searchDate, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
                             result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj, (DateTime)scene.PremiereDate)).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
