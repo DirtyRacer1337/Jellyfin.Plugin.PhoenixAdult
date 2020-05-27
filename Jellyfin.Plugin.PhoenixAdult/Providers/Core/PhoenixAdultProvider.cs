@@ -110,8 +110,10 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 result.Item.OfficialRating = "XXX";
                 result.Item.ProviderIds = sceneID;
 
-                result.People = PhoenixAdultPeoples.Cleanup(result);
-                result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres);
+                if ((result.People != null) && result.People.Any())
+                    result.People = PhoenixAdultPeoples.Cleanup(result);
+                if (result.Item.Genres != null && result.Item.Genres.Any())
+                    result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres);
             }
 
             return result;

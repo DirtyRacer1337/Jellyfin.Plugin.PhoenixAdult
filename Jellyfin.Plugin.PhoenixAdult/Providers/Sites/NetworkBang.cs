@@ -17,7 +17,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
     public class NetworkBang : IPhoenixAdultProviderBase
     {
-        public async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
+        public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {
             var param = $"{{'query':{{'bool':{{'must':[{{'match':{{'{searchType}':'{searchTitle}'}}}},{{'match':{{'type':'movie'}}}}],'must_not':[{{'match':{{'type':'trailer'}}}}]}}}}}}".Replace('\'', '"');
             var http = await PhoenixAdultProvider.Http.Post(new HttpRequestOptions
@@ -126,7 +126,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('#');
             var siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 
-            var sceneData = await new NetworkBang().GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
 
             images.Add(new RemoteImageInfo
