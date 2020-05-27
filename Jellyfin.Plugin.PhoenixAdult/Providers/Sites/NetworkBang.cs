@@ -50,7 +50,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var sceneData = searchResult["_source"];
                 string sceneID = (string)sceneData["identifier"],
-                        curID = $"{siteNum[0]}${siteNum[1]}${sceneID}",
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
                         sceneName = (string)sceneData["name"],
                         scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
                         sceneDescription = (string)sceneData["description"],
@@ -123,7 +123,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             if (item == null)
                 return images;
 
-            string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('$');
+            string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('#');
             var siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 
             var sceneData = await new NetworkBang().GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);

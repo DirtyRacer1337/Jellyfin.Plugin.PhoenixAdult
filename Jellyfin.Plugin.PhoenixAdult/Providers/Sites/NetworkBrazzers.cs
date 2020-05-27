@@ -37,7 +37,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["href"].Value,
-                        curID = $"{siteNum[0]}${siteNum[1]}${PhoenixAdultHelper.Encode(sceneURL)}",
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
                         sceneName = searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["title"].Value,
                         scenePoster = $"https:{searchResult.SelectSingleNode(".//img[contains(@class, 'card-main-img')]").Attributes["data-src"].Value}",
                         sceneDate = searchResult.SelectSingleNode(".//time").InnerText.Trim();
@@ -117,7 +117,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             if (item == null)
                 return images;
 
-            string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('$');
+            string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('#');
 
             var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
             {

@@ -55,7 +55,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 searchDate = titleAfterDate[1];
                 encodedTitle = HttpUtility.UrlEncode(searchTitle);
 
-                Log.LogInformation($"siteNum: {siteNum[0]}${siteNum[1]}");
+                Log.LogInformation($"siteNum: {siteNum[0]}:{siteNum[1]}");
                 Log.LogInformation($"searchTitle: {searchTitle}");
                 Log.LogInformation($"encodedTitle: {encodedTitle}");
                 Log.LogInformation($"searchDate: {searchDate}");
@@ -65,7 +65,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 {
                     result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDate, cancellationToken).ConfigureAwait(false);
                     if (result.Count > 0)
-                        if (DateTime.TryParse(searchDate, out DateTime searchDateObj) && result.Any(scene => (DateTime)scene.PremiereDate != null))
+                        if (DateTime.TryParse(searchDate, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
                             result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj, (DateTime)scene.PremiereDate)).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
@@ -98,7 +98,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (string.IsNullOrEmpty(externalID))
                 return result;
 
-            var curID = externalID.Split('$');
+            var curID = externalID.Split('#');
             if (curID.Length < 3)
                 return result;
 
@@ -192,14 +192,17 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (item == null)
                 return images;
 
-            var sceneID = item.ProviderIds;
-            string[] curID = sceneID.GetValueOrDefault(Name, "-1$-1").Split('$');
-            if (curID.Length > 2)
-            {
-                var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
-                if (provider != null)
-                    images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
-            }
+            var externalID = item.ProviderIds.GetValueOrDefault(Name);
+            if (string.IsNullOrEmpty(externalID))
+                return images;
+
+            var curID = externalID.Split('#');
+            if (curID.Length < 3)
+                return images;
+
+            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
+            if (provider != null)
+                images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
 
             return images;
         }
