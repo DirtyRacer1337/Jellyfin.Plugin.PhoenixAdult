@@ -7,7 +7,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 # All supported networks and sites
 
 + #### Bang! | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
-+ #### Brazzers Network: *[Limited](./manualsearch.md#limited-search)* - **Title only**
++ #### Brazzers Network: *[Enhanced Search](./manualsearch.md#enhanced-search)*
   - Asses In Public
   - Baby Got Boobs
   - Big Butts Like It Big

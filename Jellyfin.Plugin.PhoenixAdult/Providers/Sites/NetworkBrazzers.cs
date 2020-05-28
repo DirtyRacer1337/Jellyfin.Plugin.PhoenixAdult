@@ -18,42 +18,58 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, string searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (siteNum == null)
+            if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
+            var sceneID = searchTitle.Split()[0];
+            if (int.TryParse(sceneID, out _))
             {
-                CancellationToken = cancellationToken,
-                Url = PhoenixAdultHelper.GetSearchSearchURL(siteNum),
-                RequestHeaders = {
-                    { "Cookie", $"textSearch={encodedTitle}" }
-                },
-                DecompressionMethod = CompressionMethod.None
-            }).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(http.Content);
+                string sceneURL = $"{PhoenixAdultHelper.GetSearchBaseURL(siteNum)}/scenes/view/id/{sceneID}",
+                       curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
 
-            var searchResults = html.DocumentNode.SelectNodes("//div[@class='release-card-wrap']");
-            foreach (var searchResult in searchResults)
-            {
-                string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["href"].Value,
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["title"].Value,
-                        scenePoster = $"https:{searchResult.SelectSingleNode(".//img[contains(@class, 'card-main-img')]").Attributes["data-src"].Value}",
-                        sceneDate = searchResult.SelectSingleNode(".//time").InnerText.Trim();
+                var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
 
-                var res = new RemoteSearchResult
+                result.Add(new RemoteSearchResult
                 {
                     ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
-                    SearchProviderName = sceneURL
-                };
+                    Name = sceneData.Item.Name
+                });
+            }
+            else
+            {
+                var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
+                {
+                    CancellationToken = cancellationToken,
+                    Url = PhoenixAdultHelper.GetSearchSearchURL(siteNum),
+                    RequestHeaders = {
+                    { "Cookie", $"textSearch={encodedTitle}" }
+                },
+                    DecompressionMethod = CompressionMethod.None
+                }).ConfigureAwait(false);
+                var html = new HtmlDocument();
+                html.Load(http.Content);
 
-                if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                    res.PremiereDate = sceneDateObj;
+                var searchResults = html.DocumentNode.SelectNodes("//div[@class='release-card-wrap']");
+                foreach (var searchResult in searchResults)
+                {
+                    string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["href"].Value,
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                            sceneName = searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["title"].Value,
+                            scenePoster = $"https:{searchResult.SelectSingleNode(".//img[contains(@class, 'card-main-img')]").Attributes["data-src"].Value}",
+                            sceneDate = searchResult.SelectSingleNode(".//time").InnerText.Trim();
 
-                result.Add(res);
+                    var res = new RemoteSearchResult
+                    {
+                        ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
+                        Name = sceneName,
+                        ImageUrl = scenePoster
+                    };
+
+                    if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
+                        res.PremiereDate = sceneDateObj;
+
+                    result.Add(res);
+                }
             }
 
             return result;
