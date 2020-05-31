@@ -6,6 +6,13 @@
 The above is a reference list. Please see [the manualsearch doc](./manualsearch.md) for how to use these further.
 # All supported networks and sites
 
++ #### Babes Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Babes
+  - Babes Unleashed
+  - Black is Better
+  - Elegant Anal
+  - Office Obsession
+  - Stepmom Lessons
 + #### Bang! | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
 + #### Brazzers Network: *[Enhanced Search](./manualsearch.md#enhanced-search)*
   - Asses In Public
@@ -36,6 +43,121 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Teens Like It Big
   - Teens Like It Black
   - ZZ Series
++ #### Deviant Hardcore | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Erito | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### FakeHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Fake Agent
+  - Fake Agent UK
+  - Fake Cop
+  - Fake Driving School
+  - Fake Hospital
+  - Fake Hostel
+  - Fakehub Originals
+  - Fake Taxi
+  - Female Agent
+  - Female Fake Taxi
+  - Public Agent
++ #### FamilyHookups | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Kinky Spa | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - DoghouseDigital
+  - RealityJunkies
+  - SweetheartVideo
+  - SweetSinner
++ #### Other MileHighNetwork Sites | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - BellesaFilms
+  - BellesaHouse
+  - Bi Empire
+  - FamilySinners
+  - Transsensual
++ #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Don't Break Me
+  - Girls Gone Pink
+  - I Know That Girl
+  - Latina Sextapes
+  - Let's Try Anal
+  - Mofos
+  - Mofos B Sides
+  - Mofos Lab
+  - Pervs On Patrol
+  - Public Pickups
+  - Real Slut Party
+  - Share My BF
+  - She's A Freak
+  - Stranded Teens
++ #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Reality Kings Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 40 Inch Plus
+  - 8th Street Latinas
+  - Bad Tow Truck
+  - Big Naturals
+  - Big Tits Boss
+  - Bikini Crashers
+  - Black GFs
+  - Captain Stabbin
+  - CFNM Secret
+  - Crazy Asian GFs
+  - Crazy College GFs
+  - Cum Fiesta
+  - Cum Girls
+  - Dangerous Dongs
+  - Dare Dorm
+  - Euro Sex Parties
+  - Extreme Asses
+  - Extreme Naturals
+  - First Time Auditions
+  - Flower Tucci
+  - GF Revenge
+  - Girls of Naked
+  - Happy Tugs
+  - HD Love
+  - Horny Birds
+  - Hot Bush
+  - In the VIP
+  - Mike in Brazil
+  - Mike's Apartment
+  - Milf Hunter
+  - Milf Next Door
+  - Moms Bang Teens
+  - Moms Lick Teens
+  - Money Talks
+  - Monster Curves
+  - No Faces
+  - Pure 18
+  - Real Orgasms
+  - Reckless in Miami
+  - RK Prime
+  - Round and Brown
+  - Saturday Night Latinas
+  - See My Wife
+  - Sneaky Sex
+  - Street BlowJobs
+  - Team Squirt
+  - Teens Love Huge Cocks
+  - Top Shelf Pussy
+  - Tranny Surprise
+  - VIP Crew
+  - We Live Together
+  - Wives in Pantyhose
++ #### Other Reality Kings Sites | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Lil Humpers
++ #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Dane Jones
+  - Fitness Rooms
+  - Girlfriends.xxx
+  - Lesbea
+  - Massage Rooms
+  - MomXXX
++ #### She Will Cheat | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### TransAngels | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Twistys | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - MomKnowsBest
+  - TurningTwistys
+  - Twistys
+  - TwistysHard
+  - WhenGirlsPlay
 
 ## Adding sites to this list
 When this plugin is inevitably updated to add or update a sites' types of searching, you can use the below markdown formatting in a PR to easily add the site in question here

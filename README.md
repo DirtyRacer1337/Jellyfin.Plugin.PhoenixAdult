@@ -59,6 +59,7 @@ dotnet publish --configuration Release --output bin
 ## Required Libraries
 - [Html Agility Pack](https://github.com/zzzprojects/html-agility-pack)
 - [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
+- [Flurl](https://github.com/tmenier/Flurl)
 
 Supported Networks
 ------------------

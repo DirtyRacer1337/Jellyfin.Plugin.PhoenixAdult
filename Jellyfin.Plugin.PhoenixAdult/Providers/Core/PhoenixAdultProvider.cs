@@ -121,8 +121,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             return result;
         }
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
-            => PhoenixAdultHelper.GetImageResponse(url, cancellationToken);
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultHelper.GetImageResponse(url, cancellationToken);
 
         public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
         {

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Http;
 using HtmlAgilityPack;
 using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
-using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -13,7 +13,7 @@ using MediaBrowser.Model.Providers;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    public class NetworkBrazzers : IPhoenixAdultProviderBase
+    public class SiteBrazzers : IPhoenixAdultProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, string searchDate, CancellationToken cancellationToken)
         {
@@ -37,17 +37,10 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             }
             else
             {
-                var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
-                {
-                    CancellationToken = cancellationToken,
-                    Url = PhoenixAdultHelper.GetSearchSearchURL(siteNum),
-                    RequestHeaders = {
-                    { "Cookie", $"textSearch={encodedTitle}" }
-                },
-                    DecompressionMethod = CompressionMethod.None
-                }).ConfigureAwait(false);
+                var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum);
+                var http = await url.WithHeader("Cookie", $"textSearch={encodedTitle}").GetAsync(cancellationToken).ConfigureAwait(false);
                 var html = new HtmlDocument();
-                html.Load(http.Content);
+                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
                 var searchResults = html.DocumentNode.SelectNodes("//div[@class='release-card-wrap']");
                 foreach (var searchResult in searchResults)
@@ -84,14 +77,10 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return result;
 
-            var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
-            {
-                CancellationToken = cancellationToken,
-                Url = PhoenixAdultHelper.Decode(sceneID[2]),
-                DecompressionMethod = CompressionMethod.None
-            }).ConfigureAwait(false);
+            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
             var html = new HtmlDocument();
-            html.Load(http.Content);
+            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
             var sceneData = html.DocumentNode.SelectSingleNode("//p[@itemprop='description']");
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
@@ -135,14 +124,10 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('#');
 
-            var http = await PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
-            {
-                CancellationToken = cancellationToken,
-                Url = PhoenixAdultHelper.Decode(sceneID[2]),
-                DecompressionMethod = CompressionMethod.None
-            }).ConfigureAwait(false);
+            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
             var html = new HtmlDocument();
-            html.Load(http.Content);
+            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
             var sceneData = html.DocumentNode;
 
             foreach (var sceneImages in sceneData.SelectNodes("//*[@id='trailer-player']/img"))

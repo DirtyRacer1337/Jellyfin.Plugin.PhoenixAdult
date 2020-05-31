@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Http;
 using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
-using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -20,21 +19,14 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
         public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {
             var param = $"{{'query':{{'bool':{{'must':[{{'match':{{'{searchType}':'{searchTitle}'}}}},{{'match':{{'type':'movie'}}}}],'must_not':[{{'match':{{'type':'trailer'}}}}]}}}}}}".Replace('\'', '"');
-            var http = await PhoenixAdultProvider.Http.Post(new HttpRequestOptions
+            var headers = new Dictionary<string, string>
             {
-                CancellationToken = cancellationToken,
-                Url = url,
-                RequestHeaders = {
-                    { "Authorization", "Basic YmFuZy1yZWFkOktqVDN0RzJacmQ1TFNRazI=" }
-                },
-                RequestContentType = "application/json",
-                DecompressionMethod = CompressionMethod.None,
-                RequestContent = param
-            }).ConfigureAwait(false);
+                {"Authorization", "Basic YmFuZy1yZWFkOktqVDN0RzJacmQ1TFNRazI=" },
+                {"Content-Type", "application/json" }
+            };
 
-            var data = new StreamReader(http.Content);
-            var json = JObject.Parse(await data.ReadToEndAsync().ConfigureAwait(false));
-            data.Dispose();
+            var http = await url.WithHeaders(headers).PostStringAsync(param, cancellationToken).ConfigureAwait(false);
+            var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return json;
         }
@@ -42,10 +34,16 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, string searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (siteNum == null)
+            if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
+            JObject searchResults;
+            var searchSceneID = searchTitle.Split()[0];
+            if (int.TryParse(searchSceneID, out _))
+                searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken).ConfigureAwait(false);
+            else
+                searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
+
             foreach (var searchResult in searchResults["hits"]["hits"])
             {
                 var sceneData = searchResult["_source"];
@@ -53,15 +51,13 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                         curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
                         sceneName = (string)sceneData["name"],
                         scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
-                        sceneDescription = (string)sceneData["description"],
                         sceneDate = (string)sceneData["releaseDate"];
 
                 result.Add(new RemoteSearchResult
                 {
                     ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                     Name = sceneName,
-                    ImageUrl = scenePoster,
-                    Overview = sceneDescription
+                    ImageUrl = scenePoster
                 });
                 if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
                     result.Last().PremiereDate = sceneDateObj;
