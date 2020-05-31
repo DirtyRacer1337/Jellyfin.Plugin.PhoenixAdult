@@ -11,7 +11,6 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
@@ -75,13 +74,10 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                             sceneDate = (string)searchResult["dateReleased"],
                             scenePoster;
 
-                    PhoenixAdultProvider.Log.LogInformation(sceneName);
                     if (searchResult["images"]["poster"] != null)
                         scenePoster = (string)searchResult["images"]["poster"].First["xx"]["url"];
                     else
                         scenePoster = (string)searchResult["images"]["cover"].First["xx"]["url"];
-
-                    PhoenixAdultProvider.Log.LogInformation(scenePoster);
 
                     result.Add(new RemoteSearchResult
                     {

@@ -45,7 +45,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     2, new Dictionary<int, string[]> {
                         {0, new string [] { "Bellesa Films","https://www.bellesafilms.com/", "https://site-api.project1service.com" } },
                         {1, new string [] { "Bellesa House" } },
-                        {2, new string [] { "Property Sex","https://www.propertysex.com" } },
+                        {2, new string [] { "Property Sex", "https://www.propertysex.com" } },
                         {3, new string [] { "TransAngels", "https://www.transangels.com" } },
                         {4, new string [] { "FamilyHookups", "https://www.familyhookups.com" } },
                         {5, new string [] { "Erito", "https://www.erito.com" } },
@@ -54,9 +54,9 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {8, new string [] { "Deviant Hardcore", "https://www.devianthardcore.com" } },
                         {9, new string [] { "She Will Cheat", "https://www.shewillcheat.com" } },
                         {10, new string [] { "Kinky Spa", "https://www.kinkyspa.com/" } },
-                        {11, new string [] { "Transsensual","https://www.transsensual.com/" } },
-                        {12, new string [] { "Lil Humpers","https://www.lilhumpers.com" } },
-                        {13, new string [] { "Family Sinners","https://www.familysinners.com" } },
+                        {11, new string [] { "Transsensual", "https://www.transsensual.com/" } },
+                        {12, new string [] { "Lil Humpers", "https://www.lilhumpers.com" } },
+                        {13, new string [] { "Family Sinners", "https://www.familysinners.com" } },
                     }
                 },{
                     3, new Dictionary<int, string[]> {
@@ -134,7 +134,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     5, new Dictionary<int, string[]> {
-                        {0, new string [] { "Twistys","https://www.twistys.com","https://site-api.project1service.com" } },
+                        {0, new string [] { "Twistys", "https://www.twistys.com", "https://site-api.project1service.com" } },
                         {1, new string [] { "WhenGirlsPlay" } },
                         {2, new string [] { "MomKnowsBest" } },
                         {3, new string [] { "TwistysHard" } },
@@ -151,7 +151,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     7, new Dictionary<int, string[]> {
-                        {0, new string [] { "SexyHub","https://www.sexyhub.com","https://site-api.project1service.com" } },
+                        {0, new string [] { "SexyHub", "https://www.sexyhub.com", "https://site-api.project1service.com" } },
                         {1, new string [] { "Dane Jones" } },
                         {2, new string [] { "Fitness Rooms" } },
                         {3, new string [] { "Girlfriends.xxx" } },
@@ -161,7 +161,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     8, new Dictionary<int, string[]> {
-                        {0, new string [] { "FakeHub","https://www.fakehub.com","https://site-api.project1service.com" } },
+                        {0, new string [] { "FakeHub", "https://www.fakehub.com", "https://site-api.project1service.com" } },
                         {1, new string [] { "Fake Taxi" } },
                         {2, new string [] { "Fakehub Originals" } },
                         {3, new string [] { "Public Agent" } },
@@ -176,12 +176,75 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     9, new Dictionary<int, string[]> {
-                        {0, new string [] { "Sweetheart Video","https://www.milehighmedia.com","https://site-api.project1service.com" } },
+                        {0, new string [] { "Sweetheart Video", "https://www.milehighmedia.com", "https://site-api.project1service.com" } },
                         {1, new string [] { "Reality Junkies" } },
                         {2, new string [] { "SweetSinner" } },
                         {3, new string [] { "Doghouse Digital" } },
                     }
-                }
+            },
+            {
+                    10, new Dictionary<int, string[]> {
+                        {0, new string [] { "Naughty America", "https://www.naughtyamerica.com/", "https://i6p9q9r18e-3.algolianet.com/1/indexes/*/queries" } },
+                        {1, new string [] { "My Friends Hot Mom" } },
+                        {2, new string [] { "My First Sex Teacher" } },
+                        {3, new string [] { "Seduced By A Cougar" } },
+                        {4, new string [] { "My Daughters Hot Friend" } },
+                        {5, new string [] { "My Wife is My Pornstar" } },
+                        {6, new string [] { "Tonights Girlfriend Classic" } },
+                        {7, new string [] { "Wives on Vacation" } },
+                        {8, new string [] { "My Sisters Hot Friend" } },
+                        {9, new string [] { "Naughty Weddings" } },
+                        {10, new string [] { "Dirty Wives Club" } },
+                        {11, new string [] { "My Dads Hot Girlfriend" } },
+                        {12, new string [] { "My Girl Loves Anal" } },
+                        {13, new string [] { "Lesbian Girl on Girl" } },
+                        {14, new string [] { "Naughty Office" } },
+                        {15, new string [] { "I have a Wife" } },
+                        {16, new string [] { "Naughty Bookworms" } },
+                        {17, new string [] { "Housewife 1 on 1" } },
+                        {18, new string [] { "My Wifes Hot Friend" } },
+                        {19, new string [] { "Latin Adultery" } },
+                        {20, new string [] { "Ass Masterpiece" } },
+                        {21, new string [] { "2 Chicks Same Time" } },
+                        {22, new string [] { "My Friends Hot Girl" } },
+                        {23, new string [] { "Neighbor Affair" } },
+                        {24, new string [] { "My Girlfriends Busty Friend" } },
+                        {25, new string [] { "Naughty Athletics" } },
+                        {26, new string [] { "My Naughty Massage" } },
+                        {27, new string [] { "Fast Times" } },
+                        {28, new string [] { "The Passenger" } },
+                        {29, new string [] { "Milf Sugar Babes Classic" } },
+                        {30, new string [] { "Perfect Fucking Strangers Classic" } },
+                        {31, new string [] { "Asian 1 on 1" } },
+                        {32, new string [] { "American Daydreams" } },
+                        {33, new string [] { "SoCal Coeds" } },
+                        {34, new string [] { "Naughty Country Girls" } },
+                        {35, new string [] { "Diary of a Milf" } },
+                        {36, new string [] { "Naughty Rich Girls" } },
+                        {37, new string [] { "My Naughty Latin Maid" } },
+                        {38, new string [] { "Diary of a Nanny" } },
+                        {39, new string [] { "Naughty Flipside" } },
+                        {40, new string [] { "Live Party Girl" } },
+                        {41, new string [] { "Live Naughty Student" } },
+                        {42, new string [] { "Live Naughty Secretary" } },
+                        {43, new string [] { "Live Gym Cam" } },
+                        {44, new string [] { "Live Naughty Teacher" } },
+                        {45, new string [] { "Live Naughty Milf" } },
+                        {46, new string [] { "Live Naughty Nurse" } },
+                        {47, new string [] { "Big Cock Bully" } },
+                        {48, new string [] { "LA Sluts" } },
+                        {49, new string [] { "Slut Stepsister" } },
+                        {50, new string [] { "Teens Love Cream" } },
+                        {51, new string [] { "Latina Stepmom" } },
+                        {52, new string [] { "Anal College" } },
+                        {53, new string [] { "Watch Your Wife" } },
+                        {54, new string [] { "Slut Stepmom" } },
+                        {55, new string [] { "Sleazy Stepdad" } },
+                        {56, new string [] { "Open Family" } },
+                        {57, new string [] { "Watch Your Mom" } },
+                        {58, new string [] { "Show My BF" } },
+                    }
+            }
             };
 
         public static IPhoenixAdultProviderBase GetProviderBySiteID(int siteID) => siteID switch
@@ -196,6 +259,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             7 => new Network1service(),
             8 => new Network1service(),
             9 => new Network1service(),
+            10 => new SiteNaughtyAmerica(),
             _ => null,
         };
     }
