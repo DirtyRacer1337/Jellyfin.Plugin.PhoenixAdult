@@ -87,6 +87,66 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Share My BF
   - She's A Freak
   - Stranded Teens
++ #### Naughty America Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 2 Chicks Same Time
+  - American Daydreams
+  - Anal College
+  - Asian 1 on 1
+  - Ass Masterpiece
+  - Big Cock Bully
+  - Diary of a Milf
+  - Diary of a Nanny
+  - Dirty Wives Club
+  - Fast Times
+  - Housewife 1 on 1
+  - I have a Wife
+  - LA Sluts
+  - Latin Adultery
+  - Latina Stepmom
+  - Lesbian Girl on Girl
+  - Live Gym Cam
+  - Live Naughty Milf
+  - Live Naughty Nurse
+  - Live Naughty Secretary
+  - Live Naughty Student
+  - Live Naughty Teacher
+  - Live Party Girl
+  - Milf Sugar Babes Classic
+  - My Dads Hot Girlfriend
+  - My Daughters Hot Friend
+  - My First Sex Teacher
+  - My Friends Hot Girl
+  - My Friends Hot Mom
+  - My Girlfriends Busty Friend
+  - My Girl Loves Anal
+  - My Naughty Latin Maid
+  - My Naughty Massage
+  - My Sisters Hot Friend
+  - My Wife is My Pornstar
+  - My Wifes Hot Friend
+  - Naughty America
+  - Naughty Athletics
+  - Naughty Bookworms
+  - Naughty Country Girls
+  - Naughty Flipside
+  - Naughty Office
+  - Naughty Rich Girls
+  - Naughty Weddings
+  - Neighbor Affair
+  - Open Family
+  - Perfect Fucking Strangers Classic
+  - Seduced By A Cougar
+  - Show My BF
+  - Sleazy Stepdad
+  - Slut Stepmom
+  - Slut Stepsister
+  - SoCal Coeds
+  - Teens Love Cream
+  - The Passenger
+  - Tonights Girlfriend Class
+  - Watch Your Mom
+  - Watch Your Wife
+  - Wives on Vacation
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Reality Kings Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 40 Inch Plus
