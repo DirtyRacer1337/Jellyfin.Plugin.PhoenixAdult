@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -166,19 +167,26 @@ namespace Jellyfin.Plugin.PhoenixAdult
         public static string[] GetDateFromTitle(string title)
         {
             string searchDate,
-                   searchTitle = title,
-                   regExRule = @"\b\d{4} \d{2} \d{2}\b";
+                   searchTitle = title;
+            var regExRules = new Dictionary<string, string> {
+                { @"\b\d{4} \d{2} \d{2}\b", "yyyy MM dd" },
+                { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" }
+            };
             string[] searchData = new string[2] { searchTitle, string.Empty };
 
-            var regEx = Regex.Match(searchTitle, regExRule);
-            if (regEx.Groups.Count > 0)
-                if (DateTime.TryParse(regEx.Groups[0].Value, out DateTime date))
-                {
-                    searchDate = date.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
-                    searchTitle = Regex.Replace(searchTitle, regExRule, string.Empty).Trim();
+            foreach (var regExRule in regExRules)
+            {
+                var regEx = Regex.Match(searchTitle, regExRule.Key);
+                if (regEx.Groups.Count > 0)
+                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime date))
+                    {
+                        searchDate = date.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
+                        searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
 
-                    searchData = new string[2] { searchTitle, searchDate };
-                }
+                        searchData = new string[2] { searchTitle, searchDate };
+                        break;
+                    }
+            }
 
             return searchData;
         }
