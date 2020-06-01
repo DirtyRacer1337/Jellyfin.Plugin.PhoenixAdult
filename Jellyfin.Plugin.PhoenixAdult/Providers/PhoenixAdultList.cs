@@ -23,7 +23,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {13, new string [] { "Day With A Porn Star" } },
                         {14, new string [] { "Dirty Masseur" } },
                         {15, new string [] { "Doctor Adventures" } },
-                        {16, new string [] { "Exxtra" } },
+                        {16, new string [] { "Brazzers Exxtra" } },
                         {17, new string [] { "Hot and Mean" } },
                         {18, new string [] { "Hot Chicks Big Asses" } },
                         {19, new string [] { "Milfs Like It Big" } },
