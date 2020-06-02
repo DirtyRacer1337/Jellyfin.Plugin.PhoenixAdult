@@ -181,8 +181,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {2, new string [] { "SweetSinner" } },
                         {3, new string [] { "Doghouse Digital" } },
                     }
-            },
-            {
+                },{
                     10, new Dictionary<int, string[]> {
                         {0, new string [] { "Naughty America", "https://www.naughtyamerica.com/", "https://i6p9q9r18e-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "My Friends Hot Mom" } },
@@ -244,7 +243,56 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {57, new string [] { "Watch Your Mom" } },
                         {58, new string [] { "Show My BF" } },
                     }
-            }
+                },{
+                    11, new Dictionary<int, string[]> {
+                        {0, new string [] { "Adult Time", "https://freetour.adulttime.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {1, new string [] { "Evil Angel", "https://www.evilangel.com" } },
+                        {2, new string [] { "Pure Taboo", "https://www.puretaboo.com" } },
+                        {3, new string [] { "Burning Angel", "http://www.burningangel.com" } },
+                        {4, new string [] { "Devil's Film", "http://www.devilsfilm.com" } },
+                        {5, new string [] { "Rocco Siffredi", "http://www.roccosiffredi.com" } },
+                    }
+                },{
+                    12, new Dictionary<int, string[]> {
+                        {0, new string [] { "Girlsway", "https://www.girlsway.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {1, new string [] { "Mommys Girl" } },
+                        {2, new string [] { "Web Young" } },
+                        {3, new string [] { "Girls Try Anal" } },
+                        {4, new string [] { "Sextape Lesbians" } },
+                        {5, new string [] { "Girlsway Originals" } },
+                        {6, new string [] { "GirlCore" } },
+                        {7, new string [] { "Moms On Moms" } },
+                        {8, new string [] { "We Like Girls" } },
+                    }
+                },{
+                    13, new Dictionary<int, string[]> {
+                        {0, new string [] { "21Naturals", "https://www.21naturals.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {1, new string [] { "21FootArt" } },
+                        {2, new string [] { "21EroticAnal" } },
+                    }
+                },{
+                    14, new Dictionary<int, string[]> {
+                        {0, new string [] { "21Sextury", "http://www.21sextury.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {1, new string [] { "Anal Teen Angels" } },
+                        {2, new string [] { "Deepthroat Frenzy" } },
+                        {3, new string [] { "DP Fanatics" } },
+                        {4, new string [] { "Footsie Babes" } },
+                        {5, new string [] { "Gapeland" } },
+                        {6, new string [] { "Lez Cuties" } },
+                        {7, new string [] { "Pix and Video" } },
+                        {8, new string [] { "Asshole Fever" } },
+                        {9, new string [] { "Butt Plays" } },
+                    }
+                },{
+                    15, new Dictionary<int, string[]> {
+                        {0, new string [] { "21Sextreme", "http://www.21sextreme.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {1, new string [] { "LustyGrandmas" } },
+                        {2, new string [] { "GrandpasFuckTeens" } },
+                        {3, new string [] { "TeachMeFisting" } },
+                        {4, new string [] { "Zoliboy" } },
+                        {5, new string [] { "DominatedGirls" } },
+                    }
+                }
             };
 
         public static IPhoenixAdultProviderBase GetProviderBySiteID(int siteID) => siteID switch
@@ -260,7 +308,11 @@ namespace Jellyfin.Plugin.PhoenixAdult
             8 => new Network1service(),
             9 => new Network1service(),
             10 => new SiteNaughtyAmerica(),
-            _ => null,
+            11 => new NetworkGammaEnt(),
+            12 => new NetworkGammaEnt(),
+            13 => new NetworkGammaEnt(),
+            14 => new NetworkGammaEnt(),
+            _ => null
         };
     }
 }

@@ -6,6 +6,26 @@
 The above is a reference list. Please see [the manualsearch doc](./manualsearch.md) for how to use these further.
 # All supported networks and sites
 
++ #### 21Naturals | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 21Naturals
+  - 21FootArt
+  - 21EroticAnal
++ #### 21Sextreme | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - DominatedGirls
+  - GrandpasFuckTeens
+  - LustyGrandmas
+  - TeachMeFisting
+  - Zoliboy
++ #### 21Sextury | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - AnalTeenAngels
+  - ButtPlays
+  - DeepthroatFrenzy
+  - DPFanatics
+  - FootsieBabes
+  - Gapeland
+  - LezCuties
+  - PixandVideo
++ #### Adult Time | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Babes Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Babes
   - Babes Unleashed
@@ -43,9 +63,12 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Teens Like It Big
   - Teens Like It Black
   - ZZ Series
++ #### BurningAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviant Hardcore | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Erito | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### EvilAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### FakeHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Fake Agent
   - Fake Agent UK
@@ -59,6 +82,15 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Female Fake Taxi
   - Public Agent
 + #### FamilyHookups | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Girlsway | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - GirlCore
+  - GirlsTryAnal
+  - GirlswayOriginals
+  - MommysGirl
+  - MomsOnMoms
+  - SextapeLesbians
+  - WebYoung
+  - WeLikeGirls
 + #### Kinky Spa | Matching type: *[Limited](./manualsearch.md#limited-search)*
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
@@ -148,6 +180,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Watch Your Wife
   - Wives on Vacation
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### PureTaboo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Reality Kings Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 40 Inch Plus
   - 8th Street Latinas
@@ -203,6 +236,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Wives in Pantyhose
 + #### Other Reality Kings Sites | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Lil Humpers
++ #### Rocco Siffredi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Dane Jones
   - Fitness Rooms

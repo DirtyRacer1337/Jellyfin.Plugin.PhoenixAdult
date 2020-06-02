@@ -47,7 +47,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             var searchSceneID = searchTitle.Split()[0];
             var sceneTypes = new List<string> { "scene", "movie", "serie", "trailer" };
-            if (int.TryParse(searchSceneID, out _))
+            if (!int.TryParse(searchSceneID, out _))
                 searchSceneID = null;
 
             var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);

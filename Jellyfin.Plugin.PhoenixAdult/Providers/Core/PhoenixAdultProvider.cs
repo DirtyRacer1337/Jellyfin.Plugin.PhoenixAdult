@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using Flurl.Http;
 using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
@@ -213,7 +214,19 @@ namespace Jellyfin.Plugin.PhoenixAdult
 
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
             if (provider != null)
+            {
                 images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
+
+                var clearList = new List<RemoteImageInfo>();
+                foreach (var image in images)
+                {
+                    var http = await image.Url.AllowAnyHttpStatus().HeadAsync(cancellationToken).ConfigureAwait(false);
+                    if (http.IsSuccessStatusCode)
+                        clearList.Add(image);
+                }
+
+                images = clearList;
+            }
 
             return images;
         }
