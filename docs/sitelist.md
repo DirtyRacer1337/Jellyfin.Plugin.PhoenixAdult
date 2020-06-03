@@ -33,8 +33,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Elegant Anal
   - Office Obsession
   - Stepmom Lessons
-+ #### Bang! | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
-+ #### Brazzers Network: *[Enhanced Search](./manualsearch.md#enhanced-search)*
++ #### Bang! | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Brazzers Network: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Asses In Public
   - Baby Got Boobs
   - Big Butts Like It Big
@@ -64,7 +64,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Teens Like It Black
   - ZZ Series
 + #### BurningAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### Deviant Hardcore | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Erito | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
@@ -91,7 +91,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - SextapeLesbians
   - WebYoung
   - WeLikeGirls
-+ #### Kinky Spa | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### Kinky Spa | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - DoghouseDigital
@@ -244,7 +244,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Lesbea
   - Massage Rooms
   - MomXXX
-+ #### She Will Cheat | Matching type: *[Limited](./manualsearch.md#limited-search)*
++ #### She Will Cheat | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### TransAngels | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Twistys | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - MomKnowsBest
