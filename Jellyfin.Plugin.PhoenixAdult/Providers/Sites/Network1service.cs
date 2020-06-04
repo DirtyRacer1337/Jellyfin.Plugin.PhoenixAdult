@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -78,7 +79,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                         ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                         Name = sceneName
                     });
-                    if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy hh:mm:ss", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
                         result.Last().PremiereDate = sceneDateObj;
                 }
             }
@@ -109,7 +110,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio(PhoenixAdultHelper.Lang.TextInfo.ToTitleCase((string)sceneData["brand"]));
 
-            if (DateTime.TryParse((string)sceneData["dateReleased"], out DateTime sceneDateObj))
+            if (DateTime.TryParseExact((string)sceneData["dateReleased"], "MM/dd/yyyy hh:mm:ss", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
                 result.Item.ProductionYear = sceneDateObj.Year;

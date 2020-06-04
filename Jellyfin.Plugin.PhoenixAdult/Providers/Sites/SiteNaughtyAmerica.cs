@@ -51,16 +51,15 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 string sceneID = (string)searchResult["id"],
                         curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                        sceneName = (string)searchResult["title"],
-                        sceneDate = (string)searchResult["published_at"];
+                        sceneName = (string)searchResult["title"];
+                long sceneDate = (long)searchResult["published_at"];
 
                 result.Add(new RemoteSearchResult
                 {
                     ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
-                    Name = sceneName
+                    Name = sceneName,
+                    PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
                 });
-                if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                    result.Last().PremiereDate = sceneDateObj;
             }
 
             return result;
@@ -85,11 +84,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = (string)sceneData["synopsis"];
             result.Item.AddStudio("Naughty America");
 
-            if (DateTime.TryParse((string)sceneData["published_at"], out DateTime sceneDateObj))
-            {
-                result.Item.PremiereDate = sceneDateObj;
-                result.Item.ProductionYear = sceneDateObj.Year;
-            }
+            DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
+            result.Item.PremiereDate = sceneDateObj.DateTime;
+            result.Item.ProductionYear = sceneDateObj.Year;
 
             foreach (var genreLink in sceneData["fantasies"])
             {

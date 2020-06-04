@@ -125,7 +125,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio(PhoenixAdultHelper.Lang.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
-            if (DateTime.TryParse((string)sceneID[4], out DateTime sceneDateObj))
+            if (DateTime.TryParse(sceneID[4], out DateTime sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
                 result.Item.ProductionYear = sceneDateObj.Year;
