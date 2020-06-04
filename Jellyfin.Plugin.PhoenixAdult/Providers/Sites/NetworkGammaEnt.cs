@@ -135,7 +135,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var genreName = (string)genreLink["name"];
 
-                result.Item.AddGenre(genreName);
+                if (!string.IsNullOrEmpty(genreName))
+                    result.Item.AddGenre(genreName);
             }
 
             foreach (var actorLink in sceneData["actors"])
