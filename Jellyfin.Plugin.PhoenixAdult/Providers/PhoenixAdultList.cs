@@ -57,6 +57,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {11, new string [] { "Transsensual", "https://www.transsensual.com/" } },
                         {12, new string [] { "Lil Humpers", "https://www.lilhumpers.com" } },
                         {13, new string [] { "Family Sinners", "https://www.familysinners.com" } },
+                        {14, new string [] { "DigitalPlayground", "https://www.digitalplayground.com" } },
                     }
                 },{
                     3, new Dictionary<int, string[]> {
@@ -113,7 +114,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {50, new string [] { "Crazy College GFs" } },
                         {51, new string [] { "Horny Birds" } },
                         {52, new string [] { "Reckless in Miami" } },
-                        {53, new string [] { "DigitalPlayground" } },
                     }
                 },{
                     4, new Dictionary<int, string[]> {
