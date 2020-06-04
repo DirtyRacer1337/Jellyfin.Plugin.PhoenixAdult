@@ -71,19 +71,12 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                     string sceneID = (string)searchResult["id"],
                             curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}#{sceneType}",
                             sceneName = (string)searchResult["title"],
-                            sceneDate = (string)searchResult["dateReleased"],
-                            scenePoster;
-
-                    if (searchResult["images"]["poster"] != null)
-                        scenePoster = (string)searchResult["images"]["poster"].First["xx"]["url"];
-                    else
-                        scenePoster = (string)searchResult["images"]["cover"].First["xx"]["url"];
+                            sceneDate = (string)searchResult["dateReleased"];
 
                     result.Add(new RemoteSearchResult
                     {
                         ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
-                        Name = sceneName,
-                        ImageUrl = scenePoster
+                        Name = sceneName
                     });
                     if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
                         result.Last().PremiereDate = sceneDateObj;
@@ -167,20 +160,21 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             foreach (var imageType in imageTypes)
                 if (sceneData["images"][imageType] != null)
-                {
-                    images.Add(new RemoteImageInfo
+                    foreach (var image in sceneData["images"][imageType])
                     {
-                        Url = (string)sceneData["images"][imageType].First["xx"]["url"],
-                        Type = ImageType.Primary,
-                        ProviderName = PhoenixAdultProvider.PluginName
-                    });
-                    images.Add(new RemoteImageInfo
-                    {
-                        Url = (string)sceneData["images"][imageType].First["xx"]["url"],
-                        Type = ImageType.Backdrop,
-                        ProviderName = PhoenixAdultProvider.PluginName
-                    });
-                }
+                        images.Add(new RemoteImageInfo
+                        {
+                            Url = (string)image["xx"]["url"],
+                            Type = ImageType.Primary,
+                            ProviderName = PhoenixAdultProvider.PluginName
+                        });
+                        images.Add(new RemoteImageInfo
+                        {
+                            Url = (string)image["xx"]["url"],
+                            Type = ImageType.Backdrop,
+                            ProviderName = PhoenixAdultProvider.PluginName
+                        });
+                    }
 
             return images;
         }
