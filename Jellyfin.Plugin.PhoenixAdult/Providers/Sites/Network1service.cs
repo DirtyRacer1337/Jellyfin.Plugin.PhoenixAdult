@@ -104,6 +104,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
+            if (sceneData == null)
+                return result;
+
             sceneData = (JObject)sceneData["result"].First;
 
             result.Item.Name = (string)sceneData["title"];
@@ -127,16 +130,16 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var actorPageURL = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
                 var actorData = await GetDataFromAPI(actorPageURL, cookie.Value, cancellationToken).ConfigureAwait(false);
-                actorData = (JObject)actorData["result"].First;
-                result.AddPerson(new PersonInfo
-                {
-                    Name = (string)actorLink["name"],
-                    Type = PersonType.Actor
-                });
-                if (actorData["images"] != null && actorData["images"].Type == JTokenType.Object)
-                {
-                    var actorPhotoURL = actorData["result"].First["images"]["profile"].First["xs"]["url"];
-                    result.People.Last().ImageUrl = (string)actorPhotoURL;
+                if (actorData != null) {
+                    actorData = (JObject)actorData["result"].First;
+
+                    result.AddPerson(new PersonInfo
+                    {
+                        Name = (string)actorLink["name"],
+                        Type = PersonType.Actor
+                    });
+                    if (actorData["images"] != null && actorData["images"].Type == JTokenType.Object)
+                        result.People.Last().ImageUrl = (string)actorData["images"]["profile"].First["xs"]["url"];
                 }
             }
 
@@ -159,6 +162,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             var imageTypes = new List<string> { "poster", "cover" };
             var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
+            if (sceneData == null)
+                return images;
+
             sceneData = (JObject)sceneData["result"].First;
 
             foreach (var imageType in imageTypes)
