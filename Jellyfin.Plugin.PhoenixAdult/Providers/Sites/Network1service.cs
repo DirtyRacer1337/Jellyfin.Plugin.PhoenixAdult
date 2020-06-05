@@ -127,15 +127,17 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var actorPageURL = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
                 var actorData = await GetDataFromAPI(actorPageURL, cookie.Value, cancellationToken).ConfigureAwait(false);
-                var actorPhotoURL = actorData["result"].First["images"]["profile"].First["xs"]["url"];
-
+                actorData = (JObject)actorData["result"].First;
                 result.AddPerson(new PersonInfo
                 {
                     Name = (string)actorLink["name"],
                     Type = PersonType.Actor
                 });
-                if (actorPhotoURL != null)
+                if (actorData["images"] != null && actorData["images"].Type == JTokenType.Object)
+                {
+                    var actorPhotoURL = actorData["result"].First["images"]["profile"].First["xs"]["url"];
                     result.People.Last().ImageUrl = (string)actorPhotoURL;
+                }
             }
 
             return result;
