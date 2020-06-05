@@ -6,7 +6,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 {
     public static class PhoenixAdultGenres
     {
-        public static string[] Cleanup(string[] genresLink)
+        public static string[] Cleanup(string[] genresLink, string sceneName)
         {
             var newGenres = new List<string>();
 
@@ -15,9 +15,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
             foreach (var genreLink in genresLink)
             {
-                var genreName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(genreLink);
-
-                genreName = Replace(genreName);
+                var genreName = Replace(genreLink, sceneName);
+                genreName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(genreName);
 
                 if (!newGenres.Contains(genreName))
                     newGenres.Add(genreName);
@@ -26,7 +25,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             return newGenres.OrderBy(item => item).ToArray();
         }
 
-        private static string Replace(string genreName)
+        private static string Replace(string genreName, string sceneName)
         {
             if (_skipList.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                 return null;
@@ -46,7 +45,24 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
             var newGenreName = _replaceList.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
-                return newGenreName;
+                genreName = newGenreName;
+
+            if (!string.IsNullOrEmpty(sceneName))
+            {
+                if (genreName.Contains(':', StringComparison.OrdinalIgnoreCase))
+                    if (sceneName.Contains(genreName.Split(':').First(), StringComparison.OrdinalIgnoreCase))
+                        return null;
+
+                if (genreName.Contains('-', StringComparison.OrdinalIgnoreCase))
+                    if (sceneName.Contains(genreName.Split('-').First(), StringComparison.OrdinalIgnoreCase))
+                        return null;
+
+                /*if (sceneName.Contains(genreName, StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(newGenreName))
+                    return null;*/
+            }
+
+            if (genreName.Length > 25 || genreName.Split().Length > 3)
+                return null;
 
             return genreName;
         }

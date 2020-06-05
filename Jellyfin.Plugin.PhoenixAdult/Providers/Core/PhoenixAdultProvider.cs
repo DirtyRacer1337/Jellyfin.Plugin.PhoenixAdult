@@ -117,7 +117,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 if ((result.People != null) && result.People.Any())
                     result.People = PhoenixAdultPeoples.Cleanup(result);
                 if (result.Item.Genres != null && result.Item.Genres.Any())
-                    result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres);
+                    result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
             }
 
             return result;
