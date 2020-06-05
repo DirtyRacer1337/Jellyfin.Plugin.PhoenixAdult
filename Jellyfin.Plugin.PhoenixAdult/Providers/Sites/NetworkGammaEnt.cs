@@ -90,13 +90,15 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
                     curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}#{sceneDate}";
 
-                    result.Add(new RemoteSearchResult
+                    var res = new RemoteSearchResult
                     {
                         ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                         Name = sceneName
-                    });
+                    };
                     if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                        result.Last().PremiereDate = sceneDateObj;
+                        res.PremiereDate = sceneDateObj;
+
+                    result.Add(res);
                 }
             }
 

@@ -52,15 +52,16 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                         sceneName = (string)sceneData["name"],
                         scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
                         sceneDate = (string)sceneData["releaseDate"];
-
-                result.Add(new RemoteSearchResult
+                var item = new RemoteSearchResult
                 {
                     ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                     Name = sceneName,
                     ImageUrl = scenePoster
-                });
+                };
                 if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                    result.Last().PremiereDate = sceneDateObj;
+                    item.PremiereDate = sceneDateObj;
+
+                result.Add(item);
             }
 
             return result;

@@ -74,13 +74,15 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                             sceneName = (string)searchResult["title"],
                             sceneDate = (string)searchResult["dateReleased"];
 
-                    result.Add(new RemoteSearchResult
+                    var res = new RemoteSearchResult
                     {
                         ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                         Name = sceneName
-                    });
+                    };
                     if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy hh:mm:ss", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
-                        result.Last().PremiereDate = sceneDateObj;
+                        res.PremiereDate = sceneDateObj;
+
+                    result.Add(res);
                 }
             }
 
@@ -130,7 +132,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var actorPageURL = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
                 var actorData = await GetDataFromAPI(actorPageURL, cookie.Value, cancellationToken).ConfigureAwait(false);
-                if (actorData != null) {
+                if (actorData != null)
+                {
                     actorData = (JObject)actorData["result"].First;
 
                     result.AddPerson(new PersonInfo

@@ -19,17 +19,30 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
                 genreName = Replace(genreName);
 
-                if (!string.IsNullOrEmpty(genreName) && !newGenres.Contains(genreName))
+                if (!newGenres.Contains(genreName))
                     newGenres.Add(genreName);
             }
 
-            return newGenres.ToArray();
+            return newGenres.OrderBy(item => item).ToArray();
         }
 
         private static string Replace(string genreName)
         {
             if (_skipList.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                 return null;
+
+            if (genreName.Contains("5k", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("60fps", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("hd", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("1080p", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("aprilfools", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("chibbles", StringComparison.OrdinalIgnoreCase)
+                || genreName.Contains("folsom", StringComparison.OrdinalIgnoreCase)
+            )
+                return null;
+
+            if (genreName.Contains("doggystyle", StringComparison.OrdinalIgnoreCase) || genreName.Contains("doggy style", StringComparison.OrdinalIgnoreCase))
+                return "Doggystyle (Position)";
 
             var newGenreName = _replaceList.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
@@ -46,8 +59,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             "keiran", "little runaway", "mr. cummings", "photos", "public disgrace's best",
             "ryan mclane", "show less", "show more", "site member", "smart", "spring cleaning",
             "st patrick's day", "the pope", "tj cummings", "tony", "twistys hard", "tyler steele",
-            "van styles", "workitout", "wow girls special", "yes, mistress", "5k", "60fps", "hd",
-            "1080p", "aprilfools", "chibbles", "folsom",
+            "van styles", "workitout", "wow girls special", "yes, mistress",
         };
 
         private static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {
@@ -224,7 +236,6 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             // Positions
             {"69 (Position)", new string[] { "sixty-nine", "69", "69 position" } },
             {"Cowgirl (Position)", new string[] { "cow girl", "cowgirl", "cowgirl (pov)" } },
-            {"Doggystyle (Position)", new string[] { "doggystyle", "doggy style" } },
             {"Missionary (Position)", new string[] { "missionary", "missionary (pov)", "missionary - pov" } },
             {"Reverse Cowgirl (Position)", new string[] { "reverse cow girl", "reverse cowgirl", "reverse cowgirl (pov)", "cowgirl - pov" } },
         };
