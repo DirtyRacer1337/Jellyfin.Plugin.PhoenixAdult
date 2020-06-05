@@ -16,10 +16,13 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             foreach (var genreLink in genresLink)
             {
                 var genreName = Replace(genreLink, sceneName);
-                genreName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(genreName);
+                if (!string.IsNullOrEmpty(genreName))
+                {
+                    genreName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(genreName);
 
-                if (!newGenres.Contains(genreName))
-                    newGenres.Add(genreName);
+                    if (!newGenres.Contains(genreName))
+                        newGenres.Add(genreName);
+                }
             }
 
             return newGenres.OrderBy(item => item).ToArray();
