@@ -70,7 +70,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenBy(scene => scene.IndexNumber).ToList();
                         else if (DateTime.TryParseExact(searchDate, "yyyy-MM-dd", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
-                            result = result.OrderBy(scene => DateTime.Compare(searchDateObj, (DateTime)scene.PremiereDate)).ToList();
+                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj, (DateTime)scene.PremiereDate) == 0).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
                 }
