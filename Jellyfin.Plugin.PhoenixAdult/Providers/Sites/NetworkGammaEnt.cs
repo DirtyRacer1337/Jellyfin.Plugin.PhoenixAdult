@@ -49,13 +49,13 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 return result;
 
             var searchSceneID = searchTitle.Split()[0];
-            var sceneTypes = new List<string> { "scenes", "movies" };
             if (!int.TryParse(searchSceneID, out _))
                 searchSceneID = null;
 
             string apiKEY = await GetAPIKey(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
-                searchParams;
+                   searchParams;
 
+            var sceneTypes = new List<string> { "scenes", "movies" };
             foreach (var sceneType in sceneTypes)
             {
                 if (!string.IsNullOrEmpty(searchSceneID))

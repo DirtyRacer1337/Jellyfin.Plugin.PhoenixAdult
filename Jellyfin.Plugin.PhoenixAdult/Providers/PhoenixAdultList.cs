@@ -50,7 +50,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {4, new string [] { "FamilyHookups", "https://www.familyhookups.com" } },
                         {5, new string [] { "Erito", "https://www.erito.com" } },
                         {6, new string [] { "Look At Her Now", "https://www.lookathernow.com" } },
-                        {7, new string [] { "Bi Empire", "http://www.biempire.com" } },
+                        {7, new string [] { "Bi Empire", "https://www.biempire.com" } },
                         {8, new string [] { "Deviant Hardcore", "https://www.devianthardcore.com" } },
                         {9, new string [] { "She Will Cheat", "https://www.shewillcheat.com" } },
                         {10, new string [] { "Kinky Spa", "https://www.kinkyspa.com/" } },
@@ -248,9 +248,9 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {0, new string [] { "Adult Time", "https://freetour.adulttime.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
                         {1, new string [] { "Evil Angel", "https://www.evilangel.com" } },
                         {2, new string [] { "Pure Taboo", "https://www.puretaboo.com" } },
-                        {3, new string [] { "Burning Angel", "http://www.burningangel.com" } },
-                        {4, new string [] { "Devil's Film", "http://www.devilsfilm.com" } },
-                        {5, new string [] { "Rocco Siffredi", "http://www.roccosiffredi.com" } },
+                        {3, new string [] { "Burning Angel", "https://www.burningangel.com" } },
+                        {4, new string [] { "Devil's Film", "https://www.devilsfilm.com" } },
+                        {5, new string [] { "Rocco Siffredi", "https://www.roccosiffredi.com" } },
                     }
                 },{
                     12, new Dictionary<int, string[]> {
@@ -272,7 +272,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     14, new Dictionary<int, string[]> {
-                        {0, new string [] { "21Sextury", "http://www.21sextury.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "21Sextury", "https://www.21sextury.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
                         {1, new string [] { "Anal Teen Angels" } },
                         {2, new string [] { "Deepthroat Frenzy" } },
                         {3, new string [] { "DP Fanatics" } },
@@ -285,7 +285,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     }
                 },{
                     15, new Dictionary<int, string[]> {
-                        {0, new string [] { "21Sextreme", "http://www.21sextreme.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "21Sextreme", "https://www.21sextreme.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
                         {1, new string [] { "LustyGrandmas" } },
                         {2, new string [] { "GrandpasFuckTeens" } },
                         {3, new string [] { "TeachMeFisting" } },
@@ -312,6 +312,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             12 => new NetworkGammaEnt(),
             13 => new NetworkGammaEnt(),
             14 => new NetworkGammaEnt(),
+            15 => new NetworkGammaEnt(),
             _ => null
         };
     }
