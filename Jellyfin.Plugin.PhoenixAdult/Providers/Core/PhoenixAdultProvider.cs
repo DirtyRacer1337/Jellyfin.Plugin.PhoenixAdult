@@ -146,23 +146,33 @@ namespace Jellyfin.Plugin.PhoenixAdult
 
         public static string GetClearTitle(string title, string siteName)
         {
-            string clearName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(Regex.Replace(title, @"(\d+)", @"|$1")),
-                   clearSite = Regex.Replace(siteName, @"(\d+)", @"|$1"),
-                   searchTitle = title;
+            if (string.IsNullOrEmpty(title))
+                return title;
 
-            clearName = Regex.Replace(clearName, @"(?!\|)\W", string.Empty);
-            clearSite = Regex.Replace(clearSite, @"(?!\|)\W", string.Empty);
+            string clearName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(title),
+                   clearSite = siteName;
 
-            if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
-            {
-                searchTitle = Regex.Replace(clearName, clearSite, string.Empty, RegexOptions.IgnoreCase);
-                searchTitle = Regex.Replace(searchTitle, @"(\w)([A-Z])", @"$1 $2");
-                searchTitle = Regex.Replace(searchTitle, @"([A-Z])([A-Z])", @"$1 $2");
-                searchTitle = Regex.Replace(searchTitle, @"(\d+)", @" $1");
-                searchTitle = searchTitle.Replace("|", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            clearName = clearName.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
+
+            clearName = Regex.Replace(clearName, @"[^a-zA-Z0-9 ]", " ");
+            clearSite = Regex.Replace(clearSite, @"\W", string.Empty);
+
+            bool matched = false;
+            while (clearName.Contains(' ', StringComparison.OrdinalIgnoreCase)) {
+                clearName = PhoenixAdultHelper.ReplaceFirst(clearName, " ", string.Empty);
+                if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase)) {
+                    matched = true;
+                    break;
+                }
             }
 
-            return searchTitle;
+            if (matched) {
+                clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
+                clearName = string.Join(" ", clearName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            }
+
+
+            return clearName;
         }
 
         public static string[] GetDateFromTitle(string title)

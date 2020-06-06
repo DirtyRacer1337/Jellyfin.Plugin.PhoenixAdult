@@ -83,6 +83,16 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
         public static string Decode(string base64Text)
             => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
 
+        public static string ReplaceFirst(string text, string search, string replace)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+            int pos = text.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+            if (pos < 0)
+                return text;
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
         public static Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
             => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
             {
