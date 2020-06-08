@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    class SiteNaughtyAmerica : IPhoenixAdultProviderBase
+    internal class SiteNaughtyAmerica : IPhoenixAdultProviderBase
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchData, CancellationToken cancellationToken)
         {

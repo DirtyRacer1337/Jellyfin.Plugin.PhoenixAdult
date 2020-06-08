@@ -11,7 +11,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 {
     public static class PhoenixAdultHelper
     {
-        public static CultureInfo Lang = new CultureInfo("en-US", false);
+        public static readonly CultureInfo Lang = new CultureInfo("en-US", false);
 
         public static string GetSearchSiteName(int[] siteNum)
         {
@@ -85,11 +85,13 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
         public static string ReplaceFirst(string text, string search, string replace)
         {
-            if (string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(search))
                 return text;
+
             int pos = text.IndexOf(search, StringComparison.OrdinalIgnoreCase);
             if (pos < 0)
                 return text;
+
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
@@ -105,6 +107,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 public static class Base58
 {
     private const string DIGITS = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
     public static string EncodePlain(byte[] data)
     {
         if (data == null)

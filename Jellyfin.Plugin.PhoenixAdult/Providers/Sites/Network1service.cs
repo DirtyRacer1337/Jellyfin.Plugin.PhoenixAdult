@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    class Network1service : IPhoenixAdultProviderBase
+    internal class Network1service : IPhoenixAdultProviderBase
     {
         public static async Task<IDictionary<string, Cookie>> GetCookies(string url, CancellationToken cancellationToken)
         {

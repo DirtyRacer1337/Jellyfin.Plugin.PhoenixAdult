@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    class NetworkGammaEnt : IPhoenixAdultProviderBase
+    internal class NetworkGammaEnt : IPhoenixAdultProviderBase
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
@@ -192,7 +192,6 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             string image = sceneData["url_title"].ToString().ToLower(PhoenixAdultHelper.Lang).Replace('-', '_'),
                    imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
-
 
             if (!ignore)
                 images.Add(new RemoteImageInfo

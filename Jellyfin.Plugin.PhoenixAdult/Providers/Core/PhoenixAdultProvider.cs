@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities.Movies;
@@ -53,7 +52,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 };
                 searchTitle = titleAfterDate[0];
                 searchDate = titleAfterDate[1];
-                encodedTitle = HttpUtility.UrlEncode(searchTitle);
+                encodedTitle = Uri.EscapeDataString(searchTitle);
 
                 Log.LogInformation($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
                 Log.LogInformation($"searchTitle: {searchTitle}");
@@ -171,7 +170,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
                 clearName = string.Join(" ", clearName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
             }
-
 
             return clearName;
         }

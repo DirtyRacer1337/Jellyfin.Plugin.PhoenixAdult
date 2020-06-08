@@ -47,12 +47,15 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
                     case "Footsie Babes":
                         siteIndex = 0;
                         break;
+
                     case "Babes":
                         siteIndex = 1;
                         break;
+
                     case "Bang Bros":
                         siteIndex = 2;
                         break;
+
                     case "Deeper":
                     case "Tushyraw":
                     case "Tushy":
@@ -61,54 +64,71 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
                     case "Vixen":
                         siteIndex = 3;
                         break;
+
                     case "FuelVirtual":
                         siteIndex = 4;
                         break;
+
                     case "LegalPorno":
                         siteIndex = 5;
                         break;
+
                     case "Joymii":
                         siteIndex = 6;
                         break;
+
                     case "Kink":
                         siteIndex = 7;
                         break;
+
                     case "Nubiles":
                         siteIndex = 8;
                         break;
+
                     case "Porn Pros":
                         siteIndex = 9;
                         break;
+
                     case "TeamSkeet":
                         siteIndex = 10;
                         break;
+
                     case "Twistys":
                         siteIndex = 11;
                         break;
+
                     case "X-Art":
                         siteIndex = 12;
                         break;
+
                     case "DDFProd":
                         siteIndex = 13;
                         break;
+
                     case "Reality Kings":
                         siteIndex = 14;
                         break;
+
                     case "WowGirls":
                         siteIndex = 15;
                         break;
+
                     case "Private":
                         siteIndex = 16;
                         break;
+
                     case "VIPissy":
                         siteIndex = 17;
                         break;
+
                     case "Erika Lust Films":
                         siteIndex = 18;
                         break;
+
                     case "Bang":
                         siteIndex = 19;
                         break;
+
                     case "Milehigh":
                     case "Doghouse Digital":
                         siteIndex = 20;

@@ -5,7 +5,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
 {
     public static class PhoenixAdultList
     {
-        public static Dictionary<int, Dictionary<int, string[]>> SiteList = new Dictionary<int, Dictionary<int, string[]>> {{
+        public static readonly Dictionary<int, Dictionary<int, string[]>> SiteList = new Dictionary<int, Dictionary<int, string[]>> {{
                     0, new Dictionary<int, string[]> {
                         {0, new string [] { "Brazzers", "https://www.brazzers.com", "https://www.brazzers.com/videos-search/" } },
                         {1, new string [] { "Asses In Public" } },
