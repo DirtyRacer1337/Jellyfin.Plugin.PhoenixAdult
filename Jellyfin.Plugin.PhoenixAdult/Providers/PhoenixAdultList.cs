@@ -292,6 +292,46 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {4, new string [] { "Zoliboy" } },
                         {5, new string [] { "DominatedGirls" } },
                     }
+                },{
+                    16, new Dictionary<int, string[]> {
+                        {0, new string [] { "Kink", "https://www.kink.com", "https://www.kink.com/search?q=" } },
+                        {1, new string [] { "Brutal Sessions" } },
+                        {2, new string [] { "Device Bondage" } },
+                        {3, new string [] { "Families Tied" } },
+                        {4, new string [] { "Hardcore Gangbang" } },
+                        {5, new string [] { "Hogtied" } },
+                        {6, new string [] { "Kink Features" } },
+                        {7, new string [] { "Kink University" } },
+                        {8, new string [] { "Public Disgrace" } },
+                        {9, new string [] { "Sadistic Rope" } },
+                        {10, new string [] { "Sex and Submission" } },
+                        {11, new string [] { "The Training of O" } },
+                        {12, new string [] { "The Upper Floor" } },
+                        {13, new string [] { "Water Bondage" } },
+                        {14, new string [] { "Everything Butt" } },
+                        {15, new string [] { "Foot Worship" } },
+                        {16, new string [] { "Fucking Machines" } },
+                        {17, new string [] { "TS Pussy Hunters" } },
+                        {18, new string [] { "TS Seduction" } },
+                        {19, new string [] { "Ultimate Surrender" } },
+                        {20, new string [] { "30 Minutes of Torment" } },
+                        {21, new string [] { "Bound Gods" } },
+                        {22, new string [] { "Bound in Public" } },
+                        {23, new string [] { "Butt Machine Boys" } },
+                        {24, new string [] { "Men on Edge" } },
+                        {25, new string [] { "Naked Kombat" } },
+                        {26, new string [] { "Divine Bitches" } },
+                        {27, new string [] { "Electrosluts" } },
+                        {28, new string [] { "Men in Pain" } },
+                        {29, new string [] { "Whipped Ass" } },
+                        {30, new string [] { "Wired Pussy" } },
+                        {31, new string [] { "Bound Gang Bangs" } },
+                        {32, new string [] { "Chantas Bitches" } },
+                        {33, new string [] { "Fucked and Bound" } },
+                        {34, new string [] { "Captive Male" } },
+                        {35, new string [] { "SubmissiveX" } },
+                        {36, new string [] { "Filthy Femdom" } },
+                    }
                 }
             };
 
@@ -313,6 +353,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             13 => new NetworkGammaEnt(),
             14 => new NetworkGammaEnt(),
             15 => new NetworkGammaEnt(),
+            16 => new NetworkKink(),
             _ => null
         };
     }

@@ -91,6 +91,43 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - SextapeLesbians
   - WebYoung
   - WeLikeGirls
++ #### Kink Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 30MinutesofTorment
+  - BoundGangBangs
+  - BoundGods
+  - BoundinPublic
+  - BrutalSessions
+  - ButtMachineBoys
+  - CaptiveMale (Twisted Factory Channel)
+  - ChantasBitches (Twisted Factory Channel)
+  - DeviceBondage
+  - DivineBitches
+  - Electrosluts
+  - EverythingButt
+  - FamiliesTied
+  - Filthy Femdom
+  - FootWorship
+  - FuckedandBound (Twisted Factory Channel)
+  - FuckingMachines
+  - HardcoreGangbang
+  - Hogtied
+  - KinkFeatures
+  - KinkUniversity
+  - MenInPain
+  - MenOnEdge
+  - NakedKombat
+  - PublicDisgrace
+  - SadisticRope
+  - SexAndSubmission
+  - SubmissiveX
+  - TSPussyHunters
+  - TSSeduction
+  - TheTrainingOfO
+  - TheUpperFloor
+  - UltimateSurrender
+  - WaterBondage
+  - WhippedAss
+  - WiredPussy
 + #### Kinky Spa | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
