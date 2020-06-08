@@ -47,7 +47,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 return result;
 
             var searchSceneID = searchTitle.Split()[0];
-            var sceneTypes = new List<string> { "scene", "movie", "serie", "trailer" };
+            var sceneTypes = new List<string> { "scene", "movie", "serie" };
             if (!int.TryParse(searchSceneID, out _))
                 searchSceneID = null;
 
