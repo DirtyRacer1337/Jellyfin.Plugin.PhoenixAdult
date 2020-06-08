@@ -68,7 +68,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenBy(scene => scene.IndexNumber).ToList();
                         else if (DateTime.TryParseExact(searchDate, "yyyy-MM-dd", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
-                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj, (DateTime)scene.PremiereDate) == 0).ToList();
+                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj.Date, scene.PremiereDate.Value.Date) == 0).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
                 }
@@ -207,7 +207,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
         {
             string newTitle = title;
 
-            foreach(var abbrieviation in _abbrieviationList)
+            foreach (var abbrieviation in _abbrieviationList)
             {
                 Regex regex = new Regex(abbrieviation.Key, RegexOptions.IgnoreCase);
                 if (regex.IsMatch(title))
