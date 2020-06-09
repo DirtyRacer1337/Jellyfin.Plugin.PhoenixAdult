@@ -87,31 +87,37 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = sceneData.SelectSingleNode("//p[@itemprop='description']/text()").InnerText.Trim();
             result.Item.AddStudio("Brazzers");
 
-            if (DateTime.TryParse(sceneData.SelectSingleNode("//aside[contains(@class, 'scene-date')]").InnerText, out DateTime sceneDateObj))
-            {
-                result.Item.PremiereDate = sceneDateObj;
-                result.Item.ProductionYear = sceneDateObj.Year;
-            }
-
-            foreach (var genreLink in sceneData.SelectNodes("//div[contains(@class, 'tag-card-container')]//a"))
-            {
-                var genreName = genreLink.InnerText;
-
-                result.Item.AddGenre(genreName);
-            }
-
-            foreach (var actorLink in sceneData.SelectNodes("//div[@class='model-card']"))
-            {
-                string actorName = actorLink.SelectSingleNode(".//h2[@class='model-card-title']//a").Attributes["title"].Value,
-                       actorPhoto = $"https:{actorLink.SelectSingleNode(".//div[@class='card-image']//img").Attributes["data-src"].Value}";
-
-                result.AddPerson(new PersonInfo
+            var dateNode = sceneData.SelectSingleNode("//aside[contains(@class, 'scene-date')]");
+            if (dateNode != null)
+                if (DateTime.TryParse(dateNode.InnerText, out DateTime sceneDateObj))
                 {
-                    Name = actorName,
-                    ImageUrl = actorPhoto,
-                    Type = PersonType.Actor
-                });
-            }
+                    result.Item.PremiereDate = sceneDateObj;
+                    result.Item.ProductionYear = sceneDateObj.Year;
+                }
+
+            var genreNode = sceneData.SelectNodes("//div[contains(@class, 'tag-card-container')]//a");
+            if (genreNode != null)
+                foreach (var genreLink in genreNode)
+                {
+                    var genreName = genreLink.InnerText;
+
+                    result.Item.AddGenre(genreName);
+                }
+
+            var actorsNode = sceneData.SelectNodes("//div[@class='model-card']");
+            if (actorsNode != null)
+                foreach (var actorLink in actorsNode)
+                {
+                    string actorName = actorLink.SelectSingleNode(".//h2[@class='model-card-title']//a").Attributes["title"].Value,
+                           actorPhoto = $"https:{actorLink.SelectSingleNode(".//div[@class='card-image']//img").Attributes["data-src"].Value}";
+
+                    result.AddPerson(new PersonInfo
+                    {
+                        Name = actorName,
+                        ImageUrl = actorPhoto,
+                        Type = PersonType.Actor
+                    });
+                }
 
             return result;
         }

@@ -42,16 +42,19 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (site.Key != null)
             {
                 string searchTitle = GetClearTitle(title, site.Value),
-                       encodedTitle,
-                       searchDate;
+                       searchDate = string.Empty,
+                       encodedTitle;
+                DateTime? searchDateObj;
                 var titleAfterDate = GetDateFromTitle(searchTitle);
 
                 var siteNum = new int[2] {
                     site.Key[0],
                     site.Key[1]
                 };
-                searchTitle = titleAfterDate[0];
-                searchDate = titleAfterDate[1];
+                searchTitle = titleAfterDate.Item1;
+                searchDateObj = titleAfterDate.Item2;
+                if (searchDateObj.HasValue)
+                    searchDate = searchDateObj.Value.ToString("YYYY-mm-dd", PhoenixAdultHelper.Lang);
                 encodedTitle = Uri.EscapeDataString(searchTitle);
 
                 Log.LogInformation($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
@@ -66,8 +69,8 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     if (result.Count > 0)
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenBy(scene => scene.IndexNumber).ToList();
-                        else if (DateTime.TryParseExact(searchDate, "yyyy-MM-dd", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime searchDateObj) && result.All(scene => scene.PremiereDate.HasValue))
-                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj.Date, scene.PremiereDate.Value.Date) == 0).ToList();
+                        else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue))
+                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj.Value.Date, scene.PremiereDate.Value.Date) == 0).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
                 }
@@ -174,7 +177,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             return clearName;
         }
 
-        public static string[] GetDateFromTitle(string title)
+        public static (string, DateTime?) GetDateFromTitle(string title)
         {
             string searchDate,
                    searchTitle = title;
@@ -182,18 +185,18 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 { @"\b\d{4} \d{2} \d{2}\b", "yyyy MM dd" },
                 { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" }
             };
-            string[] searchData = new string[2] { searchTitle, string.Empty };
+            (string, DateTime?) searchData = (searchTitle, null);
 
             foreach (var regExRule in regExRules)
             {
                 var regEx = Regex.Match(searchTitle, regExRule.Key);
                 if (regEx.Groups.Count > 0)
-                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime date))
+                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime searchDateObj))
                     {
-                        searchDate = date.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
+                        searchDate = searchDateObj.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
 
-                        searchData = new string[2] { searchTitle, searchDate };
+                        searchData = (searchTitle, searchDateObj);
                         break;
                     }
             }
