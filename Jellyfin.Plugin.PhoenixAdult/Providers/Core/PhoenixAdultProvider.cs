@@ -37,6 +37,8 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (searchInfo == null)
                 return result;
 
+            Log.LogInformation($"searchInfo.Name: {searchInfo.Name}");
+
             var title = ReplaceAbbrieviation(searchInfo.Name);
             var site = GetSiteFromTitle(title);
             if (site.Key != null)
@@ -54,7 +56,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 searchTitle = titleAfterDate.Item1;
                 searchDateObj = titleAfterDate.Item2;
                 if (searchDateObj.HasValue)
-                    searchDate = searchDateObj.Value.ToString("YYYY-mm-dd", PhoenixAdultHelper.Lang);
+                    searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
                 encodedTitle = Uri.EscapeDataString(searchTitle);
 
                 Log.LogInformation($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
@@ -70,7 +72,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenBy(scene => scene.IndexNumber).ToList();
                         else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue))
-                            result = result.OrderByDescending(scene => DateTime.Compare(searchDateObj.Value.Date, scene.PremiereDate.Value.Date) == 0).ToList();
+                            result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
                         else
                             result = result.OrderByDescending(scene => 100 - PhoenixAdultHelper.LevenshteinDistance(searchTitle, scene.Name)).ToList();
                 }
@@ -109,6 +111,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
             if (provider != null)
             {
+                Log.LogInformation($"PhoenixAdult ID: {externalID}");
                 result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
                 result.HasMetadata = true;
                 result.Item.OfficialRating = "XXX";
