@@ -67,7 +67,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 var provider = PhoenixAdultList.GetProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
-                    result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDate, cancellationToken).ConfigureAwait(false);
+                    result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                     if (result.Count > 0)
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenBy(scene => scene.IndexNumber).ToList();
