@@ -91,6 +91,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - SextapeLesbians
   - WebYoung
   - WeLikeGirls
++ #### JAV (via R18) | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
 + #### Kink Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 30MinutesofTorment
   - BoundGangBangs
