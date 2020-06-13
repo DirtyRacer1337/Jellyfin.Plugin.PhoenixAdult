@@ -9,6 +9,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using System.Drawing;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
 {
@@ -41,7 +42,12 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
                 {
                     var http = await image.Url.AllowAnyHttpStatus().HeadAsync(cancellationToken).ConfigureAwait(false);
                     if (http.IsSuccessStatusCode)
-                        clearList.Add(image);
+                    {
+                        var img = Image.FromStream(await image.Url.GetStreamAsync(cancellationToken).ConfigureAwait(false));
+
+                        if (img.Width > 100)
+                            clearList.Add(image);
+                    }
                 }
 
                 images = clearList;

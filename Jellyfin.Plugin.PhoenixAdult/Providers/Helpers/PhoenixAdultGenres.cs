@@ -33,15 +33,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             if (_skipList.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            if (genreName.Contains("5k", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("60fps", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("hd", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("1080p", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("aprilfools", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("chibbles", StringComparison.OrdinalIgnoreCase)
-                || genreName.Contains("folsom", StringComparison.OrdinalIgnoreCase)
-            )
-                return null;
+            foreach(var genre in _skipListPartial)
+                if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                    return null;
 
             if (genreName.Contains("doggystyle", StringComparison.OrdinalIgnoreCase) || genreName.Contains("doggy style", StringComparison.OrdinalIgnoreCase))
                 return "Doggystyle (Position)";
@@ -78,7 +72,11 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             "keiran", "little runaway", "mr. cummings", "photos", "public disgrace's best",
             "ryan mclane", "show less", "show more", "site member", "smart", "spring cleaning",
             "st patrick's day", "the pope", "tj cummings", "tony", "twistys hard", "tyler steele",
-            "van styles", "workitout", "wow girls special", "yes, mistress",
+            "van styles", "workitout", "wow girls special", "yes, mistress", "hi-def"
+        };
+
+        private static readonly List<string> _skipListPartial = new List<string> {
+            "5k", "60fps", "hd", "1080p", "aprilfools", "chibbles", "folsom"
         };
 
         private static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {

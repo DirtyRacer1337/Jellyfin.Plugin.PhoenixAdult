@@ -332,6 +332,10 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {35, new string [] { "SubmissiveX" } },
                         {36, new string [] { "Filthy Femdom" } },
                     }
+                },{
+                    17, new Dictionary<int, string[]> {
+                        {0, new string [] { "JAV", "https://www.r18.com", "https://www.r18.com/common/search/searchword=" } },
+                    }
                 }
             };
 
@@ -354,6 +358,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             14 => new NetworkGammaEnt(),
             15 => new NetworkGammaEnt(),
             16 => new NetworkKink(),
+            17 => new NetworkR18(),
             _ => null
         };
     }
