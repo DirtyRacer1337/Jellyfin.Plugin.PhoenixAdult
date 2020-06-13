@@ -10,10 +10,8 @@ using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using MediaBrowser.Controller.Sorting;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
@@ -39,29 +37,30 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
             var searchResults = html.DocumentNode.SelectNodes("//li[contains(@class, 'item-list')]");
-            foreach (var searchResult in searchResults)
-            {
-                string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
-                        curID,
-                        sceneName = searchResult.SelectSingleNode(".//dt").InnerText,
-                        scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
-                        javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
-
-                sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
-                curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
-
-                var res = new RemoteSearchResult
+            if (searchResults != null)
+                foreach (var searchResult in searchResults)
                 {
-                    ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster
-                };
+                    string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                            curID,
+                            sceneName = searchResult.SelectSingleNode(".//dt").InnerText,
+                            scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
+                            javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
 
-                if (!string.IsNullOrEmpty(searchJAVID))
-                    res.IndexNumber = PhoenixAdultHelper.LevenshteinDistance(searchJAVID, javID);
+                    sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
+                    curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
 
-                result.Add(res);
-            }
+                    var res = new RemoteSearchResult
+                    {
+                        ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
+                        Name = sceneName,
+                        ImageUrl = scenePoster
+                    };
+
+                    if (!string.IsNullOrEmpty(searchJAVID))
+                        res.IndexNumber = PhoenixAdultHelper.LevenshteinDistance(searchJAVID, javID);
+
+                    result.Add(res);
+                }
 
             return result;
         }

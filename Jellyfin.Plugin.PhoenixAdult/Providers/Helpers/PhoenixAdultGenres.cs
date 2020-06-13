@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 {
@@ -15,7 +16,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
             foreach (var genreLink in genresLink)
             {
-                var genreName = Replace(genreLink, sceneName);
+                var genreName = WebUtility.HtmlDecode(genreLink);
+                genreName = Replace(genreName, sceneName);
                 if (!string.IsNullOrEmpty(genreName))
                 {
                     genreName = PhoenixAdultHelper.Lang.TextInfo.ToTitleCase(genreName);
@@ -76,7 +78,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
         };
 
         private static readonly List<string> _skipListPartial = new List<string> {
-            "5k", "60fps", "hd", "1080p", "aprilfools", "chibbles", "folsom"
+            "5k", "60fps", "hd", "1080p", "aprilfools", "chibbles", "folsom", "sale"
         };
 
         private static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {

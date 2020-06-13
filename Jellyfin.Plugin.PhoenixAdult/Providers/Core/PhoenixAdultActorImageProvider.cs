@@ -118,7 +118,11 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
 
             var actorImageNode = html.DocumentNode.SelectSingleNode("//table[@class='infobox']//a[@class='image']//img");
             if (actorImageNode != null)
-                image = "http://www.boobpedia.com" + actorImageNode.Attributes["src"].Value;
+            {
+                var img = actorImageNode.Attributes["src"].Value;
+                if (!img.Contains("NoImage", StringComparison.OrdinalIgnoreCase))
+                    image = "http://www.boobpedia.com" + actorImageNode.Attributes["src"].Value;
+            }
 
             return image;
         }
