@@ -96,7 +96,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
                 http = await actorPageURL.AllowAnyHttpStatus().WithHeader("User-Agent", "Googlebot-Image/1.0").GetAsync(cancellationToken).ConfigureAwait(false);
                 html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
-                image = html.DocumentNode.SelectSingleNode("//div[contains(@class, 'performer-image-container')]/a").Attributes["href"].Value;
+                var img = html.DocumentNode.SelectSingleNode("//div[contains(@class, 'performer-image-container')]/a");
+                if (img != null)
+                    image = img.Attributes["href"].Value;
             }
 
             return image;

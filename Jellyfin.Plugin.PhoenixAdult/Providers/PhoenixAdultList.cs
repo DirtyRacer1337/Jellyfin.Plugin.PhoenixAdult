@@ -336,6 +336,11 @@ namespace Jellyfin.Plugin.PhoenixAdult
                     17, new Dictionary<int, string[]> {
                         {0, new string [] { "JAV", "https://www.r18.com", "https://www.r18.com/common/search/searchword=" } },
                     }
+                },{
+                    18, new Dictionary<int, string[]> {
+                        {0, new string [] { "Femdom Empire", "https://femdomempire.com", "https://femdomempire.com/tour/search.php?st=advanced&qany=" } },
+                        {1, new string [] { "Feminized", "http://feminized.com", "http://feminized.com/tour/search.php?st=advanced&qany=" } },
+                    }
                 }
             };
 
@@ -359,6 +364,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             15 => new NetworkGammaEnt(),
             16 => new NetworkKink(),
             17 => new NetworkR18(),
+            18 => new NetworkFemdomEmpire(),
             _ => null
         };
     }
