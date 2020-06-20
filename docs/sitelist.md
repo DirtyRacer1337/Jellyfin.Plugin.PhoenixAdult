@@ -67,6 +67,30 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Dogfart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
+  - BarbCummings
+  - BlackMeatWhiteFeet
+  - BlacksOnBlondes
+  - BlacksOnBoys
+  - BlacksOnCougars
+  - CandyMonroe
+  - CuckoldSessions
+  - CumBang
+  - DogfarBehindTheScenes
+  - GloryHole
+  - Gloryhole-Initiations
+  - GloryholesAndHandjobs
+  - InterracialBlowbang
+  - InterracialPickups
+  - KatieThomas
+  - RuthBlackwell
+  - SpringThomas
+  - TheMinion
+  - WatchingMyDaughterGoBlack
+  - WatchingMyMomGoBlack
+  - WeFuckBlackGirls
+  - WifeWriting
+  - ZebraGirls
 + #### Erito | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### EvilAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### FakeHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
