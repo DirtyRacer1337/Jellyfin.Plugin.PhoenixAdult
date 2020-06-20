@@ -162,6 +162,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             { "Angel Piaff", new string[] { "Angela Piaf", "Angel Piaf" } },
             { "Ani Blackfox", new string[] { "Ani Black Fox", "Ani Black" } },
             { "Anita Bellini Berlusconi", new string[] { "Anita Bellini" } },
+            { "Anna De Ville", new string[] { "Anna Deville" } },
             { "Annika Albrite", new string[] { "Anikka Albrite" } },
             { "April O'Neil", new string[] { "April ONeil", "April O'neil" } },
             { "Ashlee Graham", new string[] { "Ashley Graham" } },

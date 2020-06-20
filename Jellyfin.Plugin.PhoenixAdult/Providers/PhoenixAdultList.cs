@@ -341,6 +341,33 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {0, new string [] { "Femdom Empire", "https://femdomempire.com", "https://femdomempire.com/tour/search.php?st=advanced&qany=" } },
                         {1, new string [] { "Feminized", "http://feminized.com", "http://feminized.com/tour/search.php?st=advanced&qany=" } },
                     }
+                },{
+                    19, new Dictionary<int, string[]> {
+                        {0, new string [] { "Dogfart", "https://www.dogfartnetwork.com", "https://www.dogfartnetwork.com/tour/search.php?search=" } },
+                        {1, new string [] { "BlacksOnBlondes" } },
+                        {2, new string [] { "CuckoldSessions" } },
+                        {3, new string [] { "GloryHole" } },
+                        {4, new string [] { "BlacksOnCougars" } },
+                        {5, new string [] { "WeFuckBlackGirls" } },
+                        {6, new string [] { "WatchingMyMomGoBlack" } },
+                        {7, new string [] { "InterracialBlowbang" } },
+                        {8, new string [] { "CumBang" } },
+                        {9, new string [] { "InterracialPickups" } },
+                        {10, new string [] { "WatchingMyDaughterGoBlack" } },
+                        {11, new string [] { "ZebraGirls" } },
+                        {12, new string [] { "GloryHoleInitiations" } },
+                        {13, new string [] { "DogfartBehindTheScenes" } },
+                        {14, new string [] { "BlackMeatWhiteFeet" } },
+                        {15, new string [] { "SpringThomas" } },
+                        {16, new string [] { "KatieThomas" } },
+                        {17, new string [] { "RuthBlackwell" } },
+                        {18, new string [] { "CandyMonroe" } },
+                        {19, new string [] { "WifeWriting" } },
+                        {20, new string [] { "BarbCummings" } },
+                        {21, new string [] { "TheMinion" } },
+                        {22, new string [] { "BlacksOnBoys" } },
+                        {23, new string [] { "GloryholesAndHandjobs" } },
+                    }
                 }
             };
 
@@ -365,6 +392,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             16 => new NetworkKink(),
             17 => new NetworkR18(),
             18 => new NetworkFemdomEmpire(),
+            19 => new NetworkDogfart(),
             _ => null
         };
     }

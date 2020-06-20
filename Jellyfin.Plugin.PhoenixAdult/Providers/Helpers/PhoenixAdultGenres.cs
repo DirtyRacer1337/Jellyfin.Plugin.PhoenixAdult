@@ -205,7 +205,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             {"Outdoors", new string[] { "outdoor" } },
             {"Paddle", new string[] { "paddling" } },
             {"Panties", new string[] { "braguitas" } },
-            {"Pantyhose & Stockings", new string[] { "nude stockings", "stockings", "nylons stockings", "pantyhose", "pantyhose footjobs", "black stockings", "pantyhose / stockings", "stocking" } },
+            {"Pantyhose & Stockings", new string[] { "nude stockings", "stockings", "nylons stockings", "pantyhose", "pantyhose footjobs", "black stockings", "pantyhose / stockings", "stocking", "panty hose" } },
             {"Piercing", new string[] { "piercings" } },
             {"Pile Driver", new string[] { "pile driving" } },
             {"Piss Play", new string[] { "pee", "pissing" } },
