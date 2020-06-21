@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    public class NetworkBang : IPhoenixAdultProviderBase
+    internal class NetworkBang : IPhoenixAdultProviderBase
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {

@@ -167,6 +167,43 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Bi Empire
   - FamilySinners
   - Transsensual
++ #### PornPros Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
+  - 18YearsOld
+  - 40ozBounce
+  - CockCompetition
+  - CrueltyParty
+  - CumDisgrace
+  - CumshotSurprise
+  - DeepThroatLove
+  - Disgraced18
+  - EuroHumpers
+  - FreaksOfBoobs
+  - FreaksOfCock
+  - GirlCum
+  - JurassicCock
+  - MassageCreep
+  - MilfHumiliation
+  - PimpParade
+  - PornPros
+  - RealExGirlfriends
+  - ShadyPi
+  - SquirtDisgrace
+  - TeenBFF
++ #### Other PornPros Sites | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
+  - Baeb
+  - CastingCouch-X
+  - Cum4K
+  - Exotic4k
+  - FantasyHD
+  - Holed
+  - Lubed
+  - MyVeryFirstTime
+  - NannySpy
+  - Passion-HD
+  - POVD
+  - PureMature
+  - SpyFam
+  - Tiny4k
 + #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Don't Break Me
   - Girls Gone Pink

@@ -14,7 +14,7 @@ using MediaBrowser.Model.Providers;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    class NetworkFemdomEmpire : IPhoenixAdultProviderBase
+    internal class NetworkFemdomEmpire : IPhoenixAdultProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {

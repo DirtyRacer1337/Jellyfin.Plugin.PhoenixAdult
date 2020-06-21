@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
@@ -15,7 +14,7 @@ using MediaBrowser.Model.Providers;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    class NetworkDogfart : IPhoenixAdultProviderBase
+    internal class NetworkDogfart : IPhoenixAdultProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -35,11 +34,12 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                     string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
                             curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleNode(".//div/h3[@class='scene-title']").InnerText,
-                            posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}";
+                            posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}",
+                            subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Split(".com")[0];
 
                     var res = new RemoteSearchResult
                     {
-                        Name = sceneName,
+                        Name = $"{sceneName} from {subSite}",
                         ImageUrl = posterURL
                     };
 
@@ -50,10 +50,6 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                     }
 
                     res.ProviderIds.Add(PhoenixAdultProvider.PluginName, curID);
-
-                    var subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Split(".com")[0];
-
-                    res.Name += $" from {subSite}";
 
                     if (subSite == PhoenixAdultHelper.GetSearchSiteName(siteNum))
                         res.IndexNumber = PhoenixAdultHelper.LevenshteinDistance(searchTitle, sceneName) - 100;
@@ -82,7 +78,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             var sceneData = html.DocumentNode;
 
             result.Item.Name = sceneData.SelectSingleNode("//div[@class='icon-container']/a").Attributes["title"].Value;
-            result.Item.Overview = sceneData.SelectSingleNode("//div[contains(@class, 'description')]").InnerText.Replace("...read more", "", StringComparison.OrdinalIgnoreCase).Trim();
+            result.Item.Overview = sceneData.SelectSingleNode("//div[contains(@class, 'description')]").InnerText.Replace("...read more", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
             result.Item.AddStudio("Dogfart Network");
 
             if (sceneID.Length > 3)

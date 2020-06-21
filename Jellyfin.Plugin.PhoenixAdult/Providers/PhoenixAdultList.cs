@@ -368,6 +368,46 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {22, new string [] { "BlacksOnBoys" } },
                         {23, new string [] { "GloryholesAndHandjobs" } },
                     }
+                },{
+                    20, new Dictionary<int, string[]> {
+                        {0, new string [] { "PornPros", "https://www.pornpros.com", "https://pornpros.com/video/" } },
+                        {1, new string [] { "18YearsOld" } },
+                        {2, new string [] { "RealExGirlfriends" } },
+                        {3, new string [] { "MassageCreep" } },
+                        {4, new string [] { "DeepThroatLove" } },
+                        {5, new string [] { "TeenBFF" } },
+                        {6, new string [] { "ShadyPi" } },
+                        {7, new string [] { "CrueltyParty" } },
+                        {8, new string [] { "Disgraced18" } },
+                        {9, new string [] { "MilfHumiliation" } },
+                        {10, new string [] { "CumshotSurprise" } },
+                        {11, new string [] { "40ozBounce" } },
+                        {12, new string [] { "JurassicCock" } },
+                        {13, new string [] { "FreaksOfCock" } },
+                        {14, new string [] { "EuroHumpers" } },
+                        {15, new string [] { "FreaksOfBoobs" } },
+                        {16, new string [] { "CumDisgrace" } },
+                        {17, new string [] { "CockCompetition" } },
+                        {18, new string [] { "PimpParade" } },
+                        {19, new string [] { "SquirtDisgrace" } },
+                    }
+                },{
+                    21, new Dictionary<int, string[]> {
+                        {0, new string [] { "POVD", "https://www.povd.com", "https://povd.com/video/" } },
+                        {1, new string [] { "Cum4K", "https://www.cum4k.com", "https://cum4k.com/video/" } },
+                        {2, new string [] { "Exotic4k", "https://www.exotic4k.com", "https://exotic4k.com/video/" } },
+                        {3, new string [] { "Tiny4k", "https://www.tiny4k.com", "https://tiny4k.com/video/" } },
+                        {4, new string [] { "Lubed", "https://www.lubed.com", "https://lubed.com/video/" } },
+                        {5, new string [] { "PureMature", "https://www.puremature.com", "https://puremature.com/video/" } },
+                        {6, new string [] { "NannySpy", "https://www.nannyspy.com", "https://nannyspy.com/video/" } },
+                        {7, new string [] { "Holed", "https://www.holed.com", "https://holed.com/video/" } },
+                        {8, new string [] { "CastingCouch-X", "https://www.castingcouch-x.com", "https://castingcouch-x.com/video/" } },
+                        {9, new string [] { "SpyFam", "https://www.spyfam.com", "https://spyfam.com/video/" } },
+                        {10, new string [] { "MyVeryFirstTime", "https://www.myveryfirsttime.com", "https://myveryfirsttime.com/video/" } },
+                        {11, new string [] { "Baeb", "https://www.baeb.com", "https://baeb.com/video/" } },
+                        {12, new string [] { "GirlCum", "https://www.girlcum.com", "https://www.girlcum.com/video/" } },
+                        {13, new string [] { "BBCPie", "https://bbcpie.com", "https://bbcpie.com/video/" } },
+                    }
                 }
             };
 
@@ -393,6 +433,8 @@ namespace Jellyfin.Plugin.PhoenixAdult
             17 => new NetworkR18(),
             18 => new NetworkFemdomEmpire(),
             19 => new NetworkDogfart(),
+            20 => new NetworkPornPros(),
+            21 => new NetworkPornPros(),
             _ => null
         };
     }

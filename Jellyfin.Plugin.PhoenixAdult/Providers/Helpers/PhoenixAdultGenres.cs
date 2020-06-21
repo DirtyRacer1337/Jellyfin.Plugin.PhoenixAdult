@@ -35,7 +35,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             if (_skipList.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            foreach(var genre in _skipListPartial)
+            foreach (var genre in _skipListPartial)
                 if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
                     return null;
 

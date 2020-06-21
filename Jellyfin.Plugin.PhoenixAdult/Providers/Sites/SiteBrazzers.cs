@@ -13,7 +13,7 @@ using MediaBrowser.Model.Providers;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 {
-    public class SiteBrazzers : IPhoenixAdultProviderBase
+    internal class SiteBrazzers : IPhoenixAdultProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
