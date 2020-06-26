@@ -89,7 +89,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = sceneData.SelectNodes("//div[@class='description']")[1].InnerText.Trim();
             result.Item.AddStudio("Kink");
 
-            var sceneDate = sceneData.SelectSingleNode("//div[@class='columns']/div[@class='column']/p").InnerText.Replace("Date:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
             if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
@@ -103,7 +103,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actors = sceneData.SelectNodes("//p[@class='starring' and contains(text(), 'With:')]//a");
+            var actors = sceneData.SelectNodes("//p[@class='starring']//a");
             if (actors != null)
                 foreach (var actorLink in actors)
                 {
