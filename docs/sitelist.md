@@ -33,6 +33,59 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Elegant Anal
   - Office Obsession
   - Stepmom Lessons
++ #### Bang Bros Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Ass Parade
+  - AvaSpice
+  - Back Room Facials
+  - Backroom MILF
+  - Ball Honeys
+  - Bang Bus
+  - Bang Casting
+  - Bang POV
+  - Bang Tryouts
+  - BangBros 18
+  - BangBros Angels
+  - BangBros Remastered
+  - Bangbros Clips
+  - Big Mouthfuls
+  - Big Tit Cream Pie
+  - Big Tits Round Asses
+  - BlowJob Fridays
+  - Blowjob Ninjas
+  - Boob Squad
+  - Brown Bunnies
+  - Can He Score
+  - Casting
+  - Chongas
+  - Colombia Fuck Fest
+  - Dirty World Tour
+  - Dorm Invasion
+  - Facial Fest
+  - Fuck Team Five
+  - Glory Hole Loads
+  - Latina Rampage
+  - Living With Anna
+  - MILF Lessons
+  - Magical Feet
+  - Milf Soup
+  - MomIsHorny
+  - Monsters of Cock
+  - Mr Anal
+  - Mr CamelToe
+  - My Dirty Maid
+  - My Life In Brazil
+  - Newbie Black
+  - Party of 3
+  - Pawg
+  - Penny Show
+  - Porn Star Spa
+  - Power Munch
+  - Public Bang
+  - Slutty White Girls
+  - Stepmom Videos
+  - Street Ranger
+  - Tugjobs
+  - Working Latinas
 + #### Bang! | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Brazzers Network: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Asses In Public

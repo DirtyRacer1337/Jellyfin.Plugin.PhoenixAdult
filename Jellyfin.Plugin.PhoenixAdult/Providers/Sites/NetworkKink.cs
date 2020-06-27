@@ -86,7 +86,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             var sceneData = html.DocumentNode;
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
-            result.Item.Overview = sceneData.SelectNodes("//div[@class='description']")[1].InnerText.Trim();
+            result.Item.Overview = sceneData.SelectNodes("//div[@class='description']")[1].InnerText.Replace("Description:", "", StringComparison.OrdinalIgnoreCase).Trim();
             result.Item.AddStudio("Kink");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
@@ -98,7 +98,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             foreach (var genreLink in sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a"))
             {
-                var genreName = genreLink.InnerText.Trim();
+                var genreName = genreLink.InnerText.Replace(",", "", StringComparison.OrdinalIgnoreCase).Trim();
 
                 result.Item.AddGenre(genreName);
             }

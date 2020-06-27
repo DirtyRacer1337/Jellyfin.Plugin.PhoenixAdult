@@ -16,7 +16,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
             foreach (var genreLink in genresLink)
             {
-                var genreName = WebUtility.HtmlDecode(genreLink);
+                var genreName = WebUtility.HtmlDecode(genreLink).Trim();
                 genreName = Replace(genreName, sceneName);
                 if (!string.IsNullOrEmpty(genreName))
                 {
