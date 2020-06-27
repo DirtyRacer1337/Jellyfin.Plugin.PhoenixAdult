@@ -1,10 +1,13 @@
-PhoenixAdult
-===========================
+# PhoenixAdult
+
+[![GPL 2.0 License](https://img.shields.io/github/license/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](./LICENSE)
+[![Current Release](https://img.shields.io/github/release/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/latest)
+
+------------
+
 This metadata provider helps fill Jellyfin with information for your adult videos by pulling from the original site.
 
-Features
---------
-Currently the features of this metadata agent are:
+## Features
 - Scrapes any available Metadata, including:
   - Scene Title
   - Scene Summary
@@ -16,13 +19,12 @@ Currently the features of this metadata agent are:
   - Scene Director(s)
   - Movie Poster(s) / Background Art
 
-File Naming
------------
+## File Naming
 The agent will try to match your file automatically, usually based on the filename. You can assist it by renaming your video appropriately.
-If the video is not successfully matched, you can try to manually match it using the [Identify] function in Jellyfin. See the [manual searching document](./docs/manualsearch.md) for more information.
+If the video is not successfully matched, you can try to manually match it using the "Identify" function in Jellyfin. See the [manual searching document](./docs/manualsearch.md) for more information.
 Best practice for each site is listed in the [sitelist document](./docs/sitelist.md).
 
-#### Here are some naming structures we recommend:
+### Here are some naming structures we recommend:
 - `SiteName` - `YYYY-MM-DD` - `Scene Name` `.[ext]`
 - `SiteName` - `Scene Name` `.[ext]`
 - `SiteName` - `YYYY-MM-DD` - `Actor(s)` `.[ext]`
@@ -35,9 +37,9 @@ Real world examples:
 - `Blacked - Alecia Fox Joss Lescaf.mp4`
 
 Some sites do not have a search function available. This is where SceneID and Direct URL come in to play.
-These usually don't make the most intuitive filenames, so it is often better to use the [Identify] function in Jellyfin. See the [manual searching document](./docs/manualsearch.md) for more information.
+These usually don't make the most intuitive filenames, so it is often better to use the "Identify" function in Jellyfin. See the [manual searching document](./docs/manualsearch.md) for more information.
 
-#### If you would prefer to integrate SceneIDs into your filenames, instead of manually matching in Jellyfin, here are some naming structures we recommend:
+#### If you would prefer to integrate SceneID's into your filenames, instead of manually matching in Jellyfin, here are some naming structures we recommend:
 - `SiteName` - `YYYY-MM-DD` - `SceneID` `.[ext]`
 - `SiteName` - `SceneID` `.[ext]`
 - `SiteName` - `SceneID` - `Scene Name` `.[ext]`
@@ -58,9 +60,7 @@ dotnet publish --configuration Release --output bin
 
 ## Required Libraries
 - [Html Agility Pack](https://github.com/zzzprojects/html-agility-pack)
-- [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
 - [Flurl](https://github.com/tmenier/Flurl)
 
-Supported Networks
-------------------
+## Supported Networks
 To view the full list of supported sites, [check out the sitelist doc](./docs/sitelist.md).
