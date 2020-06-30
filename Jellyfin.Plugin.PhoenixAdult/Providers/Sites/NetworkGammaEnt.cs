@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -73,30 +74,29 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 {
                     string sceneID,
                             curID,
-                            sceneName = (string)searchResult["title"],
-                            sceneDate;
+                            sceneName = (string)searchResult["title"];
+                    DateTime sceneDateObj;
 
                     if (sceneType == "scenes")
                     {
-                        sceneDate = (string)searchResult["release_date"];
+                        sceneDateObj = (DateTime)searchResult["release_date"];
                         sceneID = (string)searchResult["clip_id"];
                     }
                     else
                     {
                         var dateField = searchResult["last_modified"] != null ? "last_modified" : "date_created";
-                        sceneDate = (string)searchResult[dateField];
+                        sceneDateObj = (DateTime)searchResult[dateField];
                         sceneID = (string)searchResult["movie_id"];
                     }
+                    var sceneDate = sceneDateObj.ToString("yyyy-MM-dd", PhoenixAdultHelper.Lang);
 
                     curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}#{sceneDate}";
-
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
-                        Name = sceneName
+                        Name = sceneName,
+                        PremiereDate = sceneDateObj
                     };
-                    if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                        res.PremiereDate = sceneDateObj;
 
                     result.Add(res);
                 }
@@ -127,7 +127,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio(PhoenixAdultHelper.Lang.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
-            if (DateTime.TryParse(sceneID[4], out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", PhoenixAdultHelper.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
                 result.Item.ProductionYear = sceneDateObj.Year;

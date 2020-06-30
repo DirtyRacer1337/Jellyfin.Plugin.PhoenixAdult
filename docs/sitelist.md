@@ -221,7 +221,6 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - FamilySinners
   - Transsensual
 + #### Mylf Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
-  - Anal Mom
   - Full Of JOI
   - Got Mylf
   - Lone Milf
@@ -418,6 +417,50 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Other Reality Kings Sites | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Lil Humpers
 + #### Rocco Siffredi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### TeamSkeet Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
+  - Anal Mom
+  - BBC Paradise
+  - BFFs
+  - Badmilfs
+  - Black Valley Girls
+  - BraceFaced
+  - CFNM Teens
+  - DadCrush
+  - DaughterSwap
+  - Dyked
+  - ExxxtraSmall
+  - FamilyStrokes
+  - FosterTapes
+  - Gingerpatch
+  - Her Freshman Year
+  - Innocent High
+  - Little Asians
+  - Lust HD
+  - My Babysitters Club
+  - Oye Loca
+  - POV Life
+  - PervMom
+  - Rub A Teen
+  - Self Desire
+  - She's New
+  - Shoplyfter
+  - ShoplyfterMylf
+  - Sis Loves Me
+  - Solo Interviews
+  - StepSiblings
+  - Team Skeet Extras
+  - Teen Curves
+  - Teen JOI
+  - Teen Pies
+  - Teens Do Porn
+  - Teens Love Anal
+  - Teens Love Black Cocks
+  - Teens Love Money
+  - Teeny Black
+  - The Real Workout
+  - Thickumz
+  - This Girl Sucks
+  - Titty Attack
 + #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Dane Jones
   - Fitness Rooms

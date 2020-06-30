@@ -49,16 +49,16 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 string sceneID = (string)sceneData["identifier"],
                         curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
                         sceneName = (string)sceneData["name"],
-                        scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
-                        sceneDate = (string)sceneData["releaseDate"];
+                        scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
+                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+
                 var item = new RemoteSearchResult
                 {
                     ProviderIds = { { PhoenixAdultProvider.PluginName, curID } },
                     Name = sceneName,
-                    ImageUrl = scenePoster
+                    ImageUrl = scenePoster,
+                    PremiereDate = sceneDateObj
                 };
-                if (DateTime.TryParse(sceneDate, out DateTime sceneDateObj))
-                    item.PremiereDate = sceneDateObj;
 
                 result.Add(item);
             }
@@ -84,11 +84,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio(PhoenixAdultHelper.Lang.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
 
-            if (DateTime.TryParse((string)sceneData["releaseDate"], out DateTime sceneDateObj))
-            {
-                result.Item.PremiereDate = sceneDateObj;
-                result.Item.ProductionYear = sceneDateObj.Year;
-            }
+            DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+            result.Item.PremiereDate = sceneDateObj;
+            result.Item.ProductionYear = sceneDateObj.Year;
 
             foreach (var genreLink in sceneData["genres"])
             {

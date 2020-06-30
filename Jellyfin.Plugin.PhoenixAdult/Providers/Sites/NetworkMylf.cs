@@ -58,7 +58,6 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             };
 
             var searchResults = await PhoenixAdultHelper.GetGoogleSearchResults(searchTitle, siteNum, cancellationToken).ConfigureAwait(false);
-
             foreach (var searchResult in searchResults)
             {
                 var url = searchResult.Split("?").First();

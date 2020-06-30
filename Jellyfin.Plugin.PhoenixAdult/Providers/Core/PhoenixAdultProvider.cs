@@ -28,6 +28,22 @@ namespace Jellyfin.Plugin.PhoenixAdult
             if (log != null)
                 Log = log.CreateLogger(Name);
             Http = http;
+
+            int siteListCount = 0;
+            foreach (var site in PhoenixAdultList.SiteList.Values)
+                siteListCount += site.Count;
+
+            var siteModuleList = new List<string>();
+            for (int i = 0; i < PhoenixAdultList.SiteList.Count; i += 1) {
+                var siteModule = PhoenixAdultList.GetProviderBySiteID(i);
+                    if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
+                        siteModuleList.Add(siteModule.ToString());
+            }
+
+            Log.LogInformation($"Plugin version: {Plugin.Instance.Version}");
+            Log.LogInformation($"Number of supported sites: {siteListCount}");
+            Log.LogInformation($"Number of site modules: {siteModuleList.Count}");
+            Log.LogInformation($"Default plugin locale: {PhoenixAdultHelper.Lang.Name}");
         }
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
@@ -90,7 +106,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             };
 
             if (info == null)
-                return result;
+                return null;
 
             var sceneID = info.ProviderIds;
             if (!sceneID.ContainsKey(Name))
@@ -102,11 +118,11 @@ namespace Jellyfin.Plugin.PhoenixAdult
 
             var externalID = sceneID.GetValueOrDefault(Name);
             if (string.IsNullOrEmpty(externalID))
-                return result;
+                return null;
 
             var curID = externalID.Split('#');
             if (curID.Length < 3)
-                return result;
+                return null;
 
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
             if (provider != null)
