@@ -124,7 +124,14 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
-            result.Item.AddStudio("Mylf");
+            switch (siteNum[0]) {
+                case 23:
+                    result.Item.AddStudio("Mylf");
+                    break;
+                case 24:
+                    result.Item.AddStudio("TeamSkeet");
+                    break;
+            }
 
             DateTime? releaseDate = null;
             if (sceneData.ContainsKey("publishedDate"))
