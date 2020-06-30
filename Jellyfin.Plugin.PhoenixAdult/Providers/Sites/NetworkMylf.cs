@@ -203,6 +203,82 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                         "BDSM"
                     };
                     break;
+                case "Sis Loves Me":
+                    genres = new List<string> {
+                        "Step Sister"
+                    };
+                    break;
+                case "DadCrush":
+                case "DaughterSwap":
+                    genres = new List<string> {
+                        "Step Dad", "Step Daughter"
+                    };
+                    break;
+                case "PervMom":
+                    genres = new List<string> {
+                        "Step Mom"
+                    };
+                    break;
+                case "Family Strokes":
+                    genres = new List<string> {
+                        "Taboo Family"
+                    };
+                    break;
+                case "Foster Tapes":
+                    genres = new List<string> {
+                        "Taboo Sex"
+                    };
+                    break;
+                case "BFFs":
+                    genres = new List<string> {
+                        "Teen", "Group Sex"
+                    };
+                    break;
+                case "Shoplyfter":
+                    genres = new List<string> {
+                        "Strip"
+                    };
+                    break;
+                case "ShoplyfterMylf":
+                    genres = new List<string> {
+                        "Strip", "MILF"
+                    };
+                    break;
+                case "Exxxtra Small":
+                    genres = new List<string> {
+                        "Teen", "Small Tits"
+                    };
+                    break;
+                case "Little Asians":
+                    genres = new List<string> {
+                        "Teen", "Asian"
+                    };
+                    break;
+                case "TeenJoi":
+                    genres = new List<string> {
+                        "Teen", "JOI"
+                    };
+                    break;
+                case "Black Valley Girls":
+                    genres = new List<string> {
+                        "Teen", "Ebony"
+                    };
+                    break;
+                case "Thickumz":
+                    genres = new List<string> {
+                        "Thick"
+                    };
+                    break;
+                case "Dyked":
+                    genres = new List<string> {
+                        "Hardcore", "Teen", "Lesbian"
+                    };
+                    break;
+                case "Teens Love Black Cocks":
+                    genres = new List<string> {
+                        "Teen", "BBC"
+                    };
+                    break;
             }
 
             foreach (var genreName in genres)

@@ -40,9 +40,16 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         siteModuleList.Add(siteModule.ToString());
             }
 
+            int actressListCount = 0;
+            foreach (var actress in PhoenixAdultPeoples._replaceListStudio.Values)
+                actressListCount += actress.Count;
+            actressListCount += PhoenixAdultPeoples._replaceList.Count;
+
             Log.LogInformation($"Plugin version: {Plugin.Instance.Version}");
             Log.LogInformation($"Number of supported sites: {siteListCount}");
             Log.LogInformation($"Number of site modules: {siteModuleList.Count}");
+            Log.LogInformation($"Number of site aliases: {_abbrieviationList.Count}");
+            Log.LogInformation($"Number of actress: {actressListCount}");
             Log.LogInformation($"Default plugin locale: {PhoenixAdultHelper.Lang.Name}");
         }
 

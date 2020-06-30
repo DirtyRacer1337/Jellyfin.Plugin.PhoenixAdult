@@ -146,7 +146,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             return actorName;
         }
 
-        private static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {
+        public static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {
             { "Abbey Rain", new string[] { "Abby Rains" } },
             { "Abby Lee Brazil", new string[] { "Abby Lee" } },
             { "Abella Danger", new string[] { "Bella Danger" } },
@@ -223,7 +223,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             { "Veronica Valentine", new string[] { "Veronica Vega" } },
         };
 
-        private static readonly Dictionary<int, Dictionary<string, string[]>> _replaceListStudio = new Dictionary<int, Dictionary<string, string[]>> {{
+        public static readonly Dictionary<int, Dictionary<string, string[]>> _replaceListStudio = new Dictionary<int, Dictionary<string, string[]>> {{
                 0, new Dictionary<string, string[]> {
                     { "Henessy", new string[] { "Henna Ssy" } },
                     { "Katarina Muti", new string[] { "Ariel Temple" } },
