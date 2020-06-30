@@ -928,7 +928,6 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
                     { "Ariel Rose", new string[] { "Ariel R" } },
                     { "Arika Foxx", new string[] { "Arika" } },
                     { "Aruna Aghora", new string[] { "Zarina" } },
-                    { "Arya Fae, Megan Sage, and Nina North", new string[] { "Yoga" } },
                     { "Aubree Jade", new string[] { "Mariah" } },
                     { "Autumn Viviana", new string[] { "Viviana" } },
                     { "Ava Dalush", new string[] { "Ava" } },

@@ -113,14 +113,17 @@ namespace Jellyfin.Plugin.PhoenixAdult
             {
                 Log.LogInformation($"PhoenixAdult ID: {externalID}");
                 result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
-                result.HasMetadata = true;
-                result.Item.OfficialRating = "XXX";
-                result.Item.ProviderIds = sceneID;
+                if (result != null)
+                {
+                    result.HasMetadata = true;
+                    result.Item.OfficialRating = "XXX";
+                    result.Item.ProviderIds = sceneID;
 
-                if ((result.People != null) && result.People.Any())
-                    result.People = PhoenixAdultPeoples.Cleanup(result);
-                if (result.Item.Genres != null && result.Item.Genres.Any())
-                    result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
+                    if ((result.People != null) && result.People.Any())
+                        result.People = PhoenixAdultPeoples.Cleanup(result);
+                    if (result.Item.Genres != null && result.Item.Genres.Any())
+                        result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
+                }
             }
 
             return result;
@@ -232,9 +235,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^21fa ", "21FootArt " },
             { @"^21n ", "21Naturals " },
             { @"^2cst ", "2ChicksSameTime " },
-            { @"^Daughter ", "DaughterSwap " },
-            { @"^Daughters ", "DaughterSwap " },
-            { @"^Shes New ", "She's New " },
             { @"^a1o1 ", "Asian1on1 " },
             { @"^aa ", "AmateurAllure " },
             { @"^ad ", "AmericanDaydreams " },
@@ -274,6 +274,8 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^cuf ", "CumFiesta " },
             { @"^cws ", "CzechWifeSwap " },
             { @"^da ", "DoctorAdventures " },
+            { @"^daughter ", "DaughterSwap " },
+            { @"^daughters ", "DaughterSwap " },
             { @"^dbm ", "DontBreakMe " },
             { @"^dc ", "DorcelVision " },
             { @"^ddfb ", "DDFBusty " },
@@ -293,7 +295,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^fhd ", "FantasyHD " },
             { @"^fhl ", "FakeHostel " },
             { @"^fho ", "FakehubOriginals " },
-            { @"^fittingroom ", "Fitting-Room " },
             { @"^fka ", "FakeAgent " },
             { @"^fm ", "FuckingMachines " },
             { @"^fms ", "FantasyMassage " },
@@ -323,7 +324,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^latn ", "LookAtHerNow " },
             { @"^lcd ", "LittleCaprice " },
             { @"^lhf ", "LoveHerFeet " },
-            { @"^littlecapricedreams ", "LittleCaprice " },
             { @"^lsb ", "Lesbea " },
             { @"^lst ", "LatinaSexTapes " },
             { @"^lta ", "LetsTryAnal " },
@@ -360,7 +360,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^na ", "NaughtyAthletics " },
             { @"^naf ", "NeighborAffair " },
             { @"^nam ", "NaughtyAmerica " },
-            { @"^naughtyamericavr ", "NaughtyAmerica " },
             { @"^nb ", "NaughtyBookworms " },
             { @"^news ", "NewSensations " },
             { @"^nf ", "NubileFilms " },
@@ -371,7 +370,6 @@ namespace Jellyfin.Plugin.PhoenixAdult
             { @"^nw ", "NaughtyWeddings " },
             { @"^obj ", "OnlyBlowjob " },
             { @"^otb ", "OnlyTeenBlowjobs " },
-            { @"^passion-hd ", "PassionHD " },
             { @"^pav ", "PixAndVideo " },
             { @"^pba ", "PublicAgent " },
             { @"^pc ", "PrincessCum " },

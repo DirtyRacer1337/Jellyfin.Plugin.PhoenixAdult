@@ -96,18 +96,18 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 Item = new Movie()
             };
             if (sceneID == null)
-                return result;
+                return null;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 
             var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
-                return result;
+                return null;
 
             var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
-                return result;
+                return null;
 
             sceneData = (JObject)sceneData["result"].First;
 

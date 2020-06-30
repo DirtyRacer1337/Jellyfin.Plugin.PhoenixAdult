@@ -112,7 +112,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 Item = new Movie()
             };
             if (sceneID == null)
-                return result;
+                return null;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 

@@ -1,11 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using Flurl.Http;
+using HtmlAgilityPack;
 using MediaBrowser.Common.Net;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 {
@@ -93,6 +99,50 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
                 return text;
 
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
+        public static async Task<List<string>> GetGoogleSearchResults(string text, int[] siteNum, CancellationToken cancellationToken)
+        {
+            var results = new List<string>();
+            string searchTerm;
+
+            if (siteNum != null)
+            {
+                var site = GetSearchBaseURL(siteNum).Split("://")[1];
+                searchTerm = $"site:{site} {text}";
+            }
+            else
+                searchTerm = text;
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                PhoenixAdultProvider.Log.LogInformation($"Using Google Search '{searchTerm}'");
+                var url = "https://www.google.com/search?q=" + Uri.EscapeDataString(searchTerm);
+                var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
+                var html = new HtmlDocument();
+                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+
+                var searchResults = html.DocumentNode.SelectNodes("//a");
+                if (searchResults != null)
+                    foreach (var searchResult in searchResults)
+                    {
+                        var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
+                        if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
+                        {
+                            searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", "", StringComparison.OrdinalIgnoreCase))["q"];
+
+                            if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
+                                results.Add(searchURL);
+                        }
+                    }
+            }
+
+            return results;
+        }
+
+        public static async Task<List<string>> GetGoogleSearchResults(string text, CancellationToken cancellationToken)
+        {
+            return await GetGoogleSearchResults(text, null, cancellationToken).ConfigureAwait(false);
         }
 
         public static Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)

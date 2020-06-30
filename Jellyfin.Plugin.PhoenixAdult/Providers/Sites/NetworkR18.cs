@@ -72,7 +72,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 Item = new Movie()
             };
             if (sceneID == null)
-                return result;
+                return null;
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);

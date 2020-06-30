@@ -242,6 +242,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {56, new string [] { "Open Family" } },
                         {57, new string [] { "Watch Your Mom" } },
                         {58, new string [] { "Show My BF" } },
+                        {59, new string [] { "Naughty America VR" } },
                     }
                 },{
                     11, new Dictionary<int, string[]> {
@@ -464,6 +465,36 @@ namespace Jellyfin.Plugin.PhoenixAdult
                         {51, new string [] { "Tugjobs" } },
                         {52, new string [] { "Working Latinas" } },
                     }
+                },{
+                    23, new Dictionary<int, string[]> {
+                        {0, new string [] { "Mylf", "https://mylf.com", "https://www.mylf.com/movies/" } },
+                        {1, new string [] { "MylfBoss" } },
+                        {2, new string [] { "MylfBlows" } },
+                        {3, new string [] { "Milfty" } },
+                        {4, new string [] { "Got Mylf" } },
+                        {5, new string [] { "Mom Drips" } },
+                        {6, new string [] { "Mylfed" } },
+                        {7, new string [] { "Milf Body" } },
+                        {8, new string [] { "Lone Milf" } },
+                        {9, new string [] { "Full Of JOI" } },
+                        {10, new string [] { "Mylfwood" } },
+                        {11, new string [] { "ShoplyfterMylf", "https://www.shoplyftermylf.com", "https://www.shoplyftermylf.com/movies/" } },
+                        {12, new string [] { "Mylf x Joybear" } },
+                        {13, new string [] { "Mylf x Teamskeet" } },
+                        {14, new string [] { "Mylf x Hussie Pass" } },
+                        {15, new string [] { "Mylf Of The Month" } },
+                        {16, new string [] { "Mylfselects" } },
+                        {17, new string [] { "Mylf x Lady Fyre" } },
+                        {18, new string [] { "Mylf X CamSoda" } },
+                        {19, new string [] { "Mylf X Fucking Awesome" } },
+                        {20, new string [] { "Mylf X James Deen" } },
+                        {21, new string [] { "Mylf X Mindi Mink" } },
+                        {22, new string [] { "Mylf X Owen Gray" } },
+                        {23, new string [] { "Mylf X SpankMonster" } },
+                        {24, new string [] { "StayHomeMilf" } },
+                        {25, new string [] { "Mylfdom", "https://www.mylfdom.com", "https://www.mylfdom.com/movies/" } },
+                        {26, new string [] { "Anal Mom", "https://www.analmom.com", "https://www.analmom.com/movies/" } },
+                    }
                 }
             };
 
@@ -492,6 +523,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             20 => new NetworkPornPros(),
             21 => new NetworkPornPros(),
             22 => new SiteBangBros(),
+            23 => new NetworkMylf(),
             _ => null
         };
     }
