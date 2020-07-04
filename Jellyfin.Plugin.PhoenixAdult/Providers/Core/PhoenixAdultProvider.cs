@@ -34,10 +34,11 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 siteListCount += site.Count;
 
             var siteModuleList = new List<string>();
-            for (int i = 0; i < PhoenixAdultList.SiteList.Count; i += 1) {
+            for (int i = 0; i < PhoenixAdultList.SiteList.Count; i += 1)
+            {
                 var siteModule = PhoenixAdultList.GetProviderBySiteID(i);
-                    if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
-                        siteModuleList.Add(siteModule.ToString());
+                if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
+                    siteModuleList.Add(siteModule.ToString());
             }
 
             int actressListCount = 0;
@@ -113,7 +114,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             };
 
             if (info == null)
-                return null;
+                return result;
 
             var sceneID = info.ProviderIds;
             if (!sceneID.ContainsKey(Name))
@@ -125,11 +126,11 @@ namespace Jellyfin.Plugin.PhoenixAdult
 
             var externalID = sceneID.GetValueOrDefault(Name);
             if (string.IsNullOrEmpty(externalID))
-                return null;
+                return result;
 
             var curID = externalID.Split('#');
             if (curID.Length < 3)
-                return null;
+                return result;
 
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
             if (provider != null)

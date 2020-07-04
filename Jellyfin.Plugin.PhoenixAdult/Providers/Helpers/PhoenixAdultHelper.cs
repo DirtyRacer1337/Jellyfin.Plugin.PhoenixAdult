@@ -141,9 +141,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
         }
 
         public static async Task<List<string>> GetGoogleSearchResults(string text, CancellationToken cancellationToken)
-        {
-            return await GetGoogleSearchResults(text, null, cancellationToken).ConfigureAwait(false);
-        }
+            => await GetGoogleSearchResults(text, null, cancellationToken).ConfigureAwait(false);
 
         public static Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
             => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions

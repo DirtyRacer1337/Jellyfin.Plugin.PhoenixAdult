@@ -99,46 +99,55 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                         "Lube", "Raw", "Wet"
                     };
                     break;
+
                 case "Holed":
                     genres = new List<string> {
                         "Anal", "Ass"
                     };
                     break;
+
                 case "POVD":
                     genres = new List<string> {
                         "Gonzo", "Pov"
                     };
                     break;
+
                 case "MassageCreep":
                     genres = new List<string> {
                         "Massage", "Oil"
                     };
                     break;
+
                 case "DeepThroatLove":
                     genres = new List<string> {
                         "Blowjob", "Deep Throat"
                     };
                     break;
+
                 case "PureMature":
                     genres = new List<string> {
                         "MILF", "Mature"
                     };
                     break;
+
                 case "Cum4K":
                     genres = new List<string> {
                         "Creampie"
                     };
                     break;
+
                 case "GirlCum":
                     genres = new List<string> {
                         "Orgasms", "Girl Orgasm", "Multiple Orgasms"
                     };
                     break;
+
                 case "PassionHD":
                     genres = new List<string> {
                         "Hardcore"
                     };
                     break;
+
                 case "BBCPie":
                     genres = new List<string> {
                         "Interracial", "BBC", "Creampie"
