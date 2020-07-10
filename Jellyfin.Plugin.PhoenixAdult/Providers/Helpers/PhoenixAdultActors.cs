@@ -32,7 +32,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
         private static string Replace(string actorName, string[] studios)
         {
-            var newActorName = _replaceList.FirstOrDefault(x => x.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
+            var newActorName = ReplaceList.FirstOrDefault(x => x.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newActorName))
                 return newActorName;
 
@@ -138,7 +138,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
 
             if (siteIndex > -1)
             {
-                newActorName = _replaceListStudio[siteIndex].FirstOrDefault(item => item.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
+                newActorName = ReplaceListStudio[siteIndex].FirstOrDefault(item => item.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
                 if (!string.IsNullOrEmpty(newActorName))
                     return newActorName;
             }
@@ -146,7 +146,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             return actorName;
         }
 
-        public static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {
+        public static readonly Dictionary<string, string[]> ReplaceList = new Dictionary<string, string[]> {
             { "Abbey Rain", new string[] { "Abby Rains" } },
             { "Abby Lee Brazil", new string[] { "Abby Lee" } },
             { "Abella Danger", new string[] { "Bella Danger" } },
@@ -223,7 +223,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Helpers
             { "Veronica Valentine", new string[] { "Veronica Vega" } },
         };
 
-        public static readonly Dictionary<int, Dictionary<string, string[]>> _replaceListStudio = new Dictionary<int, Dictionary<string, string[]>> {{
+        public static readonly Dictionary<int, Dictionary<string, string[]>> ReplaceListStudio = new Dictionary<int, Dictionary<string, string[]>> {{
                 0, new Dictionary<string, string[]> {
                     { "Henessy", new string[] { "Henna Ssy" } },
                     { "Katarina Muti", new string[] { "Ariel Temple" } },

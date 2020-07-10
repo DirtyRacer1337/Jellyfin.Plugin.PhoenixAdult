@@ -39,10 +39,10 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             {
                 var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum);
                 var http = await url.WithHeader("Cookie", $"textSearch={encodedTitle}").GetAsync(cancellationToken).ConfigureAwait(false);
-                var html = new HtmlDocument();
-                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                var stream = await http.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                var data = HTML.ElementFromStream(stream);
 
-                var searchResults = html.DocumentNode.SelectNodes("//div[@class='release-card-wrap']");
+                var searchResults = data.SelectNodes("//div[@class='release-card-wrap']");
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//div[@class='scene-card-info']//a[1]").Attributes["href"].Value,
@@ -78,10 +78,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 return null;
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode.SelectSingleNode("//p[@itemprop='description']");
+            var sceneData = (await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false)).SelectSingleNode("//p[@itemprop='description']");
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
             result.Item.Overview = sceneData.SelectSingleNode("//p[@itemprop='description']/text()").InnerText.Trim();

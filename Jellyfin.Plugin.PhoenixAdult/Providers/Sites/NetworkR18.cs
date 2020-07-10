@@ -32,11 +32,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 encodedTitle = searchJAVID;
 
             var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
-            var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = html.DocumentNode.SelectNodes("//li[contains(@class, 'item-list')]");
+            var searchResults = data.SelectNodes("//li[contains(@class, 'item-list')]");
             if (searchResults != null)
                 foreach (var searchResult in searchResults)
                 {
@@ -75,10 +73,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 return null;
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode;
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText;
 

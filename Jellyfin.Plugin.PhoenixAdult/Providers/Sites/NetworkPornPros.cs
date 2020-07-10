@@ -58,10 +58,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode;
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText.Trim();
             var description = sceneData.SelectSingleNode("//div[contains(@id, 'description')]");

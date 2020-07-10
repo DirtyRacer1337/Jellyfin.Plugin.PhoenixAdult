@@ -42,9 +42,9 @@ namespace Jellyfin.Plugin.PhoenixAdult
             }
 
             int actressListCount = 0;
-            foreach (var actress in PhoenixAdultPeoples._replaceListStudio.Values)
+            foreach (var actress in PhoenixAdultPeoples.ReplaceListStudio.Values)
                 actressListCount += actress.Count;
-            actressListCount += PhoenixAdultPeoples._replaceList.Count;
+            actressListCount += PhoenixAdultPeoples.ReplaceList.Count;
 
             Log.LogInformation($"Plugin version: {Plugin.Instance.Version}");
             Log.LogInformation($"Number of supported sites: {siteListCount}");

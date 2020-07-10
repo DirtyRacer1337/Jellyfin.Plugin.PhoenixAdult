@@ -39,11 +39,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             else
             {
                 var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
-                var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
-                var html = new HtmlDocument();
-                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = html.DocumentNode.SelectNodes("//div[@class='shoot-card scene']");
+                var searchResults = data.SelectNodes("//div[@class='shoot-card scene']");
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
@@ -81,9 +79,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var http = await sceneURL.WithCookie("viewing-preferences", "straight%2Cgay").GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode;
+            var stream = await http.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var sceneData = HTML.ElementFromStream(stream);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
             result.Item.Overview = sceneData.SelectNodes("//div[@class='description']")[1].InnerText.Replace("Description:", "", StringComparison.OrdinalIgnoreCase).Trim();
@@ -107,7 +104,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             if (actors != null)
                 foreach (var actorLink in actors)
                 {
-                    string actorName = actorLink.InnerText.Trim(),
+                    string actorName = actorLink.InnerText.Replace(",", "", StringComparison.OrdinalIgnoreCase).Trim(),
                            actorPageURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 

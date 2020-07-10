@@ -90,43 +90,35 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             foreach (var genreLink in sceneData["fantasies"])
             {
-                if (genreLink.HasValues && (genreLink["name"] != null))
-                    result.Item.AddGenre((string)genreLink["name"]);
+                var genreName = (string)genreLink;
+
+                result.Item.AddGenre(genreName);
             }
 
             foreach (var actorLink in sceneData["performers"])
             {
-                if (actorLink.HasValues && (actorLink["name"] != null))
+                string actorName = (string)actorLink,
+                        actorPhoto = string.Empty,
+                        actorsPageURL;
+
+                actorsPageURL = actorName.ToLower(PhoenixAdultHelper.Lang).Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
+
+                var http = await $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}".GetAsync(cancellationToken).ConfigureAwait(false);
+                var html = new HtmlDocument();
+                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                var actorData = html.DocumentNode;
+
+                var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
+                if (actorImageNode != null)
+                    actorPhoto = actorImageNode.Attributes["src"]?.Value;
+
+                result.AddPerson(new PersonInfo
                 {
-                    string actorName = (string)actorLink["name"],
-                           actorPhoto = string.Empty,
-                           actorsPageURL;
-
-                    if (actorLink["slug"] != null)
-                        actorsPageURL = (string)actorLink["slug"];
-                    else
-                    {
-                        actorsPageURL = (string)actorLink["name"];
-                        actorsPageURL = actorsPageURL.ToLower(PhoenixAdultHelper.Lang).Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
-                    }
-
-                    var http = await $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}".GetAsync(cancellationToken).ConfigureAwait(false);
-                    var html = new HtmlDocument();
-                    html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-                    var actorData = html.DocumentNode;
-
-                    var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
-                    if (actorImageNode != null)
-                        actorPhoto = actorImageNode.Attributes["src"]?.Value;
-
-                    result.AddPerson(new PersonInfo
-                    {
-                        Name = actorName,
-                        Type = PersonType.Actor
-                    });
-                    if (!string.IsNullOrEmpty(actorPhoto))
-                        result.People.Last().ImageUrl = $"https:{actorPhoto}";
-                }
+                    Name = actorName,
+                    Type = PersonType.Actor
+                });
+                if (!string.IsNullOrEmpty(actorPhoto))
+                    result.People.Last().ImageUrl = $"https:{actorPhoto}";
             }
 
             return result;
@@ -140,10 +132,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
 
             string[] sceneID = item.ProviderIds[PhoenixAdultProvider.PluginName].Split('#');
 
-            var http = await $"https://www.naughtyamerica.com/scene/0{sceneID[2]}".GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode;
+            var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID[2]}";
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             foreach (var sceneImages in sceneData.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a"))
             {

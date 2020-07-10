@@ -23,11 +23,9 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                 return result;
 
             var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase);
-            var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = html.DocumentNode.SelectNodes("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
+            var searchResults = data.SelectNodes("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[contains(@href, '/video')]").Attributes["href"].Value,
@@ -64,10 +62,7 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultHelper.Lang), int.Parse(sceneID[1], PhoenixAdultHelper.Lang) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.GetAsync(cancellationToken).ConfigureAwait(false);
-            var html = new HtmlDocument();
-            html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-            var sceneData = html.DocumentNode;
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
             result.Item.Overview = sceneData.SelectSingleNode("//div[@class='vdoDesc']").InnerText.Trim();
@@ -98,10 +93,8 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Sites
                            actorPageURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 
-                    http = await actorPageURL.GetAsync(cancellationToken).ConfigureAwait(false);
-                    var actorHTML = new HtmlDocument();
-                    actorHTML.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-                    actorPhoto = $"https:{actorHTML.DocumentNode.SelectSingleNode("//div[@class='profilePic_in']//img").Attributes["src"].Value}";
+                    var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
+                    actorPhoto = $"https:{actorHTML.SelectSingleNode("//div[@class='profilePic_in']//img").Attributes["src"].Value}";
 
                     result.AddPerson(new PersonInfo
                     {
