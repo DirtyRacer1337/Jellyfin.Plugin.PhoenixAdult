@@ -1,15 +1,13 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
-using Jellyfin.Plugin.PhoenixAdult.Providers.Helpers;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using PhoenixAdultNET.Providers;
 
 namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
 {
@@ -32,25 +30,26 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
             if (curID.Length < 3)
                 return images;
 
-            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultHelper.Lang));
-            if (provider != null)
+            var scene = await PhoenixAdultNETProvider.Update(externalID, cancellationToken).ConfigureAwait(false);
+            if (scene != null)
             {
-                images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
+                if (scene.Posters != null)
+                    foreach (var poster in scene.Posters)
+                        images.Add(new RemoteImageInfo
+                        {
+                            Url = poster,
+                            Type = ImageType.Primary,
+                            ProviderName = PhoenixAdultProvider.PluginName
+                        });
 
-                var clearList = new List<RemoteImageInfo>();
-                foreach (var image in images)
-                {
-                    var http = await image.Url.AllowAnyHttpStatus().HeadAsync(cancellationToken).ConfigureAwait(false);
-                    if (http.IsSuccessStatusCode)
-                    {
-                        var img = Image.FromStream(await image.Url.GetStreamAsync(cancellationToken).ConfigureAwait(false));
-
-                        if (img.Width > 100)
-                            clearList.Add(image);
-                    }
-                }
-
-                images = clearList;
+                if (scene.Backgrounds != null)
+                    foreach (var background in scene.Backgrounds)
+                        images.Add(new RemoteImageInfo
+                        {
+                            Url = background,
+                            Type = ImageType.Backdrop,
+                            ProviderName = PhoenixAdultProvider.PluginName
+                        });
             }
 
             return images;
@@ -58,7 +57,11 @@ namespace Jellyfin.Plugin.PhoenixAdult.Providers.Core
 
         public bool Supports(BaseItem item) => item is Movie;
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultHelper.GetImageResponse(url, cancellationToken);
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
+        {
+            CancellationToken = cancellationToken,
+            Url = url
+        });
 
         public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
                     ImageType.Primary,

@@ -1,0 +1,20 @@
+[
+    {
+        "category": "Metadata",
+        "guid": "8f97371f-8617-463c-9859-a33072182494",
+        "name": "PhoenixAdult",
+        "description": "This metadata provider helps fill Jellyfin with information for your adult videos by pulling from the original site.",
+        "owner": "jellyfin",
+        "overview": "Manage Your Adult Videos in Jellyfin",
+        "versions": [
+            {
+                "checksum": "",
+                "changelog": "Moved to PhoenixAdult.NET | Added Jellyfin 10.6.0.0 support",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "",
+                "timestamp": "2020-07-20 16:24:38",
+                "version": "2.0.0.23"
+            }
+        ]
+    }
+]
