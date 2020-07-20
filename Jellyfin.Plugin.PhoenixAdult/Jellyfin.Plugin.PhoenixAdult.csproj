@@ -30,7 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PhoenixAdult.NET" Version="1.0.1" />
+    <PackageReference Include="PhoenixAdult.NET" Version="1.0.2" />
   </ItemGroup>
   
   <ItemGroup>
