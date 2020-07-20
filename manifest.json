@@ -4,7 +4,7 @@
         "guid": "8f97371f-8617-463c-9859-a33072182494",
         "name": "PhoenixAdult",
         "description": "This metadata provider helps fill Jellyfin with information for your adult videos by pulling from the original site.",
-        "owner": "jellyfin",
+        "owner": "DirtyRacer",
         "overview": "Manage Your Adult Videos in Jellyfin",
         "versions": [
             {
