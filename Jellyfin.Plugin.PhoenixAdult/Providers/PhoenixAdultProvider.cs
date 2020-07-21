@@ -91,6 +91,10 @@ namespace Jellyfin.Plugin.PhoenixAdult
                 result.Item.Name = scene.Title;
                 result.Item.Overview = scene.Description;
 
+                if (scene.Studios != null)
+                    foreach (var studio in scene.Studios)
+                        result.Item.AddStudio(studio);
+
                 if (scene.ReleaseDate.HasValue)
                 {
                     result.Item.PremiereDate = scene.ReleaseDate;
