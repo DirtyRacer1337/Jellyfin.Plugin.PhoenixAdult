@@ -6,7 +6,7 @@ This metadata provider helps fill Jellyfin with information for your adult video
 
 ------------
 
-## Required Libraries
+## Used Libraries
 - [PhoenixAdult.NET](https://github.com/DirtyRacer1337/PhoenixAdult.NET)
 
 ## Build Process
