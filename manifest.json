@@ -3,13 +3,13 @@
         "category": "Metadata",
         "guid": "8f97371f-8617-463c-9859-a33072182494",
         "name": "PhoenixAdult",
-        "description": "This metadata provider helps fill Jellyfin with information for your adult videos by pulling from the original site.",
+        "description": "This metadata provider helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.",
         "owner": "DirtyRacer",
-        "overview": "Manage Your Adult Videos in Jellyfin",
+        "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
                 "checksum": "3471475166163d13a714cab34c74751a",
-                "changelog": "- Combining Emby, Jellyfin, PhoenixAdult.NET plugin in one project\n- Added Actor Provider\n- Updated Brazzers\n- Minor Changes",
+                "changelog": "Combining Emby, Jellyfin, PhoenixAdult.NET plugin in one project; Added Actor Provider; Updated Brazzers; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.1.2.29/Jellyfin.Plugin.PhoenixAdult.zip",
                 "timestamp": "2020-07-28 05:12:17",
