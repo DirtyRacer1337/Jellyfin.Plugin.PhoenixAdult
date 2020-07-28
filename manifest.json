@@ -8,6 +8,14 @@
         "overview": "Manage Your Adult Videos in Jellyfin",
         "versions": [
             {
+                "checksum": "3471475166163d13a714cab34c74751a",
+                "changelog": "- Combining Emby, Jellyfin, PhoenixAdult.NET plugin in one project\n- Added Actor Provider\n- Updated Brazzers\n- Minor Changes",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.1.2.29/Jellyfin.Plugin.PhoenixAdult.zip",
+                "timestamp": "2020-07-28 05:12:17",
+                "version": "2.1.2.29"
+            },
+            {
                 "checksum": "be7cc14423964849865610354f63378c",
                 "changelog": "Updated PhoenixAdult.NET to 1.2.5",
                 "targetAbi": "10.6.0.0",
