@@ -34,12 +34,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\**" />
-    <EmbeddedResource Remove="Properties\**" />
-    <None Remove="Properties\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Flurl.Http" Version="2.4.2" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.1" />
@@ -58,25 +52,5 @@
     <None Remove="Configuration\configPage.html" />
     <EmbeddedResource Include="Configuration\configPage.html" />
   </ItemGroup>
-
-  <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release.Emby'">
-    <ItemGroup>
-      <InputAssemblies Include="$(OutputPath)$(AssemblyName).dll" />
-      <InputAssemblies Include="$(OutputPath)Flurl.dll" />
-      <InputAssemblies Include="$(OutputPath)Flurl.Http.dll" />
-      <InputAssemblies Include="$(OutputPath)HtmlAgilityPack.dll" />
-      <InputAssemblies Include="$(OutputPath)Newtonsoft.Json.dll" Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'" />
-      <InputAssemblies Include="$(OutputPath)SkiaSharp.dll" />
-    </ItemGroup>
-
-    <ILRepack
-      Parallel="true"
-      Internalize="true"
-      DebugInfo="true"
-      InputAssemblies="@(InputAssemblies)"
-      TargetKind="Dll"
-      OutputFile="$(OutputPath)$(AssemblyName).dll"
-    />
-  </Target>
 
 </Project>
