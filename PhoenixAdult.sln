@@ -2,16 +2,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jellyfin.Plugin.PhoenixAdult", "Jellyfin.Plugin.PhoenixAdult\Jellyfin.Plugin.PhoenixAdult.csproj", "{D921B930-CF91-406F-ACBC-08914DCD0D34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoenixAdult", "Jellyfin.Plugin.PhoenixAdult\PhoenixAdult.csproj", "{D921B930-CF91-406F-ACBC-08914DCD0D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug.Emby|Any CPU = Debug.Emby|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		Release.Emby|Any CPU = Release.Emby|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Debug.Emby|Any CPU.ActiveCfg = Debug.Emby|Any CPU
+		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Debug.Emby|Any CPU.Build.0 = Debug.Emby|Any CPU
 		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Release.Emby|Any CPU.ActiveCfg = Release.Emby|Any CPU
+		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Release.Emby|Any CPU.Build.0 = Release.Emby|Any CPU
 		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D921B930-CF91-406F-ACBC-08914DCD0D34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

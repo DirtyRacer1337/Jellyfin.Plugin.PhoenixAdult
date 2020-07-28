@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Jellyfin.Plugin.PhoenixAdult.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
+using PhoenixAdult.Configuration;
 
-namespace Jellyfin.Plugin.PhoenixAdult
+namespace PhoenixAdult
 {
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
@@ -15,7 +15,7 @@ namespace Jellyfin.Plugin.PhoenixAdult
             Instance = this;
         }
 
-        public override string Name => PhoenixAdultProvider.PluginName;
+        public override string Name => "PhoenixAdult";
         public override Guid Id => Guid.Parse("dc40637f-6ebd-4a34-b8a1-8799629120cf");
         public static Plugin Instance { get; private set; }
 
