@@ -58,7 +58,8 @@ namespace PhoenixAdult
                             var t = imageDubl.First();
                             var img = new RemoteImageInfo
                             {
-                                Url = t.Url
+                                Url = t.Url,
+                                ProviderName = Name
                             };
 
                             if (Plugin.Instance.Configuration.ProvideImageSize)
