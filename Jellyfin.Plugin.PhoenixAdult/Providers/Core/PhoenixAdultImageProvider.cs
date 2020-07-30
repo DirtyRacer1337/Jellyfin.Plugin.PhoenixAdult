@@ -59,14 +59,10 @@ namespace PhoenixAdult
                             var img = new RemoteImageInfo
                             {
                                 Url = t.Url,
-                                ProviderName = t.ProviderName
-                            };
-
-                            if (Plugin.Instance.Configuration.ProvideImageSize)
-                            {
-                                image.Height = t.Height;
-                                image.Width = t.Width;
-                            }
+                                ProviderName = t.ProviderName,
+                                Height = t.Height,
+                                Width = t.Width
+                        };
 
                             if (t.Type == ImageType.Backdrop)
                                 img.Type = ImageType.Primary;
@@ -84,11 +80,8 @@ namespace PhoenixAdult
                             if (img != null)
                             {
                                 image.ProviderName = Name;
-                                if (Plugin.Instance.Configuration.ProvideImageSize)
-                                {
-                                    image.Height = img.Height;
-                                    image.Width = img.Width;
-                                }
+                                image.Height = img.Height;
+                                image.Width = img.Width;
 
                                 clearImages.Add(image);
                             }
