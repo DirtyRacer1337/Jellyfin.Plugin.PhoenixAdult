@@ -147,11 +147,17 @@ namespace PhoenixAdult.Providers.Sites
             var script = sceneData.SelectSingleNode("//script[contains(text(), 'df_movie')]").InnerText;
             var match = Regex.Match(script, "useimage = \"(.*)\";");
             if (match.Success)
+            {
+                var img = match.Groups[1].Value;
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    img = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + img;
+
                 result.Add(new RemoteImageInfo
                 {
-                    Url = $"https:{match.Groups[1].Value}",
+                    Url = img,
                     Type = ImageType.Primary
                 });
+            }
 
             match = Regex.Match(script, "setid:.?\"(\\d{1,})\"");
             if (match.Success)
