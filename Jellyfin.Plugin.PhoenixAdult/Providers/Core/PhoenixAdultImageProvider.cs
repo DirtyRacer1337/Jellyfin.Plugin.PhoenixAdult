@@ -11,9 +11,7 @@ using MediaBrowser.Model.Providers;
 using PhoenixAdult.Providers;
 
 #if __EMBY__
-
 using MediaBrowser.Model.Configuration;
-
 #else
 #endif
 
@@ -24,7 +22,6 @@ namespace PhoenixAdult
         public string Name => Plugin.Instance.Name;
 
 #if __EMBY__
-
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
 #else
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)

@@ -13,9 +13,7 @@ using PhoenixAdult.Providers;
 using PhoenixAdult.Providers.Helpers;
 
 #if __EMBY__
-
 using MediaBrowser.Model.Logging;
-
 #else
 using Microsoft.Extensions.Logging;
 #endif

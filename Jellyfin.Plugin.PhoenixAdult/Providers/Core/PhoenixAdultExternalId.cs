@@ -22,7 +22,6 @@ namespace PhoenixAdult
             => item is Movie;
 
 #if __EMBY__
-
 #else
         public ExternalIdMediaType? Type
             => ExternalIdMediaType.Movie;
@@ -34,7 +33,7 @@ namespace PhoenixAdult
         public string UrlFormatString
             => null;
     }
-
+/*
     public class PhoenixAdultActorExternalId : IExternalId
     {
 #if __EMBY__
@@ -59,4 +58,5 @@ namespace PhoenixAdult
         public string UrlFormatString
             => null;
     }
+*/
 }
