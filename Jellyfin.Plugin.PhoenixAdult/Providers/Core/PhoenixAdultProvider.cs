@@ -159,6 +159,9 @@ namespace PhoenixAdult
                         result.Item.OfficialRating = "XXX";
                         result.Item.ProviderIds = sceneID;
 
+                        if (result.Item.PremiereDate.HasValue)
+                            result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
+
                         if ((result.People != null) && result.People.Any())
                             result.People = PhoenixAdultActors.Cleanup(result);
                         if (result.Item.Genres != null && result.Item.Genres.Any())
