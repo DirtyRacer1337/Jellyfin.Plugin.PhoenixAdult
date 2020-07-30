@@ -7,29 +7,18 @@
     <div id="phoenixAdultConfigurationPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button,emby-checkbox">
         <div data-role="content">
             <div class="content-primary">
-                <form id="phoenixAdultConfigForm">
-                    <div class="checkboxContainer checkboxContainer-withDescripton">
-                        <label class="emby-checkbox-label">
-                            <input id="ProvideImageSize" name="ProvideImageSize" type="checkbox" is="emby-checkbox" />
-                            <span>Provide a image size to Media Server</span>
-                        </label>
-                    </div>
-                    <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                            <span>Сохранить</span>
-                        </button>
-                    </div>
-                </form>
+                <h1>PhoenixAdult</h1>
+                <p>This metadata agent helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.</p>
             </div>
         </div>
-        <script type="text/javascript">var phoenixAdultConfig = {
+        <script type="text/javascript">
+            var phoenixAdultConfig = {
                 pluginUniqueId: 'dc40637f-6ebd-4a34-b8a1-8799629120cf'
             };
 
             $('#phoenixAdultConfigurationPage').on('pageshow', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
-                    $('#ProvideImageSize').prop('checked', config.ProvideImageSize);
                     Dashboard.hideLoadingMsg();
                 });
             });
@@ -37,7 +26,6 @@
             $('#phoenixAdultConfigForm').on('submit', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
-                    config.ProvideImageSize = $('#ProvideImageSize').prop('checked');
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
                     });
