@@ -78,6 +78,11 @@ namespace PhoenixAdult
                 searchDateObj = titleAfterDate.Item2;
                 if (searchDateObj.HasValue)
                     searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", Lang);
+                else
+                {
+                    if (searchInfo.PremiereDate.HasValue)
+                        searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", Lang);
+                }
                 encodedTitle = Uri.EscapeDataString(searchTitle);
 
                 Logger.Info(Log, $"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
