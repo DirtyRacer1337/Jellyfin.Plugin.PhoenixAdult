@@ -29,16 +29,31 @@ namespace PhoenixAdult.Providers.Sites
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
                             curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode("///div[contains(@class, 'item-info')]//a").InnerText.Trim(),
+                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'item-info')]//a").InnerText.Trim(),
                             sceneDate = searchResult.SelectSingleNode(".//span[@class='date']").InnerText.Trim(),
-                            scenePoster = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//img").Attributes["src0_1x"].Value;
+                            scenePoster = string.Empty;
 
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        ImageUrl = scenePoster
+                        Name = sceneName
                     };
+
+                    var scenePosterNode = searchResult.SelectSingleNode(".//img");
+                    if (scenePosterNode.Attributes.Contains("src0_1x"))
+                        scenePoster = scenePosterNode.Attributes["src0_1x"].Value;
+                    else
+                    {
+                        if (scenePosterNode.Attributes.Contains("src"))
+                            scenePoster = scenePosterNode.Attributes["src"].Value;
+                    }
+
+                    if (!string.IsNullOrEmpty(scenePoster))
+                    {
+                        if (!scenePoster.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                            scenePoster = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + scenePoster;
+                        res.ImageUrl = scenePoster;
+                    }
 
                     if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
                         res.PremiereDate = sceneDateObj;
