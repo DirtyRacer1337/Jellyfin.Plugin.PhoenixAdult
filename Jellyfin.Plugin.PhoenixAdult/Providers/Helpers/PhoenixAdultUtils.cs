@@ -199,12 +199,22 @@ internal static class ImageHelper
 
 internal static class Logger
 {
-    public static void Info(ILogger log, string text)
+    private static ILogger Log { get; } = PhoenixAdultProvider.Log;
+    public static void Info(string text)
     {
 #if __EMBY__
-        log.Info(text);
+        Log.Info(text);
 #else
-        log.LogInformation(text);
+        Log.LogInformation(text);
+#endif
+    }
+
+    public static void Error(string text)
+    {
+#if __EMBY__
+        Log.Error(text);
+#else
+        Log.LogError(text);
 #endif
     }
 }

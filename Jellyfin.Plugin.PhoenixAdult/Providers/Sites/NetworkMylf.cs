@@ -70,20 +70,23 @@ namespace PhoenixAdult.Providers.Sites
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
-                sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
-
-                var res = new RemoteSearchResult
+                if (sceneData != null)
                 {
-                    ProviderIds = sceneData.Item.ProviderIds,
-                    Name = sceneData.Item.Name,
-                    PremiereDate = sceneData.Item.PremiereDate
-                };
+                    sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
+                    var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
-                if (posters.Any())
-                    res.ImageUrl = posters.First().Url;
+                    var res = new RemoteSearchResult
+                    {
+                        ProviderIds = sceneData.Item.ProviderIds,
+                        Name = sceneData.Item.Name,
+                        PremiereDate = sceneData.Item.PremiereDate
+                    };
 
-                result.Add(res);
+                    if (posters.Any())
+                        res.ImageUrl = posters.First().Url;
+
+                    result.Add(res);
+                }
             }
 
             return result;
@@ -98,7 +101,7 @@ namespace PhoenixAdult.Providers.Sites
             };
 
             if (sceneID == null)
-                return result;
+                return null;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
 
@@ -110,18 +113,18 @@ namespace PhoenixAdult.Providers.Sites
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
-                return result;
+                return null;
 
             string contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
-                if (sceneData.ContainsKey(name) && (sceneData[name] != null))
+                if (sceneData.ContainsKey(name) && sceneData[name].Any())
                 {
                     contentName = name;
                     break;
                 }
 
             if (string.IsNullOrEmpty(contentName))
-                return result;
+                return null;
 
             sceneData = (JObject)sceneData[contentName];
             var sceneName = sceneData.Properties().First().Name;
@@ -349,6 +352,21 @@ namespace PhoenixAdult.Providers.Sites
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
                 return result;
+
+            string contentName = string.Empty;
+            foreach (var name in new List<string>() { "moviesContent", "videosContent" })
+                if (sceneData.ContainsKey(name) && (sceneData[name] != null))
+                {
+                    contentName = name;
+                    break;
+                }
+
+            if (string.IsNullOrEmpty(contentName))
+                return result;
+
+            sceneData = (JObject)sceneData[contentName];
+            var sceneName = sceneData.Properties().First().Name;
+            sceneData = (JObject)sceneData[sceneName];
 
             var img = (string)sceneData["img"];
             result.Add(new RemoteImageInfo

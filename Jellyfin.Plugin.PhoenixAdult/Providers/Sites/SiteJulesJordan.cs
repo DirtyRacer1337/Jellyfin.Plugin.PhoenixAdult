@@ -74,7 +74,7 @@ namespace PhoenixAdult.Providers.Sites
             };
 
             if (sceneID == null)
-                return result;
+                return null;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
 

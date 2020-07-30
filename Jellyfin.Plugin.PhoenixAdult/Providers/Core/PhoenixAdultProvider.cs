@@ -58,7 +58,14 @@ namespace PhoenixAdult
             if (searchInfo == null)
                 return result;
 
-            Logger.Info(Log, $"searchInfo.Name: {searchInfo.Name}");
+            if (!Plugin.Instance.Configuration.IgnoreYearWarning)
+                if (searchInfo.Year.HasValue)
+                {
+                    Logger.Info("Year detected (probably important data was stripped), required manual identify");
+                    return result;
+                }
+
+            Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
             var title = ReplaceAbbrieviation(searchInfo.Name);
             var site = GetSiteFromTitle(title);
@@ -85,22 +92,22 @@ namespace PhoenixAdult
                 }
                 encodedTitle = Uri.EscapeDataString(searchTitle);
 
-                Logger.Info(Log, $"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
-                Logger.Info(Log, $"searchTitle: {searchTitle}");
-                Logger.Info(Log, $"encodedTitle: {encodedTitle}");
-                Logger.Info(Log, $"searchDate: {searchDate}");
+                Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
+                Logger.Info($"searchTitle: {searchTitle}");
+                Logger.Info($"encodedTitle: {encodedTitle}");
+                Logger.Info($"searchDate: {searchDate}");
 
                 var provider = PhoenixAdultList.GetProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
-                    Logger.Info(Log, $"provider: {provider}");
+                    Logger.Info($"provider: {provider}");
                     try
                     {
                         result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception e)
                     {
-                        Logger.Info(Log, e.ToString());
+                        Logger.Error(e.ToString());
                     }
                     finally
                     {
@@ -147,14 +154,14 @@ namespace PhoenixAdult
             var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], Lang));
             if (provider != null)
             {
-                Logger.Info(Log, $"PhoenixAdult ID: {externalID}");
+                Logger.Info($"PhoenixAdult ID: {externalID}");
                 try
                 {
                     result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
-                    Logger.Info(Log, e.ToString());
+                    Logger.Error(e.ToString());
                 }
                 finally
                 {

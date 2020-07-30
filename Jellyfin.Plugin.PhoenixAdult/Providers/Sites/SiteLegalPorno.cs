@@ -88,7 +88,7 @@ namespace PhoenixAdult.Providers.Sites
             };
 
             if (sceneID == null)
-                return result;
+                return null;
 
             string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
