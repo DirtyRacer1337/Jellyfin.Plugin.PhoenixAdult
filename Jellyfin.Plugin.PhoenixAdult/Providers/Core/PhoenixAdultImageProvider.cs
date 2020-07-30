@@ -58,8 +58,7 @@ namespace PhoenixAdult
                             var t = imageDubl.First();
                             var img = new RemoteImageInfo
                             {
-                                Url = t.Url,
-                                ProviderName = Name
+                                Url = t.Url
                             };
 
                             if (Plugin.Instance.Configuration.ProvideImageSize)
@@ -83,6 +82,7 @@ namespace PhoenixAdult
                             var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
                             if (img != null)
                             {
+                                image.ProviderName = Name;
                                 if (Plugin.Instance.Configuration.ProvideImageSize)
                                 {
                                     image.Height = img.Height;

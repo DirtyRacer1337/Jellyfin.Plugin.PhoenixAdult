@@ -93,7 +93,7 @@ namespace PhoenixAdult.Providers.Sites
             var stream = await http.Content.ReadAsStreamAsync().ConfigureAwait(false);
             var sceneData = HTML.ElementFromStream(stream);
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
             result.Item.Overview = sceneData.SelectSingleNode("//p[@class='description-text']").InnerText.Trim();
             result.Item.AddStudio("Kink");
 

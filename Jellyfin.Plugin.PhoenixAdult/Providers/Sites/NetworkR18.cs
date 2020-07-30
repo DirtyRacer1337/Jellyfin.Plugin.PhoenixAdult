@@ -53,7 +53,7 @@ namespace PhoenixAdult.Providers.Sites
                     };
 
                     if (!string.IsNullOrEmpty(searchJAVID))
-                        res.IndexNumber = LevenshteinDistance.Calculate(searchJAVID, javID);
+                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID);
 
                     result.Add(res);
                 }
