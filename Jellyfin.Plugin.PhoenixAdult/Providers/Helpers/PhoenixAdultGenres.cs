@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 
@@ -21,7 +22,7 @@ namespace PhoenixAdult.Providers.Helpers
 
                 if (!string.IsNullOrEmpty(genreName))
                 {
-                    genreName = PhoenixAdultProvider.Lang.TextInfo.ToTitleCase(genreName);
+                    genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
                     if (!newGenres.Contains(genreName))
                         newGenres.Add(genreName);

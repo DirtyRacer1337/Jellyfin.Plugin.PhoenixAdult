@@ -39,7 +39,7 @@ namespace PhoenixAdult.Providers.Sites
                     ImageUrl = scenePoster
                 };
 
-                if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     res.PremiereDate = sceneDateObj;
 
                 result.Add(res);
@@ -59,7 +59,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -70,7 +70,7 @@ namespace PhoenixAdult.Providers.Sites
 
             var dateNode = sceneData.SelectSingleNode("//span[contains(@class, 'thmb_mr_2')]");
             if (dateNode != null)
-                if (DateTime.TryParseExact(dateNode.InnerText.Trim(), "MMM d, yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(dateNode.InnerText.Trim(), "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     result.Item.PremiereDate = sceneDateObj;
 
             var genreNode = sceneData.SelectNodes("//div[contains(@class, 'vdoTags')]//a");

@@ -98,7 +98,7 @@ namespace PhoenixAdult.Providers.Sites
 
                     if (sceneDateObj.HasValue)
                     {
-                        var sceneDate = sceneDateObj.Value.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang);
+                        var sceneDate = sceneDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         curID += $"#{sceneDate}";
                         res.PremiereDate = sceneDateObj;
                     }
@@ -130,7 +130,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string apiKEY = await GetAPIKey(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
                    sceneType = sceneID[2] == "scenes" ? "clip_id" : "movie_id",
@@ -141,9 +141,9 @@ namespace PhoenixAdult.Providers.Sites
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
-            result.Item.AddStudio(PhoenixAdultProvider.Lang.TextInfo.ToTitleCase((string)sceneData["network_name"]));
+            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
-            if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 result.Item.PremiereDate = sceneDateObj;
 
             foreach (var genreLink in sceneData["categories"])
@@ -187,7 +187,7 @@ namespace PhoenixAdult.Providers.Sites
 
             var sceneID = externalId.Split('#');
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string apiKEY = await GetAPIKey(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
        sceneType = sceneID[2] == "scenes" ? "clip_id" : "movie_id",
@@ -207,7 +207,7 @@ namespace PhoenixAdult.Providers.Sites
                     break;
                 }
 
-            string image = sceneData["url_title"].ToString().ToLower(PhoenixAdultProvider.Lang).Replace('-', '_'),
+            string image = sceneData["url_title"].ToString().ToLowerInvariant().Replace('-', '_'),
                    imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
 
             if (!ignore)

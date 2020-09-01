@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
@@ -20,7 +21,7 @@ namespace PhoenixAdult.Providers.Helpers
             foreach (var people in scene.People)
             {
                 people.Type = PersonType.Actor;
-                people.Name = PhoenixAdultProvider.Lang.TextInfo.ToTitleCase(people.Name);
+                people.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
                 people.Name = people.Name.Split('(').First().Trim();
                 people.Name = people.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
                 people.Name = Replace(people.Name, scene.Item.Studios);

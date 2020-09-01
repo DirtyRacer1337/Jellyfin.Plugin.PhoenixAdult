@@ -85,8 +85,8 @@ namespace PhoenixAdult.Providers.Sites
             var dateNode = sceneData.SelectSingleNode("//dd[@itemprop='dateCreated']");
             if (dateNode != null)
             {
-                var date = dateNode.InnerText.Trim().Replace(".", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase).Replace("June", "Jun", StringComparison.OrdinalIgnoreCase).Replace("July", "Jul", StringComparison.OrdinalIgnoreCase);
-                if (DateTime.TryParseExact(date, "MMM dd yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                var date = dateNode.InnerText.Replace(".", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase).Replace("June", "Jun", StringComparison.OrdinalIgnoreCase).Replace("July", "Jul", StringComparison.OrdinalIgnoreCase).Trim();
+                if (DateTime.TryParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     result.Item.PremiereDate = sceneDateObj;
             }
 
@@ -94,7 +94,7 @@ namespace PhoenixAdult.Providers.Sites
             if (genreNode != null)
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim().ToLower(PhoenixAdultProvider.Lang);
+                    var genreName = genreLink.InnerText.ToLowerInvariant().Trim();
 
                     result.Item.AddGenre(genreName);
                 }
@@ -114,7 +114,7 @@ namespace PhoenixAdult.Providers.Sites
                             Name = actorName
                         };
 
-                        var photoXpath = string.Format(PhoenixAdultProvider.Lang, "//div[@id='{0}']//img[contains(@alt, '{1}')]", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
+                        var photoXpath = string.Format(CultureInfo.InvariantCulture, "//div[@id='{0}']//img[contains(@alt, '{1}')]", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
                         var actorPhoto = sceneData.SelectSingleNode(photoXpath).Attributes["src"].Value;
 
                         if (!actorPhoto.Contains("nowprinting.gif", StringComparison.OrdinalIgnoreCase))

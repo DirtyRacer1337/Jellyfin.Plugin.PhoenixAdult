@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
@@ -77,14 +78,14 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
 
             result.Item.Name = (string)sceneData["name"];
             result.Item.Overview = (string)sceneData["description"];
-            result.Item.AddStudio(PhoenixAdultProvider.Lang.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
+            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
 
             DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
             result.Item.PremiereDate = sceneDateObj;
@@ -120,7 +121,7 @@ namespace PhoenixAdult.Providers.Sites
 
             var sceneID = externalId.Split('#');
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];

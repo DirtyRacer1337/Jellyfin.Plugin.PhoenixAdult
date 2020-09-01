@@ -40,7 +40,7 @@ namespace PhoenixAdult.Providers.Sites
             if (siteNum == null)
                 return result;
 
-            var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase).ToLower(PhoenixAdultProvider.Lang);
+            var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase).ToLowerInvariant();
             if (!directURL.Contains("/", StringComparison.OrdinalIgnoreCase))
                 directURL = directURL.Replace("-", "/", 1, StringComparison.OrdinalIgnoreCase);
 
@@ -67,7 +67,7 @@ namespace PhoenixAdult.Providers.Sites
             {
                 string curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
                 if (searchDate.HasValue)
-                    curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang)}";
+                    curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 if (sceneData != null)
@@ -103,7 +103,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
                 sceneDate = string.Empty;
@@ -149,7 +149,7 @@ namespace PhoenixAdult.Providers.Sites
             else
             {
                 if (sceneID.Length > 3)
-                    if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                         releaseDate = sceneDateObj;
             }
 

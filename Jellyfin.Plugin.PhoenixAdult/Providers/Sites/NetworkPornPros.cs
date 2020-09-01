@@ -29,7 +29,7 @@ namespace PhoenixAdult.Providers.Sites
                     curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
 
             if (searchDate.HasValue)
-                curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang)}";
+                curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
             var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
             sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
@@ -61,7 +61,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -88,7 +88,7 @@ namespace PhoenixAdult.Providers.Sites
                 }
             }
             if (!string.IsNullOrEmpty(sceneDate) && !string.IsNullOrEmpty(dateFormat))
-                if (DateTime.TryParseExact(sceneDate, dateFormat, PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     result.Item.PremiereDate = sceneDateObj;
 
             var genres = new List<string>();

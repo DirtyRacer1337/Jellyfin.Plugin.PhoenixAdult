@@ -50,10 +50,10 @@ namespace PhoenixAdult.Providers.Sites
                             sceneDate = sceneDate.Replace("<!--", "", StringComparison.OrdinalIgnoreCase).Replace("-->", "", StringComparison.OrdinalIgnoreCase).Replace("Date OFF", "", StringComparison.OrdinalIgnoreCase).Trim();
                     }
 
-                    if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
-                        curID += $"#{sceneDateObj.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang)}";
+                        curID += $"#{sceneDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
                     }
                 }
 
@@ -76,7 +76,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
                 sceneDate = sceneID[3];
@@ -87,7 +87,7 @@ namespace PhoenixAdult.Providers.Sites
             result.Item.AddStudio("Jules Jordan");
 
             if (!string.IsNullOrEmpty(sceneDate))
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     result.Item.PremiereDate = sceneDateObj;
 
             var genreNode = sceneData.SelectNodes("//span[@class='update_tags']/a");
@@ -139,7 +139,7 @@ namespace PhoenixAdult.Providers.Sites
 
             var sceneID = externalId.Split('#');
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);

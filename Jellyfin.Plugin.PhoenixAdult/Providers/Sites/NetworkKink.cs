@@ -65,7 +65,7 @@ namespace PhoenixAdult.Providers.Sites
                         Name = sceneName,
                         ImageUrl = scenePoster
                     };
-                    if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                         res.PremiereDate = sceneDateObj;
 
                     result.Add(res);
@@ -86,7 +86,7 @@ namespace PhoenixAdult.Providers.Sites
             if (sceneID == null)
                 return null;
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var http = await sceneURL.WithCookie("viewing-preferences", "straight%2Cgay").GetAsync(cancellationToken).ConfigureAwait(false);
@@ -98,7 +98,7 @@ namespace PhoenixAdult.Providers.Sites
             result.Item.AddStudio("Kink");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
-            if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 result.Item.PremiereDate = sceneDateObj;
 
             foreach (var genreLink in sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a"))

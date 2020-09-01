@@ -62,7 +62,7 @@ namespace PhoenixAdult.Providers.Sites
                         Name = sceneName
                     };
 
-                    if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                         res.PremiereDate = sceneDateObj;
 
                     var scenePosterNode = searchResult.SelectSingleNode(".//div[@class='thumbnail-image']/a");
@@ -97,7 +97,7 @@ namespace PhoenixAdult.Providers.Sites
             result.Item.AddStudio("LegalPorno");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='scene-description__detail']//a").InnerText.Trim();
-            if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 result.Item.PremiereDate = sceneDateObj;
 
             var genreNode = sceneData.SelectNodes("//dd/a[contains(@href, '/niche/')]");

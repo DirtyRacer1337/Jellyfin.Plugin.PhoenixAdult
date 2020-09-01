@@ -65,9 +65,7 @@ namespace PhoenixAdult.Providers.Helpers
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 var url = "https://www.google.com/search?q=" + Uri.EscapeDataString(searchTerm);
-                var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
-                var html = new HtmlDocument();
-                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                 var searchResults = html.DocumentNode.SelectNodes("//a");
                 if (searchResults != null)

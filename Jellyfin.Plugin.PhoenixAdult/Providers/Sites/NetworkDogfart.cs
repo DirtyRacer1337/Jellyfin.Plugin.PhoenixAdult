@@ -40,7 +40,7 @@ namespace PhoenixAdult.Providers.Sites
                     };
 
                     if (searchDate.HasValue)
-                        curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", PhoenixAdultProvider.Lang)}";
+                        curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
                     res.ProviderIds.Add(Plugin.Instance.Name, curID);
 
@@ -48,8 +48,6 @@ namespace PhoenixAdult.Providers.Sites
                         res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName);
                     else
                         res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName);
-
-                    Console.WriteLine(res.IndexNumber);
 
                     result.Add(res);
                 }
@@ -81,7 +79,7 @@ namespace PhoenixAdult.Providers.Sites
             result.Item.AddStudio("Dogfart Network");
 
             if (!string.IsNullOrEmpty(sceneDate))
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", PhoenixAdultProvider.Lang, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     result.Item.PremiereDate = sceneDateObj;
 
             var genreNode = sceneData.SelectNodes("//div[@class='categories']/p/a");
@@ -117,7 +115,7 @@ namespace PhoenixAdult.Providers.Sites
 
             var sceneID = externalId.Split('#');
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], PhoenixAdultProvider.Lang), int.Parse(sceneID[1], PhoenixAdultProvider.Lang) };
+            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);

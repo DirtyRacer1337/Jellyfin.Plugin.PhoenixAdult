@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace PhoenixAdult
             if (curID.Length < 3)
                 return images;
 
-            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], PhoenixAdultProvider.Lang));
+            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
             {
                 images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
@@ -59,7 +60,7 @@ namespace PhoenixAdult
                                 ProviderName = t.ProviderName,
                                 Height = t.Height,
                                 Width = t.Width
-                        };
+                            };
 
                             if (t.Type == ImageType.Backdrop)
                                 img.Type = ImageType.Primary;

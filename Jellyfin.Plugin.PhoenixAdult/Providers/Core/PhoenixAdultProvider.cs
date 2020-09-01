@@ -30,7 +30,6 @@ namespace PhoenixAdult
         public static ILogger<PhoenixAdultProvider> Log { get; set; }
 #endif
         public static IHttpClient Http { get; set; }
-        public static CultureInfo Lang { get; } = new CultureInfo("en-US", false);
 
         public PhoenixAdultProvider(
 #if __EMBY__
@@ -56,14 +55,14 @@ namespace PhoenixAdult
             if (searchInfo == null)
                 return result;
 
+            Logger.Info($"searchInfo.Name: {searchInfo.Name}");
+
             if (!Plugin.Instance.Configuration.IgnoreYearWarning)
                 if (searchInfo.Year.HasValue)
                 {
                     Logger.Info("Year detected (probably important data was stripped), required manual identify");
                     return result;
                 }
-
-            Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
             var title = ReplaceAbbrieviation(searchInfo.Name);
             var site = GetSiteFromTitle(title);
@@ -82,11 +81,11 @@ namespace PhoenixAdult
                 searchTitle = titleAfterDate.Item1;
                 searchDateObj = titleAfterDate.Item2;
                 if (searchDateObj.HasValue)
-                    searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", Lang);
+                    searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 else
                 {
                     if (searchInfo.PremiereDate.HasValue)
-                        searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", Lang);
+                        searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
                 encodedTitle = Uri.EscapeDataString(searchTitle);
 
@@ -149,7 +148,7 @@ namespace PhoenixAdult
             if (curID.Length < 3)
                 return result;
 
-            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], Lang));
+            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
@@ -213,7 +212,7 @@ namespace PhoenixAdult
             if (string.IsNullOrEmpty(title))
                 return title;
 
-            string clearName = Lang.TextInfo.ToTitleCase(title),
+            string clearName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title),
                    clearSite = siteName;
 
             clearName = clearName.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
@@ -255,9 +254,9 @@ namespace PhoenixAdult
             {
                 var regEx = Regex.Match(searchTitle, regExRule.Key);
                 if (regEx.Groups.Count > 0)
-                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, Lang, DateTimeStyles.None, out DateTime searchDateObj))
+                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDateObj))
                     {
-                        searchDate = searchDateObj.ToString("yyyy-MM-dd", Lang);
+                        searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
 
                         searchData = (searchTitle, searchDateObj);
