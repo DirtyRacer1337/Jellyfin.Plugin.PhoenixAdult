@@ -11,6 +11,7 @@ using HtmlAgilityPack;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult;
 using SkiaSharp;
+using PhoenixAdult.Providers.Helpers;
 
 #if __EMBY__
 
@@ -177,15 +178,15 @@ internal static class ImageHelper
 {
     public static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
     {
-        var http = await item.Url.AllowAnyHttpStatus().HeadAsync(cancellationToken).ConfigureAwait(false);
+        var http = await item.Url.AllowAnyHttpStatus().WithHeader("User-Agent", HTML.GetUserAgent()).HeadAsync(cancellationToken).ConfigureAwait(false);
         if (http.IsSuccessStatusCode)
         {
-            using (var inputStream = new SKManagedStream(await item.Url.GetStreamAsync(cancellationToken).ConfigureAwait(false)))
+            using (var inputStream = new SKManagedStream(await item.Url.WithHeader("User-Agent", HTML.GetUserAgent()).GetStreamAsync(cancellationToken).ConfigureAwait(false)))
             using (var img = SKBitmap.Decode(inputStream))
                 if (img.Width > 100)
                     return new RemoteImageInfo
                     {
-                        ProviderName = Plugin.Instance.Name,
+                        ProviderName = item.ProviderName,
                         Url = item.Url,
                         Type = item.Type,
                         Height = img.Height,

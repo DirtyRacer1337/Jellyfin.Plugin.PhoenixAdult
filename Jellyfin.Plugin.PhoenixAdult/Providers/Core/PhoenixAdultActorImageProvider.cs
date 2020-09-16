@@ -19,7 +19,10 @@ namespace PhoenixAdult
 {
     public class PhoenixAdultActorImageProvider : IRemoteImageProvider
     {
-        public string Name => Plugin.Instance.Name;
+        public string Name => Plugin.Instance.Name + "Actor";
+
+        public bool Supports(BaseItem item) => item is Person;
+
 #if __EMBY__
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
 #else
@@ -44,8 +47,6 @@ namespace PhoenixAdult
 
             return images;
         }
-
-        public bool Supports(BaseItem item) => item is Person;
 
         public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
                 ImageType.Primary

@@ -22,6 +22,8 @@ namespace PhoenixAdult
     {
         public string Name => Plugin.Instance.Name;
 
+        public bool Supports(BaseItem item) => item is Movie;
+
 #if __EMBY__
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
 #else
@@ -93,17 +95,15 @@ namespace PhoenixAdult
             return images;
         }
 
-        public bool Supports(BaseItem item) => item is Movie;
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
+                    ImageType.Primary,
+                    ImageType.Backdrop
+            };
 
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
             Url = url
         });
-
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
-                    ImageType.Primary,
-                    ImageType.Backdrop
-            };
     }
 }
