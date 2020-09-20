@@ -33,8 +33,12 @@ namespace PhoenixAdult.Providers.Sites
         public static async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
         {
             JObject json = null;
+            var headers = new Dictionary<string, string>
+            {
+                { "Instance", instance },
+            };
 
-            var http = await url.AllowAnyHttpStatus().WithHeader("Instance", instance).GetAsync(cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.GET(url, cancellationToken, headers).ConfigureAwait(false);
             if (http.IsSuccessStatusCode)
                 json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
 

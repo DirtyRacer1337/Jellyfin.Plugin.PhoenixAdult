@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using Flurl.Http;
-using HtmlAgilityPack;
 
 namespace PhoenixAdult.Providers.Helpers
 {

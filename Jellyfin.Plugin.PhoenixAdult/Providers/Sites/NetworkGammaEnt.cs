@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -20,7 +19,7 @@ namespace PhoenixAdult.Providers.Sites
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
-            var http = await url.GetAsync(cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.GET(url, cancellationToken).ConfigureAwait(false);
             var regEx = Regex.Match(await http.Content.ReadAsStringAsync().ConfigureAwait(false), "\"apiKey\":\"(.*?)\"");
             if (regEx.Groups.Count > 0)
                 return regEx.Groups[1].Value;
@@ -37,7 +36,7 @@ namespace PhoenixAdult.Providers.Sites
                 {"Referer",  referer},
             };
 
-            var http = await url.AllowAnyHttpStatus().WithHeaders(headers).PostStringAsync(param, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.POST(url, param, cancellationToken, headers).ConfigureAwait(false);
             var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return json;

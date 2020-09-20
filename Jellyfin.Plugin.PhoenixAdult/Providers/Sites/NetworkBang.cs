@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -25,7 +24,7 @@ namespace PhoenixAdult.Providers.Sites
                 {"Content-Type", "application/json" }
             };
 
-            var http = await url.WithHeaders(headers).PostStringAsync(param, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.POST(url, param, cancellationToken, headers).ConfigureAwait(false);
             var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return json;

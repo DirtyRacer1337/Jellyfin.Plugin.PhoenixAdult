@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -22,7 +21,7 @@ namespace PhoenixAdult.Providers.Sites
         {
             JObject json = null;
 
-            var http = await url.AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.GET(url, cancellationToken).ConfigureAwait(false);
             if (http.IsSuccessStatusCode)
             {
                 var data = await http.Content.ReadAsStringAsync().ConfigureAwait(false);

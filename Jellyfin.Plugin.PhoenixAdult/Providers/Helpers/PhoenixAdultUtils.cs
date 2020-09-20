@@ -12,6 +12,8 @@ using MediaBrowser.Model.Providers;
 using PhoenixAdult;
 using SkiaSharp;
 using PhoenixAdult.Providers.Helpers;
+using System.Net.Http;
+using System.Collections.Generic;
 
 #if __EMBY__
 
@@ -23,14 +25,68 @@ using Microsoft.Extensions.Logging;
 
 namespace PhoenixAdult.Providers.Helpers
 {
-    internal static class HTML
+    internal static class HTTP
     {
         public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
-        public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken)
+        public static async Task<HttpResponseMessage> GET(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
+
+            if (headers != null)
+            {
+                data = data.WithHeaders(headers);
+            }
+
+            if (cookies != null)
+            {
+                data = data.WithCookies(cookies);
+            }
+
+            return await data.GetAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        public static async Task<HttpResponseMessage> POST(string url, string param, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
+
+            if (headers != null)
+            {
+                data = data.WithHeaders(headers);
+            }
+
+            if (cookies != null)
+            {
+                data = data.WithCookies(cookies);
+            }
+
+            return await data.PostStringAsync(param, cancellationToken).ConfigureAwait(false);
+        }
+
+        public static async Task<HttpResponseMessage> HEAD(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
+
+            if (headers != null)
+            {
+                data = data.WithHeaders(headers);
+            }
+
+            if (cookies != null)
+            {
+                data = data.WithCookies(cookies);
+            }
+
+            return await data.HeadAsync(cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+        internal static class HTML
+    {
+        public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
             var html = new HtmlDocument();
-            var http = await url.AllowAnyHttpStatus().WithHeader("User-Agent", GetUserAgent()).GetAsync(cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.GET(url, cancellationToken, headers, cookies).ConfigureAwait(false);
             if (http.IsSuccessStatusCode)
                 html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
@@ -178,10 +234,10 @@ internal static class ImageHelper
 {
     public static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
     {
-        var http = await item.Url.AllowAnyHttpStatus().WithHeader("User-Agent", HTML.GetUserAgent()).HeadAsync(cancellationToken).ConfigureAwait(false);
+        var http = await item.Url.AllowAnyHttpStatus().WithHeader("User-Agent", HTTP.GetUserAgent()).HeadAsync(cancellationToken).ConfigureAwait(false);
         if (http.IsSuccessStatusCode)
         {
-            using (var inputStream = new SKManagedStream(await item.Url.WithHeader("User-Agent", HTML.GetUserAgent()).GetStreamAsync(cancellationToken).ConfigureAwait(false)))
+            using (var inputStream = new SKManagedStream(await item.Url.WithHeader("User-Agent", HTTP.GetUserAgent()).GetStreamAsync(cancellationToken).ConfigureAwait(false)))
             using (var img = SKBitmap.Decode(inputStream))
                 if (img.Width > 100)
                     return new RemoteImageInfo

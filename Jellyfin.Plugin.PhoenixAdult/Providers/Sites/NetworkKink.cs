@@ -4,8 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
-using HtmlAgilityPack;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -17,6 +15,10 @@ namespace PhoenixAdult.Providers.Sites
 {
     internal class NetworkKink : IPhoenixAdultProviderBase
     {
+        private readonly IDictionary<string, string> _cookies = new Dictionary<string, string> {
+            { "viewing-preferences", "straight%2Cgay" },
+        };
+
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
@@ -48,7 +50,7 @@ namespace PhoenixAdult.Providers.Sites
             else
             {
                 var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
-                var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
+                var data = await HTML.ElementFromURL(url, cancellationToken, null, _cookies).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//div[@class='shoot-card scene']");
                 foreach (var searchResult in searchResults)
@@ -89,9 +91,7 @@ namespace PhoenixAdult.Providers.Sites
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.WithCookie("viewing-preferences", "straight%2Cgay").GetAsync(cancellationToken).ConfigureAwait(false);
-            var stream = await http.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            var sceneData = HTML.ElementFromStream(stream);
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, _cookies).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
             result.Item.Overview = sceneData.SelectSingleNode("//p[@class='description-text']").InnerText.Trim();
@@ -116,10 +116,8 @@ namespace PhoenixAdult.Providers.Sites
                            actorPageURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 
-                    http = await actorPageURL.GetAsync(cancellationToken).ConfigureAwait(false);
-                    var actorHTML = new HtmlDocument();
-                    actorHTML.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
-                    actorPhoto = actorHTML.DocumentNode.SelectSingleNode("//div[contains(@class, 'biography-container')]//img").Attributes["src"].Value;
+                    var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, _cookies).ConfigureAwait(false);
+                    actorPhoto = actorHTML.SelectSingleNode("//div[contains(@class, 'biography-container')]//img").Attributes["src"].Value;
 
                     result.People.Add(new PersonInfo
                     {
@@ -141,9 +139,7 @@ namespace PhoenixAdult.Providers.Sites
             var sceneID = externalId.Split('#');
 
             var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
-            var http = await sceneURL.WithCookie("viewing-preferences", "straight%2Cgay").GetAsync(cancellationToken).ConfigureAwait(false);
-            var stream = await http.Content.ReadAsStreamAsync().ConfigureAwait(false);
-            var sceneData = HTML.ElementFromStream(stream);
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, _cookies).ConfigureAwait(false);
 
             var sceneImages = sceneData.SelectNodes("//video");
             if (sceneImages != null)
