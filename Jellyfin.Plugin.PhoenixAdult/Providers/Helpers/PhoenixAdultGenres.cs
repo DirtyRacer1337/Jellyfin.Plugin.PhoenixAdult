@@ -77,7 +77,8 @@ namespace PhoenixAdult.Providers.Helpers
             "keiran", "little runaway", "mr. cummings", "photos", "public disgrace's best",
             "ryan mclane", "show less", "show more", "site member", "smart", "spring cleaning",
             "st patrick's day", "the pope", "tj cummings", "tony", "twistys hard", "tyler steele",
-            "van styles", "workitout", "wow girls special", "yes, mistress", "hi-def"
+            "van styles", "workitout", "wow girls special", "yes, mistress", "hi-def",
+            "featured actress", "digital mosaic", "minimal mosaic"
         };
 
         private static readonly List<string> _skipListPartial = new List<string> {

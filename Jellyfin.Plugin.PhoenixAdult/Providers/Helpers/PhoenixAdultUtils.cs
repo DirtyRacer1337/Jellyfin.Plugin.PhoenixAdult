@@ -14,11 +14,10 @@ using SkiaSharp;
 using PhoenixAdult.Providers.Helpers;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Globalization;
 
 #if __EMBY__
-
 using MediaBrowser.Model.Logging;
-
 #else
 using Microsoft.Extensions.Logging;
 #endif
@@ -29,59 +28,57 @@ namespace PhoenixAdult.Providers.Helpers
     {
         public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
+        private static IFlurlRequest Init(string url, IDictionary<string, string> headers, IDictionary<string, string> cookies)
+        {
+            IFlurlRequest result = null;
+
+            using (var http = new FlurlClient(url))
+            {
+                http.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
+                if (headers != null)
+                {
+                    http.WithHeaders(headers);
+                }
+
+                if (cookies != null)
+                {
+                    http.WithCookies(cookies);
+                }
+
+                http.Configure(settings => settings.Timeout = TimeSpan.FromMinutes(2));
+
+                result = http.Request();
+            }
+
+            return result;
+        }
+
         public static async Task<HttpResponseMessage> GET(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
-            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
-
-            if (headers != null)
-            {
-                data = data.WithHeaders(headers);
-            }
-
-            if (cookies != null)
-            {
-                data = data.WithCookies(cookies);
-            }
+            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting GET \"{0}\"", url));
+            var data = Init(url, headers, cookies);
 
             return await data.GetAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task<HttpResponseMessage> POST(string url, string param, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
-            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
-
-            if (headers != null)
-            {
-                data = data.WithHeaders(headers);
-            }
-
-            if (cookies != null)
-            {
-                data = data.WithCookies(cookies);
-            }
+            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting POST \"{0}\"", url));
+            var data = Init(url, headers, cookies);
 
             return await data.PostStringAsync(param, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task<HttpResponseMessage> HEAD(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
-            var data = url.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
-
-            if (headers != null)
-            {
-                data = data.WithHeaders(headers);
-            }
-
-            if (cookies != null)
-            {
-                data = data.WithCookies(cookies);
-            }
+            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting HEAD \"{0}\"", url));
+            var data = Init(url, headers, cookies);
 
             return await data.HeadAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 
-        internal static class HTML
+    internal static class HTML
     {
         public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
@@ -96,9 +93,10 @@ namespace PhoenixAdult.Providers.Helpers
         public static HtmlNode ElementFromString(string data)
         {
             var html = new HtmlDocument();
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-            html.Load(stream);
-            stream.Dispose();
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+            {
+                html.Load(stream);
+            }
 
             return html.DocumentNode;
         }
@@ -234,11 +232,12 @@ internal static class ImageHelper
 {
     public static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
     {
-        var http = await item.Url.AllowAnyHttpStatus().WithHeader("User-Agent", HTTP.GetUserAgent()).HeadAsync(cancellationToken).ConfigureAwait(false);
+        var http = await HTTP.HEAD(item.Url, cancellationToken).ConfigureAwait(false);
         if (http.IsSuccessStatusCode)
         {
-            using (var inputStream = new SKManagedStream(await item.Url.WithHeader("User-Agent", HTTP.GetUserAgent()).GetStreamAsync(cancellationToken).ConfigureAwait(false)))
-            using (var img = SKBitmap.Decode(inputStream))
+            using (var httpStream = await HTTP.GET(item.Url, cancellationToken).ConfigureAwait(false))
+            using (var img = SKBitmap.Decode(await httpStream.Content.ReadAsStreamAsync().ConfigureAwait(false)))
+            {
                 if (img.Width > 100)
                     return new RemoteImageInfo
                     {
@@ -248,6 +247,7 @@ internal static class ImageHelper
                         Height = img.Height,
                         Width = img.Width
                     };
+            }
         }
 
         return null;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +11,7 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Providers;
+using PhoenixAdult.Providers.Helpers;
 
 #if __EMBY__
 using MediaBrowser.Model.Configuration;
@@ -30,6 +32,7 @@ namespace PhoenixAdult
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
 #endif
         {
+            var errorImages = new List<string>();
             var images = new List<RemoteImageInfo>();
 
             if (item == null)
@@ -50,7 +53,7 @@ namespace PhoenixAdult
                 var clearImages = new List<RemoteImageInfo>();
                 foreach (var image in images)
                 {
-                    if (!clearImages.Where(o => o.Url == image.Url && o.Type == image.Type).Any())
+                    if (!clearImages.Where(o => o.Url == image.Url && o.Type == image.Type).Any() && !errorImages.Contains(image.Url, StringComparer.OrdinalIgnoreCase))
                     {
                         var imageDubl = clearImages.Where(o => o.Url == image.Url && o.Type != image.Type);
                         if (imageDubl.Any())
@@ -65,7 +68,9 @@ namespace PhoenixAdult
                             };
 
                             if (t.Type == ImageType.Backdrop)
+                            {
                                 img.Type = ImageType.Primary;
+                            }
                             else
                             {
                                 if (t.Type == ImageType.Primary)
@@ -85,10 +90,21 @@ namespace PhoenixAdult
 
                                 clearImages.Add(image);
                             }
+                            else
+                            {
+                                errorImages.Add(image.Url);
+                            }
                         }
                     }
 
                     images = clearImages;
+                }
+
+                var FirstBackdrop = images.Where(o => o.Type == ImageType.Backdrop).First();
+                if (FirstBackdrop != null && images.Where(o => o.Type == ImageType.Primary).First().Url == FirstBackdrop.Url)
+                {
+                    images.Remove(FirstBackdrop);
+                    images.Add(FirstBackdrop);
                 }
             }
 
@@ -103,7 +119,8 @@ namespace PhoenixAdult
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
-            Url = url
+            Url = url,
+            UserAgent = HTTP.GetUserAgent(),
         });
     }
 }

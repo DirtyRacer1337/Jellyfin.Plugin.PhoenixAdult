@@ -36,14 +36,20 @@ namespace PhoenixAdult
 
             var imageList = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
             foreach (var image in imageList)
-                images.Add(new RemoteImageInfo
+            {
+                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
+                if (img != null)
                 {
-                    Url = image.Url,
-                    Type = ImageType.Primary,
-                    Height = image.Height,
-                    Width = image.Width,
-                    ProviderName = image.ProviderName
-                });
+                    images.Add(new RemoteImageInfo
+                    {
+                        ProviderName = image.ProviderName,
+                        Url = image.Url,
+                        Type = ImageType.Primary,
+                        Height = img.Height,
+                        Width = img.Width,
+                    });
+                }
+            }
 
             return images;
         }
@@ -55,7 +61,8 @@ namespace PhoenixAdult
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
-            Url = url
+            Url = url,
+            UserAgent = HTTP.GetUserAgent(),
         });
 
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
@@ -68,69 +75,41 @@ namespace PhoenixAdult
             imageURL = await GetFromAdultDVDEmpire(name, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(imageURL))
             {
-                image.Url = imageURL;
-                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
-                if (img != null)
+                imageList.Add(new RemoteImageInfo
                 {
-                    imageList.Add(new RemoteImageInfo
-                    {
-                        ProviderName = "AdultDVDEmpire",
-                        Url = imageURL,
-                        Height = img.Height,
-                        Width = img.Width
-                    });
-                }
+                    ProviderName = "AdultDVDEmpire",
+                    Url = imageURL,
+                });
             }
 
             imageURL = await GetFromBoobpedia(name, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(imageURL))
             {
-                image.Url = imageURL;
-                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
-                if (img != null)
+                imageList.Add(new RemoteImageInfo
                 {
-                    imageList.Add(new RemoteImageInfo
-                    {
-                        ProviderName = "Boobpedia",
-                        Url = imageURL,
-                        Height = img.Height,
-                        Width = img.Width
-                    });
-                }
+                    ProviderName = "Boobpedia",
+                    Url = imageURL,
+                });
             }
 
             imageURL = await GetFromBabepedia(name, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(imageURL))
             {
-                image.Url = imageURL;
-                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
-                if (img != null)
+                imageList.Add(new RemoteImageInfo
                 {
-                    imageList.Add(new RemoteImageInfo
-                    {
-                        ProviderName = "Babepedia",
-                        Url = imageURL,
-                        Height = img.Height,
-                        Width = img.Width
-                    });
-                }
+                    ProviderName = "Babepedia",
+                    Url = imageURL,
+                });
             }
 
             imageURL = await GetFromIAFD(name, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(imageURL))
             {
-                image.Url = imageURL;
-                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
-                if (img != null)
+                imageList.Add(new RemoteImageInfo
                 {
-                    imageList.Add(new RemoteImageInfo
-                    {
-                        ProviderName = "IAFD",
-                        Url = imageURL,
-                        Height = img.Height,
-                        Width = img.Width
-                    });
-                }
+                    ProviderName = "IAFD",
+                    Url = imageURL,
+                });
             }
 
             return imageList;

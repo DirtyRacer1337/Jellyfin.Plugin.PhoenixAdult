@@ -166,7 +166,7 @@ namespace PhoenixAdult.Providers.Sites
                     });
                 }
 
-            sceneImages = sceneData.SelectNodes("//div[@id='previewImages']//img");
+            sceneImages = sceneData.SelectNodes("//div[@id='gallerySlider']//img");
             if (sceneImages != null)
                 foreach (var sceneImage in sceneImages)
                 {

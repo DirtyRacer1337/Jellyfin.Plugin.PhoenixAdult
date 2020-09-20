@@ -97,7 +97,8 @@ namespace PhoenixAdult
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
-            Url = url
+            Url = url,
+            UserAgent = HTTP.GetUserAgent().
         });
     }
 }

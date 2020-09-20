@@ -24,11 +24,8 @@ namespace PhoenixAdult
     {
         public string Name => Plugin.Instance.Name;
 
-#if __EMBY__
         public static ILogger Log { get; set; }
-#else
-        public static ILogger<PhoenixAdultProvider> Log { get; set; }
-#endif
+
         public static IHttpClient Http { get; set; }
 
         public PhoenixAdultProvider(
@@ -185,7 +182,8 @@ namespace PhoenixAdult
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
-            Url = url
+            Url = url,
+            UserAgent = HTTP.GetUserAgent(),
         });
 
         public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
