@@ -82,7 +82,7 @@ namespace PhoenixAdult.Helpers
         };
 
         private static readonly List<string> _skipListPartial = new List<string> {
-            "5k", "60fps", "hd", "1080p", "aprilfools", "chibbles", "folsom", "sale"
+            "5k", "60fps", "hd", "1080p", "aprilfools", "chibbles", "folsom", "sale", "best of", "bestof"
         };
 
         private static readonly Dictionary<string, string[]> _replaceList = new Dictionary<string, string[]> {
