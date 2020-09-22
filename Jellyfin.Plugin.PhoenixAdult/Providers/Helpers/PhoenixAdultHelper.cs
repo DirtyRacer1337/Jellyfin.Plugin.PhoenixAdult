@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace PhoenixAdult.Providers.Helpers
+namespace PhoenixAdult.Helpers
 {
     internal static class PhoenixAdultHelper
     {

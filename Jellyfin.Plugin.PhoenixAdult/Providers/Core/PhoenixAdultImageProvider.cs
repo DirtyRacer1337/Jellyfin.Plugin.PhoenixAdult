@@ -10,8 +10,8 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Providers;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult;
+using PhoenixAdult.Helpers;
 
 #if __EMBY__
 using MediaBrowser.Model.Configuration;
@@ -25,6 +25,11 @@ namespace PhoenixAdult
         public string Name => Plugin.Instance.Name;
 
         public bool Supports(BaseItem item) => item is Movie;
+
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
+                    ImageType.Primary,
+                    ImageType.Backdrop
+            };
 
 #if __EMBY__
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
@@ -100,21 +105,20 @@ namespace PhoenixAdult
                     images = clearImages;
                 }
 
-                var FirstBackdrop = images.Where(o => o.Type == ImageType.Backdrop).First();
-                if (FirstBackdrop != null && images.Where(o => o.Type == ImageType.Primary).First().Url == FirstBackdrop.Url)
+                var backdrops = images.Where(o => o.Type == ImageType.Backdrop);
+                if (backdrops.Any())
                 {
-                    images.Remove(FirstBackdrop);
-                    images.Add(FirstBackdrop);
+                    var firstBackdrop = backdrops.First();
+                    if (firstBackdrop != null && images.Where(o => o.Type == ImageType.Primary).First().Url == firstBackdrop.Url)
+                    {
+                        images.Remove(firstBackdrop);
+                        images.Add(firstBackdrop);
+                    }
                 }
             }
 
             return images;
         }
-
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
-                    ImageType.Primary,
-                    ImageType.Backdrop
-            };
 
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
         {

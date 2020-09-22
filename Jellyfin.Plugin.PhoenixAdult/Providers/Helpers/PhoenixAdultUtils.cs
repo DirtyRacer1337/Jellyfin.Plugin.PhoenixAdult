@@ -11,7 +11,7 @@ using HtmlAgilityPack;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult;
 using SkiaSharp;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult.Helpers;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,7 +22,7 @@ using MediaBrowser.Model.Logging;
 using Microsoft.Extensions.Logging;
 #endif
 
-namespace PhoenixAdult.Providers.Helpers
+namespace PhoenixAdult.Helpers
 {
     internal static class HTTP
     {

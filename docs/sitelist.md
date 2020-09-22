@@ -292,6 +292,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - PureMature
   - SpyFam
   - Tiny4k
++ #### Pornhub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Don't Break Me
   - Girls Gone Pink

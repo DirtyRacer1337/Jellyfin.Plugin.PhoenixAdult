@@ -7,7 +7,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 
-namespace PhoenixAdult.Providers
+namespace PhoenixAdult
 {
     internal interface IPhoenixAdultProviderBase
     {

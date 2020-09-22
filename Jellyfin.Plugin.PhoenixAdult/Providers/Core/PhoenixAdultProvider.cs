@@ -9,8 +9,8 @@ using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Providers;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult;
+using PhoenixAdult.Helpers;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -43,6 +43,29 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
+
+            int siteListCount = 0;
+            foreach (var site in PhoenixAdultList.SiteList.Values)
+                siteListCount += site.Count;
+
+            var siteModuleList = new List<string>();
+            for (int i = 0; i < PhoenixAdultList.SiteList.Count; i += 1)
+            {
+                var siteModule = PhoenixAdultList.GetProviderBySiteID(i);
+                if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
+                    siteModuleList.Add(siteModule.ToString());
+            }
+
+            int actressListCount = 0;
+            foreach (var actress in PhoenixAdultActors.ReplaceListStudio.Values)
+                actressListCount += actress.Count;
+            actressListCount += PhoenixAdultActors.ReplaceList.Count;
+
+            Logger.Info($"Plugin version: {Plugin.Instance.Version}");
+            Logger.Info($"Number of supported sites: {siteListCount}");
+            Logger.Info($"Number of site modules: {siteModuleList.Count}");
+            Logger.Info($"Number of site aliases: {PhoenixAdultList.AbbrieviationList.Count}");
+            Logger.Info($"Number of actress: {actressListCount}");
         }
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)

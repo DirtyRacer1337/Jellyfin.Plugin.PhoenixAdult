@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using PhoenixAdult.Providers.Sites;
+using PhoenixAdult.Sites;
 
-namespace PhoenixAdult.Providers
+namespace PhoenixAdult
 {
     public static class PhoenixAdultList
     {
@@ -43,7 +43,7 @@ namespace PhoenixAdult.Providers
                     }
                 },{
                     2, new Dictionary<int, string[]> {
-                        {0, new string [] { "Bellesa Films","https://www.bellesafilms.com/", "https://site-api.project1service.com" } },
+                        {0, new string [] { "Bellesa Films","https://www.bellesafilms.com", "https://site-api.project1service.com" } },
                         {1, new string [] { "Bellesa House" } },
                         {2, new string [] { "Property Sex", "https://www.propertysex.com" } },
                         {3, new string [] { "TransAngels", "https://www.transangels.com" } },
@@ -53,8 +53,8 @@ namespace PhoenixAdult.Providers
                         {7, new string [] { "Bi Empire", "https://www.biempire.com" } },
                         {8, new string [] { "Deviant Hardcore", "https://www.devianthardcore.com" } },
                         {9, new string [] { "She Will Cheat", "https://www.shewillcheat.com" } },
-                        {10, new string [] { "Kinky Spa", "https://www.kinkyspa.com/" } },
-                        {11, new string [] { "Transsensual", "https://www.transsensual.com/" } },
+                        {10, new string [] { "Kinky Spa", "https://www.kinkyspa.com" } },
+                        {11, new string [] { "Transsensual", "https://www.transsensual.com" } },
                         {12, new string [] { "Lil Humpers", "https://www.lilhumpers.com" } },
                         {13, new string [] { "Family Sinners", "https://www.familysinners.com" } },
                         {14, new string [] { "DigitalPlayground", "https://www.digitalplayground.com" } },
@@ -183,7 +183,7 @@ namespace PhoenixAdult.Providers
                     }
                 },{
                     10, new Dictionary<int, string[]> {
-                        {0, new string [] { "Naughty America", "https://www.naughtyamerica.com/", "https://i6p9q9r18e-3.algolianet.com/1/indexes/*/queries" } },
+                        {0, new string [] { "Naughty America", "https://www.naughtyamerica.com", "https://i6p9q9r18e-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "My Friends Hot Mom" } },
                         {2, new string [] { "My First Sex Teacher" } },
                         {3, new string [] { "Seduced By A Cougar" } },
@@ -501,7 +501,7 @@ namespace PhoenixAdult.Providers
                         {1, new string [] { "Exxxtra Small", "https://www.exxxtrasmall.com", "https://www.exxxtrasmall.com/movies/" } },
                         {2, new string [] { "Teen Pies", "https://www.teenpies.com", "https://www.teenpies.com/movies/" } },
                         {3, new string [] { "Innocent High", "https://www.innocenthigh.com", "https://www.innocenthigh.com/movies/" } },
-                        {4, new string [] { "Teen Curves", "https://www.teencurves.com/", "https://www.teencurves.com/movies/" } },
+                        {4, new string [] { "Teen Curves", "https://www.teencurves.com", "https://www.teencurves.com/movies/" } },
                         {5, new string [] { "CFNM Teens" } },
                         {6, new string [] { "Teens Love Anal", "https://www.teensloveanal.com", "https://www.teensloveanal.com/movies/" } },
                         {7, new string [] { "My Babysitters Club", "https://www.mybabysittersclub.com", "https://www.mybabysittersclub.com/movies/" } },
@@ -538,8 +538,8 @@ namespace PhoenixAdult.Providers
                         {38, new string [] { "Little Asians", "https://www.littleasians.com", "https://www.littleasians.com/movies" } },
                         {39, new string [] { "Thickumz", "https://www.thickumz.com", "https://www.thickumz.com/movies/" } },
                         {40, new string [] { "Teens Love Black Cocks", "https://www.teensloveblackcocks.com", "https://www.teensloveblackcocks.com/movies/" } },
-                        {41, new string [] { "Anal Mom", "https://analmom.com", "https://www.analmom.com/movies/" } },
-                        {42, new string [] { "BBC Paradise", "https://www.bbcparadise.com/", "https://www.bbcparadise.com/movies/" } },
+                        {41, new string [] { "Anal Mom", "https://analmom.com", "https://www.analmom.com/movies" } },
+                        {42, new string [] { "BBC Paradise", "https://www.bbcparadise.com", "https://www.bbcparadise.com/movies/" } },
                     }
                 },{
                     25, new Dictionary<int, string[]> {
@@ -552,6 +552,10 @@ namespace PhoenixAdult.Providers
                 },{
                     26, new Dictionary<int, string[]> {
                         {0, new string [] { "LegalPorno", "https://www.legalporno.com", "https://www.legalporno.com/search/?query=" } },
+                    }
+                },{
+                    27, new Dictionary<int, string[]> {
+                        {0, new string [] { "Pornhub", "https://www.pornhub.com", "https://www.pornhub.com/video/search?search=" } },
                     }
                 }
             };
@@ -567,7 +571,6 @@ namespace PhoenixAdult.Providers
             { @"^a1o1 ", "Asian1on1 " },
             { @"^aa ", "AmateurAllure " },
             { @"^ad ", "AmericanDaydreams " },
-            { @"^add ", "ManualAddActors " },
             { @"^agm ", "AllGirlMassage " },
             { @"^am ", "AssMasterpiece " },
             { @"^analb ", "AnalBeauty " },
@@ -787,6 +790,7 @@ namespace PhoenixAdult.Providers
                 case 24: return new NetworkMylf();
                 case 25: return new SiteJulesJordan();
                 case 26: return new SiteLegalPorno();
+                case 27: return new SitePornhub();
                 default: return null;
             };
         }

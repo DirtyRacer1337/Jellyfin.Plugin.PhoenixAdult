@@ -11,9 +11,9 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json.Linq;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult.Helpers;
 
-namespace PhoenixAdult.Providers.Sites
+namespace PhoenixAdult.Sites
 {
     internal class Network1service : IPhoenixAdultProviderBase
     {

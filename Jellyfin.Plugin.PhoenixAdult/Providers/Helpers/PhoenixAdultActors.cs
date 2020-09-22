@@ -7,7 +7,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 
-namespace PhoenixAdult.Providers.Helpers
+namespace PhoenixAdult.Helpers
 {
     internal static class PhoenixAdultActors
     {

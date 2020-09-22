@@ -8,7 +8,7 @@ using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult
 {

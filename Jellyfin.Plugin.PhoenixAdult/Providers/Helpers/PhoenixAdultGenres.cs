@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 
-namespace PhoenixAdult.Providers.Helpers
+namespace PhoenixAdult.Helpers
 {
     internal static class PhoenixAdultGenres
     {

@@ -8,9 +8,9 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult.Providers.Helpers;
+using PhoenixAdult.Helpers;
 
-namespace PhoenixAdult.Providers.Sites
+namespace PhoenixAdult.Sites
 {
     internal class SiteBangBros : IPhoenixAdultProviderBase
     {
@@ -20,7 +20,8 @@ namespace PhoenixAdult.Providers.Sites
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase);
+            encodedTitle = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase);
+            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
