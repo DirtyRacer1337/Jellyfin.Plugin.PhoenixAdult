@@ -94,7 +94,7 @@ namespace PhoenixAdult.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, _cookies).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
-            result.Item.Overview = sceneData.SelectSingleNode("//p[@class='description-text']").InnerText.Trim();
+            result.Item.Overview = sceneData.SelectSingleNode("//*[@class='description-text']").InnerText.Trim();
             result.Item.AddStudio("Kink");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
