@@ -118,23 +118,15 @@ namespace PhoenixAdult
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
-                    try
+                    result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    if (result.Any())
                     {
-                        result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Error(e.ToString());
-                    }
-                    finally
-                    {
-                        if (result.Any())
-                            if (result.Any(scene => scene.IndexNumber.HasValue))
-                                result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
-                            else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue) && result.Any(scene => scene.PremiereDate.Value != searchDateObj))
-                                result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
-                            else
-                                result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
+                        if (result.Any(scene => scene.IndexNumber.HasValue))
+                            result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
+                        else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue) && result.Any(scene => scene.PremiereDate.Value != searchDateObj))
+                            result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
+                        else
+                            result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
                     }
                 }
             }
@@ -172,30 +164,20 @@ namespace PhoenixAdult
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
-                try
+                result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
+                if (result != null)
                 {
-                    result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e.ToString());
-                }
-                finally
-                {
-                    if (result != null)
-                    {
-                        result.HasMetadata = true;
-                        result.Item.OfficialRating = "XXX";
-                        result.Item.ProviderIds = sceneID;
+                    result.HasMetadata = true;
+                    result.Item.OfficialRating = "XXX";
+                    result.Item.ProviderIds = sceneID;
 
-                        if (result.Item.PremiereDate.HasValue)
-                            result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
+                    if (result.Item.PremiereDate.HasValue)
+                        result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
 
-                        if ((result.People != null) && result.People.Any())
-                            result.People = PhoenixAdultActors.Cleanup(result);
-                        if (result.Item.Genres != null && result.Item.Genres.Any())
-                            result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
-                    }
+                    if ((result.People != null) && result.People.Any())
+                        result.People = PhoenixAdultActors.Cleanup(result);
+                    if (result.Item.Genres != null && result.Item.Genres.Any())
+                        result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
                 }
             }
 

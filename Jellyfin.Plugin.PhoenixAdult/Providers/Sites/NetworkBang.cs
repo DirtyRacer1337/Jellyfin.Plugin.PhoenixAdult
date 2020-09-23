@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Util;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -17,6 +18,8 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {
+            JObject json = null;
+
             var param = $"{{'query':{{'bool':{{'must':[{{'match':{{'{searchType}':'{searchTitle}'}}}},{{'match':{{'type':'movie'}}}}],'must_not':[{{'match':{{'type':'trailer'}}}}]}}}}}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
@@ -24,8 +27,15 @@ namespace PhoenixAdult.Sites
                 {"Content-Type", "application/json" }
             };
 
-            var http = await HTTP.POST(url, param, cancellationToken, headers).ConfigureAwait(false);
-            var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var http = await HTTP.Request(new HTTP.HTTPRequest {
+                _url = url,
+                _param = param,
+                _headers = headers,
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            }
 
             return json;
         }
@@ -43,24 +53,27 @@ namespace PhoenixAdult.Sites
             else
                 searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
 
-            foreach (var searchResult in searchResults["hits"]["hits"])
+            if (searchResults != null)
             {
-                var sceneData = searchResult["_source"];
-                string sceneID = (string)sceneData["identifier"],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                        sceneName = (string)sceneData["name"],
-                        scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
-                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
-
-                var item = new RemoteSearchResult
+                foreach (var searchResult in searchResults["hits"]["hits"])
                 {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
-                    PremiereDate = sceneDateObj
-                };
+                    var sceneData = searchResult["_source"];
+                    string sceneID = (string)sceneData["identifier"],
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                            sceneName = (string)sceneData["name"],
+                            scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
+                    DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
 
-                result.Add(item);
+                    var item = new RemoteSearchResult
+                    {
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        Name = sceneName,
+                        ImageUrl = scenePoster,
+                        PremiereDate = sceneDateObj
+                    };
+
+                    result.Add(item);
+                }
             }
 
             return result;

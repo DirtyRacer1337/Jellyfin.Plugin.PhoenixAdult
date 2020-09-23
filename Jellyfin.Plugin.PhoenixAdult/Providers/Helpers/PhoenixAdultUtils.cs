@@ -15,6 +15,7 @@ using PhoenixAdult.Helpers;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -26,55 +27,85 @@ namespace PhoenixAdult.Helpers
 {
     internal static class HTTP
     {
+        public struct HTTPRequest
+        {
+            public string _url;
+            public HttpMethod _method;
+            public string _param;
+            public IDictionary<string, string> _headers;
+            public IDictionary<string, string> _cookies;
+        }
+
+        public struct HTTPResponse
+        {
+            public HttpResponseMessage _response;
+            public IDictionary<string, Cookie> _cookies;
+        }
         public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
-        private static IFlurlRequest Init(string url, IDictionary<string, string> headers, IDictionary<string, string> cookies)
+        public static async Task<HTTPResponse> Request(HTTPRequest request, CancellationToken cancellationToken)
         {
-            IFlurlRequest result = null;
+            HTTPResponse result = new HTTPResponse();
 
-            using (var http = new FlurlClient(url))
+            request._url = Uri.EscapeUriString(request._url);
+
+            if (request._method == null)
+                request._method = HttpMethod.Get;
+
+            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request._url, request._method.Method));
+
+            using (var http = new FlurlClient(request._url))
             {
                 http.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
-                if (headers != null)
+
+                if (request._headers != null)
                 {
-                    http.WithHeaders(headers);
+                    http.WithHeaders(request._headers);
                 }
 
-                if (cookies != null)
+                if (request._cookies != null)
                 {
-                    http.WithCookies(cookies);
+                    http.WithCookies(request._cookies);
                 }
 
-                http.Configure(settings => settings.Timeout = TimeSpan.FromMinutes(2));
+                http.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
 
-                result = http.Request();
+                var data = http.Request();
+
+                try
+                {
+                    switch (request._method.Method)
+                    {
+                        case "GET":
+                            result._response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
+                            break;
+                        case "POST":
+                            result._response = await data.PostStringAsync(request._param, cancellationToken).ConfigureAwait(false);
+                            break;
+                        case "HEAD":
+                            result._response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
+                            break;
+                        default:
+                            return result;
+                    }
+
+                }
+                catch (FlurlHttpTimeoutException e)
+                {
+                    Logger.Info(e.Message);
+                    return new HTTPResponse
+                    {
+                        _response = new HttpResponseMessage
+                        {
+                            StatusCode = HttpStatusCode.RequestTimeout
+                        }
+                    };
+                }
+
+                result._cookies = http.Cookies;
             }
 
             return result;
-        }
-
-        public static async Task<HttpResponseMessage> GET(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
-        {
-            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting GET \"{0}\"", url));
-            var data = Init(url, headers, cookies);
-
-            return await data.GetAsync(cancellationToken).ConfigureAwait(false);
-        }
-
-        public static async Task<HttpResponseMessage> POST(string url, string param, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
-        {
-            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting POST \"{0}\"", url));
-            var data = Init(url, headers, cookies);
-
-            return await data.PostStringAsync(param, cancellationToken).ConfigureAwait(false);
-        }
-
-        public static async Task<HttpResponseMessage> HEAD(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
-        {
-            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting HEAD \"{0}\"", url));
-            var data = Init(url, headers, cookies);
-
-            return await data.HeadAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -83,9 +114,14 @@ namespace PhoenixAdult.Helpers
         public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
             var html = new HtmlDocument();
-            var http = await HTTP.GET(url, cancellationToken, headers, cookies).ConfigureAwait(false);
-            if (http.IsSuccessStatusCode)
-                html.Load(await http.Content.ReadAsStreamAsync().ConfigureAwait(false));
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = url,
+                _headers = headers,
+                _cookies = cookies,
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+                html.Load(await http._response.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
             return html.DocumentNode;
         }
@@ -232,11 +268,18 @@ internal static class ImageHelper
 {
     public static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
     {
-        var http = await HTTP.HEAD(item.Url, cancellationToken).ConfigureAwait(false);
-        if (http.IsSuccessStatusCode)
+        var http = await HTTP.Request(new HTTP.HTTPRequest
         {
-            using (var httpStream = await HTTP.GET(item.Url, cancellationToken).ConfigureAwait(false))
-            using (var img = SKBitmap.Decode(await httpStream.Content.ReadAsStreamAsync().ConfigureAwait(false)))
+            _url = item.Url,
+            _method = HttpMethod.Head,
+        }, cancellationToken).ConfigureAwait(false);
+        if (http._response.IsSuccessStatusCode)
+        {
+            var httpStream = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = item.Url,
+            }, cancellationToken).ConfigureAwait(false);
+            using (var img = SKBitmap.Decode(await httpStream._response.Content.ReadAsStreamAsync().ConfigureAwait(false)))
             {
                 if (img.Width > 100)
                     return new RemoteImageInfo

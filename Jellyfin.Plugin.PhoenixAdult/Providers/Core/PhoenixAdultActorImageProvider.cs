@@ -72,8 +72,6 @@ namespace PhoenixAdult
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
             string imageURL;
-            var image = new RemoteImageInfo();
-
             var imageList = new List<RemoteImageInfo>();
 
             imageURL = await GetFromAdultDVDEmpire(name, cancellationToken).ConfigureAwait(false);
@@ -182,7 +180,11 @@ namespace PhoenixAdult
 
             var actorImageNode = actorData.SelectSingleNode("//div[@id='profimg']/a");
             if (actorImageNode != null)
-                image = "https://www.babepedia.com" + actorImageNode.Attributes["href"].Value;
+            {
+                var img = actorImageNode.Attributes["href"].Value;
+                if(!img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+                    image = "https://www.babepedia.com" + img;
+            }
 
             return image;
         }

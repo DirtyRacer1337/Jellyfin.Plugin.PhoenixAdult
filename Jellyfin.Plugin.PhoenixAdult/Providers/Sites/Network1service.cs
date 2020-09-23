@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Flurl.Http;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -19,15 +19,13 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<IDictionary<string, Cookie>> GetCookies(string url, CancellationToken cancellationToken)
         {
-            IDictionary<string, Cookie> cookies;
-
-            using (var http = new FlurlClient(url))
+            var http = await HTTP.Request(new HTTP.HTTPRequest
             {
-                await http.EnableCookies().AllowAnyHttpStatus().Request().HeadAsync(cancellationToken).ConfigureAwait(false);
-                cookies = http.Cookies;
-            }
+                _url = url,
+                _method = HttpMethod.Head,
+            }, cancellationToken).ConfigureAwait(false);
 
-            return cookies;
+            return http._cookies;
         }
 
         public static async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
@@ -38,9 +36,13 @@ namespace PhoenixAdult.Sites
                 { "Instance", instance },
             };
 
-            var http = await HTTP.GET(url, cancellationToken, headers).ConfigureAwait(false);
-            if (http.IsSuccessStatusCode)
-                json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = url,
+                _headers = headers
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             return json;
         }

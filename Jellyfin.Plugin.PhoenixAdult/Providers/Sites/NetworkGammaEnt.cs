@@ -19,16 +19,24 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
-            var http = await HTTP.GET(url, cancellationToken).ConfigureAwait(false);
-            var regEx = Regex.Match(await http.Content.ReadAsStringAsync().ConfigureAwait(false), "\"apiKey\":\"(.*?)\"");
-            if (regEx.Groups.Count > 0)
-                return regEx.Groups[1].Value;
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = url
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                var regEx = Regex.Match(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false), "\"apiKey\":\"(.*?)\"");
+                if (regEx.Groups.Count > 0)
+                    return regEx.Groups[1].Value;
+            }
 
             return string.Empty;
         }
 
         public static async Task<JObject> GetDataFromAPI(string url, string indexName, string referer, string searchParams, CancellationToken cancellationToken)
         {
+            JObject json = null;
+
             var param = $"{{'requests':[{{'indexName':'{indexName}','params':'{searchParams}'}}]}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
@@ -36,8 +44,16 @@ namespace PhoenixAdult.Sites
                 {"Referer",  referer},
             };
 
-            var http = await HTTP.POST(url, param, cancellationToken, headers).ConfigureAwait(false);
-            var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = url,
+                _param = param,
+                _headers = headers,
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            }
 
             return json;
         }
@@ -69,49 +85,52 @@ namespace PhoenixAdult.Sites
                 var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
                 var searchResults = await GetDataFromAPI(url, $"all_{sceneType}", PhoenixAdultHelper.GetSearchBaseURL(siteNum), searchParams, cancellationToken).ConfigureAwait(false);
 
-                foreach (JObject searchResult in searchResults["results"].First["hits"])
+                if (searchResults != null)
                 {
-                    string sceneID,
-                            sceneName = (string)searchResult["title"],
-                            curID;
-                    DateTime? sceneDateObj;
-
-                    if (sceneType == "scenes")
+                    foreach (JObject searchResult in searchResults["results"].First["hits"])
                     {
-                        sceneDateObj = (DateTime?)searchResult["release_date"];
-                        sceneID = (string)searchResult["clip_id"];
+                        string sceneID,
+                                sceneName = (string)searchResult["title"],
+                                curID;
+                        DateTime? sceneDateObj;
+
+                        if (sceneType == "scenes")
+                        {
+                            sceneDateObj = (DateTime?)searchResult["release_date"];
+                            sceneID = (string)searchResult["clip_id"];
+                        }
+                        else
+                        {
+                            var dateField = searchResult["last_modified"] != null ? "last_modified" : "date_created";
+                            sceneDateObj = (DateTime?)searchResult[dateField];
+                            sceneID = (string)searchResult["movie_id"];
+                        }
+
+                        var res = new RemoteSearchResult
+                        {
+                            Name = sceneName
+                        };
+
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}";
+
+                        if (sceneDateObj.HasValue)
+                        {
+                            var sceneDate = sceneDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            curID += $"#{sceneDate}";
+                            res.PremiereDate = sceneDateObj;
+                        }
+
+                        res.ProviderIds.Add(Plugin.Instance.Name, curID);
+
+                        if (searchResult.ContainsKey("pictures"))
+                        {
+                            var images = searchResult["pictures"].Where(item => !item.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                            if (images.Any())
+                                res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";
+                        }
+
+                        result.Add(res);
                     }
-                    else
-                    {
-                        var dateField = searchResult["last_modified"] != null ? "last_modified" : "date_created";
-                        sceneDateObj = (DateTime?)searchResult[dateField];
-                        sceneID = (string)searchResult["movie_id"];
-                    }
-
-                    var res = new RemoteSearchResult
-                    {
-                        Name = sceneName
-                    };
-
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}";
-
-                    if (sceneDateObj.HasValue)
-                    {
-                        var sceneDate = sceneDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        curID += $"#{sceneDate}";
-                        res.PremiereDate = sceneDateObj;
-                    }
-
-                    res.ProviderIds.Add(Plugin.Instance.Name, curID);
-
-                    if (searchResult.ContainsKey("pictures"))
-                    {
-                        var images = searchResult["pictures"].Where(item => !item.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
-                        if (images.Any())
-                            res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";
-                    }
-
-                    result.Add(res);
                 }
             }
 

@@ -21,10 +21,12 @@ namespace PhoenixAdult.Sites
         {
             JObject json = null;
 
-            var http = await HTTP.GET(url, cancellationToken).ConfigureAwait(false);
-            if (http.IsSuccessStatusCode)
+            var http = await HTTP.Request(new HTTP.HTTPRequest {
+                _url = url
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
             {
-                var data = await http.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var regEx = new Regex(@"window\.__INITIAL_STATE__ = (.*);").Match(data);
                 if (regEx.Groups.Count > 0)
                     json = (JObject)JObject.Parse(regEx.Groups[1].Value)["content"];

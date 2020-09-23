@@ -18,14 +18,24 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchData, CancellationToken cancellationToken)
         {
+            JObject json = null;
+
             var param = $"{{'requests':[{{'indexName':'nacms_scenes_production','params':'{searchData}&hitsPerPage=100'}}]}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
                 {"Content-Type", "application/json" }
             };
 
-            var http = await HTTP.POST(url, param, cancellationToken, headers).ConfigureAwait(false);
-            var json = JObject.Parse(await http.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = url,
+                _param = param,
+                _headers = headers,
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            }
 
             return json;
         }
@@ -46,30 +56,33 @@ namespace PhoenixAdult.Sites
             var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             searchResults = await GetDataFromAPI(url, searchParams, cancellationToken).ConfigureAwait(false);
 
-            foreach (var searchResult in searchResults["results"].First["hits"])
+            if (searchResults != null)
             {
-                string sceneID = (string)searchResult["id"],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                        sceneName = (string)searchResult["title"];
-                long sceneDate = (long)searchResult["published_at"];
-
-                var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID}";
-                var posters = (await GetImages(new Movie
+                foreach (var searchResult in searchResults["results"].First["hits"])
                 {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                    string sceneID = (string)searchResult["id"],
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                            sceneName = (string)searchResult["title"];
+                    long sceneDate = (long)searchResult["published_at"];
 
-                var res = new RemoteSearchResult
-                {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                    Name = sceneName,
-                    PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
-                };
+                    var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID}";
+                    var posters = (await GetImages(new Movie
+                    {
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                    }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
-                if (posters.Any())
-                    res.ImageUrl = posters.First().Url;
+                    var res = new RemoteSearchResult
+                    {
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        Name = sceneName,
+                        PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
+                    };
 
-                result.Add(res);
+                    if (posters.Any())
+                        res.ImageUrl = posters.First().Url;
+
+                    result.Add(res);
+                }
             }
 
             return result;
