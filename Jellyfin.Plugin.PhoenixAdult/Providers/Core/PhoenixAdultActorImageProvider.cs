@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -50,6 +51,9 @@ namespace PhoenixAdult
                     });
                 }
             }
+
+            if (images.Any())
+                images = images.OrderByDescending(o => o.Height).ToList();
 
             return images;
         }
