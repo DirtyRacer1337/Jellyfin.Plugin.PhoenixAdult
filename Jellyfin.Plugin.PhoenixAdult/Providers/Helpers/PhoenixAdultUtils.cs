@@ -113,7 +113,7 @@ namespace PhoenixAdult.Helpers
     {
         public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
-            var html = new HtmlDocument();
+            HtmlNode html = new HtmlDocument().DocumentNode;
             var http = await HTTP.Request(new HTTP.HTTPRequest
             {
                 _url = url,
@@ -121,20 +121,20 @@ namespace PhoenixAdult.Helpers
                 _cookies = cookies,
             }, cancellationToken).ConfigureAwait(false);
             if (http._response.IsSuccessStatusCode)
-                html.Load(await http._response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+                html = ElementFromStream(await http._response.Content.ReadAsStreamAsync().ConfigureAwait(false));
 
-            return html.DocumentNode;
+            return html;
         }
 
         public static HtmlNode ElementFromString(string data)
         {
-            var html = new HtmlDocument();
+            HtmlNode html;
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
             {
-                html.Load(stream);
+                html = ElementFromStream(stream);
             }
 
-            return html.DocumentNode;
+            return html;
         }
 
         public static HtmlNode ElementFromStream(Stream data)
