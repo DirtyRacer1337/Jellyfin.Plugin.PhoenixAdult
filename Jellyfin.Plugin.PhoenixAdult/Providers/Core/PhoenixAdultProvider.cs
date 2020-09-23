@@ -77,13 +77,6 @@ namespace PhoenixAdult
 
             Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
-            if (!Plugin.Instance.Configuration.IgnoreYearWarning)
-                if (searchInfo.Year.HasValue)
-                {
-                    Logger.Info("Year detected (probably important data was stripped), required manual identify");
-                    return result;
-                }
-
             var title = ReplaceAbbrieviation(searchInfo.Name);
             var site = GetSiteFromTitle(title);
             if (site.Key != null)
