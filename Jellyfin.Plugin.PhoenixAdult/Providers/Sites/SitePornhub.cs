@@ -44,7 +44,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                encodedTitle = searchTitle.Replace(" ", "+", StringComparison.OrdinalIgnoreCase);
+                encodedTitle = encodedTitle.Replace("%20", "+", StringComparison.OrdinalIgnoreCase);
                 var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 

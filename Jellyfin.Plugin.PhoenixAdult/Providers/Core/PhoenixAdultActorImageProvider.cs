@@ -182,7 +182,7 @@ namespace PhoenixAdult
             if (actorImageNode != null)
             {
                 var img = actorImageNode.Attributes["href"].Value;
-                if(!img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+                if (!img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
                     image = "https://www.babepedia.com" + img;
             }
 

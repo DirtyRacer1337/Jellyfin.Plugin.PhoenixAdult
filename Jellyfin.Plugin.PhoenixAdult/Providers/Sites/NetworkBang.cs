@@ -27,7 +27,8 @@ namespace PhoenixAdult.Sites
                 {"Content-Type", "application/json" }
             };
 
-            var http = await HTTP.Request(new HTTP.HTTPRequest {
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
                 _url = url,
                 _param = param,
                 _headers = headers,
@@ -94,31 +95,33 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
-
-            result.Item.Name = (string)sceneData["name"];
-            result.Item.Overview = (string)sceneData["description"];
-            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
-
-            DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
-            result.Item.PremiereDate = sceneDateObj;
-
-            foreach (var genreLink in sceneData["genres"])
+            if (sceneData != null)
             {
-                var genreName = (string)genreLink["name"];
+                result.Item.Name = (string)sceneData["name"];
+                result.Item.Overview = (string)sceneData["description"];
+                result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
 
-                result.Item.AddGenre(genreName);
-            }
+                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+                result.Item.PremiereDate = sceneDateObj;
 
-            foreach (var actorLink in sceneData["actors"])
-            {
-                string actorName = (string)actorLink["name"],
-                       actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
-
-                result.People.Add(new PersonInfo
+                foreach (var genreLink in sceneData["genres"])
                 {
-                    Name = actorName,
-                    ImageUrl = actorPhoto
-                });
+                    var genreName = (string)genreLink["name"];
+
+                    result.Item.AddGenre(genreName);
+                }
+
+                foreach (var actorLink in sceneData["actors"])
+                {
+                    string actorName = (string)actorLink["name"],
+                           actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
+
+                    result.People.Add(new PersonInfo
+                    {
+                        Name = actorName,
+                        ImageUrl = actorPhoto
+                    });
+                }
             }
 
             return result;
@@ -137,19 +140,21 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
-
-            result.Add(new RemoteImageInfo
+            if (sceneData != null)
             {
-                Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
-                Type = ImageType.Primary
-            });
-
-            foreach (var image in sceneData["screenshots"])
                 result.Add(new RemoteImageInfo
                 {
-                    Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
-                    Type = ImageType.Backdrop
+                    Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
+                    Type = ImageType.Primary
                 });
+
+                foreach (var image in sceneData["screenshots"])
+                    result.Add(new RemoteImageInfo
+                    {
+                        Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
+                        Type = ImageType.Backdrop
+                    });
+            }
 
             return result;
         }

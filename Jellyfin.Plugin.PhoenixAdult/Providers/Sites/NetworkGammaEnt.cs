@@ -156,41 +156,47 @@ namespace PhoenixAdult.Sites
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", PhoenixAdultHelper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            result.Item.Name = (string)sceneData["title"];
-            var description = (string)sceneData["description"];
-            result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
-            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
-
-            if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
-                result.Item.PremiereDate = sceneDateObj;
-
-            foreach (var genreLink in sceneData["categories"])
+            if (sceneData != null)
             {
-                var genreName = (string)genreLink["name"];
+                result.Item.Name = (string)sceneData["title"];
+                var description = (string)sceneData["description"];
+                result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
+                result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
-                if (!string.IsNullOrEmpty(genreName))
-                    result.Item.AddGenre(genreName);
-            }
+                if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    result.Item.PremiereDate = sceneDateObj;
 
-            foreach (var actorLink in sceneData["actors"])
-            {
-                string actorName = (string)actorLink["name"],
-                       actorPhotoURL = string.Empty;
-
-                var data = await GetDataFromAPI(url, "all_actors", PhoenixAdultHelper.GetSearchBaseURL(siteNum), $"filters=actor_id={actorLink["actor_id"]}", cancellationToken).ConfigureAwait(false);
-                var actorData = data["results"].First["hits"].First;
-                if (actorData["pictures"] != null)
-                    actorPhotoURL = (string)actorData["pictures"].Last;
-
-                var actor = new PersonInfo
+                foreach (var genreLink in sceneData["categories"])
                 {
-                    Name = actorName
-                };
+                    var genreName = (string)genreLink["name"];
 
-                if (actorPhotoURL != null)
-                    actor.ImageUrl = $"https://images-fame.gammacdn.com/actors{actorPhotoURL}";
+                    if (!string.IsNullOrEmpty(genreName))
+                        result.Item.AddGenre(genreName);
+                }
 
-                result.People.Add(actor);
+                foreach (var actorLink in sceneData["actors"])
+                {
+                    string actorName = (string)actorLink["name"],
+                           actorPhotoURL = string.Empty;
+
+                    var data = await GetDataFromAPI(url, "all_actors", PhoenixAdultHelper.GetSearchBaseURL(siteNum), $"filters=actor_id={actorLink["actor_id"]}", cancellationToken).ConfigureAwait(false);
+                    if (data != null)
+                    {
+                        var actorData = data["results"].First["hits"].First;
+                        if (actorData["pictures"] != null)
+                            actorPhotoURL = (string)actorData["pictures"].Last;
+
+                        var actor = new PersonInfo
+                        {
+                            Name = actorName
+                        };
+
+                        if (actorPhotoURL != null)
+                            actor.ImageUrl = $"https://images-fame.gammacdn.com/actors{actorPhotoURL}";
+
+                        result.People.Add(actor);
+                    }
+                }
             }
 
             return result;
@@ -213,42 +219,45 @@ namespace PhoenixAdult.Sites
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", PhoenixAdultHelper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            var ignore = false;
-            var siteList = new List<string>
+            if (sceneData != null)
+            {
+                var ignore = false;
+                var siteList = new List<string>
             {
                 "girlsway.com", "puretaboo.com"
             };
-            foreach (var site in siteList)
-                if (PhoenixAdultHelper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))
+                foreach (var site in siteList)
+                    if (PhoenixAdultHelper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))
+                    {
+                        ignore = true;
+                        break;
+                    }
+
+                string image = sceneData["url_title"].ToString().ToLowerInvariant().Replace('-', '_'),
+                       imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
+
+                if (!ignore)
+                    result.Add(new RemoteImageInfo
+                    {
+                        Url = imageURL,
+                        Type = ImageType.Primary
+                    });
+
+                if (sceneData.ContainsKey("pictures"))
                 {
-                    ignore = true;
-                    break;
+                    image = (string)sceneData["pictures"].Last(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                    imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
+                    result.Add(new RemoteImageInfo
+                    {
+                        Url = imageURL,
+                        Type = ImageType.Primary
+                    });
+                    result.Add(new RemoteImageInfo
+                    {
+                        Url = imageURL,
+                        Type = ImageType.Backdrop
+                    });
                 }
-
-            string image = sceneData["url_title"].ToString().ToLowerInvariant().Replace('-', '_'),
-                   imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
-
-            if (!ignore)
-                result.Add(new RemoteImageInfo
-                {
-                    Url = imageURL,
-                    Type = ImageType.Primary
-                });
-
-            if (sceneData.ContainsKey("pictures"))
-            {
-                image = (string)sceneData["pictures"].Last(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
-                imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
-                result.Add(new RemoteImageInfo
-                {
-                    Url = imageURL,
-                    Type = ImageType.Primary
-                });
-                result.Add(new RemoteImageInfo
-                {
-                    Url = imageURL,
-                    Type = ImageType.Backdrop
-                });
             }
 
             return result;

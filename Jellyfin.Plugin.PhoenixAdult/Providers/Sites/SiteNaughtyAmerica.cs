@@ -105,43 +105,46 @@ namespace PhoenixAdult.Sites
             var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[2]}", cancellationToken).ConfigureAwait(false);
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            result.Item.Name = (string)sceneData["title"];
-            result.Item.Overview = (string)sceneData["synopsis"];
-            result.Item.AddStudio("Naughty America");
-
-            DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
-            result.Item.PremiereDate = sceneDateObj.DateTime;
-
-            foreach (var genreLink in sceneData["fantasies"])
+            if (sceneData != null)
             {
-                var genreName = (string)genreLink;
+                result.Item.Name = (string)sceneData["title"];
+                result.Item.Overview = (string)sceneData["synopsis"];
+                result.Item.AddStudio("Naughty America");
 
-                result.Item.AddGenre(genreName);
-            }
+                DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
+                result.Item.PremiereDate = sceneDateObj.DateTime;
 
-            foreach (var actorLink in sceneData["performers"])
-            {
-                string actorName = (string)actorLink,
-                        actorPhoto = string.Empty,
-                        actorsPageURL;
-
-                actorsPageURL = actorName.ToLowerInvariant().Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
-
-                var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
-                var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
-
-                var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
-                if (actorImageNode != null)
-                    actorPhoto = actorImageNode.Attributes["src"]?.Value;
-
-                var actor = new PersonInfo
+                foreach (var genreLink in sceneData["fantasies"])
                 {
-                    Name = actorName
-                };
-                if (!string.IsNullOrEmpty(actorPhoto))
-                    actor.ImageUrl = $"https:{actorPhoto}";
+                    var genreName = (string)genreLink;
 
-                result.People.Add(actor);
+                    result.Item.AddGenre(genreName);
+                }
+
+                foreach (var actorLink in sceneData["performers"])
+                {
+                    string actorName = (string)actorLink,
+                            actorPhoto = string.Empty,
+                            actorsPageURL;
+
+                    actorsPageURL = actorName.ToLowerInvariant().Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
+
+                    var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
+                    var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
+
+                    var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
+                    if (actorImageNode != null)
+                        actorPhoto = actorImageNode.Attributes["src"]?.Value;
+
+                    var actor = new PersonInfo
+                    {
+                        Name = actorName
+                    };
+                    if (!string.IsNullOrEmpty(actorPhoto))
+                        actor.ImageUrl = $"https:{actorPhoto}";
+
+                    result.People.Add(actor);
+                }
             }
 
             return result;
