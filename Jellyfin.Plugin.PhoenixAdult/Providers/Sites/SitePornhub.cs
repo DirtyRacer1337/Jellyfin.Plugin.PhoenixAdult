@@ -21,7 +21,7 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
-            if (searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _) && !searchTitle.Contains(" ", StringComparison.OrdinalIgnoreCase))
+            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(" ", StringComparison.OrdinalIgnoreCase))
             {
                 string sceneURL = $"{PhoenixAdultHelper.GetSearchBaseURL(siteNum)}/view_video.php?viewkey={searchTitle}",
                        curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
