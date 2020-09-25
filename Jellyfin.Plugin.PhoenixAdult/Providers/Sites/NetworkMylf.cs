@@ -21,7 +21,8 @@ namespace PhoenixAdult.Sites
         {
             JObject json = null;
 
-            var http = await HTTP.Request(new HTTP.HTTPRequest {
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
                 _url = url
             }, cancellationToken).ConfigureAwait(false);
             if (http._response.IsSuccessStatusCode)

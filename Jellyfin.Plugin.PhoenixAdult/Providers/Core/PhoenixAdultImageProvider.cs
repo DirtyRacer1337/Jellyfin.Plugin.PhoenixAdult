@@ -10,7 +10,6 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult;
 using PhoenixAdult.Helpers;
 
 #if __EMBY__
