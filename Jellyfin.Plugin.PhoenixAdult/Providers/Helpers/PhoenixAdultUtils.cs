@@ -16,7 +16,6 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
-using MediaBrowser.Common.Net;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -94,7 +93,7 @@ namespace PhoenixAdult.Helpers
             }
             catch (FlurlHttpTimeoutException e)
             {
-                Logger.Info(e.Message);
+                Logger.Error(e.Message);
                 return new HTTPResponse
                 {
                     _response = new HttpResponseMessage
@@ -316,6 +315,24 @@ internal static class Logger
         Log.Error(text);
 #else
         Log.LogError(text);
+#endif
+    }
+
+    public static void Debug(string text)
+    {
+#if __EMBY__
+        Log.Debug(text);
+#else
+        Log.LogDebug(text);
+#endif
+    }
+
+    public static void Warning(string text)
+    {
+#if __EMBY__
+        Log.Warn(text);
+#else
+        Log.LogWarning(text);
 #endif
     }
 }
