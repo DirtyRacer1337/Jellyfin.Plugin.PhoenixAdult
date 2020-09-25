@@ -111,18 +111,18 @@ namespace PhoenixAdult.Sites
                 People = new List<PersonInfo>()
             };
             if (sceneID == null)
-                return null;
+                return result;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
-                return null;
+                return result;
 
             var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
-                return null;
+                return result;
 
             sceneData = (JObject)sceneData["result"].First;
 

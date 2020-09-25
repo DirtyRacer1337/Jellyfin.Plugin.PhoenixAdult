@@ -64,7 +64,7 @@ namespace PhoenixAdult.Sites
             };
 
             if (sceneID == null)
-                return null;
+                return result;
 
             string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
                 sceneDate = string.Empty;

@@ -86,7 +86,7 @@ namespace PhoenixAdult.Sites
             };
 
             if (sceneID == null)
-                return null;
+                return result;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 

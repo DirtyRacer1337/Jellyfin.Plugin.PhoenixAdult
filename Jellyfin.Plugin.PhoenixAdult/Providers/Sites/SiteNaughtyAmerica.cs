@@ -56,33 +56,33 @@ namespace PhoenixAdult.Sites
             var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             searchResults = await GetDataFromAPI(url, searchParams, cancellationToken).ConfigureAwait(false);
 
-            if (searchResults != null)
+            if (searchResults == null)
+                return result;
+
+            foreach (var searchResult in searchResults["results"].First["hits"])
             {
-                foreach (var searchResult in searchResults["results"].First["hits"])
+                string sceneID = (string)searchResult["id"],
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                        sceneName = (string)searchResult["title"];
+                long sceneDate = (long)searchResult["published_at"];
+
+                var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID}";
+                var posters = (await GetImages(new Movie
                 {
-                    string sceneID = (string)searchResult["id"],
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                            sceneName = (string)searchResult["title"];
-                    long sceneDate = (long)searchResult["published_at"];
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
+                }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
-                    var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID}";
-                    var posters = (await GetImages(new Movie
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                    }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var res = new RemoteSearchResult
+                {
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
+                    Name = sceneName,
+                    PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
+                };
 
-                    var res = new RemoteSearchResult
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
-                    };
+                if (posters.Any())
+                    res.ImageUrl = posters.First().Url;
 
-                    if (posters.Any())
-                        res.ImageUrl = posters.First().Url;
-
-                    result.Add(res);
-                }
+                result.Add(res);
             }
 
             return result;
@@ -97,54 +97,55 @@ namespace PhoenixAdult.Sites
             };
 
             if (sceneID == null)
-                return null;
+                return result;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[2]}", cancellationToken).ConfigureAwait(false);
+
+            if (sceneData == null)
+                return result;
+
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            if (sceneData != null)
+            result.Item.Name = (string)sceneData["title"];
+            result.Item.Overview = (string)sceneData["synopsis"];
+            result.Item.AddStudio("Naughty America");
+
+            DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
+            result.Item.PremiereDate = sceneDateObj.DateTime;
+
+            foreach (var genreLink in sceneData["fantasies"])
             {
-                result.Item.Name = (string)sceneData["title"];
-                result.Item.Overview = (string)sceneData["synopsis"];
-                result.Item.AddStudio("Naughty America");
+                var genreName = (string)genreLink;
 
-                DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
-                result.Item.PremiereDate = sceneDateObj.DateTime;
+                result.Item.AddGenre(genreName);
+            }
 
-                foreach (var genreLink in sceneData["fantasies"])
+            foreach (var actorLink in sceneData["performers"])
+            {
+                string actorName = (string)actorLink,
+                        actorPhoto = string.Empty,
+                        actorsPageURL;
+
+                actorsPageURL = actorName.ToLowerInvariant().Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
+
+                var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
+                var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
+
+                var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
+                if (actorImageNode != null)
+                    actorPhoto = actorImageNode.Attributes["src"]?.Value;
+
+                var actor = new PersonInfo
                 {
-                    var genreName = (string)genreLink;
+                    Name = actorName
+                };
+                if (!string.IsNullOrEmpty(actorPhoto))
+                    actor.ImageUrl = $"https:{actorPhoto}";
 
-                    result.Item.AddGenre(genreName);
-                }
-
-                foreach (var actorLink in sceneData["performers"])
-                {
-                    string actorName = (string)actorLink,
-                            actorPhoto = string.Empty,
-                            actorsPageURL;
-
-                    actorsPageURL = actorName.ToLowerInvariant().Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
-
-                    var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
-                    var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
-
-                    var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
-                    if (actorImageNode != null)
-                        actorPhoto = actorImageNode.Attributes["src"]?.Value;
-
-                    var actor = new PersonInfo
-                    {
-                        Name = actorName
-                    };
-                    if (!string.IsNullOrEmpty(actorPhoto))
-                        actor.ImageUrl = $"https:{actorPhoto}";
-
-                    result.People.Add(actor);
-                }
+                result.People.Add(actor);
             }
 
             return result;

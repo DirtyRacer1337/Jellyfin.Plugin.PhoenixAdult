@@ -246,7 +246,7 @@ namespace PhoenixAdult
                     }
                 },{
                     11, new Dictionary<int, string[]> {
-                        {0, new string [] { "Adult Time", "https://freetour.adulttime.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "Adult Time", "https://freetour.adulttime.com", "https://tsmkfa364q-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "Evil Angel", "https://www.evilangel.com" } },
                         {2, new string [] { "Pure Taboo", "https://www.puretaboo.com" } },
                         {3, new string [] { "Burning Angel", "https://www.burningangel.com" } },
@@ -256,7 +256,7 @@ namespace PhoenixAdult
                     }
                 },{
                     12, new Dictionary<int, string[]> {
-                        {0, new string [] { "Girlsway", "https://www.girlsway.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "Girlsway", "https://www.girlsway.com", "https://tsmkfa364q-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "Mommys Girl" } },
                         {2, new string [] { "Web Young" } },
                         {3, new string [] { "Girls Try Anal" } },
@@ -268,13 +268,13 @@ namespace PhoenixAdult
                     }
                 },{
                     13, new Dictionary<int, string[]> {
-                        {0, new string [] { "21Naturals", "https://www.21naturals.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "21Naturals", "https://www.21naturals.com", "https://tsmkfa364q-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "21FootArt" } },
                         {2, new string [] { "21EroticAnal" } },
                     }
                 },{
                     14, new Dictionary<int, string[]> {
-                        {0, new string [] { "21Sextury", "https://www.21sextury.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "21Sextury", "https://www.21sextury.com", "https://tsmkfa364q-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "Anal Teen Angels" } },
                         {2, new string [] { "Deepthroat Frenzy" } },
                         {3, new string [] { "DP Fanatics" } },
@@ -287,7 +287,7 @@ namespace PhoenixAdult
                     }
                 },{
                     15, new Dictionary<int, string[]> {
-                        {0, new string [] { "21Sextreme", "https://www.21sextreme.com", "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries" } },
+                        {0, new string [] { "21Sextreme", "https://www.21sextreme.com", "https://tsmkfa364q-3.algolianet.com/1/indexes/*/queries" } },
                         {1, new string [] { "LustyGrandmas" } },
                         {2, new string [] { "GrandpasFuckTeens" } },
                         {3, new string [] { "TeachMeFisting" } },

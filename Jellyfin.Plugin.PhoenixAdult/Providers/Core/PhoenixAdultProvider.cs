@@ -158,7 +158,7 @@ namespace PhoenixAdult
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
                 result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
-                if (result != null)
+                if (result.Item != new Movie())
                 {
                     result.HasMetadata = true;
                     result.Item.OfficialRating = "XXX";

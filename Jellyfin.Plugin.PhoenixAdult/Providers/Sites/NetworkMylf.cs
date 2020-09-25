@@ -71,7 +71,7 @@ namespace PhoenixAdult.Sites
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
-                if (sceneData != null)
+                if (sceneData.Item != new Movie())
                 {
                     sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
                     var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
@@ -102,7 +102,7 @@ namespace PhoenixAdult.Sites
             };
 
             if (sceneID == null)
-                return null;
+                return result;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
@@ -114,7 +114,7 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
-                return null;
+                return result;
 
             string contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
@@ -125,7 +125,7 @@ namespace PhoenixAdult.Sites
                 }
 
             if (string.IsNullOrEmpty(contentName))
-                return null;
+                return result;
 
             sceneData = (JObject)sceneData[contentName];
             var sceneName = sceneData.Properties().First().Name;

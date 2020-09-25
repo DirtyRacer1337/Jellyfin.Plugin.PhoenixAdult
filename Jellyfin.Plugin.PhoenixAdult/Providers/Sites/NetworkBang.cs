@@ -54,27 +54,27 @@ namespace PhoenixAdult.Sites
             else
                 searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
 
-            if (searchResults != null)
+            if (searchResults == null)
+                return result;
+
+            foreach (var searchResult in searchResults["hits"]["hits"])
             {
-                foreach (var searchResult in searchResults["hits"]["hits"])
+                var sceneData = searchResult["_source"];
+                string sceneID = (string)sceneData["identifier"],
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                        sceneName = (string)sceneData["name"],
+                        scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
+                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+
+                var item = new RemoteSearchResult
                 {
-                    var sceneData = searchResult["_source"];
-                    string sceneID = (string)sceneData["identifier"],
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                            sceneName = (string)sceneData["name"],
-                            scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
-                    DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
+                    Name = sceneName,
+                    ImageUrl = scenePoster,
+                    PremiereDate = sceneDateObj
+                };
 
-                    var item = new RemoteSearchResult
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        ImageUrl = scenePoster,
-                        PremiereDate = sceneDateObj
-                    };
-
-                    result.Add(item);
-                }
+                result.Add(item);
             }
 
             return result;
@@ -89,39 +89,40 @@ namespace PhoenixAdult.Sites
             };
 
             if (sceneID == null)
-                return null;
+                return result;
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
+            if (sceneData == null)
+                return result;
+
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
-            if (sceneData != null)
+
+            result.Item.Name = (string)sceneData["name"];
+            result.Item.Overview = (string)sceneData["description"];
+            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
+
+            DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+            result.Item.PremiereDate = sceneDateObj;
+
+            foreach (var genreLink in sceneData["genres"])
             {
-                result.Item.Name = (string)sceneData["name"];
-                result.Item.Overview = (string)sceneData["description"];
-                result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
+                var genreName = (string)genreLink["name"];
 
-                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
-                result.Item.PremiereDate = sceneDateObj;
+                result.Item.AddGenre(genreName);
+            }
 
-                foreach (var genreLink in sceneData["genres"])
+            foreach (var actorLink in sceneData["actors"])
+            {
+                string actorName = (string)actorLink["name"],
+                       actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
+
+                result.People.Add(new PersonInfo
                 {
-                    var genreName = (string)genreLink["name"];
-
-                    result.Item.AddGenre(genreName);
-                }
-
-                foreach (var actorLink in sceneData["actors"])
-                {
-                    string actorName = (string)actorLink["name"],
-                           actorPhoto = $"https://i.bang.com/pornstars/{actorLink["id"]}.jpg";
-
-                    result.People.Add(new PersonInfo
-                    {
-                        Name = actorName,
-                        ImageUrl = actorPhoto
-                    });
-                }
+                    Name = actorName,
+                    ImageUrl = actorPhoto
+                });
             }
 
             return result;
@@ -139,21 +140,23 @@ namespace PhoenixAdult.Sites
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
+            if (sceneData == null)
+                return result;
+
             sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
-            if (sceneData != null)
+            result.Add(new RemoteImageInfo
+            {
+                Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
+                Type = ImageType.Primary
+            });
+
+            foreach (var image in sceneData["screenshots"])
             {
                 result.Add(new RemoteImageInfo
                 {
-                    Url = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg",
-                    Type = ImageType.Primary
+                    Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
+                    Type = ImageType.Backdrop
                 });
-
-                foreach (var image in sceneData["screenshots"])
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = $"https://i.bang.com/screenshots/{sceneData["dvd"]["id"]}/movie/1/{image["screenId"]}.jpg",
-                        Type = ImageType.Backdrop
-                    });
             }
 
             return result;
