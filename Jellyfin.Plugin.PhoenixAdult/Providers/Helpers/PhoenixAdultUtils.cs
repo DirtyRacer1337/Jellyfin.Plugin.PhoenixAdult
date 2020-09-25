@@ -336,3 +336,68 @@ internal static class Logger
 #endif
     }
 }
+
+internal static class Database
+{
+    private const string BaseURL = "https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/database/data/";
+
+    private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
+
+    public static readonly IDictionary<string, string[]> GenresReplaceList = new Dictionary<string, string[]>();
+
+    public static readonly IList<string> GenresSkipList = new List<string>();
+
+    public static readonly IList<string> GenresSkipListPartial = new List<string>();
+
+    public static async void Load(CancellationToken cancellationToken)
+    {
+        var fileList = new List<string> { "GenresReplace.db", "GenresSkip.db", "GenresPartialSkip.db" };
+
+        foreach (var fileName in fileList)
+        {
+            var http = await HTTP.Request(new HTTP.HTTPRequest
+            {
+                _url = BaseURL + fileName
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                Logger.Info($"Database file \"{fileName}\" loaded successfully");
+                var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                File.WriteAllText(Path.Combine(_databasePath, fileName), data);
+            }
+        }
+
+        Update();
+    }
+
+    public static void Update()
+    {
+        var file = File.ReadAllLines(Path.Combine(_databasePath, "GenresReplace.db"));
+        foreach (var line in file.ToList())
+        {
+            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase) && line.Contains(";", StringComparison.OrdinalIgnoreCase))
+            {
+                var data = line.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                GenresReplaceList.Add(data[0], data.Skip(1).ToArray());
+            }
+        }
+
+        file = File.ReadAllLines(Path.Combine(_databasePath, "GenresSkip.db"));
+        foreach (var line in file.ToList())
+        {
+            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase))
+            {
+                GenresSkipList.Add(line);
+            }
+        }
+
+        file = File.ReadAllLines(Path.Combine(_databasePath, "GenresPartialSkip.db"));
+        foreach (var line in file.ToList())
+        {
+            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase))
+            {
+                GenresSkipListPartial.Add(line);
+            }
+        }
+    }
+}
