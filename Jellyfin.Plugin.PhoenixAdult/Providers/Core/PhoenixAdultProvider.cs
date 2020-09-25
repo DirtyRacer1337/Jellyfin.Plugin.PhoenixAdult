@@ -9,8 +9,8 @@ using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
-using PhoenixAdult;
 using PhoenixAdult.Helpers;
+using Flurl.Http;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -28,6 +28,8 @@ namespace PhoenixAdult
 
         public static IHttpClient Http { get; set; }
 
+        public static FlurlClient FlurlHttp { get; set; }
+
         public PhoenixAdultProvider(
 #if __EMBY__
         ILogManager logger,
@@ -43,6 +45,10 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
+
+            FlurlHttp = new FlurlClient();
+            FlurlHttp.AllowAnyHttpStatus().EnableCookies();
+            FlurlHttp.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
 
             int siteListCount = 0;
             foreach (var site in PhoenixAdultList.SiteList.Values)

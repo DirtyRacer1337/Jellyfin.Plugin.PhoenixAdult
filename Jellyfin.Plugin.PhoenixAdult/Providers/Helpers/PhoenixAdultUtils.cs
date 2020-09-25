@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using MediaBrowser.Common.Net;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -54,56 +55,56 @@ namespace PhoenixAdult.Helpers
 
             Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request._url, request._method.Method));
 
-            using (var http = new FlurlClient(request._url))
+            var http = PhoenixAdultProvider.FlurlHttp;
+            http.BaseUrl = request._url;
+            http.Headers.Clear();
+            http.Cookies.Clear();
+
+            http.WithHeader("User-Agent", GetUserAgent());
+
+            if (request._headers != null)
             {
-                http.AllowAnyHttpStatus().EnableCookies().WithHeader("User-Agent", GetUserAgent());
-
-                if (request._headers != null)
-                {
-                    http.WithHeaders(request._headers);
-                }
-
-                if (request._cookies != null)
-                {
-                    http.WithCookies(request._cookies);
-                }
-
-                http.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
-
-                var data = http.Request();
-
-                try
-                {
-                    switch (request._method.Method)
-                    {
-                        case "GET":
-                            result._response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
-                            break;
-                        case "POST":
-                            result._response = await data.PostStringAsync(request._param, cancellationToken).ConfigureAwait(false);
-                            break;
-                        case "HEAD":
-                            result._response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
-                            break;
-                        default:
-                            return result;
-                    }
-
-                }
-                catch (FlurlHttpTimeoutException e)
-                {
-                    Logger.Info(e.Message);
-                    return new HTTPResponse
-                    {
-                        _response = new HttpResponseMessage
-                        {
-                            StatusCode = HttpStatusCode.RequestTimeout
-                        }
-                    };
-                }
-
-                result._cookies = http.Cookies;
+                http.WithHeaders(request._headers);
             }
+
+            if (request._cookies != null)
+            {
+                http.WithCookies(request._cookies);
+            }
+
+            var data = http.Request();
+
+            try
+            {
+                switch (request._method.Method)
+                {
+                    case "GET":
+                        result._response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
+                        break;
+                    case "POST":
+                        result._response = await data.PostStringAsync(request._param, cancellationToken).ConfigureAwait(false);
+                        break;
+                    case "HEAD":
+                        result._response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
+                        break;
+                    default:
+                        return result;
+                }
+
+            }
+            catch (FlurlHttpTimeoutException e)
+            {
+                Logger.Info(e.Message);
+                return new HTTPResponse
+                {
+                    _response = new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.RequestTimeout
+                    }
+                };
+            }
+
+            result._cookies = http.Cookies;
 
             return result;
         }
