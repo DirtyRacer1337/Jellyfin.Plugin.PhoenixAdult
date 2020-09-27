@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PhoenixAdult;
 
@@ -53,44 +54,19 @@ internal static class Database
             Directory.CreateDirectory(_databasePath);
         }
 
-        DateTime dateTimeNow = DateTime.UtcNow;
-
-        bool updateRequire = false;
         foreach (var fileName in _databaseFiles)
         {
-            if (!File.Exists(Path.Combine(_databasePath, fileName)))
+            var http = await HTTP.Request(new HTTP.HTTPRequest
             {
-                updateRequire = true;
-                break;
+                _url = BaseURL + fileName
+            }, cancellationToken).ConfigureAwait(false);
+            if (http._response.IsSuccessStatusCode)
+            {
+                Logger.Info($"Database file \"{fileName}\" downloaded successfully");
+                var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                File.WriteAllText(Path.Combine(_databasePath, fileName), data);
             }
         }
-
-        if ((dateTimeNow - Plugin.Instance.Configuration.DatabaseLastUpdate).TotalDays >= 1)
-        {
-            updateRequire = true;
-        }
-
-        if (updateRequire)
-        {
-            foreach (var fileName in _databaseFiles)
-            {
-                var http = await HTTP.Request(new HTTP.HTTPRequest
-                {
-                    _url = BaseURL + fileName
-                }, cancellationToken).ConfigureAwait(false);
-                if (http._response.IsSuccessStatusCode)
-                {
-                    Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                    var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    File.WriteAllText(Path.Combine(_databasePath, fileName), data);
-                }
-            }
-        }
-
-        Plugin.Instance.Configuration.DatabaseLastUpdate = dateTimeNow;
-        Plugin.Instance.SaveConfiguration();
-
-        Update();
     }
 
     public static void Update()

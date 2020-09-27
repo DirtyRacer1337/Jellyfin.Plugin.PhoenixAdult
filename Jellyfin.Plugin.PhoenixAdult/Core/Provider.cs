@@ -50,8 +50,6 @@ namespace PhoenixAdult
             FlurlHttp.AllowAnyHttpStatus().EnableCookies();
             FlurlHttp.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
 
-            Database.Load(CancellationToken.None);
-
             int siteListCount = 0;
             foreach (var site in ISiteList.SiteList.Values)
                 siteListCount += site.Count;
