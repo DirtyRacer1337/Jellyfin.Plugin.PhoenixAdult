@@ -41,12 +41,21 @@ namespace PhoenixAdult.Helpers
                 if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
                     return null;
 
-            if (genreName.Contains("doggystyle", StringComparison.OrdinalIgnoreCase) || genreName.Contains("doggy style", StringComparison.OrdinalIgnoreCase))
-                return "Doggystyle (Position)";
-
             var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
+            {
                 genreName = newGenreName;
+            }
+            else
+            {
+                foreach (var genreDic in Database.Genres.GenresPartialReplace)
+                    foreach (var genre in genreDic.Value)
+                        if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                        {
+                            genreName = genreDic.Key;
+                            break;
+                        }
+            }
 
             if (!string.IsNullOrEmpty(sceneName))
             {

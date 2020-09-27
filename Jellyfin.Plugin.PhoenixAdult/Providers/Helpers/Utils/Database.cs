@@ -37,6 +37,8 @@ internal static class Database
     {
         public Dictionary<string, string[]> GenresReplace { get; set; }
 
+        public Dictionary<string, string[]> GenresPartialReplace { get; set; }
+
         public List<string> GenresSkip { get; set; }
 
         public List<string> GenresPartialSkip { get; set; }
