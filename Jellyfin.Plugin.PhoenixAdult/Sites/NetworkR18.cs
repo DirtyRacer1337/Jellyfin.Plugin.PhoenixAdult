@@ -15,7 +15,7 @@ namespace PhoenixAdult.Sites
 {
     internal class NetworkR18 : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null)
@@ -27,9 +27,9 @@ namespace PhoenixAdult.Sites
                 searchJAVID = $"{sceneID[0]}%20{sceneID[1]}";
 
             if (!string.IsNullOrEmpty(searchJAVID))
-                encodedTitle = searchJAVID;
+                searchTitle = searchJAVID;
 
-            var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//li[contains(@class, 'item-list')]");

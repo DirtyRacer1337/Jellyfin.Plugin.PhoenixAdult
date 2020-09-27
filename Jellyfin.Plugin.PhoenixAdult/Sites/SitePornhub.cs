@@ -16,7 +16,7 @@ namespace PhoenixAdult.Sites
 {
     internal class SitePornhub : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
@@ -44,8 +44,8 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                encodedTitle = encodedTitle.Replace("%20", "+", StringComparison.OrdinalIgnoreCase);
-                var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
+                searchTitle = searchTitle.Replace(" ", "+", StringComparison.OrdinalIgnoreCase);
+                var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//ul[@id='videoSearchResult']/li[@_vkey]");

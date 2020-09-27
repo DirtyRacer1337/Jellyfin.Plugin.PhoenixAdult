@@ -19,7 +19,7 @@ namespace PhoenixAdult.Sites
             { "viewing-preferences", "straight%2Cgay" },
         };
 
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null)
@@ -49,7 +49,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
+                var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken, null, _cookies).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//div[@class='shoot-card scene']");

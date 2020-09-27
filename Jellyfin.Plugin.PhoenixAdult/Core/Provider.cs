@@ -81,8 +81,7 @@ namespace PhoenixAdult
             if (site.Key != null)
             {
                 string searchTitle = GetClearTitle(title, site.Value),
-                       searchDate = string.Empty,
-                       encodedTitle;
+                       searchDate = string.Empty;
                 DateTime? searchDateObj;
                 var titleAfterDate = GetDateFromTitle(searchTitle);
 
@@ -99,18 +98,16 @@ namespace PhoenixAdult
                     if (searchInfo.PremiereDate.HasValue)
                         searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
-                encodedTitle = Uri.EscapeDataString(searchTitle);
 
                 Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
                 Logger.Info($"searchTitle: {searchTitle}");
-                Logger.Info($"encodedTitle: {encodedTitle}");
                 Logger.Info($"searchDate: {searchDate}");
 
                 var provider = ISiteList.GetProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
-                    result = await provider.Search(siteNum, searchTitle, encodedTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                     if (result.Any())
                     {
                         if (result.Any(scene => scene.IndexNumber.HasValue))

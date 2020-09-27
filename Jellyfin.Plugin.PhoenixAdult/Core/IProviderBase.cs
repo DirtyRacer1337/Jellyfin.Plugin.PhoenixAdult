@@ -11,7 +11,7 @@ namespace PhoenixAdult
 {
     internal interface IProviderBase
     {
-        Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken);
+        Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken);
 
         Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken);
 
