@@ -13,7 +13,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SiteLegalPorno : IPhoenixAdultProviderBase
+    internal class SiteLegalPorno : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -21,13 +21,13 @@ namespace PhoenixAdult.Sites
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             if (!data.SelectSingleNode("//title").InnerText.Contains("Search for", StringComparison.OrdinalIgnoreCase))
             {
                 string sceneURL = data.SelectSingleNode("//div[@class='user--guest']//a").Attributes["href"].Value,
-                       curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
+                       curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
@@ -51,7 +51,7 @@ namespace PhoenixAdult.Sites
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'thumbnail-title')]//a").InnerText.Trim(),
                             scenePoster = string.Empty,
                             sceneDate = searchResult.SelectSingleNode(".").Attributes["release"].Value;
@@ -90,7 +90,7 @@ namespace PhoenixAdult.Sites
             if (sceneID == null)
                 return result;
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            string sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='watchpage-title']").InnerText.Trim();
@@ -138,7 +138,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var scenePoster = sceneData.SelectSingleNode("//div[@id='player']").Attributes["style"].Value.Split('(')[1].Split(')')[0];

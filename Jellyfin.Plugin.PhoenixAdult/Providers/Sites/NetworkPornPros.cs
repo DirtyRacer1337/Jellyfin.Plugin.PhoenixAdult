@@ -13,7 +13,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkPornPros : IPhoenixAdultProviderBase
+    internal class NetworkPornPros : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -25,8 +25,8 @@ namespace PhoenixAdult.Sites
             if (int.TryParse(directURL.Substring(directURL.Length - 1, 1), out _) && directURL.Substring(directURL.Length - 2, 1) == "-")
                 directURL = $"{directURL.Substring(0, directURL.Length - 1)}-{directURL.Substring(directURL.Length - 1, 1)}";
 
-            string sceneURL = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + directURL,
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
+            string sceneURL = Helper.GetSearchSearchURL(siteNum) + directURL,
+                    curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
             if (searchDate.HasValue)
                 curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
@@ -63,7 +63,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText.Trim();
@@ -92,7 +92,7 @@ namespace PhoenixAdult.Sites
                     result.Item.PremiereDate = sceneDateObj;
 
             var genres = new List<string>();
-            switch (PhoenixAdultHelper.GetSearchSiteName(siteNum))
+            switch (Helper.GetSearchSiteName(siteNum))
             {
                 case "Lubed":
                     genres = new List<string> {
@@ -182,7 +182,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var poster = sceneData.SelectSingleNode("//video[@id='player']");

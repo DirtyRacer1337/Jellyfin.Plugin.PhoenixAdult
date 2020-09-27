@@ -3,14 +3,14 @@ using System.Text;
 
 namespace PhoenixAdult.Helpers
 {
-    internal static class PhoenixAdultHelper
+    internal static class Helper
     {
         public static string GetSearchSiteName(int[] siteNum)
         {
             if (siteNum == null)
                 return null;
 
-            return PhoenixAdultList.SiteList[siteNum[0]][siteNum[1]][0];
+            return ISiteList.SiteList[siteNum[0]][siteNum[1]][0];
         }
 
         public static string GetSearchBaseURL(int[] siteNum)
@@ -18,10 +18,10 @@ namespace PhoenixAdult.Helpers
             if (siteNum == null)
                 return null;
 
-            if (!string.IsNullOrEmpty(PhoenixAdultList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
-                return PhoenixAdultList.SiteList[siteNum[0]][siteNum[1]][1];
+            if (!string.IsNullOrEmpty(ISiteList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
+                return ISiteList.SiteList[siteNum[0]][siteNum[1]][1];
             else
-                return PhoenixAdultList.SiteList[siteNum[0]].First().Value[1];
+                return ISiteList.SiteList[siteNum[0]].First().Value[1];
         }
 
         public static string GetSearchSearchURL(int[] siteNum)
@@ -29,10 +29,10 @@ namespace PhoenixAdult.Helpers
             if (siteNum == null)
                 return null;
 
-            if (!string.IsNullOrEmpty(PhoenixAdultList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
-                return PhoenixAdultList.SiteList[siteNum[0]][siteNum[1]][2];
+            if (!string.IsNullOrEmpty(ISiteList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
+                return ISiteList.SiteList[siteNum[0]][siteNum[1]][2];
             else
-                return PhoenixAdultList.SiteList[siteNum[0]].First().Value[2];
+                return ISiteList.SiteList[siteNum[0]].First().Value[2];
         }
 
         public static string Encode(string text)

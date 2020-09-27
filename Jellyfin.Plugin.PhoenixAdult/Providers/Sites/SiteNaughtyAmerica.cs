@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SiteNaughtyAmerica : IPhoenixAdultProviderBase
+    internal class SiteNaughtyAmerica : IProviderBase
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchData, CancellationToken cancellationToken)
         {
@@ -53,7 +53,7 @@ namespace PhoenixAdult.Sites
                 searchParams = $"filters=id={searchSceneID}";
             else
                 searchParams = $"query={searchTitle}";
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
+            var url = Helper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             searchResults = await GetDataFromAPI(url, searchParams, cancellationToken).ConfigureAwait(false);
 
             if (searchResults == null)
@@ -100,7 +100,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
+            var url = Helper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[2]}", cancellationToken).ConfigureAwait(false);
 
             if (sceneData == null)

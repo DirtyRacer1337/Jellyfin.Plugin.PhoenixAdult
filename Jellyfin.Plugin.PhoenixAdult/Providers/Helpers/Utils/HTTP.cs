@@ -10,7 +10,7 @@ using PhoenixAdult;
 
 internal static class HTTP
 {
-    private static readonly FlurlClient _http = PhoenixAdultProvider.FlurlHttp;
+    private static readonly FlurlClient _http = Provider.FlurlHttp;
 
     public struct HTTPRequest
     {

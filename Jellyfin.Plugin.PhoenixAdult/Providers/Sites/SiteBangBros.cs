@@ -12,7 +12,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SiteBangBros : IPhoenixAdultProviderBase
+    internal class SiteBangBros : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -21,14 +21,14 @@ namespace PhoenixAdult.Sites
                 return result;
 
             encodedTitle = encodedTitle.Replace("%20", "+", StringComparison.OrdinalIgnoreCase);
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[contains(@href, '/video')]").Attributes["href"].Value,
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[contains(@href, '/video')]").Attributes["href"].Value,
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                         sceneName = searchResult.SelectSingleNode(".//span[@class='thmb_ttl']").InnerText.Trim(),
                         scenePoster = $"https:{searchResult.SelectSingleNode(".//img").Attributes["data-src"].Value}",
                         sceneDate = searchResult.SelectSingleNode(".//span[contains(@class, 'thmb_mr_2')]").InnerText.Trim();
@@ -62,7 +62,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
@@ -88,7 +88,7 @@ namespace PhoenixAdult.Sites
                 foreach (var actorLink in actorsNode)
                 {
                     string actorName = actorLink.InnerText.Trim(),
-                           actorPageURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
+                           actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 
                     var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
@@ -113,7 +113,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var imgNode = sceneData.SelectNodes("//img[contains(@id, 'player-overlay-image')]");

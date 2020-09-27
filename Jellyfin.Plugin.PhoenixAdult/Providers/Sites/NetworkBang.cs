@@ -13,7 +13,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkBang : IPhoenixAdultProviderBase
+    internal class NetworkBang : IProviderBase
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {
@@ -49,9 +49,9 @@ namespace PhoenixAdult.Sites
             JObject searchResults;
             var searchSceneID = searchTitle.Split()[0];
             if (int.TryParse(searchSceneID, out _))
-                searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken).ConfigureAwait(false);
+                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchSceneID, "identifier", cancellationToken).ConfigureAwait(false);
             else
-                searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
+                searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), searchTitle, "name", cancellationToken).ConfigureAwait(false);
 
             if (searchResults == null)
                 return result;
@@ -92,7 +92,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
                 return result;
 
@@ -138,7 +138,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneData = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum), sceneID[2], "identifier", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
                 return result;
 

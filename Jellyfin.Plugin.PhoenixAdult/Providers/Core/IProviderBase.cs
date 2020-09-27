@@ -9,7 +9,7 @@ using MediaBrowser.Model.Providers;
 
 namespace PhoenixAdult
 {
-    internal interface IPhoenixAdultProviderBase
+    internal interface IProviderBase
     {
         Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken);
 

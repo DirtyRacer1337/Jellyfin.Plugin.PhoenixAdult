@@ -9,7 +9,7 @@ using MediaBrowser.Model.Entities;
 
 namespace PhoenixAdult.Helpers
 {
-    internal static class PhoenixAdultActors
+    internal static class Actors
     {
         public static List<PersonInfo> Cleanup(MetadataResult<Movie> scene)
         {

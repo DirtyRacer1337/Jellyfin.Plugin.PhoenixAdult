@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PhoenixAdult
 {
-    public class PhoenixAdultProvider : IRemoteMetadataProvider<Movie, MovieInfo>
+    public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
         public string Name => Plugin.Instance.Name;
 
@@ -30,11 +30,11 @@ namespace PhoenixAdult
 
         public static FlurlClient FlurlHttp { get; set; }
 
-        public PhoenixAdultProvider(
+        public Provider(
 #if __EMBY__
         ILogManager logger,
 #else
-        ILogger<PhoenixAdultProvider> logger,
+        ILogger<Provider> logger,
 #endif
             IHttpClient http)
         {
@@ -53,13 +53,13 @@ namespace PhoenixAdult
             Database.Load(CancellationToken.None);
 
             int siteListCount = 0;
-            foreach (var site in PhoenixAdultList.SiteList.Values)
+            foreach (var site in ISiteList.SiteList.Values)
                 siteListCount += site.Count;
 
             var siteModuleList = new List<string>();
-            for (int i = 0; i < PhoenixAdultList.SiteList.Count; i += 1)
+            for (int i = 0; i < ISiteList.SiteList.Count; i += 1)
             {
-                var siteModule = PhoenixAdultList.GetProviderBySiteID(i);
+                var siteModule = ISiteList.GetProviderBySiteID(i);
                 if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
                     siteModuleList.Add(siteModule.ToString());
             }
@@ -108,7 +108,7 @@ namespace PhoenixAdult
                 Logger.Info($"encodedTitle: {encodedTitle}");
                 Logger.Info($"searchDate: {searchDate}");
 
-                var provider = PhoenixAdultList.GetProviderBySiteID(siteNum[0]);
+                var provider = ISiteList.GetProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
@@ -154,7 +154,7 @@ namespace PhoenixAdult
             if (curID.Length < 3)
                 return result;
 
-            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
+            var provider = ISiteList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
@@ -169,9 +169,9 @@ namespace PhoenixAdult
                         result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
 
                     if ((result.People != null) && result.People.Any())
-                        result.People = PhoenixAdultActors.Cleanup(result);
+                        result.People = Actors.Cleanup(result);
                     if (result.Item.Genres != null && result.Item.Genres.Any())
-                        result.Item.Genres = PhoenixAdultGenres.Cleanup(result.Item.Genres, result.Item.Name);
+                        result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name);
                 }
             }
 
@@ -190,7 +190,7 @@ namespace PhoenixAdult
             string clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
 
-            foreach (var site in PhoenixAdultList.SiteList)
+            foreach (var site in ISiteList.SiteList)
                 foreach (var siteData in site.Value)
                 {
                     string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);

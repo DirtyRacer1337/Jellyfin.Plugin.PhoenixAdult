@@ -15,7 +15,7 @@ internal static class GoogleSearch
 
         if (siteNum != null)
         {
-            var site = PhoenixAdultHelper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", "", StringComparison.OrdinalIgnoreCase);
+            var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", "", StringComparison.OrdinalIgnoreCase);
             searchTerm = $"site:{site} {text}";
         }
         else

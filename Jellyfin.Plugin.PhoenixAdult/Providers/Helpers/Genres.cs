@@ -6,7 +6,7 @@ using System.Net;
 
 namespace PhoenixAdult.Helpers
 {
-    internal static class PhoenixAdultGenres
+    internal static class Genres
     {
         public static string[] Cleanup(string[] genresLink, string sceneName)
         {

@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SitePornhub : IPhoenixAdultProviderBase
+    internal class SitePornhub : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -23,8 +23,8 @@ namespace PhoenixAdult.Sites
                 return result;
             if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(" ", StringComparison.OrdinalIgnoreCase))
             {
-                string sceneURL = $"{PhoenixAdultHelper.GetSearchBaseURL(siteNum)}/view_video.php?viewkey={searchTitle}",
-                       curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
+                string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/view_video.php?viewkey={searchTitle}",
+                       curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
@@ -45,14 +45,14 @@ namespace PhoenixAdult.Sites
             else
             {
                 encodedTitle = encodedTitle.Replace("%20", "+", StringComparison.OrdinalIgnoreCase);
-                var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+                var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//ul[@id='videoSearchResult']/li[@_vkey]");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleNode(".//span[@class='title']").InnerText.Trim(),
                             scenePoster = searchResult.SelectSingleNode(".//div[@class='phimage']//img").Attributes["data-thumb_url"].Value;
 
@@ -82,7 +82,7 @@ namespace PhoenixAdult.Sites
             if (sceneID == null)
                 return result;
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
             var sceneDataJSON = JObject.Parse(sceneData.SelectSingleNode("//script[@type='application/ld+json']").InnerText.Trim());
 
@@ -129,7 +129,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var imgNode = sceneData.SelectSingleNode("//div[@id='player']//img");

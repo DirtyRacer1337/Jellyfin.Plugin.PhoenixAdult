@@ -18,7 +18,7 @@ using MediaBrowser.Model.Configuration;
 
 namespace PhoenixAdult
 {
-    public class PhoenixAdultImageProvider : IRemoteImageProvider
+    public class ImageProvider : IRemoteImageProvider
     {
         public string Name => Plugin.Instance.Name;
 
@@ -48,7 +48,7 @@ namespace PhoenixAdult
             if (curID.Length < 3)
                 return images;
 
-            var provider = PhoenixAdultList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
+            var provider = ISiteList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
             {
                 images = (List<RemoteImageInfo>)await provider.GetImages(item, cancellationToken).ConfigureAwait(false);
@@ -118,7 +118,7 @@ namespace PhoenixAdult
             return images;
         }
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Provider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
             Url = url,

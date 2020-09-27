@@ -15,7 +15,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkMylf : IPhoenixAdultProviderBase
+    internal class NetworkMylf : IProviderBase
     {
         public static async Task<JObject> GetJSONfromPage(string url, CancellationToken cancellationToken)
         {
@@ -51,7 +51,7 @@ namespace PhoenixAdult.Sites
             else
                 directURL = directURL.Split('/')[1];
 
-            directURL = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + directURL;
+            directURL = Helper.GetSearchSearchURL(siteNum) + directURL;
             var searchResultsURLs = new List<string>
             {
                 directURL
@@ -67,7 +67,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var sceneURL in searchResultsURLs)
             {
-                string curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
+                string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 if (searchDate.HasValue)
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
@@ -107,7 +107,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
+            string sceneURL = Helper.Decode(sceneID[2]),
                 sceneDate = string.Empty;
 
             if (sceneID.Length > 3)
@@ -162,7 +162,7 @@ namespace PhoenixAdult.Sites
             if (sceneData.ContainsKey("site"))
                 subSite = (string)sceneData["site"]["name"];
             else
-                subSite = PhoenixAdultHelper.GetSearchSiteName(siteNum);
+                subSite = Helper.GetSearchSiteName(siteNum);
 
             var genres = new List<string>();
             switch (subSite)
@@ -325,7 +325,7 @@ namespace PhoenixAdult.Sites
                        actorID = (string)actorLink["modelId"],
                        actorPhotoURL;
 
-                var actorData = await GetJSONfromPage($"{PhoenixAdultHelper.GetSearchBaseURL(siteNum)}/models/{actorID}", cancellationToken).ConfigureAwait(false);
+                var actorData = await GetJSONfromPage($"{Helper.GetSearchBaseURL(siteNum)}/models/{actorID}", cancellationToken).ConfigureAwait(false);
                 if (actorData != null)
                 {
                     actorPhotoURL = (string)actorData["modelsContent"][actorID]["img"];
@@ -349,7 +349,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            string sceneURL = Helper.Decode(sceneID[2]);
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)

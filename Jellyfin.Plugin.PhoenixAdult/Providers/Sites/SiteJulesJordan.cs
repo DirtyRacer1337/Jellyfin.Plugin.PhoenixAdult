@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SiteJulesJordan : IPhoenixAdultProviderBase
+    internal class SiteJulesJordan : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -22,14 +22,14 @@ namespace PhoenixAdult.Sites
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//div[@class='update_details']");
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = searchResult.SelectSingleNode("./a[last()]").Attributes["href"].Value,
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                         sceneName = searchResult.SelectSingleNode("./a[last()]").InnerText.Trim(),
                         scenePoster = searchResult.SelectSingleNode(".//img[1]").Attributes["src"].Value;
                 var sceneDateNode = searchResult.SelectSingleNode(".//div[contains(@class, 'update_date')]");
@@ -78,7 +78,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
+            string sceneURL = Helper.Decode(sceneID[2]),
                 sceneDate = sceneID[3];
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
@@ -119,7 +119,7 @@ namespace PhoenixAdult.Sites
                             actorPhoto = actorPhotoNode.Attributes["src0"].Value;
 
                         if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                            actorPhoto = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorPhoto;
+                            actorPhoto = Helper.GetSearchBaseURL(siteNum) + actorPhoto;
 
                         actor.ImageUrl = actorPhoto;
                     }
@@ -141,7 +141,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var script = sceneData.SelectSingleNode("//script[contains(text(), 'df_movie')]").InnerText;
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Sites
             {
                 var img = match.Groups[1].Value;
                 if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                    img = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + img;
+                    img = Helper.GetSearchBaseURL(siteNum) + img;
 
                 result.Add(new RemoteImageInfo
                 {
@@ -163,7 +163,7 @@ namespace PhoenixAdult.Sites
             if (match.Success)
             {
                 var setId = match.Groups[1].Value;
-                var sceneSearch = await HTML.ElementFromURL(PhoenixAdultHelper.GetSearchSearchURL(siteNum) + Uri.EscapeDataString(item.Name), cancellationToken).ConfigureAwait(false);
+                var sceneSearch = await HTML.ElementFromURL(Helper.GetSearchSearchURL(siteNum) + Uri.EscapeDataString(item.Name), cancellationToken).ConfigureAwait(false);
 
                 var scenePosters = sceneSearch.SelectSingleNode($"//img[@id='set-target-{setId}' and contains(@class, 'hideMobile')]");
                 if (scenePosters != null)
@@ -197,7 +197,7 @@ namespace PhoenixAdult.Sites
                     var t = (matches.Count / 10 * i) - 1;
                     var img = matches[t].Groups[1].Value;
                     if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                        img = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + img;
+                        img = Helper.GetSearchBaseURL(siteNum) + img;
 
                     result.Add(new RemoteImageInfo
                     {

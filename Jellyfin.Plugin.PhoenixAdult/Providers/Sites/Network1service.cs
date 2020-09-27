@@ -15,7 +15,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class Network1service : IPhoenixAdultProviderBase
+    internal class Network1service : IProviderBase
     {
         public static async Task<IDictionary<string, Cookie>> GetCookies(string url, CancellationToken cancellationToken)
         {
@@ -58,7 +58,7 @@ namespace PhoenixAdult.Sites
             if (!int.TryParse(searchSceneID, out _))
                 searchSceneID = null;
 
-            var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
+            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
                 return result;
 
@@ -70,7 +70,7 @@ namespace PhoenixAdult.Sites
                 else
                     url = $"/v2/releases?type={sceneType}&id={searchSceneID}";
 
-                var searchResults = await GetDataFromAPI(PhoenixAdultHelper.GetSearchSearchURL(siteNum) + url, cookie.Value, cancellationToken).ConfigureAwait(false);
+                var searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum) + url, cookie.Value, cancellationToken).ConfigureAwait(false);
                 if (searchResults == null)
                     break;
 
@@ -115,11 +115,11 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
+            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
                 return result;
 
-            var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
+            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
                 return result;
@@ -142,7 +142,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var actorLink in sceneData["actors"])
             {
-                var actorPageURL = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
+                var actorPageURL = $"{Helper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
                 var actorData = await GetDataFromAPI(actorPageURL, cookie.Value, cancellationToken).ConfigureAwait(false);
                 if (actorData != null)
                 {
@@ -174,11 +174,11 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var cookies = await GetCookies(PhoenixAdultHelper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
+            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
                 return result;
 
-            var url = $"{PhoenixAdultHelper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
+            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
                 return result;

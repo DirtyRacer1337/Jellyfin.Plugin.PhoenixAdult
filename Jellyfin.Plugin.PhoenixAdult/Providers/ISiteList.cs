@@ -3,7 +3,7 @@ using PhoenixAdult.Sites;
 
 namespace PhoenixAdult
 {
-    public static class PhoenixAdultList
+    public static class ISiteList
     {
         public static readonly Dictionary<int, Dictionary<int, string[]>> SiteList = new Dictionary<int, Dictionary<int, string[]>> {{
                     0, new Dictionary<int, string[]> {
@@ -560,7 +560,7 @@ namespace PhoenixAdult
                 }
             };
 
-        internal static IPhoenixAdultProviderBase GetProviderBySiteID(int siteID)
+        internal static IProviderBase GetProviderBySiteID(int siteID)
         {
             switch (siteID)
             {

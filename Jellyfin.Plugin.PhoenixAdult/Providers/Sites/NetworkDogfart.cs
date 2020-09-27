@@ -12,7 +12,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkDogfart : IPhoenixAdultProviderBase
+    internal class NetworkDogfart : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, string encodedTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -20,15 +20,15 @@ namespace PhoenixAdult.Sites
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
-            var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//a[contains(@class, 'thumbnail')]");
             if (searchResults != null)
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleNode(".//div/h3[@class='scene-title']").InnerText,
                             posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}",
                             subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Replace(".com", "", StringComparison.OrdinalIgnoreCase);
@@ -44,7 +44,7 @@ namespace PhoenixAdult.Sites
 
                     res.ProviderIds.Add(Plugin.Instance.Name, curID);
 
-                    if (subSite == PhoenixAdultHelper.GetSearchSiteName(siteNum))
+                    if (subSite == Helper.GetSearchSiteName(siteNum))
                         res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName);
                     else
                         res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName);
@@ -66,7 +66,7 @@ namespace PhoenixAdult.Sites
             if (sceneID == null)
                 return result;
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]),
+            string sceneURL = Helper.Decode(sceneID[2]),
                 sceneDate = string.Empty;
 
             if (sceneID.Length > 3)
@@ -117,7 +117,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            string sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            string sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var poster = sceneData.SelectSingleNode("//div[@class='icon-container']//img");
@@ -132,7 +132,7 @@ namespace PhoenixAdult.Sites
             if (img != null)
                 foreach (var sceneImages in img)
                 {
-                    var url = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + sceneImages.Attributes["href"].Value;
+                    var url = Helper.GetSearchBaseURL(siteNum) + sceneImages.Attributes["href"].Value;
                     var posterHTML = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                     var posterData = posterHTML.SelectSingleNode("//div[contains(@class, 'remove-bs-padding')]/img").Attributes["src"].Value;

@@ -17,7 +17,7 @@ using MediaBrowser.Model.Configuration;
 
 namespace PhoenixAdult
 {
-    public class PhoenixAdultActorImageProvider : IRemoteImageProvider
+    public class ActorImageProvider : IRemoteImageProvider
     {
         public string Name => Plugin.Instance.Name + "Actor";
 
@@ -61,7 +61,7 @@ namespace PhoenixAdult
                 ImageType.Primary
             };
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => PhoenixAdultProvider.Http.GetResponse(new HttpRequestOptions
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Provider.Http.GetResponse(new HttpRequestOptions
         {
             CancellationToken = cancellationToken,
             Url = url,

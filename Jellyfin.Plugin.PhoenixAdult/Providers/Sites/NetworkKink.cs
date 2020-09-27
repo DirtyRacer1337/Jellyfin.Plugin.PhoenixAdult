@@ -13,7 +13,7 @@ using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkKink : IPhoenixAdultProviderBase
+    internal class NetworkKink : IProviderBase
     {
         private readonly IDictionary<string, string> _cookies = new Dictionary<string, string> {
             { "viewing-preferences", "straight%2Cgay" },
@@ -28,8 +28,8 @@ namespace PhoenixAdult.Sites
             var sceneID = searchTitle.Split()[0];
             if (int.TryParse(sceneID, out _))
             {
-                string sceneURL = $"{PhoenixAdultHelper.GetSearchBaseURL(siteNum)}/shoot/{sceneID}",
-                       curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}";
+                string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/shoot/{sceneID}",
+                       curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
                 var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
@@ -49,14 +49,14 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                var url = PhoenixAdultHelper.GetSearchSearchURL(siteNum) + encodedTitle;
+                var url = Helper.GetSearchSearchURL(siteNum) + encodedTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken, null, _cookies).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//div[@class='shoot-card scene']");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{PhoenixAdultHelper.Encode(sceneURL)}",
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
+                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value.Trim(),
                             scenePoster = searchResult.SelectSingleNode(".//img").Attributes["src"].Value,
                             sceneDate = searchResult.SelectSingleNode(".//div[@class='date']").InnerText.Trim();
@@ -90,7 +90,7 @@ namespace PhoenixAdult.Sites
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, _cookies).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
@@ -113,7 +113,7 @@ namespace PhoenixAdult.Sites
                 foreach (var actorLink in actors)
                 {
                     string actorName = actorLink.InnerText.Replace(",", "", StringComparison.OrdinalIgnoreCase).Trim(),
-                           actorPageURL = PhoenixAdultHelper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
+                           actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 
                     var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, _cookies).ConfigureAwait(false);
@@ -138,7 +138,7 @@ namespace PhoenixAdult.Sites
 
             var sceneID = externalId.Split('#');
 
-            var sceneURL = PhoenixAdultHelper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, _cookies).ConfigureAwait(false);
 
             var sceneImages = sceneData.SelectNodes("//video");
