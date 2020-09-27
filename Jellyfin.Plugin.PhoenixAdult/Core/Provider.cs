@@ -10,7 +10,6 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers;
-using Flurl.Http;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
