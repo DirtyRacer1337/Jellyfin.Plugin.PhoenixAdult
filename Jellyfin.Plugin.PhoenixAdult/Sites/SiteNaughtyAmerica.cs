@@ -11,6 +11,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
+using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
@@ -26,7 +27,7 @@ namespace PhoenixAdult.Sites
                 {"Content-Type", "application/json" }
             };
 
-            var http = await HTTP.Request(url, new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, new HTTPRequest
             {
                 Param = param,
                 Headers = headers

@@ -12,6 +12,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
+using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {

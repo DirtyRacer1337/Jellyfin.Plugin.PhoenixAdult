@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-internal static class StringExtensions
+internal static class String
 {
     public static bool Contains(this string source, string toCheck, StringComparison stringComparison) => source?.IndexOf(toCheck, stringComparison) >= 0;
 

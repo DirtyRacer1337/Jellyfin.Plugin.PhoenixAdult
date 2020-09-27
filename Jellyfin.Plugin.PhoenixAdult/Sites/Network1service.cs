@@ -12,6 +12,7 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
+using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
@@ -32,7 +33,7 @@ namespace PhoenixAdult.Sites
                 { "Instance", instance },
             };
 
-            var http = await HTTP.Request(url, new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, new HTTPRequest
             {
                 Headers = headers
             }, cancellationToken).ConfigureAwait(false);

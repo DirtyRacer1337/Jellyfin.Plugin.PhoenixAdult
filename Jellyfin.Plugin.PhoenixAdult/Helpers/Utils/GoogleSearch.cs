@@ -4,48 +4,50 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using PhoenixAdult.Helpers;
 
-internal static class GoogleSearch
+namespace PhoenixAdult.Helpers.Utils
 {
-    public static async Task<List<string>> GetSearchResults(string text, int[] siteNum, CancellationToken cancellationToken)
+    internal static class GoogleSearch
     {
-        var results = new List<string>();
-        string searchTerm;
-
-        if (siteNum != null)
+        public static async Task<List<string>> GetSearchResults(string text, int[] siteNum, CancellationToken cancellationToken)
         {
-            var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", "", StringComparison.OrdinalIgnoreCase);
-            searchTerm = $"site:{site} {text}";
-        }
-        else
-            searchTerm = text;
+            var results = new List<string>();
+            string searchTerm;
 
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            var url = "https://www.google.com/search?q=" + searchTerm;
-            var html = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
-
-            var searchResults = html.SelectNodes("//a[@href]");
-            if (searchResults != null)
+            if (siteNum != null)
             {
-                foreach (var searchResult in searchResults)
-                {
-                    var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
-                    if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
-                    {
-                        searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", "", StringComparison.OrdinalIgnoreCase))["q"];
+                var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", "", StringComparison.OrdinalIgnoreCase);
+                searchTerm = $"site:{site} {text}";
+            }
+            else
+                searchTerm = text;
 
-                        if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
-                            results.Add(searchURL);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                var url = "https://www.google.com/search?q=" + searchTerm;
+                var html = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
+
+                var searchResults = html.SelectNodes("//a[@href]");
+                if (searchResults != null)
+                {
+                    foreach (var searchResult in searchResults)
+                    {
+                        var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
+                        if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
+                        {
+                            searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", "", StringComparison.OrdinalIgnoreCase))["q"];
+
+                            if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
+                                results.Add(searchURL);
+                        }
                     }
                 }
             }
+
+            return results;
         }
 
-        return results;
+        public static async Task<List<string>> GetSearchResults(string text, CancellationToken cancellationToken)
+            => await GetSearchResults(text, null, cancellationToken).ConfigureAwait(false);
     }
-
-    public static async Task<List<string>> GetSearchResults(string text, CancellationToken cancellationToken)
-        => await GetSearchResults(text, null, cancellationToken).ConfigureAwait(false);
 }

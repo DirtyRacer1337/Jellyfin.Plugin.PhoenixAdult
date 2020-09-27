@@ -5,38 +5,41 @@ using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-internal static class HTML
+namespace PhoenixAdult.Helpers.Utils
 {
-    public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+    internal static class HTML
     {
-        HtmlNode html = new HtmlDocument().DocumentNode;
-        var http = await HTTP.Request(url, new HTTP.HTTPRequest
+        public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
-            Headers = headers,
-            Cookies = cookies,
-        }, cancellationToken).ConfigureAwait(false);
-        if (http.IsOK)
-            html = ElementFromStream(http.ContentStream);
+            HtmlNode html = new HtmlDocument().DocumentNode;
+            var http = await HTTP.Request(url, new HTTPRequest
+            {
+                Headers = headers,
+                Cookies = cookies,
+            }, cancellationToken).ConfigureAwait(false);
+            if (http.IsOK)
+                html = ElementFromStream(http.ContentStream);
 
-        return html;
-    }
-
-    public static HtmlNode ElementFromString(string data)
-    {
-        HtmlNode html;
-        using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
-        {
-            html = ElementFromStream(stream);
+            return html;
         }
 
-        return html;
-    }
+        public static HtmlNode ElementFromString(string data)
+        {
+            HtmlNode html;
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+            {
+                html = ElementFromStream(stream);
+            }
 
-    public static HtmlNode ElementFromStream(Stream data)
-    {
-        var html = new HtmlDocument();
-        html.Load(data);
+            return html;
+        }
 
-        return html.DocumentNode;
+        public static HtmlNode ElementFromStream(Stream data)
+        {
+            var html = new HtmlDocument();
+            html.Load(data);
+
+            return html.DocumentNode;
+        }
     }
 }
