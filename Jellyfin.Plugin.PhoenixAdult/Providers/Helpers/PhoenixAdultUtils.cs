@@ -340,7 +340,7 @@ internal static class Logger
 
 internal static class Database
 {
-    private const string BaseURL = "https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/database/data/";
+    private const string BaseURL = "https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/master/data/";
 
     private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
 
