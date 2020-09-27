@@ -46,7 +46,7 @@ namespace PhoenixAdult.Helpers.Utils
                 IsOK = false
             };
 
-            url = HttpUtility.UrlPathEncode(url);
+            url = Uri.EscapeUriString(Uri.UnescapeDataString(url));
 
             if (request.Method == null)
             {
