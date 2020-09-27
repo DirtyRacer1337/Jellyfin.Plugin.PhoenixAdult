@@ -13,8 +13,8 @@ namespace PhoenixAdult.Helpers.Utils
             var http = await HTTP.Request(item.Url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
-                var httpStream = await HTTP.Request(item.Url, cancellationToken).ConfigureAwait(false);
-                using (var img = SKBitmap.Decode(httpStream.ContentStream))
+                http = await HTTP.Request(item.Url, cancellationToken).ConfigureAwait(false);
+                using (var img = SKBitmap.Decode(http.ContentStream))
                 {
                     if (img.Width > 100)
                         return new RemoteImageInfo

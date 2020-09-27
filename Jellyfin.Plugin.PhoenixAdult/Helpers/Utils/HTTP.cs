@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Flurl.Http;
 
 namespace PhoenixAdult.Helpers.Utils
@@ -45,7 +46,7 @@ namespace PhoenixAdult.Helpers.Utils
                 IsOK = false
             };
 
-            url = Uri.EscapeUriString(url);
+            url = HttpUtility.UrlPathEncode(url);
 
             if (request.Method == null)
             {
