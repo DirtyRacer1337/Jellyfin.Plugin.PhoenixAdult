@@ -19,13 +19,10 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
-            var http = await HTTP.Request(new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            if (http.IsOK)
             {
-                _url = url
-            }, cancellationToken).ConfigureAwait(false);
-            if (http._response.IsSuccessStatusCode)
-            {
-                var regEx = Regex.Match(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false), "\"apiKey\":\"(.*?)\"");
+                var regEx = Regex.Match(http.Content, "\"apiKey\":\"(.*?)\"");
                 if (regEx.Groups.Count > 0)
                     return regEx.Groups[1].Value;
             }
@@ -44,15 +41,14 @@ namespace PhoenixAdult.Sites
                 {"Referer",  referer},
             };
 
-            var http = await HTTP.Request(new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, new HTTP.HTTPRequest
             {
-                _url = url,
-                _param = param,
-                _headers = headers,
+                Param = param,
+                Headers = headers,
             }, cancellationToken).ConfigureAwait(false);
-            if (http._response.IsSuccessStatusCode)
+            if (http.IsOK)
             {
-                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                json = JObject.Parse(http.Content);
             }
 
             return json;

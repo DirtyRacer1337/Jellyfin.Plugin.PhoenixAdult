@@ -26,15 +26,14 @@ namespace PhoenixAdult.Sites
                 {"Content-Type", "application/json" }
             };
 
-            var http = await HTTP.Request(new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, new HTTP.HTTPRequest
             {
-                _url = url,
-                _param = param,
-                _headers = headers,
+                Param = param,
+                Headers = headers,
             }, cancellationToken).ConfigureAwait(false);
-            if (http._response.IsSuccessStatusCode)
+            if (http.IsOK)
             {
-                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+                json = JObject.Parse(http.Content);
             }
 
             return json;

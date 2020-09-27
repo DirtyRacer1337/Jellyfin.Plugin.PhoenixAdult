@@ -8,18 +8,11 @@ internal static class ImageHelper
 {
     public static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
     {
-        var http = await HTTP.Request(new HTTP.HTTPRequest
+        var http = await HTTP.Request(item.Url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
+        if (http.IsOK)
         {
-            _url = item.Url,
-            _method = HttpMethod.Head,
-        }, cancellationToken).ConfigureAwait(false);
-        if (http._response.IsSuccessStatusCode)
-        {
-            var httpStream = await HTTP.Request(new HTTP.HTTPRequest
-            {
-                _url = item.Url,
-            }, cancellationToken).ConfigureAwait(false);
-            using (var img = SKBitmap.Decode(await httpStream._response.Content.ReadAsStreamAsync().ConfigureAwait(false)))
+            var httpStream = await HTTP.Request(item.Url, cancellationToken).ConfigureAwait(false);
+            using (var img = SKBitmap.Decode(httpStream.ContentStream))
             {
                 if (img.Width > 100)
                     return new RemoteImageInfo

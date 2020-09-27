@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -10,74 +11,79 @@ using PhoenixAdult;
 
 internal static class HTTP
 {
-    private static readonly FlurlClient _http = Provider.FlurlHttp;
+    private static FlurlClient FlurlHTTP { get; } = Provider.FlurlHttp;
 
     public struct HTTPRequest
     {
-        public string _url;
-        public HttpMethod _method;
-        public string _param;
-        public IDictionary<string, string> _headers;
-        public IDictionary<string, string> _cookies;
+        public HttpMethod Method { get; set; }
+        public string Param { get; set; }
+        public IDictionary<string, string> Headers { get; set; }
+        public IDictionary<string, string> Cookies { get; set; }
     }
 
     public struct HTTPResponse
     {
-        public HttpResponseMessage _response;
-        public IDictionary<string, Cookie> _cookies;
+        public string Content { get; set; }
+        public Stream ContentStream { get; set; }
+        public bool IsOK { get; set; }
+        public IDictionary<string, Cookie> Cookies { get; set; }
     }
     public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
-    public static async Task<HTTPResponse> Request(HTTPRequest request, CancellationToken cancellationToken)
+    public static async Task<HTTPResponse> Request(string url, HTTPRequest request, CancellationToken cancellationToken)
     {
-        HTTPResponse result = new HTTPResponse();
-
-        request._url = Uri.EscapeUriString(request._url);
-
-        if (request._method == null)
+        HTTPResponse result = new HTTPResponse()
         {
-            if (!string.IsNullOrEmpty(request._param))
+            IsOK = false
+        };
+
+        url = Uri.EscapeUriString(url);
+
+        if (request.Method == null)
+        {
+            if (!string.IsNullOrEmpty(request.Param))
             {
-                request._method = HttpMethod.Post;
+                request.Method = HttpMethod.Post;
             }
             else
             {
-                request._method = HttpMethod.Get;
+                request.Method = HttpMethod.Get;
             }
         }
 
-        Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request._url, request._method.Method));
+        Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", url, request.Method.Method));
 
-        _http.BaseUrl = request._url;
-        _http.Headers.Clear();
-        _http.Cookies.Clear();
+        FlurlHTTP.BaseUrl = url;
+        FlurlHTTP.Headers.Clear();
+        FlurlHTTP.Cookies.Clear();
 
-        _http.WithHeader("User-Agent", GetUserAgent());
+        FlurlHTTP.WithHeader("User-Agent", GetUserAgent());
 
-        if (request._headers != null)
+        if (request.Headers != null)
         {
-            _http.WithHeaders(request._headers);
+            FlurlHTTP.WithHeaders(request.Headers);
         }
 
-        if (request._cookies != null)
+        if (request.Cookies != null)
         {
-            _http.WithCookies(request._cookies);
+            FlurlHTTP.WithCookies(request.Cookies);
         }
 
-        var data = _http.Request();
+        var data = FlurlHTTP.Request();
 
+        HttpResponseMessage response = null;
         try
         {
-            switch (request._method.Method)
+            switch (request.Method.Method)
             {
                 case "GET":
-                    result._response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
+                    response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
                     break;
                 case "POST":
-                    result._response = await data.PostStringAsync(request._param, cancellationToken).ConfigureAwait(false);
+                    response = await data.PostStringAsync(request.Param, cancellationToken).ConfigureAwait(false);
                     break;
                 case "HEAD":
-                    result._response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
+                    response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
                     break;
                 default:
                     return result;
@@ -87,17 +93,19 @@ internal static class HTTP
         catch (FlurlHttpTimeoutException e)
         {
             Logger.Error(e.Message);
-            return new HTTPResponse
-            {
-                _response = new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.RequestTimeout
-                }
-            };
         }
 
-        result._cookies = _http.Cookies;
+        if (response != null)
+        {
+            result.Cookies = FlurlHTTP.Cookies;
+            result.Content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            result.ContentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            result.IsOK = response.IsSuccessStatusCode;
+        }
 
         return result;
     }
+
+    public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken) => await Request(url, new HTTPRequest { }, cancellationToken).ConfigureAwait(false);
+    public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken) => await Request(url, new HTTPRequest { Method = method }, cancellationToken).ConfigureAwait(false);
 }

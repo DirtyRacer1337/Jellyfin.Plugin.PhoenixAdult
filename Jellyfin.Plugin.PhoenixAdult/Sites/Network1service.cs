@@ -19,13 +19,9 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<IDictionary<string, Cookie>> GetCookies(string url, CancellationToken cancellationToken)
         {
-            var http = await HTTP.Request(new HTTP.HTTPRequest
-            {
-                _url = url,
-                _method = HttpMethod.Head,
-            }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
 
-            return http._cookies;
+            return http.Cookies;
         }
 
         public static async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
@@ -36,13 +32,12 @@ namespace PhoenixAdult.Sites
                 { "Instance", instance },
             };
 
-            var http = await HTTP.Request(new HTTP.HTTPRequest
+            var http = await HTTP.Request(url, new HTTP.HTTPRequest
             {
-                _url = url,
-                _headers = headers
+                Headers = headers
             }, cancellationToken).ConfigureAwait(false);
-            if (http._response.IsSuccessStatusCode)
-                json = JObject.Parse(await http._response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            if (http.IsOK)
+                json = JObject.Parse(http.Content);
 
             return json;
         }

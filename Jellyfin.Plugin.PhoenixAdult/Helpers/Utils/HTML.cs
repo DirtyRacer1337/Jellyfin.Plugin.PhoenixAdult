@@ -10,14 +10,13 @@ internal static class HTML
     public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
     {
         HtmlNode html = new HtmlDocument().DocumentNode;
-        var http = await HTTP.Request(new HTTP.HTTPRequest
+        var http = await HTTP.Request(url, new HTTP.HTTPRequest
         {
-            _url = url,
-            _headers = headers,
-            _cookies = cookies,
+            Headers = headers,
+            Cookies = cookies,
         }, cancellationToken).ConfigureAwait(false);
-        if (http._response.IsSuccessStatusCode)
-            html = ElementFromStream(await http._response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+        if (http.IsOK)
+            html = ElementFromStream(http.ContentStream);
 
         return html;
     }

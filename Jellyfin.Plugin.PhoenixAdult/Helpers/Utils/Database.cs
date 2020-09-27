@@ -54,15 +54,11 @@ internal static class Database
 
         foreach (var fileName in _databaseFiles)
         {
-            var http = await HTTP.Request(new HTTP.HTTPRequest
-            {
-                _url = BaseURL + fileName
-            }, cancellationToken).ConfigureAwait(false);
-            if (http._response.IsSuccessStatusCode)
+            var http = await HTTP.Request(BaseURL + fileName, cancellationToken).ConfigureAwait(false);
+            if (http.IsOK)
             {
                 Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                File.WriteAllText(Path.Combine(_databasePath, fileName), data);
+                File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content);
             }
         }
     }
