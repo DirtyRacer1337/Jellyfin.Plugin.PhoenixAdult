@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -31,6 +32,7 @@ namespace PhoenixAdult.Sites
                 _url = url,
                 _param = param,
                 _headers = headers,
+                _method = HttpMethod.Post
             }, cancellationToken).ConfigureAwait(false);
             if (http._response.IsSuccessStatusCode)
             {
@@ -66,7 +68,6 @@ namespace PhoenixAdult.Sites
                         sceneName = (string)searchResult["title"];
                 long sceneDate = (long)searchResult["published_at"];
 
-                var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID}";
                 var posters = (await GetImages(new Movie
                 {
                     ProviderIds = { { Plugin.Instance.Name, curID } },
