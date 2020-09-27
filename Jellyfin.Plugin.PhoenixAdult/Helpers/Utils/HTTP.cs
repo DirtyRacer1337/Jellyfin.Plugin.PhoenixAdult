@@ -11,7 +11,13 @@ using PhoenixAdult;
 
 internal static class HTTP
 {
-    private static FlurlClient FlurlHTTP { get; } = Provider.FlurlHttp;
+    private static FlurlClient FlurlHTTP { get; } = new FlurlClient();
+
+    static HTTP()
+    {
+        FlurlHTTP.AllowAnyHttpStatus().EnableCookies();
+        FlurlHTTP.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
+    }
 
     public struct HTTPRequest
     {
@@ -28,6 +34,7 @@ internal static class HTTP
         public bool IsOK { get; set; }
         public IDictionary<string, Cookie> Cookies { get; set; }
     }
+
     public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
     public static async Task<HTTPResponse> Request(string url, HTTPRequest request, CancellationToken cancellationToken)

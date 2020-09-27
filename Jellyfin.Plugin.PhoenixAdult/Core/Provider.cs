@@ -28,8 +28,6 @@ namespace PhoenixAdult
 
         public static IHttpClient Http { get; set; }
 
-        public static FlurlClient FlurlHttp { get; set; }
-
         public Provider(
 #if __EMBY__
         ILogManager logger,
@@ -45,10 +43,6 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
-
-            FlurlHttp = new FlurlClient();
-            FlurlHttp.AllowAnyHttpStatus().EnableCookies();
-            FlurlHttp.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
 
             int siteListCount = 0;
             foreach (var site in ISiteList.SiteList.Values)
