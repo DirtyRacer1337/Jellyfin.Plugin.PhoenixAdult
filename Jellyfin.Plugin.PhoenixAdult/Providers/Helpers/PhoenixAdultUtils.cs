@@ -51,7 +51,16 @@ namespace PhoenixAdult.Helpers
             request._url = Uri.EscapeUriString(request._url);
 
             if (request._method == null)
-                request._method = HttpMethod.Get;
+            {
+                if (!string.IsNullOrEmpty(request._param))
+                {
+                    request._method = HttpMethod.Post;
+                }
+                else
+                {
+                    request._method = HttpMethod.Get;
+                }
+            }
 
             Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request._url, request._method.Method));
 

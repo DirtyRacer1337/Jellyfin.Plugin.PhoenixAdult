@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -31,8 +30,7 @@ namespace PhoenixAdult.Sites
             {
                 _url = url,
                 _param = param,
-                _headers = headers,
-                _method = HttpMethod.Post
+                _headers = headers
             }, cancellationToken).ConfigureAwait(false);
             if (http._response.IsSuccessStatusCode)
             {

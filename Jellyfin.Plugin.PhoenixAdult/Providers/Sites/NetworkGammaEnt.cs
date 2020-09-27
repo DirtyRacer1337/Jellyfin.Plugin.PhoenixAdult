@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,7 +47,6 @@ namespace PhoenixAdult.Sites
             var http = await HTTP.Request(new HTTP.HTTPRequest
             {
                 _url = url,
-                _method = HttpMethod.Post,
                 _param = param,
                 _headers = headers,
             }, cancellationToken).ConfigureAwait(false);

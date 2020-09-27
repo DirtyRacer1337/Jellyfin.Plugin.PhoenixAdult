@@ -44,7 +44,7 @@ namespace PhoenixAdult.Helpers
             {
                 var studioName = studio.Split('!').First().Trim();
 
-                foreach(var studioIndex in Database.Actors.ActorsStudioIndexes)
+                foreach (var studioIndex in Database.Actors.ActorsStudioIndexes)
                 {
                     if (studioIndex.Value.Contains(studioName))
                     {
