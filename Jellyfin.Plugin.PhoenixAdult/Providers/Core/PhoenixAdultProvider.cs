@@ -50,6 +50,8 @@ namespace PhoenixAdult
             FlurlHttp.AllowAnyHttpStatus().EnableCookies();
             FlurlHttp.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
 
+            Database.Load(CancellationToken.None);
+
             int siteListCount = 0;
             foreach (var site in PhoenixAdultList.SiteList.Values)
                 siteListCount += site.Count;
@@ -62,16 +64,9 @@ namespace PhoenixAdult
                     siteModuleList.Add(siteModule.ToString());
             }
 
-            int actressListCount = 0;
-            foreach (var actress in PhoenixAdultActors.ReplaceListStudio.Values)
-                actressListCount += actress.Count;
-            actressListCount += PhoenixAdultActors.ReplaceList.Count;
-
             Logger.Info($"Plugin version: {Plugin.Instance.Version}");
             Logger.Info($"Number of supported sites: {siteListCount}");
             Logger.Info($"Number of site modules: {siteModuleList.Count}");
-            Logger.Info($"Number of site aliases: {PhoenixAdultList.AbbrieviationList.Count}");
-            Logger.Info($"Number of actress: {actressListCount}");
         }
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
@@ -273,12 +268,12 @@ namespace PhoenixAdult
         {
             string newTitle = title;
 
-            foreach (var abbrieviation in PhoenixAdultList.AbbrieviationList)
+            foreach (var abbrieviation in Database.SiteList.Abbrieviations)
             {
-                Regex regex = new Regex(abbrieviation.Key, RegexOptions.IgnoreCase);
+                Regex regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
                 if (regex.IsMatch(title))
                 {
-                    newTitle = regex.Replace(title, abbrieviation.Value, 1);
+                    newTitle = regex.Replace(title, abbrieviation.Value + " ", 1);
                     break;
                 }
             }
