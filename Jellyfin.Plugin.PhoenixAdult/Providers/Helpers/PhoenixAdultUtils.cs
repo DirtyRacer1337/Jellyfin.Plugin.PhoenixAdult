@@ -377,6 +377,12 @@ internal static class Database
 
     public static async void Load(CancellationToken cancellationToken)
     {
+        if (!Directory.Exists(_databasePath))
+        {
+            Logger.Info($"Creating database directory \"{_databasePath}\"");
+            Directory.CreateDirectory(_databasePath);
+        }
+
         foreach (var fileName in _databaseFiles)
         {
             var http = await HTTP.Request(new HTTP.HTTPRequest
