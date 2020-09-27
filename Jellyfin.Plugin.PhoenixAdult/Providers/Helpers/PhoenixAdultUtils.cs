@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using Newtonsoft.Json;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -343,17 +344,40 @@ internal static class Database
 
     private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
 
-    public static readonly IDictionary<string, string[]> GenresReplaceList = new Dictionary<string, string[]>();
+    private static readonly string[] _databaseFiles = { "SiteList.json", "Actors.json", "Genres.json" };
 
-    public static readonly IList<string> GenresSkipList = new List<string>();
+    public static SiteListStructure SiteList;
 
-    public static readonly IList<string> GenresSkipListPartial = new List<string>();
+    public static ActorsStructure Actors;
+
+    public static GenresStructure Genres;
+
+    public struct SiteListStructure
+    {
+        public Dictionary<string, string> Abbrieviations { get; set; }
+    }
+
+    public struct ActorsStructure
+    {
+        public Dictionary<string, string[]> ActorsReplace { get; set; }
+
+        public Dictionary<int, string[]> ActorsStudioIndexes { get; set; }
+
+        public Dictionary<int, Dictionary<string, string[]>> ActorsReplaceStudios { get; set; }
+    }
+
+    public struct GenresStructure
+    {
+        public Dictionary<string, string[]> GenresReplace { get; set; }
+
+        public List<string> GenresSkip { get; set; }
+
+        public List<string> GenresPartialSkip { get; set; }
+    }
 
     public static async void Load(CancellationToken cancellationToken)
     {
-        var fileList = new List<string> { "GenresReplace.db", "GenresSkip.db", "GenresPartialSkip.db" };
-
-        foreach (var fileName in fileList)
+        foreach (var fileName in _databaseFiles)
         {
             var http = await HTTP.Request(new HTTP.HTTPRequest
             {
@@ -361,7 +385,7 @@ internal static class Database
             }, cancellationToken).ConfigureAwait(false);
             if (http._response.IsSuccessStatusCode)
             {
-                Logger.Info($"Database file \"{fileName}\" loaded successfully");
+                Logger.Info($"Database file \"{fileName}\" downloaded successfully");
                 var data = await http._response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 File.WriteAllText(Path.Combine(_databasePath, fileName), data);
             }
@@ -372,32 +396,27 @@ internal static class Database
 
     public static void Update()
     {
-        var file = File.ReadAllLines(Path.Combine(_databasePath, "GenresReplace.db"));
-        foreach (var line in file.ToList())
+        foreach (var fileName in _databaseFiles)
         {
-            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase) && line.Contains(";", StringComparison.OrdinalIgnoreCase))
+            var filePath = Path.Combine(_databasePath, fileName);
+            if (File.Exists(filePath))
             {
-                var data = line.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                GenresReplaceList.Add(data[0], data.Skip(1).ToArray());
+                var data = File.ReadAllText(filePath, Encoding.UTF8);
+                switch (fileName)
+                {
+                    case "SiteList.json":
+                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
+                        break;
+                    case "Actors.json":
+                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
+                        break;
+                    case "Genres.json":
+                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
+                        break;
+                }
             }
         }
 
-        file = File.ReadAllLines(Path.Combine(_databasePath, "GenresSkip.db"));
-        foreach (var line in file.ToList())
-        {
-            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase))
-            {
-                GenresSkipList.Add(line);
-            }
-        }
-
-        file = File.ReadAllLines(Path.Combine(_databasePath, "GenresPartialSkip.db"));
-        foreach (var line in file.ToList())
-        {
-            if (!string.IsNullOrEmpty(line) && !line.StartsWith("//", StringComparison.OrdinalIgnoreCase))
-            {
-                GenresSkipListPartial.Add(line);
-            }
-        }
+        Logger.Info($"Database loading finished");
     }
 }

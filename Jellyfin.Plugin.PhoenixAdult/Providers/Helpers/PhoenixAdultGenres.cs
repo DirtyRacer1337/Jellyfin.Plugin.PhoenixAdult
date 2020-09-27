@@ -34,17 +34,17 @@ namespace PhoenixAdult.Helpers
 
         private static string Replace(string genreName, string sceneName)
         {
-            if (Database.GenresSkipList.Contains(genreName, StringComparer.OrdinalIgnoreCase))
+            if (Database.Genres.GenresSkip.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                 return null;
 
-            foreach (var genre in Database.GenresSkipListPartial)
+            foreach (var genre in Database.Genres.GenresPartialSkip)
                 if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
                     return null;
 
             if (genreName.Contains("doggystyle", StringComparison.OrdinalIgnoreCase) || genreName.Contains("doggy style", StringComparison.OrdinalIgnoreCase))
                 return "Doggystyle (Position)";
 
-            var newGenreName = Database.GenresReplaceList.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
+            var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
                 genreName = newGenreName;
 
