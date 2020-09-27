@@ -57,7 +57,7 @@ namespace PhoenixAdult.Sites
                 directURL
             };
 
-            var searchResults = await PhoenixAdultHelper.GetGoogleSearchResults(searchTitle, siteNum, cancellationToken).ConfigureAwait(false);
+            var searchResults = await GoogleSearch.GetSearchResults(searchTitle, siteNum, cancellationToken).ConfigureAwait(false);
             foreach (var searchResult in searchResults)
             {
                 var url = searchResult.Split('?').First();
