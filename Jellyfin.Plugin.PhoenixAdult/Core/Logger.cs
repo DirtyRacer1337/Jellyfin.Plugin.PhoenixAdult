@@ -1,11 +1,10 @@
-
 #if __EMBY__
 using MediaBrowser.Model.Logging;
 #else
 using Microsoft.Extensions.Logging;
 #endif
 
-namespace PhoenixAdult.Helpers.Utils
+namespace PhoenixAdult
 {
     internal static class Logger
     {
@@ -13,7 +12,7 @@ namespace PhoenixAdult.Helpers.Utils
         public static void Info(string text)
         {
 #if __EMBY__
-        Log.Info(text);
+            Log.Info(text);
 #else
             Log.LogInformation(text);
 #endif
@@ -22,7 +21,7 @@ namespace PhoenixAdult.Helpers.Utils
         public static void Error(string text)
         {
 #if __EMBY__
-        Log.Error(text);
+            Log.Error(text);
 #else
             Log.LogError(text);
 #endif
@@ -31,7 +30,7 @@ namespace PhoenixAdult.Helpers.Utils
         public static void Debug(string text)
         {
 #if __EMBY__
-        Log.Debug(text);
+            Log.Debug(text);
 #else
             Log.LogDebug(text);
 #endif
@@ -40,7 +39,7 @@ namespace PhoenixAdult.Helpers.Utils
         public static void Warning(string text)
         {
 #if __EMBY__
-        Log.Warn(text);
+            Log.Warn(text);
 #else
             Log.LogWarning(text);
 #endif

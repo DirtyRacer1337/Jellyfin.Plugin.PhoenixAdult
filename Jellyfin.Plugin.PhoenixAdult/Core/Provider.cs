@@ -30,9 +30,9 @@ namespace PhoenixAdult
 
         public Provider(
 #if __EMBY__
-        ILogManager logger,
+            ILogManager logger,
 #else
-        ILogger<Provider> logger,
+            ILogger<Provider> logger,
 #endif
             IHttpClient http)
         {
