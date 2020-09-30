@@ -144,8 +144,10 @@ namespace PhoenixAdult.Helpers
 
         public static IProviderBase GetProviderBySiteID(int siteID)
         {
-            var name = Database.SiteList.SiteIDList[siteID];
-            return GetBaseSiteByName(name);
+            if(Database.SiteList.SiteIDList.ContainsKey(siteID))
+                return GetBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+
+            return null;
         }
 
         public static IProviderBase GetBaseSiteByName(string name)
