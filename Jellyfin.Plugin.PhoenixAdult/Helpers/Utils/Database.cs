@@ -22,7 +22,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         public struct SiteListStructure
         {
-            public Dictionary<int, Dictionary<int, string[]>> SiteList { get; set; }
+            public Dictionary<int, Dictionary<int, string[]>> Sites { get; set; }
 
             public Dictionary<int, string> SiteIDList { get; set; }
 

@@ -15,7 +15,7 @@ namespace PhoenixAdult.Helpers
             if (siteNum == null)
                 return null;
 
-            return Database.SiteList.SiteList[siteNum[0]][siteNum[1]][0];
+            return Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
         }
 
         public static string GetSearchBaseURL(int[] siteNum)
@@ -23,10 +23,10 @@ namespace PhoenixAdult.Helpers
             if (siteNum == null)
                 return null;
 
-            if (!string.IsNullOrEmpty(Database.SiteList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
-                return Database.SiteList.SiteList[siteNum[0]][siteNum[1]][1];
+            if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
+                return Database.SiteList.Sites[siteNum[0]][siteNum[1]][1];
             else
-                return Database.SiteList.SiteList[siteNum[0]].First().Value[1];
+                return Database.SiteList.Sites[siteNum[0]].First().Value[1];
         }
 
         public static string GetSearchSearchURL(int[] siteNum)
@@ -34,10 +34,10 @@ namespace PhoenixAdult.Helpers
             if (siteNum == null)
                 return null;
 
-            if (!string.IsNullOrEmpty(Database.SiteList.SiteList[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
-                return Database.SiteList.SiteList[siteNum[0]][siteNum[1]][2];
+            if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
+                return Database.SiteList.Sites[siteNum[0]][siteNum[1]][2];
             else
-                return Database.SiteList.SiteList[siteNum[0]].First().Value[2];
+                return Database.SiteList.Sites[siteNum[0]].First().Value[2];
         }
 
         public static string Encode(string text)
@@ -51,7 +51,7 @@ namespace PhoenixAdult.Helpers
             string clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
 
-            foreach (var site in Database.SiteList.SiteList)
+            foreach (var site in Database.SiteList.Sites)
                 foreach (var siteData in site.Value)
                 {
                     string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
