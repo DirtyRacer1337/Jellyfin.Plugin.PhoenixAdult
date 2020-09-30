@@ -22,6 +22,10 @@ namespace PhoenixAdult.Helpers.Utils
 
         public struct SiteListStructure
         {
+            public Dictionary<int, Dictionary<int, string[]>> SiteList { get; set; }
+
+            public Dictionary<int, string> SiteIDList { get; set; }
+
             public Dictionary<string, string> Abbrieviations { get; set; }
         }
 
@@ -59,7 +63,7 @@ namespace PhoenixAdult.Helpers.Utils
                 if (http.IsOK)
                 {
                     Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                    File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content);
+                    File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, Encoding.UTF8);
                 }
             }
         }

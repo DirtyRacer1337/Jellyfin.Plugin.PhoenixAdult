@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Net;
@@ -43,22 +42,6 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
-
-            int siteListCount = 0;
-            foreach (var site in ISiteList.SiteList.Values)
-                siteListCount += site.Count;
-
-            var siteModuleList = new List<string>();
-            for (int i = 0; i < ISiteList.SiteList.Count; i += 1)
-            {
-                var siteModule = ISiteList.GetProviderBySiteID(i);
-                if (siteModule != null && !siteModuleList.Contains(siteModule.ToString()))
-                    siteModuleList.Add(siteModule.ToString());
-            }
-
-            Logger.Info($"Plugin version: {Plugin.Instance.Version}");
-            Logger.Info($"Number of supported sites: {siteListCount}");
-            Logger.Info($"Number of site modules: {siteModuleList.Count}");
         }
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
@@ -70,14 +53,14 @@ namespace PhoenixAdult
 
             Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
-            var title = ReplaceAbbrieviation(searchInfo.Name);
-            var site = GetSiteFromTitle(title);
+            var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
+            var site = Helper.GetSiteFromTitle(title);
             if (site.Key != null)
             {
-                string searchTitle = GetClearTitle(title, site.Value),
+                string searchTitle = Helper.GetClearTitle(title, site.Value),
                        searchDate = string.Empty;
                 DateTime? searchDateObj;
-                var titleAfterDate = GetDateFromTitle(searchTitle);
+                var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
 
                 var siteNum = new int[2] {
                     site.Key[0],
@@ -97,7 +80,7 @@ namespace PhoenixAdult
                 Logger.Info($"searchTitle: {searchTitle}");
                 Logger.Info($"searchDate: {searchDate}");
 
-                var provider = ISiteList.GetProviderBySiteID(siteNum[0]);
+                var provider = Helper.GetProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
@@ -143,7 +126,7 @@ namespace PhoenixAdult
             if (curID.Length < 3)
                 return result;
 
-            var provider = ISiteList.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
+            var provider = Helper.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
@@ -173,101 +156,5 @@ namespace PhoenixAdult
             Url = url,
             UserAgent = HTTP.GetUserAgent(),
         });
-
-        public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
-        {
-            string clearName = Regex.Replace(title, @"\W", string.Empty);
-            var possibleSites = new Dictionary<int[], string>();
-
-            foreach (var site in ISiteList.SiteList)
-                foreach (var siteData in site.Value)
-                {
-                    string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
-                    if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
-                        possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
-                }
-
-            if (possibleSites.Count > 0)
-                return possibleSites.OrderByDescending(x => x.Value.Length).First();
-
-            return new KeyValuePair<int[], string>(null, null);
-        }
-
-        public static string GetClearTitle(string title, string siteName)
-        {
-            if (string.IsNullOrEmpty(title))
-                return title;
-
-            string clearName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title),
-                   clearSite = siteName;
-
-            clearName = clearName.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
-
-            clearName = Regex.Replace(clearName, @"[^a-zA-Z0-9 ]", " ");
-            clearSite = Regex.Replace(clearSite, @"\W", string.Empty);
-
-            bool matched = false;
-            while (clearName.Contains(" ", StringComparison.OrdinalIgnoreCase))
-            {
-                clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
-                if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
-                {
-                    matched = true;
-                    break;
-                }
-            }
-
-            if (matched)
-            {
-                clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
-                clearName = string.Join(" ", clearName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
-            }
-
-            return clearName;
-        }
-
-        public static (string, DateTime?) GetDateFromTitle(string title)
-        {
-            string searchDate,
-                   searchTitle = title;
-            var regExRules = new Dictionary<string, string> {
-                { @"\b\d{4} \d{2} \d{2}\b", "yyyy MM dd" },
-                { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" }
-            };
-            (string, DateTime?) searchData = (searchTitle, null);
-
-            foreach (var regExRule in regExRules)
-            {
-                var regEx = Regex.Match(searchTitle, regExRule.Key);
-                if (regEx.Groups.Count > 0)
-                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDateObj))
-                    {
-                        searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
-
-                        searchData = (searchTitle, searchDateObj);
-                        break;
-                    }
-            }
-
-            return searchData;
-        }
-
-        public static string ReplaceAbbrieviation(string title)
-        {
-            string newTitle = title;
-
-            foreach (var abbrieviation in Database.SiteList.Abbrieviations)
-            {
-                Regex regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(title))
-                {
-                    newTitle = regex.Replace(title, abbrieviation.Value + " ", 1);
-                    break;
-                }
-            }
-
-            return newTitle;
-        }
     }
 }
