@@ -13,7 +13,7 @@ namespace PhoenixAdult.ScheduledTasks
 
         public string Key => "PhoenixAdultUpdateDatabase";
 
-        public string Description => "Update database with sites abbreviations / genres / actors";
+        public string Description => "Update database with sites / genres / actors";
 
         public string Category => "PhoenixAdult";
 
