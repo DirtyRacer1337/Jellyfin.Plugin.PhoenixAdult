@@ -13,7 +13,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
 
-        public static string[] DatabaseFiles { get; } = { "SiteList.json", "Actors.json", "Genres.json" };
+        public static readonly string[] DatabaseFiles = { "SiteList.json", "Actors.json", "Genres.json" };
 
         public static SiteListStructure SiteList;
 
