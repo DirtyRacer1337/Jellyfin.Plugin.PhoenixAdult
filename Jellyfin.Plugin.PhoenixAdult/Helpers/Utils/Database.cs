@@ -57,25 +57,28 @@ namespace PhoenixAdult.Helpers.Utils
                 Directory.CreateDirectory(_databasePath);
             }
 
+            var encoding = new UTF8Encoding(false);
             foreach (var fileName in _databaseFiles)
             {
                 var http = await HTTP.Request(BaseURL + fileName, cancellationToken).ConfigureAwait(false);
                 if (http.IsOK)
                 {
                     Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                    File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, Encoding.UTF8);
+                    File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, encoding);
                 }
             }
         }
 
         public static void Update()
         {
+            var encoding = new UTF8Encoding(false);
+
             foreach (var fileName in _databaseFiles)
             {
                 var filePath = Path.Combine(_databasePath, fileName);
                 if (File.Exists(filePath))
                 {
-                    var data = File.ReadAllText(filePath, Encoding.UTF8);
+                    var data = File.ReadAllText(filePath, encoding);
                     switch (fileName)
                     {
                         case "SiteList.json":
