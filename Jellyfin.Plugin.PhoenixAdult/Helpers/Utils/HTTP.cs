@@ -94,11 +94,12 @@ namespace PhoenixAdult.Helpers.Utils
                         response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
                         break;
                     default:
-                        return result;
+                        Logger.Error($"Method {request.Method.Method} not implemented");
+                        break;
                 }
 
             }
-            catch (FlurlHttpTimeoutException e)
+            catch (FlurlHttpException e)
             {
                 Logger.Error(e.Message);
             }

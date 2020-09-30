@@ -19,11 +19,17 @@ namespace PhoenixAdult.ScheduledTasks
 
         public async Task Execute(CancellationToken cancellationToken, IProgress<double> progress)
         {
-            progress.Report(0);
-            Database.Load(cancellationToken);
-            progress.Report(50);
-            Database.Update();
-            progress.Report(100);
+            progress?.Report(0);
+            for (int i = 0; i < Database.DatabaseFiles.Length; i++)
+            {
+                var fileName = Database.DatabaseFiles[i];
+                progress?.Report((double)i / Database.DatabaseFiles.Length * 100);
+                if (await Database.Download(fileName, cancellationToken).ConfigureAwait(false))
+                {
+                    Database.Update(fileName);
+                }
+            }
+            progress?.Report(100);
         }
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()

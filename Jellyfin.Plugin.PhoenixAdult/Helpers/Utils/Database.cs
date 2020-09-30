@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace PhoenixAdult.Helpers.Utils
@@ -12,7 +13,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
 
-        private static readonly string[] _databaseFiles = { "SiteList.json", "Actors.json", "Genres.json" };
+        public static string[] DatabaseFiles { get; } = { "SiteList.json", "Actors.json", "Genres.json" };
 
         public static SiteListStructure SiteList;
 
@@ -49,7 +50,7 @@ namespace PhoenixAdult.Helpers.Utils
             public List<string> GenresPartialSkip { get; set; }
         }
 
-        public static async void Load(CancellationToken cancellationToken)
+        public static async Task<bool> Download(string fileName, CancellationToken cancellationToken)
         {
             if (!Directory.Exists(_databasePath))
             {
@@ -58,39 +59,39 @@ namespace PhoenixAdult.Helpers.Utils
             }
 
             var encoding = new UTF8Encoding(false);
-            foreach (var fileName in _databaseFiles)
+            var http = await HTTP.Request(BaseURL + fileName, cancellationToken).ConfigureAwait(false);
+            if (http.IsOK)
             {
-                var http = await HTTP.Request(BaseURL + fileName, cancellationToken).ConfigureAwait(false);
-                if (http.IsOK)
-                {
-                    Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                    File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, encoding);
-                }
+                Logger.Info($"Database file \"{fileName}\" downloaded successfully");
+                File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, encoding);
+
+                return true;
             }
+
+            return false;
         }
 
-        public static void Update()
+        public static void Update(string fileName)
         {
             var encoding = new UTF8Encoding(false);
 
-            foreach (var fileName in _databaseFiles)
+            var filePath = Path.Combine(_databasePath, fileName);
+            if (File.Exists(filePath))
             {
-                var filePath = Path.Combine(_databasePath, fileName);
-                if (File.Exists(filePath))
+                var data = File.ReadAllText(filePath, encoding);
+                switch (fileName)
                 {
-                    var data = File.ReadAllText(filePath, encoding);
-                    switch (fileName)
-                    {
-                        case "SiteList.json":
-                            SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
-                            break;
-                        case "Actors.json":
-                            Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
-                            break;
-                        case "Genres.json":
-                            Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
-                            break;
-                    }
+                    case "SiteList.json":
+                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
+                        break;
+                    case "Actors.json":
+                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
+                        break;
+                    case "Genres.json":
+                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
+                        break;
+                    default:
+                        break;
                 }
             }
 
