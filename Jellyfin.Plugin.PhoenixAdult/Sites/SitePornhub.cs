@@ -65,7 +65,6 @@ namespace PhoenixAdult.Sites
                     };
 
                     result.Add(res);
-
                 }
             }
 

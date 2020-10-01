@@ -84,12 +84,15 @@ namespace PhoenixAdult.Helpers.Utils
                     case "SiteList.json":
                         SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
                         break;
+
                     case "Actors.json":
                         Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
                         break;
+
                     case "Genres.json":
                         Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
                         break;
+
                     default:
                         break;
                 }

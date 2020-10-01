@@ -87,17 +87,19 @@ namespace PhoenixAdult.Helpers.Utils
                     case "GET":
                         response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
                         break;
+
                     case "POST":
                         response = await data.PostStringAsync(request.Param, cancellationToken).ConfigureAwait(false);
                         break;
+
                     case "HEAD":
                         response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
                         break;
+
                     default:
                         Logger.Error($"Method {request.Method.Method} not implemented");
                         break;
                 }
-
             }
             catch (FlurlHttpException e)
             {
@@ -116,6 +118,7 @@ namespace PhoenixAdult.Helpers.Utils
         }
 
         public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken) => await Request(url, new HTTPRequest { }, cancellationToken).ConfigureAwait(false);
+
         public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null) => await Request(url, new HTTPRequest
         {
             Method = method,

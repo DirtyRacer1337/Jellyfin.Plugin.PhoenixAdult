@@ -9,6 +9,7 @@ namespace PhoenixAdult
     internal static class Logger
     {
         private static ILogger Log { get; } = Provider.Log;
+
         public static void Info(string text)
         {
 #if __EMBY__
