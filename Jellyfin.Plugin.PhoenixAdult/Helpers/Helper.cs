@@ -152,7 +152,7 @@ namespace PhoenixAdult.Helpers
 
         public static IProviderBase GetBaseSiteByName(string name)
         {
-            name = $"{Plugin.Instance.Name}.Sites.{name}";
+            name = $"{typeof(Plugin).Namespace}.Sites.{name}";
             var provider = Type.GetType(name, false, true);
 
             if (provider != null)
