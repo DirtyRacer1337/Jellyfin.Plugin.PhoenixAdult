@@ -57,47 +57,26 @@ namespace PhoenixAdult
 
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
-            string imageURL;
+            var tasks = new Dictionary<string, Task<string>>();
             var imageList = new List<RemoteImageInfo>();
 
-            imageURL = await GetFromAdultDVDEmpire(name, cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(imageURL))
-            {
-                imageList.Add(new RemoteImageInfo
-                {
-                    ProviderName = "AdultDVDEmpire",
-                    Url = imageURL,
-                });
-            }
+            tasks.Add("AdultDVDEmpire", GetFromAdultDVDEmpire(name, cancellationToken));
+            tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
+            tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
+            tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
 
-            imageURL = await GetFromBoobpedia(name, cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(imageURL))
-            {
-                imageList.Add(new RemoteImageInfo
-                {
-                    ProviderName = "Boobpedia",
-                    Url = imageURL,
-                });
-            }
+            await Task.WhenAll(tasks.Values).ConfigureAwait(false);
 
-            imageURL = await GetFromBabepedia(name, cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(imageURL))
+            foreach (var image in tasks)
             {
-                imageList.Add(new RemoteImageInfo
-                {
-                    ProviderName = "Babepedia",
-                    Url = imageURL,
-                });
-            }
+                var res = image.Value.Result;
 
-            imageURL = await GetFromIAFD(name, cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(imageURL))
-            {
-                imageList.Add(new RemoteImageInfo
-                {
-                    ProviderName = "IAFD",
-                    Url = imageURL,
-                });
+                if (!string.IsNullOrEmpty(res))
+                    imageList.Add(new RemoteImageInfo
+                    {
+                        ProviderName = image.Key,
+                        Url = res,
+                    });
             }
 
             return imageList;
