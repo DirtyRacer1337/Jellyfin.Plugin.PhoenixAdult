@@ -90,7 +90,7 @@ namespace PhoenixAdult.Helpers.Utils
             foreach (var task in tasks)
             {
                 var res = task.Result;
-                if (res.Width > 100)
+                if (res != null && res.Width > 100)
                     result.Add(res);
             }
 
