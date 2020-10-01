@@ -59,7 +59,7 @@ namespace PhoenixAdult.Helpers.Utils
                 }
             }
 
-            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", url, request.Method.Method));
+            Logger.Debug(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", url, request.Method.Method));
 
             FlurlHTTP.BaseUrl = url;
             FlurlHTTP.Headers.Clear();

@@ -19,7 +19,9 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 if (!clearImages.Where(o => o.Url == image.Url && o.Type == image.Type).Any())
                 {
-                    image.ProviderName = Plugin.Instance.Name;
+                    if (string.IsNullOrEmpty(image.ProviderName))
+                        image.ProviderName = Plugin.Instance.Name;
+
                     clearImages.Add(image);
                 }
             }
