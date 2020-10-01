@@ -35,22 +35,8 @@ namespace PhoenixAdult
             if (item == null)
                 return images;
 
-            var imageList = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
-            foreach (var image in imageList)
-            {
-                var img = await ImageHelper.GetImageSizeAndValidate(image, cancellationToken).ConfigureAwait(false);
-                if (img != null)
-                {
-                    images.Add(new RemoteImageInfo
-                    {
-                        ProviderName = image.ProviderName,
-                        Url = image.Url,
-                        Type = ImageType.Primary,
-                        Height = img.Height,
-                        Width = img.Width,
-                    });
-                }
-            }
+            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
+            images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
 
             if (images.Any())
                 images = images.OrderByDescending(o => o.Height).ToList();
