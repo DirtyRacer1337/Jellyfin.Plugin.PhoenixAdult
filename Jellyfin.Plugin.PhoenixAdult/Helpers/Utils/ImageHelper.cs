@@ -46,17 +46,20 @@ namespace PhoenixAdult.Helpers.Utils
             if (http.IsOK)
             {
                 http = await HTTP.Request(item.Url, cancellationToken).ConfigureAwait(false);
-                using (var img = SKBitmap.Decode(http.ContentStream))
+                if (http.IsOK)
                 {
-                    if (img.Width > 100)
-                        return new RemoteImageInfo
-                        {
-                            ProviderName = item.ProviderName,
-                            Url = item.Url,
-                            Type = item.Type,
-                            Height = img.Height,
-                            Width = img.Width
-                        };
+                    using (var img = SKBitmap.Decode(http.ContentStream))
+                    {
+                        if (img != null && img.Width > 100)
+                            return new RemoteImageInfo
+                            {
+                                ProviderName = item.ProviderName,
+                                Url = item.Url,
+                                Type = item.Type,
+                                Height = img.Height,
+                                Width = img.Width
+                            };
+                    }
                 }
             }
 
@@ -70,8 +73,8 @@ namespace PhoenixAdult.Helpers.Utils
 
             var cleanImages = Cleanup(images);
 
-            var primaryList = cleanImages.Where(o => o.Type == ImageType.Primary);
-            var backdropList = cleanImages.Where(o => o.Type == ImageType.Backdrop);
+            var primaryList = cleanImages.Where(o => o.Type == ImageType.Primary).ToList();
+            var backdropList = cleanImages.Where(o => o.Type == ImageType.Backdrop).ToList();
             var dublList = new List<RemoteImageInfo>();
 
             foreach (var image in primaryList)
@@ -87,12 +90,12 @@ namespace PhoenixAdult.Helpers.Utils
                     dublList.Add(image);
             }
 
-            await Task.WhenAll(tasks).ConfigureAwait(false);
+            Task.WaitAll(tasks.ToArray(), cancellationToken);
 
             foreach (var task in tasks)
             {
                 var res = task.Result;
-                if (res != null && res.Width > 100)
+                if (res != null)
                     result.Add(res);
             }
 

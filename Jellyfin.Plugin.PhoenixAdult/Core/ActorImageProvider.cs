@@ -65,7 +65,7 @@ namespace PhoenixAdult
             tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
             tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
 
-            await Task.WhenAll(tasks.Values).ConfigureAwait(false);
+            Task.WaitAll(tasks.Values.ToArray(), cancellationToken);
 
             foreach (var image in tasks)
             {
