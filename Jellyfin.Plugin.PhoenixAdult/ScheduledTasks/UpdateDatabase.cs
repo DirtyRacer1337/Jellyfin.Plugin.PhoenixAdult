@@ -19,7 +19,9 @@ namespace PhoenixAdult.ScheduledTasks
 
         public async Task Execute(CancellationToken cancellationToken, IProgress<double> progress)
         {
+            await Task.Yield();
             progress?.Report(0);
+
             for (int i = 0; i < Database.DatabaseFiles.Length; i++)
             {
                 var fileName = Database.DatabaseFiles[i];
@@ -29,6 +31,7 @@ namespace PhoenixAdult.ScheduledTasks
                     Database.Update(fileName);
                 }
             }
+
             progress?.Report(100);
         }
 
