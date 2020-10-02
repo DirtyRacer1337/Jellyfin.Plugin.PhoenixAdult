@@ -65,18 +65,27 @@ namespace PhoenixAdult
             tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
             tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
 
-            Task.WaitAll(tasks.Values.ToArray(), cancellationToken);
-
-            foreach (var image in tasks)
+            try
             {
-                var res = image.Value.Result;
+                await Task.WhenAll(tasks.Values).ConfigureAwait(false);
+            }
+            catch (AggregateException e)
+            {
+                Logger.Error(e.Message);
+            }
+            finally
+            {
+                foreach (var image in tasks)
+                {
+                    var res = image.Value.Result;
 
-                if (!string.IsNullOrEmpty(res))
-                    imageList.Add(new RemoteImageInfo
-                    {
-                        ProviderName = image.Key,
-                        Url = res,
-                    });
+                    if (!string.IsNullOrEmpty(res))
+                        imageList.Add(new RemoteImageInfo
+                        {
+                            ProviderName = image.Key,
+                            Url = res,
+                        });
+                }
             }
 
             return imageList;

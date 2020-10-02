@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -90,30 +91,39 @@ namespace PhoenixAdult.Helpers.Utils
                     dublList.Add(image);
             }
 
-            Task.WaitAll(tasks.ToArray(), cancellationToken);
-
-            foreach (var task in tasks)
+            try
             {
-                var res = task.Result;
-                if (res != null)
-                    result.Add(res);
+                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
-
-            foreach (var image in dublList)
+            catch (AggregateException e)
             {
-                var res = result.Where(o => o.Url == image.Url);
-                if (res.Any())
+                Logger.Error(e.Message);
+            }
+            finally
+            {
+                foreach (var task in tasks)
                 {
-                    var img = res.First();
+                    var res = task.Result;
+                    if (res != null)
+                        result.Add(res);
+                }
 
-                    result.Add(new RemoteImageInfo
+                foreach (var image in dublList)
+                {
+                    var res = result.Where(o => o.Url == image.Url);
+                    if (res.Any())
                     {
-                        ProviderName = image.ProviderName,
-                        Url = image.Url,
-                        Type = ImageType.Backdrop,
-                        Height = img.Height,
-                        Width = img.Width
-                    });
+                        var img = res.First();
+
+                        result.Add(new RemoteImageInfo
+                        {
+                            ProviderName = image.ProviderName,
+                            Url = image.Url,
+                            Type = ImageType.Backdrop,
+                            Height = img.Height,
+                            Width = img.Width
+                        });
+                    }
                 }
             }
 
