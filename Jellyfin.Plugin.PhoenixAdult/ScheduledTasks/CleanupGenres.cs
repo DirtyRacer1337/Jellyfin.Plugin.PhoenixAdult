@@ -44,7 +44,12 @@ namespace PhoenixAdult.ScheduledTasks
                 if (parent.Genres != null && parent.Genres.Any())
                 {
                     parent.Genres = Helpers.Genres.Cleanup(parent.Genres, parent.Name);
+
+#if __EMBY__
+                    _libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit);
+#else
                     _libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit, cancellationToken);
+#endif
                 }
 
                 progress?.Report((double)i / items.Count * 100);
@@ -58,7 +63,7 @@ namespace PhoenixAdult.ScheduledTasks
 
         public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
         {
-            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerWeekly, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks};
+            yield return new TaskTriggerInfo { Type = TaskTriggerInfo.TriggerWeekly, DayOfWeek = DayOfWeek.Sunday, TimeOfDayTicks = TimeSpan.FromHours(12).Ticks };
         }
     }
 }
