@@ -104,10 +104,13 @@ namespace PhoenixAdult.Helpers.Utils
                 foreach (var task in tasks)
                 {
                     var res = task.Result;
+
                     if (res != null)
                         result.Add(res);
                 }
+            }
 
+            if (result.Any())
                 foreach (var image in dublList)
                 {
                     var res = result.Where(o => o.Url == image.Url);
@@ -125,7 +128,6 @@ namespace PhoenixAdult.Helpers.Utils
                         });
                     }
                 }
-            }
 
             return result;
         }
