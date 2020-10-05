@@ -11,13 +11,13 @@ namespace PhoenixAdult.ScheduledTasks
 {
     public class CleanupGenres : IScheduledTask
     {
-        public string Name => "Cleanup Genres";
+        public string Key => Plugin.Instance.Name + "CleanupGenres";
 
-        public string Key => "PhoenixAdultCleanupGenres";
+        public string Name => "Cleanup Genres";
 
         public string Description => "Cleanup genres in library";
 
-        public string Category => "PhoenixAdult";
+        public string Category => Plugin.Instance.Name;
 
         private readonly ILibraryManager _libraryManager;
 

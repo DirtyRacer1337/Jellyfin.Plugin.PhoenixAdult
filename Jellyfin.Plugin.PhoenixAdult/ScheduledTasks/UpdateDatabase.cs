@@ -9,13 +9,13 @@ namespace PhoenixAdult.ScheduledTasks
 {
     public class UpdateDatabase : IScheduledTask
     {
-        public string Name => "Update Database";
+        public string Key => Plugin.Instance.Name + "UpdateDatabase";
 
-        public string Key => "PhoenixAdultUpdateDatabase";
+        public string Name => "Update Database";
 
         public string Description => "Update database with sites / genres / actors";
 
-        public string Category => "PhoenixAdult";
+        public string Category => Plugin.Instance.Name;
 
         public async Task Execute(CancellationToken cancellationToken, IProgress<double> progress)
         {
