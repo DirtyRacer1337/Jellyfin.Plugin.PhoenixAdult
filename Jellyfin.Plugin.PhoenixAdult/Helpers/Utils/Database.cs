@@ -64,8 +64,6 @@ namespace PhoenixAdult.Helpers.Utils
                         break;
                 }
             }
-
-            Logger.Info($"Database loading finished");
         }
 
         public struct SiteListStructure
