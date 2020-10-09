@@ -14,12 +14,12 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkR18 : IProviderBase
+    public class NetworkR18 : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (siteNum == null)
+            if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
             string searchJAVID = string.Empty;
@@ -131,6 +131,9 @@ namespace PhoenixAdult.Sites
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
+
+            if (item == null)
+                return result;
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
                 return result;

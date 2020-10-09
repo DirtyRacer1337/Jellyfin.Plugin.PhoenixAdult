@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkBang : IProviderBase
+    public class NetworkBang : IProviderBase
     {
         public static async Task<JObject> GetDataFromAPI(string url, string searchTitle, string searchType, CancellationToken cancellationToken)
         {
@@ -130,6 +130,9 @@ namespace PhoenixAdult.Sites
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
+
+            if (item == null)
+                return result;
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
                 return result;

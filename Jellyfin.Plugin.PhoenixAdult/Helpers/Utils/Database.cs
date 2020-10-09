@@ -9,11 +9,7 @@ namespace PhoenixAdult.Helpers.Utils
 {
     internal static class Database
     {
-        private const string BaseURL = "https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/master/data/";
-
         private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
-
-        public static readonly string[] DatabaseFiles = { "SiteList.json", "Actors.json", "Genres.json" };
 
         public static SiteListStructure SiteList;
 
@@ -50,7 +46,7 @@ namespace PhoenixAdult.Helpers.Utils
             public List<string> GenresPartialSkip { get; set; }
         }
 
-        public static async Task<bool> Download(string fileName, CancellationToken cancellationToken)
+        public static async Task<bool> Download(string url, string fileName, CancellationToken cancellationToken)
         {
             if (!Directory.Exists(_databasePath))
             {
@@ -59,7 +55,7 @@ namespace PhoenixAdult.Helpers.Utils
             }
 
             var encoding = new UTF8Encoding(false);
-            var http = await HTTP.Request(BaseURL + fileName, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 Logger.Info($"Database file \"{fileName}\" downloaded successfully");

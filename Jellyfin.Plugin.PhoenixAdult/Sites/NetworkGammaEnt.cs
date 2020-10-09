@@ -16,7 +16,7 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkGammaEnt : IProviderBase
+    public class NetworkGammaEnt : IProviderBase
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
@@ -202,6 +202,9 @@ namespace PhoenixAdult.Sites
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
+
+            if (item == null)
+                return result;
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
                 return result;

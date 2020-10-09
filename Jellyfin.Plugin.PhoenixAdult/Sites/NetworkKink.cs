@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    internal class NetworkKink : IProviderBase
+    public class NetworkKink : IProviderBase
     {
         private readonly IDictionary<string, string> _cookies = new Dictionary<string, string> {
             { "viewing-preferences", "straight%2Cgay" },
@@ -23,7 +23,7 @@ namespace PhoenixAdult.Sites
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
-            if (siteNum == null)
+            if (siteNum == null || string.IsNullOrEmpty(searchTitle))
                 return result;
 
             var sceneID = searchTitle.Split()[0];
@@ -133,6 +133,9 @@ namespace PhoenixAdult.Sites
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
+
+            if (item == null)
+                return result;
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
                 return result;

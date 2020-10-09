@@ -14,7 +14,7 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    internal class SiteLegalPorno : IProviderBase
+    public class SiteLegalPorno : IProviderBase
     {
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
@@ -133,6 +133,9 @@ namespace PhoenixAdult.Sites
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
+
+            if (item == null)
+                return result;
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
                 return result;
