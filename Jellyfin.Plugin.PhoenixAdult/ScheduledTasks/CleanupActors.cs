@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Tasks;
+using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.ScheduledTasks
 {
-    public class CleanupGenres : IScheduledTask
+    public class CleanupActors : IScheduledTask
     {
         private readonly ILibraryManager libraryManager;
 
-        public CleanupGenres(ILibraryManager libraryManager)
+        public CleanupActors(ILibraryManager libraryManager)
         {
             this.libraryManager = libraryManager;
         }
 
-        public string Key => Plugin.Instance.Name + "CleanupGenres";
+        public string Key => Plugin.Instance.Name + "CleanupActors";
 
-        public string Name => "Cleanup Genres";
+        public string Name => "Cleanup Actors";
 
-        public string Description => "Cleanup genres in library";
+        public string Description => "Cleanup actors in library";
 
         public string Category => Plugin.Instance.Name;
 
@@ -39,23 +40,25 @@ namespace PhoenixAdult.ScheduledTasks
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                var parent = item;
+                List<PersonInfo> peoples;
 
                 progress?.Report((double)i / items.Count * 100);
 
-                if (parent.Genres != null && parent.Genres.Any())
-                {
-                    parent.Genres = Helpers.Genres.Cleanup(parent.Genres, parent.Name);
-
-                    if (!item.Equals(parent))
-                    {
-                        Logger.Debug($"Genres cleaned in {item.Name}");
-
 #if __EMBY__
-                        this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit);
+                peoples = this.libraryManager.GetItemPeople(item);
 #else
-                        this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit, cancellationToken);
+                peoples = this.libraryManager.GetPeople(item);
 #endif
+
+                if (peoples != null && peoples.Any())
+                {
+                    var parent = Actors.Cleanup(peoples, item.Studios);
+
+                    if (!peoples.SequenceEqual(parent))
+                    {
+                        Logger.Debug($"Actors cleaned in {item.Name}");
+
+                        this.libraryManager.UpdatePeople(item, parent);
                     }
                 }
 

@@ -38,6 +38,18 @@ namespace PhoenixAdult.Helpers
             return newPeoples;
         }
 
+        public static List<PersonInfo> Cleanup(List<PersonInfo> peoples, string[] studios)
+        {
+            return Cleanup(new MetadataResult<Movie>
+            {
+                People = peoples,
+                Item = new Movie
+                {
+                    Studios = studios,
+                },
+            });
+        }
+
         private static string Replace(string actorName, string[] studios)
         {
             var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(x => x.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
