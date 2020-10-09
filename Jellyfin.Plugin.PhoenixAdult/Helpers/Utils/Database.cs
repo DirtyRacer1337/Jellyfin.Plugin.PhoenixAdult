@@ -66,6 +66,11 @@ namespace PhoenixAdult.Helpers.Utils
             }
         }
 
+        public static bool IsExist(string fileName)
+        {
+            return File.Exists(Path.Combine(Database.DatabasePath, fileName));
+        }
+
         public struct SiteListStructure
         {
             public Dictionary<int, Dictionary<int, string[]>> Sites { get; set; }

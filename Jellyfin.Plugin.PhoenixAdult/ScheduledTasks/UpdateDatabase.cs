@@ -41,10 +41,11 @@ namespace PhoenixAdult.ScheduledTasks
                 var url = (string)file["download_url"];
                 var fileName = (string)file["name"];
                 var sha = (string)file["sha"];
+                var type = (string)file["type"];
 
                 progress?.Report((double)i / json.Count * 100);
 
-                if (!db.ContainsKey(fileName) || (string)db[fileName] != sha)
+                if (type == "file" && (!db.ContainsKey(fileName) || (string)db[fileName] != sha || !Database.IsExist(fileName)))
                 {
                     if (await Database.Download(url, fileName, cancellationToken).ConfigureAwait(false))
                     {
