@@ -192,3 +192,33 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
+
+# SA1200: Using directives should be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none
+
+# CA1054: URI-like parameters should not be strings
+dotnet_diagnostic.CA1054.severity = none
+
+# CA1308: Normalize strings to uppercase
+dotnet_diagnostic.CA1308.severity = none
+
+# SA1513: Closing brace should be followed by blank line
+dotnet_diagnostic.SA1513.severity = error
+
+# SA1503: Braces should not be omitted
+dotnet_diagnostic.SA1503.severity = error
+
+# SA1122: Use string.Empty for empty strings
+dotnet_diagnostic.SA1122.severity = error
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none

@@ -19,13 +19,16 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null)
+            {
                 return result;
+            }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//div[contains(@class, 'item') and contains(@class, 'hover')]");
             if (searchResults != null)
+            {
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
@@ -37,30 +40,40 @@ namespace PhoenixAdult.Sites
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName
+                        Name = sceneName,
                     };
 
                     var scenePosterNode = searchResult.SelectSingleNode(".//img");
                     if (scenePosterNode.Attributes.Contains("src0_1x"))
+                    {
                         scenePoster = scenePosterNode.Attributes["src0_1x"].Value;
+                    }
                     else
                     {
                         if (scenePosterNode.Attributes.Contains("src"))
+                        {
                             scenePoster = scenePosterNode.Attributes["src"].Value;
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(scenePoster))
                     {
                         if (!scenePoster.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
                             scenePoster = Helper.GetSearchBaseURL(siteNum) + scenePoster;
+                        }
+
                         res.ImageUrl = scenePoster;
                     }
 
                     if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    {
                         res.PremiereDate = sceneDateObj;
+                    }
 
                     result.Add(res);
                 }
+            }
 
             return result;
         }
@@ -70,11 +83,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -82,7 +97,10 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//h3").InnerText.Trim();
             var description = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//p");
             if (description != null)
+            {
                 result.Item.Overview = description.InnerText.Trim();
+            }
+
             result.Item.AddStudio("Femdom Empire");
 
             var dateNode = sceneData.SelectSingleNode("//div[contains(@class, 'videoInfo')]//p");
@@ -90,32 +108,43 @@ namespace PhoenixAdult.Sites
             {
                 var date = dateNode.InnerText.Replace("Date Added:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
                 if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                {
                     result.Item.PremiereDate = sceneDateObj;
+                }
             }
 
             var genreNode = sceneData.SelectNodes("//div[contains(@class, 'featuring')][2]//ul//li");
             if (genreNode != null)
+            {
                 foreach (var genreLink in genreNode)
                 {
                     var genreName = genreLink.InnerText.Replace("categories:", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("tags:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
                     if (!string.IsNullOrEmpty(genreName))
+                    {
                         result.Item.AddGenre(genreName);
+                    }
                 }
+            }
+
             result.Item.AddGenre("Femdom");
 
             var actorsNode = sceneData.SelectNodes("//div[contains(@class, 'featuring')][1]/ul/li");
             if (actorsNode != null)
+            {
                 foreach (var actorLink in actorsNode)
                 {
                     string actorName = actorLink.InnerText.Replace("Featuring:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
 
                     if (!string.IsNullOrEmpty(actorName))
+                    {
                         result.People.Add(new PersonInfo
                         {
-                            Name = actorName
+                            Name = actorName,
                         });
+                    }
                 }
+            }
 
             return result;
         }
@@ -125,10 +154,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -144,12 +177,12 @@ namespace PhoenixAdult.Sites
                 result.Add(new RemoteImageInfo
                 {
                     Url = image,
-                    Type = ImageType.Primary
+                    Type = ImageType.Primary,
                 });
                 result.Add(new RemoteImageInfo
                 {
                     Url = image,
-                    Type = ImageType.Backdrop
+                    Type = ImageType.Backdrop,
                 });
             }
 

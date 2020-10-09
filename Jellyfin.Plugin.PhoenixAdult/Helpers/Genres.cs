@@ -14,7 +14,9 @@ namespace PhoenixAdult.Helpers
             var newGenres = new List<string>();
 
             if (genresLink == null)
+            {
                 return newGenres.ToArray();
+            }
 
             foreach (var genreLink in genresLink)
             {
@@ -26,7 +28,9 @@ namespace PhoenixAdult.Helpers
                     genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
                     if (!newGenres.Contains(genreName))
+                    {
                         newGenres.Add(genreName);
+                    }
                 }
             }
 
@@ -36,11 +40,17 @@ namespace PhoenixAdult.Helpers
         private static string Replace(string genreName, string sceneName)
         {
             if (Database.Genres.GenresSkip.Contains(genreName, StringComparer.OrdinalIgnoreCase))
+            {
                 return null;
+            }
 
             foreach (var genre in Database.Genres.GenresPartialSkip)
+            {
                 if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                {
                     return null;
+                }
+            }
 
             var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
@@ -50,23 +60,35 @@ namespace PhoenixAdult.Helpers
             else
             {
                 foreach (var genreDic in Database.Genres.GenresPartialReplace)
+                {
                     foreach (var genre in genreDic.Value)
+                    {
                         if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
                         {
                             genreName = genreDic.Key;
                             break;
                         }
+                    }
+                }
             }
 
             if (!string.IsNullOrEmpty(sceneName))
             {
                 if (genreName.Contains(":", StringComparison.OrdinalIgnoreCase))
+                {
                     if (sceneName.Contains(genreName.Split(':').First(), StringComparison.OrdinalIgnoreCase))
+                    {
                         return null;
+                    }
+                }
 
                 if (genreName.Contains("-", StringComparison.OrdinalIgnoreCase))
+                {
                     if (sceneName.Contains(genreName.Split('-').First(), StringComparison.OrdinalIgnoreCase))
+                    {
                         return null;
+                    }
+                }
 
                 /*if (sceneName.Contains(genreName, StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(newGenreName))
                     return null;
@@ -74,7 +96,9 @@ namespace PhoenixAdult.Helpers
             }
 
             if (genreName.Length > 25 || genreName.Split().Length > 3)
+            {
                 return null;
+            }
 
             return genreName;
         }

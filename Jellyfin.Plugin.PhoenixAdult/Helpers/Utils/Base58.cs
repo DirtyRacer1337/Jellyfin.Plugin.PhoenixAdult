@@ -11,9 +11,11 @@ namespace PhoenixAdult.Helpers.Utils
         public static string EncodePlain(byte[] data)
         {
             if (data == null)
+            {
                 return null;
+            }
 
-            var intData = data.Aggregate<byte, BigInteger>(0, (current, t) => current * 256 + t);
+            var intData = data.Aggregate<byte, BigInteger>(0, (current, t) => (current * 256) + t);
 
             var result = string.Empty;
             while (intData > 0)
@@ -24,7 +26,9 @@ namespace PhoenixAdult.Helpers.Utils
             }
 
             for (var i = 0; i < data.Length && data[i] == 0; i++)
+            {
                 result = '1' + result;
+            }
 
             return result;
         }
@@ -32,7 +36,9 @@ namespace PhoenixAdult.Helpers.Utils
         public static byte[] DecodePlain(string data)
         {
             if (data == null)
+            {
                 return null;
+            }
 
             BigInteger intData = 0;
             for (var i = 0; i < data.Length; i++)
@@ -40,9 +46,11 @@ namespace PhoenixAdult.Helpers.Utils
                 var digit = DIGITS.IndexOf(data[i]);
 
                 if (digit < 0)
+                {
                     throw new FormatException($"Invalid Base58 character `{data[i]}` at position {i}");
+                }
 
-                intData = intData * 58 + digit;
+                intData = (intData * 58) + digit;
             }
 
             var leadingZeroCount = data.TakeWhile(c => c == '1').Count();

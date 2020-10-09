@@ -4,10 +4,11 @@ namespace PhoenixAdult.Configuration
 {
     public class PluginConfiguration : BasePluginConfiguration
     {
-        public string DatabaseHash { get; set; }
         public PluginConfiguration()
         {
-            DatabaseHash = string.Empty;
+            this.DatabaseHash = string.Empty;
         }
+
+        public string DatabaseHash { get; set; }
     }
 }

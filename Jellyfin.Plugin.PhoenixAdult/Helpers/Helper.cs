@@ -13,7 +13,9 @@ namespace PhoenixAdult.Helpers
         public static string GetSearchSiteName(int[] siteNum)
         {
             if (siteNum == null)
+            {
                 return null;
+            }
 
             return Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
         }
@@ -21,23 +23,35 @@ namespace PhoenixAdult.Helpers
         public static string GetSearchBaseURL(int[] siteNum)
         {
             if (siteNum == null)
+            {
                 return null;
+            }
 
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
+            {
                 return Database.SiteList.Sites[siteNum[0]][siteNum[1]][1];
+            }
             else
+            {
                 return Database.SiteList.Sites[siteNum[0]].First().Value[1];
+            }
         }
 
         public static string GetSearchSearchURL(int[] siteNum)
         {
             if (siteNum == null)
+            {
                 return null;
+            }
 
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
+            {
                 return Database.SiteList.Sites[siteNum[0]][siteNum[1]][2];
+            }
             else
+            {
                 return Database.SiteList.Sites[siteNum[0]].First().Value[2];
+            }
         }
 
         public static string Encode(string text)
@@ -52,15 +66,21 @@ namespace PhoenixAdult.Helpers
             var possibleSites = new Dictionary<int[], string>();
 
             foreach (var site in Database.SiteList.Sites)
+            {
                 foreach (var siteData in site.Value)
                 {
                     string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
                     if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
+                    {
                         possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
+                    }
                 }
+            }
 
             if (possibleSites.Count > 0)
+            {
                 return possibleSites.OrderByDescending(x => x.Value.Length).First();
+            }
 
             return new KeyValuePair<int[], string>(null, null);
         }
@@ -68,7 +88,9 @@ namespace PhoenixAdult.Helpers
         public static string GetClearTitle(string title, string siteName)
         {
             if (string.IsNullOrEmpty(title))
+            {
                 return title;
+            }
 
             string clearName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title),
                    clearSite = siteName;
@@ -102,9 +124,10 @@ namespace PhoenixAdult.Helpers
         {
             string searchDate,
                    searchTitle = title;
-            var regExRules = new Dictionary<string, string> {
+            var regExRules = new Dictionary<string, string>
+            {
                 { @"\b\d{4} \d{2} \d{2}\b", "yyyy MM dd" },
-                { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" }
+                { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" },
             };
             (string, DateTime?) searchData = (searchTitle, null);
 
@@ -112,6 +135,7 @@ namespace PhoenixAdult.Helpers
             {
                 var regEx = Regex.Match(searchTitle, regExRule.Key);
                 if (regEx.Groups.Count > 0)
+                {
                     if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDateObj))
                     {
                         searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -120,6 +144,7 @@ namespace PhoenixAdult.Helpers
                         searchData = (searchTitle, searchDateObj);
                         break;
                     }
+                }
             }
 
             return searchData;
@@ -145,7 +170,9 @@ namespace PhoenixAdult.Helpers
         public static IProviderBase GetProviderBySiteID(int siteID)
         {
             if (Database.SiteList.SiteIDList.ContainsKey(siteID))
+            {
                 return GetBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+            }
 
             return null;
         }
@@ -156,7 +183,9 @@ namespace PhoenixAdult.Helpers
             var provider = Type.GetType(name, false, true);
 
             if (provider != null)
+            {
                 return (IProviderBase)Activator.CreateInstance(provider);
+            }
 
             return null;
         }

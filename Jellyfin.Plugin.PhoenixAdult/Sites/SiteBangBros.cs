@@ -19,7 +19,9 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
 
             searchTitle = searchTitle.Replace(" ", "+", StringComparison.OrdinalIgnoreCase);
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
@@ -38,11 +40,13 @@ namespace PhoenixAdult.Sites
                 {
                     ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = sceneName,
-                    ImageUrl = scenePoster
+                    ImageUrl = scenePoster,
                 };
 
                 if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                {
                     res.PremiereDate = sceneDateObj;
+                }
 
                 result.Add(res);
             }
@@ -55,11 +59,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
@@ -72,20 +78,27 @@ namespace PhoenixAdult.Sites
 
             var dateNode = sceneData.SelectSingleNode("//span[contains(@class, 'thmb_mr_2')]");
             if (dateNode != null)
+            {
                 if (DateTime.TryParseExact(dateNode.InnerText.Trim(), "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                {
                     result.Item.PremiereDate = sceneDateObj;
+                }
+            }
 
             var genreNode = sceneData.SelectNodes("//div[contains(@class, 'vdoTags')]//a");
             if (genreNode != null)
+            {
                 foreach (var genreLink in genreNode)
                 {
                     var genreName = genreLink.InnerText.Trim();
 
                     result.Item.AddGenre(genreName);
                 }
+            }
 
             var actorsNode = sceneData.SelectNodes("//div[@class='vdoCast']//a[contains(@href, '/model')]");
             if (actorsNode != null)
+            {
                 foreach (var actorLink in actorsNode)
                 {
                     string actorName = actorLink.InnerText.Trim(),
@@ -98,9 +111,10 @@ namespace PhoenixAdult.Sites
                     result.People.Add(new PersonInfo
                     {
                         Name = actorName,
-                        ImageUrl = actorPhoto
+                        ImageUrl = actorPhoto,
                     });
                 }
+            }
 
             return result;
         }
@@ -110,10 +124,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -122,21 +140,29 @@ namespace PhoenixAdult.Sites
 
             var imgNode = sceneData.SelectNodes("//img[contains(@id, 'player-overlay-image')]");
             if (imgNode != null)
+            {
                 foreach (var sceneImages in imgNode)
+                {
                     result.Add(new RemoteImageInfo
                     {
                         Url = $"https:{sceneImages.Attributes["src"].Value}",
-                        Type = ImageType.Primary
+                        Type = ImageType.Primary,
                     });
+                }
+            }
 
             imgNode = sceneData.SelectNodes("//div[@id='img-slider']//img");
             if (imgNode != null)
+            {
                 foreach (var sceneImages in imgNode)
+                {
                     result.Add(new RemoteImageInfo
                     {
                         Url = $"https:{sceneImages.Attributes["src"].Value}",
-                        Type = ImageType.Backdrop
+                        Type = ImageType.Backdrop,
                     });
+                }
+            }
 
             return result;
         }

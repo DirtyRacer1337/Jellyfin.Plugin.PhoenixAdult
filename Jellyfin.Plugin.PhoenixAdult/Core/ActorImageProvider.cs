@@ -22,39 +22,6 @@ namespace PhoenixAdult
     {
         public string Name => Plugin.Instance.Name + "Actor";
 
-        public bool Supports(BaseItem item) => item is Person;
-
-#if __EMBY__
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
-#else
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
-#endif
-        {
-            var images = new List<RemoteImageInfo>();
-
-            if (item == null)
-                return images;
-
-            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
-            images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
-
-            if (images.Any())
-                images = images.OrderByDescending(o => o.Height).ToList();
-
-            return images;
-        }
-
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
-                ImageType.Primary
-            };
-
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Provider.Http.GetResponse(new HttpRequestOptions
-        {
-            CancellationToken = cancellationToken,
-            Url = url,
-            UserAgent = HTTP.GetUserAgent(),
-        });
-
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
             var tasks = new Dictionary<string, Task<string>>();
@@ -80,23 +47,65 @@ namespace PhoenixAdult
                     var res = image.Value.Result;
 
                     if (!string.IsNullOrEmpty(res))
+                    {
                         imageList.Add(new RemoteImageInfo
                         {
                             ProviderName = image.Key,
                             Url = res,
                         });
+                    }
                 }
             }
 
             return imageList;
         }
 
+        public bool Supports(BaseItem item) => item is Person;
+
+#if __EMBY__
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
+#else
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+#endif
+        {
+            var images = new List<RemoteImageInfo>();
+
+            if (item == null)
+            {
+                return images;
+            }
+
+            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
+            images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
+
+            if (images.Any())
+            {
+                images = images.OrderByDescending(o => o.Height).ToList();
+            }
+
+            return images;
+        }
+
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType>
+        {
+            ImageType.Primary,
+        };
+
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Provider.Http.GetResponse(new HttpRequestOptions
+        {
+            CancellationToken = cancellationToken,
+            Url = url,
+            UserAgent = HTTP.GetUserAgent(),
+        });
+
         private static async Task<string> GetFromAdultDVDEmpire(string name, CancellationToken cancellationToken)
         {
             string image = null;
 
             if (string.IsNullOrEmpty(name))
+            {
                 return image;
+            }
 
             string encodedName = HttpUtility.UrlEncode(name),
                    url = $"https://www.adultdvdempire.com/performer/search?q={encodedName}";
@@ -111,7 +120,9 @@ namespace PhoenixAdult
 
                 var img = actorPage.SelectSingleNode("//div[contains(@class, 'performer-image-container')]/a");
                 if (img != null)
+                {
                     image = img.Attributes["href"].Value;
+                }
             }
 
             return image;
@@ -122,7 +133,9 @@ namespace PhoenixAdult
             string image = null;
 
             if (string.IsNullOrEmpty(name))
+            {
                 return image;
+            }
 
             string encodedName = HttpUtility.UrlEncode(name),
                    url = $"http://www.boobpedia.com/wiki/index.php?search={encodedName}";
@@ -134,7 +147,9 @@ namespace PhoenixAdult
             {
                 var img = actorImageNode.Attributes["src"].Value;
                 if (!img.Contains("NoImage", StringComparison.OrdinalIgnoreCase))
+                {
                     image = "http://www.boobpedia.com" + actorImageNode.Attributes["src"].Value;
+                }
             }
 
             return image;
@@ -145,7 +160,9 @@ namespace PhoenixAdult
             string image = null;
 
             if (string.IsNullOrEmpty(name))
+            {
                 return image;
+            }
 
             string encodedName = name.Replace(" ", "_", StringComparison.OrdinalIgnoreCase),
                    url = $"https://www.babepedia.com/babe/{encodedName}";
@@ -157,7 +174,9 @@ namespace PhoenixAdult
             {
                 var img = actorImageNode.Attributes["href"].Value;
                 if (!img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+                {
                     image = "https://www.babepedia.com" + img;
+                }
             }
 
             return image;
@@ -168,7 +187,9 @@ namespace PhoenixAdult
             string image = null;
 
             if (string.IsNullOrEmpty(name))
+            {
                 return image;
+            }
 
             string encodedName = HttpUtility.UrlEncode(name),
                    url = $"http://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={encodedName}";
@@ -183,7 +204,9 @@ namespace PhoenixAdult
 
                 var actorImage = actorPage.SelectSingleNode("//div[@id='headshot']//img").Attributes["src"].Value;
                 if (!actorImage.Contains("nophoto", StringComparison.OrdinalIgnoreCase))
+                {
                     image = actorImage;
+                }
             }
 
             return image;

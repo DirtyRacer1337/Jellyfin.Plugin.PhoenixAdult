@@ -27,7 +27,9 @@ namespace PhoenixAdult.Sites
             {
                 var regEx = new Regex(@"window\.__INITIAL_STATE__ = (.*);").Match(http.Content);
                 if (regEx.Groups.Count > 0)
+                {
                     json = (JObject)JObject.Parse(regEx.Groups[1].Value)["content"];
+                }
             }
 
             return json;
@@ -37,21 +39,29 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
 
             var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase).ToLowerInvariant();
             if (!directURL.Contains("/", StringComparison.OrdinalIgnoreCase))
+            {
                 directURL = directURL.Replace("-", "/", 1, StringComparison.OrdinalIgnoreCase);
+            }
 
             if (!int.TryParse(directURL.Split('/')[0], out _))
+            {
                 directURL = directURL.Replace("/", "-", 1, StringComparison.OrdinalIgnoreCase);
+            }
             else
+            {
                 directURL = directURL.Split('/')[1];
+            }
 
             directURL = Helper.GetSearchSearchURL(siteNum) + directURL;
             var searchResultsURLs = new List<string>
             {
-                directURL
+                directURL,
             };
 
             var searchResults = await GoogleSearch.GetSearchResults(searchTitle, siteNum, cancellationToken).ConfigureAwait(false);
@@ -59,30 +69,36 @@ namespace PhoenixAdult.Sites
             {
                 var url = searchResult.Split('?').First();
                 if (url.Contains("/movies/", StringComparison.OrdinalIgnoreCase) && !searchResultsURLs.Contains(url))
+                {
                     searchResultsURLs.Add(url);
+                }
             }
 
             foreach (var sceneURL in searchResultsURLs)
             {
                 string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 if (searchDate.HasValue)
+                {
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+                }
 
-                var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
+                var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 if (sceneData.Item != new Movie())
                 {
                     sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                    var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                    var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = sceneData.Item.ProviderIds,
                         Name = sceneData.Item.Name,
-                        PremiereDate = sceneData.Item.PremiereDate
+                        PremiereDate = sceneData.Item.PremiereDate,
                     };
 
                     if (posters.Any())
+                    {
                         res.ImageUrl = posters.First().Url;
+                    }
 
                     result.Add(res);
                 }
@@ -96,11 +112,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
@@ -108,22 +126,30 @@ namespace PhoenixAdult.Sites
                 sceneDate = string.Empty;
 
             if (sceneID.Length > 3)
+            {
                 sceneDate = sceneID[3];
+            }
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
+            {
                 return result;
+            }
 
             string contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
+            {
                 if (sceneData.ContainsKey(name) && sceneData[name].Any())
                 {
                     contentName = name;
                     break;
                 }
+            }
 
             if (string.IsNullOrEmpty(contentName))
+            {
                 return result;
+            }
 
             sceneData = (JObject)sceneData[contentName];
             var sceneName = sceneData.Properties().First().Name;
@@ -144,177 +170,217 @@ namespace PhoenixAdult.Sites
 
             DateTime? releaseDate = null;
             if (sceneData.ContainsKey("publishedDate"))
+            {
                 releaseDate = (DateTime)sceneData["publishedDate"];
+            }
             else
             {
                 if (sceneID.Length > 3)
+                {
                     if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    {
                         releaseDate = sceneDateObj;
+                    }
+                }
             }
 
             if (releaseDate.HasValue)
+            {
                 result.Item.PremiereDate = releaseDate.Value;
+            }
 
             string subSite;
             if (sceneData.ContainsKey("site"))
+            {
                 subSite = (string)sceneData["site"]["name"];
+            }
             else
+            {
                 subSite = Helper.GetSearchSiteName(siteNum);
+            }
 
             var genres = new List<string>();
             switch (subSite)
             {
                 case "MylfBoss":
-                    genres = new List<string> {
-                        "Office", "Boss"
+                    genres = new List<string>
+                    {
+                        "Office", "Boss",
                     };
                     break;
 
                 case "MylfBlows":
-                    genres = new List<string> {
-                        "Blowjob"
+                    genres = new List<string>
+                    {
+                        "Blowjob",
                     };
                     break;
 
                 case "Milfty":
-                    genres = new List<string> {
-                        "Cheating"
+                    genres = new List<string>
+                    {
+                        "Cheating",
                     };
                     break;
 
                 case "Mom Drips":
-                    genres = new List<string> {
-                        "Creampie"
+                    genres = new List<string>
+                    {
+                        "Creampie",
                     };
                     break;
 
                 case "Milf Body":
-                    genres = new List<string> {
-                        "Gym", "Fitness"
+                    genres = new List<string>
+                    {
+                        "Gym", "Fitness",
                     };
                     break;
 
                 case "Lone Milf":
-                    genres = new List<string> {
-                        "Solo"
+                    genres = new List<string>
+                    {
+                        "Solo",
                     };
                     break;
 
                 case "Full Of JOI":
-                    genres = new List<string> {
-                        "JOI"
+                    genres = new List<string>
+                    {
+                        "JOI",
                     };
                     break;
 
                 case "Mylfed":
-                    genres = new List<string> {
-                        "Lesbian"
+                    genres = new List<string>
+                    {
+                        "Lesbian",
                     };
                     break;
 
                 case "MylfDom":
-                    genres = new List<string> {
-                        "BDSM"
+                    genres = new List<string>
+                    {
+                        "BDSM",
                     };
                     break;
 
                 case "Sis Loves Me":
-                    genres = new List<string> {
-                        "Step Sister"
+                    genres = new List<string>
+                    {
+                        "Step Sister",
                     };
                     break;
 
                 case "DadCrush":
                 case "DaughterSwap":
-                    genres = new List<string> {
-                        "Step Dad", "Step Daughter"
+                    genres = new List<string>
+                    {
+                        "Step Dad", "Step Daughter",
                     };
                     break;
 
                 case "PervMom":
-                    genres = new List<string> {
-                        "Step Mom"
+                    genres = new List<string>
+                    {
+                        "Step Mom",
                     };
                     break;
 
                 case "Family Strokes":
-                    genres = new List<string> {
-                        "Taboo Family"
+                    genres = new List<string>
+                    {
+                        "Taboo Family",
                     };
                     break;
 
                 case "Foster Tapes":
-                    genres = new List<string> {
-                        "Taboo Sex"
+                    genres = new List<string>
+                    {
+                        "Taboo Sex",
                     };
                     break;
 
                 case "BFFs":
-                    genres = new List<string> {
-                        "Teen", "Group Sex"
+                    genres = new List<string>
+                    {
+                        "Teen", "Group Sex",
                     };
                     break;
 
                 case "Shoplyfter":
-                    genres = new List<string> {
-                        "Strip"
+                    genres = new List<string>
+                    {
+                        "Strip",
                     };
                     break;
 
                 case "ShoplyfterMylf":
-                    genres = new List<string> {
-                        "Strip", "MILF"
+                    genres = new List<string>
+                    {
+                        "Strip", "MILF",
                     };
                     break;
 
                 case "Exxxtra Small":
-                    genres = new List<string> {
-                        "Teen", "Small Tits"
+                    genres = new List<string>
+                    {
+                        "Teen", "Small Tits",
                     };
                     break;
 
                 case "Little Asians":
-                    genres = new List<string> {
-                        "Teen", "Asian"
+                    genres = new List<string>
+                    {
+                        "Teen", "Asian",
                     };
                     break;
 
                 case "TeenJoi":
-                    genres = new List<string> {
-                        "Teen", "JOI"
+                    genres = new List<string>
+                    {
+                        "Teen", "JOI",
                     };
                     break;
 
                 case "Black Valley Girls":
-                    genres = new List<string> {
-                        "Teen", "Ebony"
+                    genres = new List<string>
+                    {
+                        "Teen", "Ebony",
                     };
                     break;
 
                 case "Thickumz":
-                    genres = new List<string> {
-                        "Thick"
+                    genres = new List<string>
+                    {
+                        "Thick",
                     };
                     break;
 
                 case "Dyked":
-                    genres = new List<string> {
-                        "Hardcore", "Teen", "Lesbian"
+                    genres = new List<string>
+                    {
+                        "Hardcore", "Teen", "Lesbian",
                     };
                     break;
 
                 case "Teens Love Black Cocks":
-                    genres = new List<string> {
-                        "Teen", "BBC"
+                    genres = new List<string>
+                    {
+                        "Teen", "BBC",
                     };
                     break;
             }
 
             foreach (var genreName in genres)
+            {
                 result.Item.AddGenre(genreName);
+            }
 
             foreach (var genreName in new List<string>() { "MILF", "Mature" })
+            {
                 result.Item.AddGenre(genreName);
+            }
 
             foreach (var actorLink in sceneData["models"])
             {
@@ -342,10 +408,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -353,18 +423,24 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
+            {
                 return result;
+            }
 
             string contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
+            {
                 if (sceneData.ContainsKey(name) && (sceneData[name] != null))
                 {
                     contentName = name;
                     break;
                 }
+            }
 
             if (string.IsNullOrEmpty(contentName))
+            {
                 return result;
+            }
 
             sceneData = (JObject)sceneData[contentName];
             var sceneName = sceneData.Properties().First().Name;
@@ -374,12 +450,12 @@ namespace PhoenixAdult.Sites
             result.Add(new RemoteImageInfo
             {
                 Url = img,
-                Type = ImageType.Primary
+                Type = ImageType.Primary,
             });
             result.Add(new RemoteImageInfo
             {
                 Url = img,
-                Type = ImageType.Backdrop
+                Type = ImageType.Backdrop,
             });
 
             return result;

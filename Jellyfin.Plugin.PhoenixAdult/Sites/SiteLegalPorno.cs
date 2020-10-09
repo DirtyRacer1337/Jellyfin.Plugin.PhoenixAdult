@@ -20,7 +20,9 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
@@ -30,19 +32,21 @@ namespace PhoenixAdult.Sites
                 string sceneURL = data.SelectSingleNode("//div[@class='user--guest']//a").Attributes["href"].Value,
                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
-                var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
+                var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {
                     ProviderIds = sceneData.Item.ProviderIds,
                     Name = sceneData.Item.Name,
-                    PremiereDate = sceneData.Item.PremiereDate
+                    PremiereDate = sceneData.Item.PremiereDate,
                 };
 
                 if (posters.Any())
+                {
                     res.ImageUrl = posters.First().Url;
+                }
 
                 result.Add(res);
             }
@@ -60,18 +64,24 @@ namespace PhoenixAdult.Sites
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName
+                        Name = sceneName,
                     };
 
                     if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    {
                         res.PremiereDate = sceneDateObj;
+                    }
 
                     var scenePosterNode = searchResult.SelectSingleNode(".//div[@class='thumbnail-image']/a");
                     if (scenePosterNode != null && scenePosterNode.Attributes.Contains("style"))
+                    {
                         scenePoster = scenePosterNode.Attributes["style"].Value.Split('(')[1].Split(')')[0];
+                    }
 
                     if (!string.IsNullOrEmpty(scenePoster))
+                    {
                         res.ImageUrl = scenePoster;
+                    }
 
                     result.Add(res);
                 }
@@ -85,11 +95,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             string sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -99,33 +111,41 @@ namespace PhoenixAdult.Sites
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='scene-description__detail']//a").InnerText.Trim();
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+            {
                 result.Item.PremiereDate = sceneDateObj;
+            }
 
             var genreNode = sceneData.SelectNodes("//dd/a[contains(@href, '/niche/')]");
             if (genreNode != null)
+            {
                 foreach (var genreLink in genreNode)
                 {
                     var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
+            }
 
             var actorsNode = sceneData.SelectNodes("//dd/a[contains(@href, 'model') and not(contains(@href, 'forum'))]");
             if (actorsNode != null)
+            {
                 foreach (var actorLink in actorsNode)
                 {
                     var actor = new PersonInfo
                     {
-                        Name = actorLink.InnerText.Trim()
+                        Name = actorLink.InnerText.Trim(),
                     };
 
                     var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
                     var actorPhotoNode = actorPage.SelectSingleNode("//div[@class='model--avatar']//img");
                     if (actorPhotoNode != null)
+                    {
                         actor.ImageUrl = actorPhotoNode.Attributes["src"].Value;
+                    }
 
                     result.People.Add(actor);
                 }
+            }
 
             return result;
         }
@@ -135,10 +155,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -149,25 +173,27 @@ namespace PhoenixAdult.Sites
             result.Add(new RemoteImageInfo
             {
                 Url = scenePoster,
-                Type = ImageType.Primary
+                Type = ImageType.Primary,
             });
 
             var scenePosters = sceneData.SelectNodes("//div[contains(@class, 'thumbs2 gallery')]//img");
             if (scenePosters != null)
+            {
                 foreach (var poster in scenePosters)
                 {
                     scenePoster = poster.Attributes["src"].Value.Split('?')[0];
                     result.Add(new RemoteImageInfo
                     {
                         Url = scenePoster,
-                        Type = ImageType.Primary
+                        Type = ImageType.Primary,
                     });
                     result.Add(new RemoteImageInfo
                     {
                         Url = scenePoster,
-                        Type = ImageType.Backdrop
+                        Type = ImageType.Backdrop,
                     });
                 }
+            }
 
             return result;
         }

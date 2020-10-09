@@ -12,6 +12,79 @@ namespace PhoenixAdult.Helpers.Utils
 {
     internal static class ImageHelper
     {
+        public static async Task<List<RemoteImageInfo>> GetImagesSizeAndValidate(List<RemoteImageInfo> images, CancellationToken cancellationToken)
+        {
+            var result = new List<RemoteImageInfo>();
+            var tasks = new List<Task<RemoteImageInfo>>();
+
+            var cleanImages = Cleanup(images);
+
+            var primaryList = cleanImages.Where(o => o.Type == ImageType.Primary).ToList();
+            var backdropList = cleanImages.Where(o => o.Type == ImageType.Backdrop).ToList();
+            var dublList = new List<RemoteImageInfo>();
+
+            foreach (var image in primaryList)
+            {
+                tasks.Add(GetImageSizeAndValidate(image, cancellationToken));
+            }
+
+            foreach (var image in backdropList)
+            {
+                if (!primaryList.Where(o => o.Url == image.Url).Any())
+                {
+                    tasks.Add(GetImageSizeAndValidate(image, cancellationToken));
+                }
+                else
+                {
+                    dublList.Add(image);
+                }
+            }
+
+            try
+            {
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+            catch (AggregateException e)
+            {
+                Logger.Error(e.Message);
+            }
+            finally
+            {
+                foreach (var task in tasks)
+                {
+                    var res = task.Result;
+
+                    if (res != null)
+                    {
+                        result.Add(res);
+                    }
+                }
+            }
+
+            if (result.Any())
+            {
+                foreach (var image in dublList)
+                {
+                    var res = result.Where(o => o.Url == image.Url);
+                    if (res.Any())
+                    {
+                        var img = res.First();
+
+                        result.Add(new RemoteImageInfo
+                        {
+                            ProviderName = image.ProviderName,
+                            Url = image.Url,
+                            Type = ImageType.Backdrop,
+                            Height = img.Height,
+                            Width = img.Width,
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private static List<RemoteImageInfo> Cleanup(List<RemoteImageInfo> images)
         {
             var clearImages = new List<RemoteImageInfo>();
@@ -21,7 +94,9 @@ namespace PhoenixAdult.Helpers.Utils
                 if (!clearImages.Where(o => o.Url == image.Url && o.Type == image.Type).Any())
                 {
                     if (string.IsNullOrEmpty(image.ProviderName))
+                    {
                         image.ProviderName = Plugin.Instance.Name;
+                    }
 
                     clearImages.Add(image);
                 }
@@ -52,84 +127,21 @@ namespace PhoenixAdult.Helpers.Utils
                     using (var img = SKBitmap.Decode(http.ContentStream))
                     {
                         if (img != null && img.Width > 100)
+                        {
                             return new RemoteImageInfo
                             {
                                 ProviderName = item.ProviderName,
                                 Url = item.Url,
                                 Type = item.Type,
                                 Height = img.Height,
-                                Width = img.Width
+                                Width = img.Width,
                             };
+                        }
                     }
                 }
             }
 
             return null;
-        }
-
-        public static async Task<List<RemoteImageInfo>> GetImagesSizeAndValidate(List<RemoteImageInfo> images, CancellationToken cancellationToken)
-        {
-            var result = new List<RemoteImageInfo>();
-            var tasks = new List<Task<RemoteImageInfo>>();
-
-            var cleanImages = Cleanup(images);
-
-            var primaryList = cleanImages.Where(o => o.Type == ImageType.Primary).ToList();
-            var backdropList = cleanImages.Where(o => o.Type == ImageType.Backdrop).ToList();
-            var dublList = new List<RemoteImageInfo>();
-
-            foreach (var image in primaryList)
-            {
-                tasks.Add(GetImageSizeAndValidate(image, cancellationToken));
-            }
-
-            foreach (var image in backdropList)
-            {
-                if (!primaryList.Where(o => o.Url == image.Url).Any())
-                    tasks.Add(GetImageSizeAndValidate(image, cancellationToken));
-                else
-                    dublList.Add(image);
-            }
-
-            try
-            {
-                await Task.WhenAll(tasks).ConfigureAwait(false);
-            }
-            catch (AggregateException e)
-            {
-                Logger.Error(e.Message);
-            }
-            finally
-            {
-                foreach (var task in tasks)
-                {
-                    var res = task.Result;
-
-                    if (res != null)
-                        result.Add(res);
-                }
-            }
-
-            if (result.Any())
-                foreach (var image in dublList)
-                {
-                    var res = result.Where(o => o.Url == image.Url);
-                    if (res.Any())
-                    {
-                        var img = res.First();
-
-                        result.Add(new RemoteImageInfo
-                        {
-                            ProviderName = image.ProviderName,
-                            Url = image.Url,
-                            Type = ImageType.Backdrop,
-                            Height = img.Height,
-                            Width = img.Width
-                        });
-                    }
-                }
-
-            return result;
         }
     }
 }

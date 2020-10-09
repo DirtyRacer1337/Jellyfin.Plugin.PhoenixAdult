@@ -10,39 +10,24 @@ using Flurl.Http;
 
 namespace PhoenixAdult.Helpers.Utils
 {
-    internal class HTTPRequest
-    {
-        public HttpMethod Method { get; set; }
-        public string Param { get; set; }
-        public IDictionary<string, string> Headers { get; set; }
-        public IDictionary<string, string> Cookies { get; set; }
-    }
-
     internal static class HTTP
     {
-        private static FlurlClient FlurlHTTP { get; } = new FlurlClient();
-
         static HTTP()
         {
             FlurlHTTP.AllowAnyHttpStatus().EnableCookies();
             FlurlHTTP.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
         }
 
-        public struct HTTPResponse
-        {
-            public string Content { get; set; }
-            public Stream ContentStream { get; set; }
-            public bool IsOK { get; set; }
-            public IDictionary<string, Cookie> Cookies { get; set; }
-        }
+        private static FlurlClient FlurlHTTP { get; } = new FlurlClient();
 
-        public static string GetUserAgent() => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
+        public static string GetUserAgent()
+            => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
         public static async Task<HTTPResponse> Request(string url, HTTPRequest request, CancellationToken cancellationToken)
         {
             HTTPResponse result = new HTTPResponse()
             {
-                IsOK = false
+                IsOK = false,
             };
 
             url = Uri.EscapeUriString(Uri.UnescapeDataString(url));
@@ -117,13 +102,39 @@ namespace PhoenixAdult.Helpers.Utils
             return result;
         }
 
-        public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken) => await Request(url, new HTTPRequest { }, cancellationToken).ConfigureAwait(false);
+        public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken)
+            => await Request(url, new HTTPRequest { }, cancellationToken).ConfigureAwait(false);
 
-        public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null) => await Request(url, new HTTPRequest
+        public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+            => await Request(
+                url,
+                new HTTPRequest
+                {
+                    Method = method,
+                    Headers = headers,
+                    Cookies = cookies,
+                }, cancellationToken).ConfigureAwait(false);
+
+        internal struct HTTPResponse
         {
-            Method = method,
-            Headers = headers,
-            Cookies = cookies,
-        }, cancellationToken).ConfigureAwait(false);
+            public string Content { get; set; }
+
+            public Stream ContentStream { get; set; }
+
+            public bool IsOK { get; set; }
+
+            public IDictionary<string, Cookie> Cookies { get; set; }
+        }
+
+        internal struct HTTPRequest
+        {
+            public HttpMethod Method { get; set; }
+
+            public string Param { get; set; }
+
+            public IDictionary<string, string> Headers { get; set; }
+
+            public IDictionary<string, string> Cookies { get; set; }
+        }
     }
 }

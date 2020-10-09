@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Model.Tasks;
@@ -29,7 +30,9 @@ namespace PhoenixAdult.ScheduledTasks
 
             var db = new JObject();
             if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DatabaseHash))
+            {
                 db = JObject.Parse(Plugin.Instance.Configuration.DatabaseHash);
+            }
 
             for (int i = 0; i < json.Count; i++)
             {
@@ -46,15 +49,18 @@ namespace PhoenixAdult.ScheduledTasks
                     if (await Database.Download(url, fileName, cancellationToken).ConfigureAwait(false))
                     {
                         if (db.ContainsKey(fileName))
+                        {
                             db[fileName] = sha;
+                        }
                         else
+                        {
                             db.Add(fileName, sha);
-
-                        Database.Update(fileName);
+                        }
                     }
                 }
-            }
 
+                Database.Update(fileName);
+            }
 
             Plugin.Instance.Configuration.DatabaseHash = JsonConvert.SerializeObject(db);
             Plugin.Instance.SaveConfiguration();

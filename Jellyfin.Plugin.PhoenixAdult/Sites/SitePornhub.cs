@@ -21,25 +21,30 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
+
             if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(" ", StringComparison.OrdinalIgnoreCase))
             {
                 string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/view_video.php?viewkey={searchTitle}",
                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
 
-                var sceneData = await Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
+                var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                var posters = (await GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {
                     ProviderIds = sceneData.Item.ProviderIds,
                     Name = sceneData.Item.Name,
-                    PremiereDate = sceneData.Item.PremiereDate
+                    PremiereDate = sceneData.Item.PremiereDate,
                 };
 
                 if (posters.Any())
+                {
                     res.ImageUrl = posters.First().Url;
+                }
 
                 result.Add(res);
             }
@@ -61,7 +66,7 @@ namespace PhoenixAdult.Sites
                     {
                         ProviderIds = { { Plugin.Instance.Name, curID } },
                         Name = sceneName,
-                        ImageUrl = scenePoster
+                        ImageUrl = scenePoster,
                     };
 
                     result.Add(res);
@@ -76,11 +81,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -92,20 +99,27 @@ namespace PhoenixAdult.Sites
 
             var date = (string)sceneDataJSON["uploadDate"];
             if (date != null)
+            {
                 if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                {
                     result.Item.PremiereDate = sceneDateObj;
+                }
+            }
 
             var genreNode = sceneData.SelectNodes("(//div[@class='categoriesWrapper'] | //div[@class='tagsWrapper'])/a");
             if (genreNode != null)
+            {
                 foreach (var genreLink in genreNode)
                 {
                     var genreName = genreLink.InnerText.Trim();
 
                     result.Item.AddGenre(genreName);
                 }
+            }
 
             var actorsNode = sceneData.SelectNodes("//div[@class='pornstarsWrapper']/a");
             if (actorsNode != null)
+            {
                 foreach (var actorLink in actorsNode)
                 {
                     string actorName = actorLink.Attributes["data-mxptext"].Value,
@@ -113,9 +127,10 @@ namespace PhoenixAdult.Sites
                     result.People.Add(new PersonInfo
                     {
                         Name = actorName,
-                        ImageUrl = actorPhotoURL
+                        ImageUrl = actorPhotoURL,
                     });
                 }
+            }
 
             return result;
         }
@@ -125,10 +140,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -137,11 +156,13 @@ namespace PhoenixAdult.Sites
 
             var imgNode = sceneData.SelectSingleNode("//div[@id='player']//img");
             if (imgNode != null)
+            {
                 result.Add(new RemoteImageInfo
                 {
                     Url = imgNode.Attributes["src"].Value,
-                    Type = ImageType.Primary
+                    Type = ImageType.Primary,
                 });
+            }
 
             return result;
         }

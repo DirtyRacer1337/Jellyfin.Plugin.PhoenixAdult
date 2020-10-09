@@ -11,6 +11,13 @@ namespace PhoenixAdult.ScheduledTasks
 {
     public class CleanupGenres : IScheduledTask
     {
+        private readonly ILibraryManager libraryManager;
+
+        public CleanupGenres(ILibraryManager libraryManager)
+        {
+            this.libraryManager = libraryManager;
+        }
+
         public string Key => Plugin.Instance.Name + "CleanupGenres";
 
         public string Name => "Cleanup Genres";
@@ -19,21 +26,14 @@ namespace PhoenixAdult.ScheduledTasks
 
         public string Category => Plugin.Instance.Name;
 
-        private readonly ILibraryManager _libraryManager;
-
-        public CleanupGenres(ILibraryManager libraryManager)
-        {
-            _libraryManager = libraryManager;
-        }
-
         public async Task Execute(CancellationToken cancellationToken, IProgress<double> progress)
         {
             await Task.Yield();
             progress?.Report(0);
 
-            var items = _libraryManager.GetItemList(new InternalItemsQuery
+            var items = this.libraryManager.GetItemList(new InternalItemsQuery
             {
-                IsMovie = true
+                IsMovie = true,
             }).Where(o => o.ProviderIds.ContainsKey(Plugin.Instance.Name)).ToList();
 
             for (int i = 0; i < items.Count; i++)
@@ -46,16 +46,18 @@ namespace PhoenixAdult.ScheduledTasks
                     parent.Genres = Helpers.Genres.Cleanup(parent.Genres, parent.Name);
 
 #if __EMBY__
-                    _libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit);
+                    this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit);
 #else
-                    _libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit, cancellationToken);
+                    this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit, cancellationToken);
 #endif
                 }
 
                 progress?.Report((double)i / items.Count * 100);
 
                 if (cancellationToken.IsCancellationRequested)
+                {
                     return;
+                }
             }
 
             progress?.Report(100);

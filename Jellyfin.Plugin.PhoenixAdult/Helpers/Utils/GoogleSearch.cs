@@ -16,11 +16,13 @@ namespace PhoenixAdult.Helpers.Utils
 
             if (siteNum != null)
             {
-                var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", "", StringComparison.OrdinalIgnoreCase);
+                var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", string.Empty, StringComparison.OrdinalIgnoreCase);
                 searchTerm = $"site:{site} {text}";
             }
             else
+            {
                 searchTerm = text;
+            }
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -35,10 +37,12 @@ namespace PhoenixAdult.Helpers.Utils
                         var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
                         if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
                         {
-                            searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", "", StringComparison.OrdinalIgnoreCase))["q"];
+                            searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", string.Empty, StringComparison.OrdinalIgnoreCase))["q"];
 
                             if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
+                            {
                                 results.Add(searchURL);
+                            }
                         }
                     }
                 }

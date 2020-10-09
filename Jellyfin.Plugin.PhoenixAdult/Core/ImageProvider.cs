@@ -24,10 +24,11 @@ namespace PhoenixAdult
 
         public bool Supports(BaseItem item) => item is Movie;
 
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType> {
-                    ImageType.Primary,
-                    ImageType.Backdrop
-            };
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType>
+        {
+            ImageType.Primary,
+            ImageType.Backdrop,
+        };
 
 #if __EMBY__
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
@@ -38,14 +39,20 @@ namespace PhoenixAdult
             var images = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return images;
+            }
 
-            if (!item.ProviderIds.TryGetValue(Name, out string externalID))
+            if (!item.ProviderIds.TryGetValue(this.Name, out string externalID))
+            {
                 return images;
+            }
 
             var curID = externalID.Split('#');
             if (curID.Length < 3)
+            {
                 return images;
+            }
 
             var provider = Helper.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)

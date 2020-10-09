@@ -25,7 +25,9 @@ namespace PhoenixAdult.Sites
             {
                 var regEx = Regex.Match(http.Content, "\"apiKey\":\"(.*?)\"");
                 if (regEx.Groups.Count > 0)
+                {
                     return regEx.Groups[1].Value;
+                }
             }
 
             return string.Empty;
@@ -38,15 +40,17 @@ namespace PhoenixAdult.Sites
             var param = $"{{'requests':[{{'indexName':'{indexName}','params':'{searchParams}'}}]}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
-                {"Content-Type", "application/json" },
-                {"Referer",  referer},
+                { "Content-Type", "application/json" },
+                { "Referer",  referer },
             };
 
-            var http = await HTTP.Request(url, new HTTPRequest
-            {
-                Param = param,
-                Headers = headers,
-            }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(
+                url,
+                new HTTP.HTTPRequest
+                {
+                    Param = param,
+                    Headers = headers,
+                }, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);
@@ -59,11 +63,15 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
 
             var searchSceneID = searchTitle.Split()[0];
             if (!int.TryParse(searchSceneID, out _))
+            {
                 searchSceneID = null;
+            }
 
             string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
                    searchParams;
@@ -72,18 +80,28 @@ namespace PhoenixAdult.Sites
             foreach (var sceneType in sceneTypes)
             {
                 if (!string.IsNullOrEmpty(searchSceneID))
+                {
                     if (sceneType == "scenes")
+                    {
                         searchParams = $"filters=clip_id={searchSceneID}";
+                    }
                     else
+                    {
                         searchParams = $"filters=movie_id={searchSceneID}";
+                    }
+                }
                 else
+                {
                     searchParams = $"query={searchTitle}";
+                }
 
                 var url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
                 var searchResults = await GetDataFromAPI(url, $"all_{sceneType}", Helper.GetSearchBaseURL(siteNum), searchParams, cancellationToken).ConfigureAwait(false);
 
                 if (searchResults == null)
+                {
                     return result;
+                }
 
                 foreach (JObject searchResult in searchResults["results"].First["hits"])
                 {
@@ -106,7 +124,7 @@ namespace PhoenixAdult.Sites
 
                     var res = new RemoteSearchResult
                     {
-                        Name = sceneName
+                        Name = sceneName,
                     };
 
                     curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}";
@@ -124,7 +142,9 @@ namespace PhoenixAdult.Sites
                     {
                         var images = searchResult["pictures"].Where(item => !item.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
                         if (images.Any())
+                        {
                             res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";
+                        }
                     }
 
                     result.Add(res);
@@ -139,11 +159,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
@@ -152,7 +174,9 @@ namespace PhoenixAdult.Sites
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
+            {
                 return result;
+            }
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
@@ -162,14 +186,18 @@ namespace PhoenixAdult.Sites
             result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
             if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+            {
                 result.Item.PremiereDate = sceneDateObj;
+            }
 
             foreach (var genreLink in sceneData["categories"])
             {
                 var genreName = (string)genreLink["name"];
 
                 if (!string.IsNullOrEmpty(genreName))
+                {
                     result.Item.AddGenre(genreName);
+                }
             }
 
             foreach (var actorLink in sceneData["actors"])
@@ -182,15 +210,19 @@ namespace PhoenixAdult.Sites
                 {
                     var actorData = data["results"].First["hits"].First;
                     if (actorData["pictures"] != null)
+                    {
                         actorPhotoURL = (string)actorData["pictures"].Last;
+                    }
 
                     var actor = new PersonInfo
                     {
-                        Name = actorName
+                        Name = actorName,
                     };
 
                     if (actorPhotoURL != null)
+                    {
                         actor.ImageUrl = $"https://images-fame.gammacdn.com/actors{actorPhotoURL}";
+                    }
 
                     result.People.Add(actor);
                 }
@@ -204,10 +236,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -218,31 +254,37 @@ namespace PhoenixAdult.Sites
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
+            {
                 return result;
+            }
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
             var ignore = false;
             var siteList = new List<string>
                 {
-                    "girlsway.com", "puretaboo.com"
+                    "girlsway.com", "puretaboo.com",
                 };
             foreach (var site in siteList)
+            {
                 if (Helper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))
                 {
                     ignore = true;
                     break;
                 }
+            }
 
             string image = sceneData["url_title"].ToString().ToLowerInvariant().Replace('-', '_'),
                    imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
 
             if (!ignore)
+            {
                 result.Add(new RemoteImageInfo
                 {
                     Url = imageURL,
-                    Type = ImageType.Primary
+                    Type = ImageType.Primary,
                 });
+            }
 
             if (sceneData.ContainsKey("pictures"))
             {
@@ -251,12 +293,12 @@ namespace PhoenixAdult.Sites
                 result.Add(new RemoteImageInfo
                 {
                     Url = imageURL,
-                    Type = ImageType.Primary
+                    Type = ImageType.Primary,
                 });
                 result.Add(new RemoteImageInfo
                 {
                     Url = imageURL,
-                    Type = ImageType.Backdrop
+                    Type = ImageType.Backdrop,
                 });
             }
 

@@ -17,7 +17,9 @@ namespace PhoenixAdult.Helpers
             var newPeoples = new List<PersonInfo>();
 
             if (scene == null)
+            {
                 return newPeoples;
+            }
 
             foreach (var people in scene.People)
             {
@@ -28,7 +30,9 @@ namespace PhoenixAdult.Helpers
                 people.Name = Replace(people.Name, scene.Item.Studios);
 
                 if (!newPeoples.Any(person => person.Name == people.Name))
+                {
                     newPeoples.Add(people);
+                }
             }
 
             return newPeoples;
@@ -38,7 +42,9 @@ namespace PhoenixAdult.Helpers
         {
             var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(x => x.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newActorName))
+            {
                 return newActorName;
+            }
 
             int siteIndex = -1;
             foreach (var studio in studios)
@@ -58,7 +64,9 @@ namespace PhoenixAdult.Helpers
             {
                 newActorName = Database.Actors.ActorsReplaceStudios[siteIndex].FirstOrDefault(item => item.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
                 if (!string.IsNullOrEmpty(newActorName))
+                {
                     return newActorName;
+                }
             }
 
             return actorName;

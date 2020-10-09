@@ -21,12 +21,6 @@ namespace PhoenixAdult
 {
     public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
-        public string Name => Plugin.Instance.Name;
-
-        public static ILogger Log { get; set; }
-
-        public static IHttpClient Http { get; set; }
-
         public Provider(
 #if __EMBY__
             ILogManager logger,
@@ -37,19 +31,29 @@ namespace PhoenixAdult
         {
 #if __EMBY__
             if (logger != null)
-                Log = logger.GetLogger(Name);
+            {
+                Log = logger.GetLogger(this.Name);
+            }
 #else
             Log = logger;
 #endif
             Http = http;
         }
 
+        public static ILogger Log { get; set; }
+
+        public static IHttpClient Http { get; set; }
+
+        public string Name => Plugin.Instance.Name;
+
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
             List<RemoteSearchResult> result = new List<RemoteSearchResult>();
 
             if (searchInfo == null)
+            {
                 return result;
+            }
 
             Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
@@ -62,18 +66,23 @@ namespace PhoenixAdult
                 DateTime? searchDateObj;
                 var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
 
-                var siteNum = new int[2] {
+                var siteNum = new int[2]
+                {
                     site.Key[0],
-                    site.Key[1]
+                    site.Key[1],
                 };
                 searchTitle = titleAfterDate.Item1;
                 searchDateObj = titleAfterDate.Item2;
                 if (searchDateObj.HasValue)
+                {
                     searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                }
                 else
                 {
                     if (searchInfo.PremiereDate.HasValue)
+                    {
                         searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    }
                 }
 
                 Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
@@ -88,11 +97,17 @@ namespace PhoenixAdult
                     if (result.Any())
                     {
                         if (result.Any(scene => scene.IndexNumber.HasValue))
+                        {
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
+                        }
                         else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue) && result.Any(scene => scene.PremiereDate.Value != searchDateObj))
+                        {
                             result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
+                        }
                         else
+                        {
                             result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
+                        }
                     }
                 }
             }
@@ -105,26 +120,34 @@ namespace PhoenixAdult
             var result = new MetadataResult<Movie>
             {
                 HasMetadata = false,
-                Item = new Movie()
+                Item = new Movie(),
             };
 
             if (info == null)
-                return result;
-
-            var sceneID = info.ProviderIds;
-            if (!sceneID.ContainsKey(Name))
             {
-                var searchResults = await GetSearchResults(info, cancellationToken).ConfigureAwait(false);
-                if (searchResults.Any())
-                    sceneID = searchResults.First().ProviderIds;
+                return result;
             }
 
-            if (!sceneID.TryGetValue(Name, out string externalID))
+            var sceneID = info.ProviderIds;
+            if (!sceneID.ContainsKey(this.Name))
+            {
+                var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
+                if (searchResults.Any())
+                {
+                    sceneID = searchResults.First().ProviderIds;
+                }
+            }
+
+            if (!sceneID.TryGetValue(this.Name, out string externalID))
+            {
                 return result;
+            }
 
             var curID = externalID.Split('#');
             if (curID.Length < 3)
+            {
                 return result;
+            }
 
             var provider = Helper.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
             if (provider != null)
@@ -138,23 +161,31 @@ namespace PhoenixAdult
                     result.Item.ProviderIds = sceneID;
 
                     if (result.Item.PremiereDate.HasValue)
+                    {
                         result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
+                    }
 
                     if ((result.People != null) && result.People.Any())
+                    {
                         result.People = Actors.Cleanup(result);
+                    }
+
                     if (result.Item.Genres != null && result.Item.Genres.Any())
+                    {
                         result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name);
+                    }
                 }
             }
 
             return result;
         }
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Http.GetResponse(new HttpRequestOptions
-        {
-            CancellationToken = cancellationToken,
-            Url = url,
-            UserAgent = HTTP.GetUserAgent(),
-        });
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
+            => Http.GetResponse(new HttpRequestOptions
+            {
+                CancellationToken = cancellationToken,
+                Url = url,
+                UserAgent = HTTP.GetUserAgent(),
+            });
     }
 }

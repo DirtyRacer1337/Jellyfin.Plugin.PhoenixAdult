@@ -24,14 +24,16 @@ namespace PhoenixAdult.Sites
             var param = $"{{'requests':[{{'indexName':'nacms_scenes_production','params':'{searchData}&hitsPerPage=100'}}]}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
-                {"Content-Type", "application/json" }
+                { "Content-Type", "application/json" },
             };
 
-            var http = await HTTP.Request(url, new HTTPRequest
-            {
-                Param = param,
-                Headers = headers
-            }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(
+                url,
+                new HTTP.HTTPRequest
+                {
+                    Param = param,
+                    Headers = headers,
+                }, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);
@@ -44,20 +46,29 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteSearchResult>();
             if (siteNum == null || string.IsNullOrEmpty(searchTitle))
+            {
                 return result;
+            }
 
             JObject searchResults;
             var searchSceneID = searchTitle.Split()[0];
             string searchParams;
             if (int.TryParse(searchSceneID, out _))
+            {
                 searchParams = $"filters=id={searchSceneID}";
+            }
             else
+            {
                 searchParams = $"query={searchTitle}";
+            }
+
             var url = Helper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
             searchResults = await GetDataFromAPI(url, searchParams, cancellationToken).ConfigureAwait(false);
 
             if (searchResults == null)
+            {
                 return result;
+            }
 
             foreach (var searchResult in searchResults["results"].First["hits"])
             {
@@ -66,20 +77,23 @@ namespace PhoenixAdult.Sites
                         sceneName = (string)searchResult["title"];
                 long sceneDate = (long)searchResult["published_at"];
 
-                var posters = (await GetImages(new Movie
-                {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await this.GetImages(
+                    new Movie
+                    {
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                    }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {
                     ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = sceneName,
-                    PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime
+                    PremiereDate = DateTimeOffset.FromUnixTimeSeconds(sceneDate).DateTime,
                 };
 
                 if (posters.Any())
+                {
                     res.ImageUrl = posters.First().Url;
+                }
 
                 result.Add(res);
             }
@@ -92,11 +106,13 @@ namespace PhoenixAdult.Sites
             var result = new MetadataResult<Movie>()
             {
                 Item = new Movie(),
-                People = new List<PersonInfo>()
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
+            {
                 return result;
+            }
 
             int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
@@ -104,7 +120,9 @@ namespace PhoenixAdult.Sites
             var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[2]}", cancellationToken).ConfigureAwait(false);
 
             if (sceneData == null)
+            {
                 return result;
+            }
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
@@ -135,14 +153,18 @@ namespace PhoenixAdult.Sites
 
                 var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
                 if (actorImageNode != null)
+                {
                     actorPhoto = actorImageNode.Attributes["src"]?.Value;
+                }
 
                 var actor = new PersonInfo
                 {
-                    Name = actorName
+                    Name = actorName,
                 };
                 if (!string.IsNullOrEmpty(actorPhoto))
+                {
                     actor.ImageUrl = $"https:{actorPhoto}";
+                }
 
                 result.People.Add(actor);
             }
@@ -155,10 +177,14 @@ namespace PhoenixAdult.Sites
             var result = new List<RemoteImageInfo>();
 
             if (item == null)
+            {
                 return result;
+            }
 
             if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
+            {
                 return result;
+            }
 
             var sceneID = externalId.Split('#');
 
@@ -167,20 +193,22 @@ namespace PhoenixAdult.Sites
 
             var images = sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a");
             if (images != null)
+            {
                 foreach (var sceneImages in sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a"))
                 {
                     var image = $"https:{sceneImages.Attributes["href"].Value}";
                     result.Add(new RemoteImageInfo
                     {
                         Url = image,
-                        Type = ImageType.Primary
+                        Type = ImageType.Primary,
                     });
                     result.Add(new RemoteImageInfo
                     {
                         Url = image,
-                        Type = ImageType.Backdrop
+                        Type = ImageType.Backdrop,
                     });
                 }
+            }
 
             return result;
         }

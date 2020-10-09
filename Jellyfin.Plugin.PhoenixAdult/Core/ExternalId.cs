@@ -14,11 +14,9 @@ namespace PhoenixAdult
 #if __EMBY__
         public string Name => Plugin.Instance.Name;
 #else
-        public string ProviderName => Plugin.Instance.Name;
+        public string ProviderName
+            => Plugin.Instance.Name;
 #endif
-
-        public bool Supports(IHasProviderIds item)
-            => item is Movie;
 
 #if __EMBY__
 #else
@@ -31,5 +29,8 @@ namespace PhoenixAdult
 
         public string UrlFormatString
             => null;
+
+        public bool Supports(IHasProviderIds item)
+            => item is Movie;
     }
 }

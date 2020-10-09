@@ -9,13 +9,64 @@ namespace PhoenixAdult.Helpers.Utils
 {
     internal static class Database
     {
-        private static readonly string _databasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
+        private static readonly string DatabasePath = Path.Combine(Plugin.Instance.DataFolderPath, "data");
 
-        public static SiteListStructure SiteList;
+        public static SiteListStructure SiteList { get; set; }
 
-        public static ActorsStructure Actors;
+        public static ActorsStructure Actors { get; set; }
 
-        public static GenresStructure Genres;
+        public static GenresStructure Genres { get; set; }
+
+        public static async Task<bool> Download(string url, string fileName, CancellationToken cancellationToken)
+        {
+            if (!Directory.Exists(DatabasePath))
+            {
+                Logger.Info($"Creating database directory \"{DatabasePath}\"");
+                Directory.CreateDirectory(DatabasePath);
+            }
+
+            var encoding = new UTF8Encoding(false);
+            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            if (http.IsOK)
+            {
+                Logger.Info($"Database file \"{fileName}\" downloaded successfully");
+                File.WriteAllText(Path.Combine(DatabasePath, fileName), http.Content, encoding);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void Update(string fileName)
+        {
+            var encoding = new UTF8Encoding(false);
+
+            var filePath = Path.Combine(DatabasePath, fileName);
+            if (File.Exists(filePath))
+            {
+                var data = File.ReadAllText(filePath, encoding);
+                switch (fileName)
+                {
+                    case "SiteList.json":
+                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
+                        break;
+
+                    case "Actors.json":
+                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
+                        break;
+
+                    case "Genres.json":
+                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            Logger.Info($"Database loading finished");
+        }
 
         public struct SiteListStructure
         {
@@ -44,57 +95,6 @@ namespace PhoenixAdult.Helpers.Utils
             public List<string> GenresSkip { get; set; }
 
             public List<string> GenresPartialSkip { get; set; }
-        }
-
-        public static async Task<bool> Download(string url, string fileName, CancellationToken cancellationToken)
-        {
-            if (!Directory.Exists(_databasePath))
-            {
-                Logger.Info($"Creating database directory \"{_databasePath}\"");
-                Directory.CreateDirectory(_databasePath);
-            }
-
-            var encoding = new UTF8Encoding(false);
-            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
-            if (http.IsOK)
-            {
-                Logger.Info($"Database file \"{fileName}\" downloaded successfully");
-                File.WriteAllText(Path.Combine(_databasePath, fileName), http.Content, encoding);
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public static void Update(string fileName)
-        {
-            var encoding = new UTF8Encoding(false);
-
-            var filePath = Path.Combine(_databasePath, fileName);
-            if (File.Exists(filePath))
-            {
-                var data = File.ReadAllText(filePath, encoding);
-                switch (fileName)
-                {
-                    case "SiteList.json":
-                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
-                        break;
-
-                    case "Actors.json":
-                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
-                        break;
-
-                    case "Genres.json":
-                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            Logger.Info($"Database loading finished");
         }
     }
 }
