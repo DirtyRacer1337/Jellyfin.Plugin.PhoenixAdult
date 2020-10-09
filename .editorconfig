@@ -222,3 +222,6 @@ dotnet_diagnostic.SA1122.severity = error
 
 # SA0001: XML comment analysis is disabled due to project configuration
 dotnet_diagnostic.SA0001.severity = none
+
+# SA1028: Code should not contain trailing whitespace
+dotnet_diagnostic.SA1028.severity = error

@@ -68,7 +68,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         public static bool IsExist(string fileName)
         {
-            return File.Exists(Path.Combine(Database.DatabasePath, fileName));
+            return File.Exists(Path.Combine(DatabasePath, fileName));
         }
 
         public struct SiteListStructure
