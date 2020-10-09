@@ -26,6 +26,7 @@ internal static class StringExtension
         return source;
     }
 
+#if __EMBY__
     public static string Replace(this string source, string from, string to, StringComparison stringComparison)
     {
         if (stringComparison == StringComparison.OrdinalIgnoreCase)
@@ -37,6 +38,7 @@ internal static class StringExtension
             return source?.Replace(from, to);
         }
     }
+#endif
 
     public static string[] Split(this string source, string separator)
     {

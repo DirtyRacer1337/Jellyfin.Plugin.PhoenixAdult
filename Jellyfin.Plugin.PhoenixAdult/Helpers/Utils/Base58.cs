@@ -43,7 +43,7 @@ namespace PhoenixAdult.Helpers.Utils
             BigInteger intData = 0;
             for (var i = 0; i < data.Length; i++)
             {
-                var digit = DIGITS.IndexOf(data[i]);
+                var digit = DIGITS.IndexOf(data[i].ToString(), StringComparison.Ordinal);
 
                 if (digit < 0)
                 {
