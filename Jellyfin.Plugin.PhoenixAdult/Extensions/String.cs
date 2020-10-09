@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-internal static class String
+internal static class StringExtension
 {
     public static bool Contains(this string source, string toCheck, StringComparison stringComparison) => source?.IndexOf(toCheck, stringComparison) >= 0;
 
@@ -28,5 +28,10 @@ internal static class String
             return Regex.Replace(source, Regex.Escape(from), to, RegexOptions.IgnoreCase);
         else
             return source?.Replace(from, to);
+    }
+
+    public static string[] Split(this string source, string separator)
+    {
+        return Regex.Split(source, Regex.Escape(separator));
     }
 }
