@@ -28,7 +28,7 @@ namespace PhoenixAdult.Sites
             var sceneID = searchTitle.Split();
             if (int.TryParse(sceneID[1], out _))
             {
-                searchJAVID = $"{sceneID[0]}%20{sceneID[1]}";
+                searchJAVID = $"{sceneID[0]}-{sceneID[1]}";
             }
 
             if (!string.IsNullOrEmpty(searchJAVID))
@@ -36,7 +36,7 @@ namespace PhoenixAdult.Sites
                 searchTitle = searchJAVID;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle.Replace("-", " ", 1, StringComparison.OrdinalIgnoreCase);
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//li[contains(@class, 'item-list')]");
