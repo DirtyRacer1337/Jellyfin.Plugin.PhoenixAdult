@@ -52,7 +52,7 @@ namespace PhoenixAdult.ScheduledTasks
 
                 if (peoples != null && peoples.Any())
                 {
-                    var parent = Actors.Cleanup(peoples, item.Studios);
+                    var parent = Actors.Cleanup(peoples, item);
 
                     if (!peoples.SequenceEqual(parent))
                     {

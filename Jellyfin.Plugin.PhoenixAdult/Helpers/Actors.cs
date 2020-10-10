@@ -24,6 +24,7 @@ namespace PhoenixAdult.Helpers
             foreach (var people in scene.People)
             {
                 people.Type = PersonType.Actor;
+
                 people.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
                 people.Name = people.Name.Split('(').First().Trim();
                 people.Name = people.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
@@ -38,14 +39,14 @@ namespace PhoenixAdult.Helpers
             return newPeoples;
         }
 
-        public static List<PersonInfo> Cleanup(List<PersonInfo> peoples, string[] studios)
+        public static List<PersonInfo> Cleanup(List<PersonInfo> peoples, BaseItem item)
         {
             return Cleanup(new MetadataResult<Movie>
             {
                 People = peoples,
                 Item = new Movie
                 {
-                    Studios = studios,
+                    Studios = item.Studios,
                 },
             });
         }
