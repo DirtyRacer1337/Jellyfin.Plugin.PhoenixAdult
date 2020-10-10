@@ -103,17 +103,36 @@ namespace PhoenixAdult.Helpers.Utils
         }
 
         public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken)
-            => await Request(url, new HTTPRequest { }, cancellationToken).ConfigureAwait(false);
+            => await Request(url, null, cancellationToken).ConfigureAwait(false);
 
         public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
-            => await Request(
-                url,
-                new HTTPRequest
-                {
-                    Method = method,
-                    Headers = headers,
-                    Cookies = cookies,
-                }, cancellationToken).ConfigureAwait(false);
+            => await Request(url, HTTP.CreateRequest(method, headers, cookies), cancellationToken).ConfigureAwait(false);
+
+        public static HTTPRequest CreateRequest(HttpMethod method, string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            return new HTTPRequest
+            {
+                Method = method,
+                Headers = headers,
+                Cookies = cookies,
+                Param = param,
+            };
+        }
+
+        public static HTTPRequest CreateRequest(HttpMethod method, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            return CreateRequest(method, null, headers, cookies);
+        }
+
+        public static HTTPRequest CreateRequest(IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            return CreateRequest(null, null, headers, cookies);
+        }
+
+        public static HTTPRequest CreateRequest(string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        {
+            return CreateRequest(null, param, headers, cookies);
+        }
 
         internal struct HTTPResponse
         {

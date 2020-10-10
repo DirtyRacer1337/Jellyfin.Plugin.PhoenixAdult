@@ -12,13 +12,7 @@ namespace PhoenixAdult.Helpers.Utils
         public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
             HtmlNode html = new HtmlDocument().DocumentNode;
-            var http = await HTTP.Request(
-                url,
-                new HTTP.HTTPRequest
-                {
-                    Headers = headers,
-                    Cookies = cookies,
-                }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HTTP.CreateRequest(headers, cookies), cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 html = ElementFromStream(http.ContentStream);

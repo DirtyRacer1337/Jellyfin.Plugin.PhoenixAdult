@@ -33,12 +33,7 @@ namespace PhoenixAdult.Sites
                 { "Instance", instance },
             };
 
-            var http = await HTTP.Request(
-                url,
-                new HTTP.HTTPRequest
-                {
-                    Headers = headers,
-                }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HTTP.CreateRequest(headers), cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);

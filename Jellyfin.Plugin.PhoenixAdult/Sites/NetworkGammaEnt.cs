@@ -44,13 +44,7 @@ namespace PhoenixAdult.Sites
                 { "Referer",  referer },
             };
 
-            var http = await HTTP.Request(
-                url,
-                new HTTP.HTTPRequest
-                {
-                    Param = param,
-                    Headers = headers,
-                }, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HTTP.CreateRequest(param, headers), cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);
