@@ -523,6 +523,9 @@
     },
     "27": {
       "0": [ "Pornhub", "https://www.pornhub.com", "https://www.pornhub.com/video/search?search=" ]
+    },
+    "28": {
+      "0": [ "Nubile Films", "https://nubilefilms.com", "https://nubilefilms.com/video/" ]
     }
   },
   "SiteIDList": {
@@ -553,7 +556,8 @@
     "24": "NetworkMylf",
     "25": "SiteJulesJordan",
     "26": "SiteLegalPorno",
-    "27": "SitePornhub"
+    "27": "SitePornhub",
+    "28": "NetworkNubiles"
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
