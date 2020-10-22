@@ -36,32 +36,25 @@ namespace PhoenixAdult.ScheduledTasks
                 IsMovie = true,
             }).Where(o => o.ProviderIds.ContainsKey(Plugin.Instance.Name)).ToList();
 
-            for (int i = 0; i < items.Count; i++)
+            foreach (var (idx, item) in items.WithIndex())
             {
-                var item = items[i];
-                var parent = item;
+                progress?.Report((double)idx / items.Count * 100);
 
-                progress?.Report((double)i / items.Count * 100);
-
-                if (parent.Genres != null && parent.Genres.Any())
+                if (item.Genres != null && item.Genres.Any())
                 {
-                    parent.Genres = Helpers.Genres.Cleanup(parent.Genres, parent.Name);
+                    var genres = Helpers.Genres.Cleanup(item.Genres, item.Name);
 
-                    if (!item.Equals(parent))
+                    if (!item.Genres.All(genres.Contains))
                     {
                         Logger.Debug($"Genres cleaned in {item.Name}");
+                        item.Genres = genres;
 
 #if __EMBY__
-                        this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit);
+                        this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit);
 #else
-                        this.libraryManager.UpdateItem(item, parent, ItemUpdateType.MetadataEdit, cancellationToken);
+                        this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit, cancellationToken);
 #endif
                     }
-                }
-
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return;
                 }
             }
 

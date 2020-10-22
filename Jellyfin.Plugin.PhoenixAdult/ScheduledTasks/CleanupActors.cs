@@ -37,12 +37,11 @@ namespace PhoenixAdult.ScheduledTasks
                 IsMovie = true,
             }).Where(o => o.ProviderIds.ContainsKey(Plugin.Instance.Name)).ToList();
 
-            for (int i = 0; i < items.Count; i++)
+            foreach (var (idx, item) in items.WithIndex())
             {
-                var item = items[i];
                 List<PersonInfo> peoples;
 
-                progress?.Report((double)i / items.Count * 100);
+                progress?.Report((double)idx / items.Count * 100);
 
 #if __EMBY__
                 peoples = this.libraryManager.GetItemPeople(item);
@@ -54,7 +53,7 @@ namespace PhoenixAdult.ScheduledTasks
                 {
                     var parent = Actors.Cleanup(peoples, item);
 
-                    if (!peoples.SequenceEqual(parent))
+                    if (!peoples.Select(o => o.Name).All(parent.Select(o => o.Name).Contains))
                     {
                         Logger.Debug($"Actors cleaned in {item.Name}");
 

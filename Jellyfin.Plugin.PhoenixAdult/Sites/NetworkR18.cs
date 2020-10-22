@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -88,7 +89,8 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText;
+            var title = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
+            result.Item.Name = title;
 
             var description = sceneData.SelectSingleNode("//div[@class='cmn-box-description01']");
             if (description != null)

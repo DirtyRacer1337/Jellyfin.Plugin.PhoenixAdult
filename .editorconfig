@@ -225,3 +225,15 @@ dotnet_diagnostic.SA0001.severity = none
 
 # SA1028: Code should not contain trailing whitespace
 dotnet_diagnostic.SA1028.severity = error
+
+# SA1000: Keywords should be spaced correctly
+dotnet_diagnostic.SA1000.severity = error
+
+# SA1003: Symbols should be spaced correctly
+dotnet_diagnostic.SA1003.severity = error
+
+# SA1137: Elements should have the same indentation
+dotnet_diagnostic.SA1137.severity = error
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = error

@@ -23,16 +23,18 @@ namespace PhoenixAdult.Helpers
 
             foreach (var people in scene.People)
             {
-                people.Type = PersonType.Actor;
-
-                people.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
-                people.Name = people.Name.Split('(').First().Trim();
-                people.Name = people.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
-                people.Name = Replace(people.Name, scene.Item.Studios);
-
-                if (!newPeoples.Any(person => person.Name == people.Name))
+                var newPeople = new PersonInfo
                 {
-                    newPeoples.Add(people);
+                    Type = PersonType.Actor,
+                };
+                newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
+                newPeople.Name = newPeople.Name.Split('(').First().Trim();
+                newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
+                newPeople.Name = Replace(newPeople.Name, scene.Item.Studios);
+
+                if (!newPeoples.Any(person => person.Name == newPeople.Name))
+                {
+                    newPeoples.Add(newPeople);
                 }
             }
 
