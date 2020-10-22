@@ -255,6 +255,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Mylfwood
   - Shoplyfter Mylf
   - StayHomeMilf
++ #### Porndoe Premium Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Let's Doe It
 + #### PornPros Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
   - 18YearsOld
   - 40ozBounce
