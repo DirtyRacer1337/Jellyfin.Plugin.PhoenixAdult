@@ -138,7 +138,7 @@ namespace PhoenixAdult.Sites
             var sceneTitle = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
             foreach (var word in CensoredWords)
             {
-                if (!sceneTitle.Contains('*', StringComparison.OrdinalIgnoreCase))
+                if (!sceneTitle.Contains("*", StringComparison.OrdinalIgnoreCase))
                 {
                     break;
                 }
