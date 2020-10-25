@@ -8,6 +8,14 @@
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
+                "checksum": "2cc743ed5b04f5a6df25281a3b32099c",
+                "changelog": "Added Nublies support; Added Porndoe support; Added cleanup tasks; Improved image speed; Improved database update; Fixed JAV search scoring; Minor changes",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.3.33/Jellyfin.Plugin.PhoenixAdult.zip",
+                "timestamp": "2020-10-25 16:54:16",
+                "version": "2.2.3.33"
+            },
+            {
                 "checksum": "b8a764f2a84b46739dd3def058ddc487",
                 "changelog": "SiteList moved to database; Minor Changes",
                 "targetAbi": "10.6.0.0",
