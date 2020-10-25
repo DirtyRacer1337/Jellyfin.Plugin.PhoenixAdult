@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,6 +18,51 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkR18 : IProviderBase
     {
+        private static readonly IDictionary<string, string> CensoredWords = new Dictionary<string, string>
+        {
+            { "**", string.Empty },
+            { "A*****t", "Assault" },
+            { "A****p", "Asleep" },
+            { "A***es", "Abuses" },
+            { "B***d", "Blood" },
+            { "C***d", "Child" },
+            { "C*ck", "Cock" },
+            { "D******e", "Disgrace" },
+            { "D***k", "Drunk" },
+            { "D**g", "Drug" },
+            { "F*****g", "Forcing" },
+            { "F***e", "Force" },
+            { "G*******g", "Gangbang" },
+            { "G******g", "Gang Bang" },
+            { "H*******e", "Hypnotize" },
+            { "H*******m", "Hypnotism" },
+            { "H**t", "Hurt" },
+            { "I****t", "Incest" },
+            { "K****p", "Kidnap" },
+            { "K****r", "Killer" },
+            { "K**ling", "Killing" },
+            { "K*d", "Kid" },
+            { "M************n", "Mother And Son" },
+            { "M****t", "Molest" },
+            { "P********t", "Passed Out" },
+            { "P****h", "Punish" },
+            { "R****g", "Raping" },
+            { "R**e", "Rape" },
+            { "S*********l", "School Girl" },
+            { "S********l", "Schoolgirl" },
+            { "S******g", "Sleeping" },
+            { "S*****t", "Student" },
+            { "S***e", "Slave" },
+            { "S**t", "Scat" },
+            { "Sch**l", "School" },
+            { "T******e", "Tentacle" },
+            { "T*****e", "Torture" },
+            { "U*********s", "Unconscious" },
+            { "V*****e", "Violate" },
+            { "V*****t", "Violent" },
+            { "Y********l", "Young Girl" },
+        };
+
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
@@ -89,8 +135,25 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var title = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
-            result.Item.Name = title;
+            var sceneTitle = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
+            foreach (var word in CensoredWords)
+            {
+                if (!sceneTitle.Contains('*', StringComparison.OrdinalIgnoreCase))
+                {
+                    break;
+                }
+
+                if (!string.IsNullOrEmpty(word.Value))
+                {
+                    var pattern = Regex.Escape(word.Key);
+                    if (Regex.IsMatch(sceneTitle, pattern))
+                    {
+                        sceneTitle = Regex.Replace(sceneTitle, pattern, word.Value);
+                    }
+                }
+            }
+
+            result.Item.Name = sceneTitle;
 
             var description = sceneData.SelectSingleNode("//div[@class='cmn-box-description01']");
             if (description != null)

@@ -240,3 +240,9 @@ dotnet_diagnostic.SA1413.severity = error
 
 # Default severity for analyzer diagnostics with category 'StyleCop.CSharp.LayoutRules'
 dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = error
+
+# SA1012: Opening braces should be spaced correctly
+dotnet_diagnostic.SA1012.severity = error
+
+# SA1013: Closing braces should be spaced correctly
+dotnet_diagnostic.SA1013.severity = error
