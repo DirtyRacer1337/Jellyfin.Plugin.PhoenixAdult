@@ -256,7 +256,51 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Shoplyfter Mylf
   - StayHomeMilf
 + #### Porndoe Premium Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - A Girl Knows
+  - Badtime Stories
+  - Bitches Abroad
+  - Bums Besuch
+  - Bums Buero
+  - Bums Bus
+  - Carne Del Mercado
+  - Casting Alla Italiana
+  - Casting Francais
+  - Chicas Loca
+  - Crowd Bondage
+  - Deutschland Report
+  - Doe Girls
+  - Doe Projects
+  - Exposed Casting
+  - Fucked In Traffic
+  - Hausfrau Ficken
+  - Her Big Ass
+  - Her Limit
+  - Horny Hostel
+  - Kinky Inlaws
+  - La Cochonne
+  - La Novice
+  - Las Folladoras
   - Let's Doe It
+  - Los Consoladores
+  - My Naughty Album
+  - Operacion Limpieza
+  - PinUp Sex
+  - Porndoepedia
+  - Porno Academie
+  - Quest for Orgasm
+  - Reife Swinger
+  - Relaxxxed
+  - Scam Angels
+  - Scambisti Maturi
+  - Sextape Germany
+  - Special Feet Force
+  - The White Boxxx
+  - Trans Bella
+  - Trans Taboo
+  - Tu Venganza
+  - XXX Omas
+  - XXX Shades
+  - Xchimera
 + #### PornPros Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
   - 18YearsOld
   - 40ozBounce
@@ -371,7 +415,32 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Watch Your Wife
   - Wives on Vacation
 + #### Nubiles Porn Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID**
+  - Anilos
+  - Bad Teens Punished
+  - Bountyhunter Porn
+  - Bratty Sis
+  - Daddy's Lil Angel
+  - Deep Lush
+  - Detention Girls
+  - Driver XXX
+  - FamilySwapXXX
+  - GirlsOnlyPorn
+  - Hot Crazy Mess
+  - Moms Teach Sex
+  - My Family Pies
+  - NF Busty
   - Nubile Films
+  - Nubiles
+  - Nubiles Casting
+  - Nubiles ET
+  - Nubiles Porn
+  - Nubiles Unscripted
+  - Petite Ballerinas Fucked
+  - Petite HD Porn
+  - Princess Cum
+  - Step Siblings Caught
+  - Teacher Fucks Teens
+  - That Sitcom Show
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PureTaboo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Reality Kings Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
