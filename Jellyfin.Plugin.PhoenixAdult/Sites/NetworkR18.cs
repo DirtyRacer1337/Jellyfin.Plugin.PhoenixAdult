@@ -20,20 +20,22 @@ namespace PhoenixAdult.Sites
     {
         private static readonly IDictionary<string, string> CensoredWords = new Dictionary<string, string>
         {
-            { "**", string.Empty },
             { "A*****t", "Assault" },
             { "A****p", "Asleep" },
             { "A***e", "Abuse" },
             { "B***d", "Blood" },
+            { "B**d", "Bled" },
             { "C***d", "Child" },
             { "C*ck", "Cock" },
             { "D******e", "Disgrace" },
             { "D***k", "Drunk" },
+            { "D***king", "Drinking" },
             { "D**g", "Drug" },
             { "F*****g", "Forcing" },
             { "F***e", "Force" },
             { "G*******g", "Gangbang" },
             { "G******g", "Gang Bang" },
+            { "H*********n", "Humiliation" },
             { "H*******e", "Hypnotize" },
             { "H*******m", "Hypnotism" },
             { "H**t", "Hurt" },
@@ -48,6 +50,7 @@ namespace PhoenixAdult.Sites
             { "P****h", "Punish" },
             { "R****g", "Raping" },
             { "R**e", "Rape" },
+            { "RStepB****************r", "Stepbrother and Sister" },
             { "S*********l", "School Girl" },
             { "S********l", "Schoolgirl" },
             { "S******g", "Sleeping" },
@@ -55,6 +58,7 @@ namespace PhoenixAdult.Sites
             { "S***e", "Slave" },
             { "S**t", "Scat" },
             { "Sch**l", "School" },
+            { "StepM************n", "Stepmother and Son" },
             { "T******e", "Tentacle" },
             { "T*****e", "Torture" },
             { "U*********s", "Unconscious" },
@@ -156,13 +160,10 @@ namespace PhoenixAdult.Sites
                     break;
                 }
 
-                if (!string.IsNullOrEmpty(word.Value))
+                var pattern = Regex.Escape(word.Key);
+                if (Regex.IsMatch(sceneTitle, pattern))
                 {
-                    var pattern = Regex.Escape(word.Key);
-                    if (Regex.IsMatch(sceneTitle, pattern))
-                    {
-                        sceneTitle = Regex.Replace(sceneTitle, pattern, word.Value);
-                    }
+                    sceneTitle = Regex.Replace(sceneTitle, pattern, word.Value);
                 }
             }
 
