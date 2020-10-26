@@ -135,6 +135,19 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            var javID = sceneData.SelectSingleText("//dt[text()='DVD ID:']/following-sibling::dd[1]");
+            if (javID.StartsWith("--", StringComparison.OrdinalIgnoreCase))
+            {
+                javID = sceneData.SelectSingleText("//dt[text()='Content ID:']/following-sibling::dd[1]");
+            }
+
+            if (javID.Contains(" ", StringComparison.OrdinalIgnoreCase))
+            {
+                javID = javID.Replace(" ", "-", StringComparison.OrdinalIgnoreCase);
+            }
+
+            result.Item.OriginalTitle = javID.ToUpperInvariant();
+
             var sceneTitle = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
             foreach (var word in CensoredWords)
             {
