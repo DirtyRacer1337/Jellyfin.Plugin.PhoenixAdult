@@ -165,14 +165,14 @@ namespace PhoenixAdult
                         result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
                     }
 
-                    if ((result.People != null) && result.People.Any())
+                    if (result.People != null && result.People.Any())
                     {
                         result.People = Actors.Cleanup(result);
                     }
 
                     if (result.Item.Genres != null && result.Item.Genres.Any())
                     {
-                        result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name);
+                        result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People);
                     }
                 }
             }

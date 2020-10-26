@@ -3,19 +3,39 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using MediaBrowser.Controller.Entities;
 using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Helpers
 {
     internal static class Genres
     {
-        public static string[] Cleanup(string[] genresLink, string sceneName)
+        public static string[] Cleanup(string[] genresLink, string sceneName, List<PersonInfo> actors)
         {
             var newGenres = new List<string>();
 
             if (genresLink == null)
             {
                 return newGenres.ToArray();
+            }
+
+            if (actors != null && actors.Any())
+            {
+                switch (actors.Count)
+                {
+                    case 1:
+                    case 2:
+                        break;
+                    case 3:
+                        newGenres.Add("Threesome");
+                        break;
+                    case 4:
+                        newGenres.Add("Foursome");
+                        break;
+                    default:
+                        newGenres.Add("Orgy");
+                        break;
+                }
             }
 
             foreach (var genreLink in genresLink)
@@ -36,6 +56,9 @@ namespace PhoenixAdult.Helpers
 
             return newGenres.OrderBy(item => item).ToArray();
         }
+
+        public static string[] Cleanup(string[] genresLink, string sceneName)
+            => Cleanup(genresLink, sceneName, null);
 
         private static string Replace(string genreName, string sceneName)
         {
