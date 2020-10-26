@@ -58,7 +58,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (int.TryParse(searchTitle.Split(' ')[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int sceneID))
+                if (int.TryParse(searchTitle.Split()[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int sceneID))
                 {
                     var sceneURL = $"{Helper.GetSearchSearchURL(siteNum)}watch/{sceneID}";
                     var data = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
