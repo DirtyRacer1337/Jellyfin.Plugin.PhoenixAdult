@@ -160,11 +160,7 @@ namespace PhoenixAdult.Sites
                     break;
                 }
 
-                var pattern = Regex.Escape(word.Key);
-                if (Regex.IsMatch(sceneTitle, pattern))
-                {
-                    sceneTitle = Regex.Replace(sceneTitle, pattern, word.Value);
-                }
+                sceneTitle = sceneTitle.Replace(word.Key, word.Value, StringComparison.OrdinalIgnoreCase);
             }
 
             result.Item.Name = sceneTitle;
