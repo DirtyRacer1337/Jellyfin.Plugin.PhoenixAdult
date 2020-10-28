@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -32,10 +33,10 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = searchResult.SelectSingleText(".//div[@data-item='c-11 r-11 / bottom']/a/@href"),
+                    string sceneURL = searchResult.SelectSingleText(".//a/@href"),
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleText(".//div[@data-item='c-11 r-11 / bottom']/a/@title"),
-                            sceneDate = searchResult.SelectSingleText(".//div[@data-item='c-21 r-21 / middle right']/p"),
+                            sceneName = searchResult.SelectSingleText(".//a/@aria-label"),
+                            sceneDate = searchResult.SelectSingleText(".//p[contains(@class, 'extra-info') and not(contains(@class, 'actors'))]"),
                             scenePoster = searchResult.SelectSingleText(".//div[contains(@class, 'thumb')]/@data-bg");
 
                     var res = new RemoteSearchResult
@@ -45,7 +46,7 @@ namespace PhoenixAdult.Sites
                         ImageUrl = scenePoster,
                     };
 
-                    if (DateTime.TryParseExact(sceneDate, "dd MMMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -83,7 +84,7 @@ namespace PhoenixAdult.Sites
             var dateNode = sceneData.SelectSingleNode("//div[@class='h5 h5-published nowrap color-rgba255-06']");
             if (dateNode != null)
             {
-                if (DateTime.TryParseExact(dateNode.InnerText.Trim(), "dd MMMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(dateNode.InnerText.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
