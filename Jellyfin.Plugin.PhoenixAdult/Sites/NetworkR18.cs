@@ -75,15 +75,11 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string searchJAVID = string.Empty;
+            string searchJAVID = null;
             var sceneID = searchTitle.Split();
-            if (int.TryParse(sceneID[1], out _))
+            if (sceneID.Length > 1 && int.TryParse(sceneID[1], out _))
             {
                 searchJAVID = $"{sceneID[0]}-{sceneID[1]}";
-            }
-
-            if (!string.IsNullOrEmpty(searchJAVID))
-            {
                 searchTitle = searchJAVID;
             }
 

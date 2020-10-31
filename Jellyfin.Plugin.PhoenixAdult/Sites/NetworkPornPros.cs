@@ -102,7 +102,7 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            if (!string.IsNullOrEmpty(sceneDate) && !string.IsNullOrEmpty(dateFormat))
+            if (!string.IsNullOrEmpty(sceneDate))
             {
                 if (DateTime.TryParseExact(sceneDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 {

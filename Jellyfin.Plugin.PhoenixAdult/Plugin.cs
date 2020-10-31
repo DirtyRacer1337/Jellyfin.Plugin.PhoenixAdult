@@ -6,6 +6,8 @@ using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using PhoenixAdult.Configuration;
 
+[assembly: CLSCompliant(false)]
+
 namespace PhoenixAdult
 {
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages

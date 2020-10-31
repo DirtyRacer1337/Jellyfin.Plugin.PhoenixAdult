@@ -18,6 +18,35 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkMylf : IProviderBase
     {
+        private static readonly Dictionary<string, string[]> Genres = new Dictionary<string, string[]>
+        {
+            { "MylfBoss", new[] { "Office", "Boss" } },
+            { "MylfBlows", new[] { "Blowjob" } },
+            { "Milfty", new[] { "Cheating" } },
+            { "Mom Drips", new[] { "Creampie" } },
+            { "Milf Body", new[] { "Gym", "Fitness" } },
+            { "Lone Milf", new[] { "Solo" } },
+            { "Full Of JOI", new[] { "JOI" } },
+            { "Mylfed", new[] { "Lesbian" } },
+            { "MylfDom", new[] { "BDSM" } },
+            { "Sis Loves Me", new[] { "Step Sister" } },
+            { "DadCrush", new[] { "Step Dad", "Step Daughter" } },
+            { "DaughterSwap", new[] { "Step Dad", "Step Daughter" } },
+            { "PervMom", new[] { "Step Mom" } },
+            { "Family Strokes", new[] { "Taboo Family" } },
+            { "Foster Tapes", new[] { "Taboo Sex" } },
+            { "BFFs", new[] { "Teen", "Group Sex" } },
+            { "Shoplyfter", new[] { "Strip" } },
+            { "ShoplyfterMylf", new[] { "Strip", "MILF" } },
+            { "Exxxtra Small", new[] { "Teen", "Small Tits" } },
+            { "Little Asians", new[] { "Teen", "Asian" } },
+            { "TeenJoi", new[] { "Teen", "JOI" } },
+            { "Black Valley Girls", new[] { "Teen", "Ebony" } },
+            { "Thickumz", new[] { "Thick" } },
+            { "Dyked", new[] { "Hardcore", "Teen", "Lesbian" } },
+            { "Teens Love Black Cocks", new[] { "Teen", "BBC" } },
+        };
+
         public static async Task<JObject> GetJSONfromPage(string url, CancellationToken cancellationToken)
         {
             JObject json = null;
@@ -199,182 +228,12 @@ namespace PhoenixAdult.Sites
                 subSite = Helper.GetSearchSiteName(siteNum);
             }
 
-            var genres = new List<string>();
-            switch (subSite)
+            if (Genres.ContainsKey(subSite))
             {
-                case "MylfBoss":
-                    genres = new List<string>
-                    {
-                        "Office", "Boss",
-                    };
-                    break;
-
-                case "MylfBlows":
-                    genres = new List<string>
-                    {
-                        "Blowjob",
-                    };
-                    break;
-
-                case "Milfty":
-                    genres = new List<string>
-                    {
-                        "Cheating",
-                    };
-                    break;
-
-                case "Mom Drips":
-                    genres = new List<string>
-                    {
-                        "Creampie",
-                    };
-                    break;
-
-                case "Milf Body":
-                    genres = new List<string>
-                    {
-                        "Gym", "Fitness",
-                    };
-                    break;
-
-                case "Lone Milf":
-                    genres = new List<string>
-                    {
-                        "Solo",
-                    };
-                    break;
-
-                case "Full Of JOI":
-                    genres = new List<string>
-                    {
-                        "JOI",
-                    };
-                    break;
-
-                case "Mylfed":
-                    genres = new List<string>
-                    {
-                        "Lesbian",
-                    };
-                    break;
-
-                case "MylfDom":
-                    genres = new List<string>
-                    {
-                        "BDSM",
-                    };
-                    break;
-
-                case "Sis Loves Me":
-                    genres = new List<string>
-                    {
-                        "Step Sister",
-                    };
-                    break;
-
-                case "DadCrush":
-                case "DaughterSwap":
-                    genres = new List<string>
-                    {
-                        "Step Dad", "Step Daughter",
-                    };
-                    break;
-
-                case "PervMom":
-                    genres = new List<string>
-                    {
-                        "Step Mom",
-                    };
-                    break;
-
-                case "Family Strokes":
-                    genres = new List<string>
-                    {
-                        "Taboo Family",
-                    };
-                    break;
-
-                case "Foster Tapes":
-                    genres = new List<string>
-                    {
-                        "Taboo Sex",
-                    };
-                    break;
-
-                case "BFFs":
-                    genres = new List<string>
-                    {
-                        "Teen", "Group Sex",
-                    };
-                    break;
-
-                case "Shoplyfter":
-                    genres = new List<string>
-                    {
-                        "Strip",
-                    };
-                    break;
-
-                case "ShoplyfterMylf":
-                    genres = new List<string>
-                    {
-                        "Strip", "MILF",
-                    };
-                    break;
-
-                case "Exxxtra Small":
-                    genres = new List<string>
-                    {
-                        "Teen", "Small Tits",
-                    };
-                    break;
-
-                case "Little Asians":
-                    genres = new List<string>
-                    {
-                        "Teen", "Asian",
-                    };
-                    break;
-
-                case "TeenJoi":
-                    genres = new List<string>
-                    {
-                        "Teen", "JOI",
-                    };
-                    break;
-
-                case "Black Valley Girls":
-                    genres = new List<string>
-                    {
-                        "Teen", "Ebony",
-                    };
-                    break;
-
-                case "Thickumz":
-                    genres = new List<string>
-                    {
-                        "Thick",
-                    };
-                    break;
-
-                case "Dyked":
-                    genres = new List<string>
-                    {
-                        "Hardcore", "Teen", "Lesbian",
-                    };
-                    break;
-
-                case "Teens Love Black Cocks":
-                    genres = new List<string>
-                    {
-                        "Teen", "BBC",
-                    };
-                    break;
-            }
-
-            foreach (var genreName in genres)
-            {
-                result.Item.AddGenre(genreName);
+                foreach (var genreName in Genres[subSite])
+                {
+                    result.Item.AddGenre(genreName);
+                }
             }
 
             foreach (var genreName in new List<string>() { "MILF", "Mature" })
