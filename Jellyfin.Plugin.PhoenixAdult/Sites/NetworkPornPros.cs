@@ -16,6 +16,20 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkPornPros : IProviderBase
     {
+        private static readonly Dictionary<string, string[]> Genres = new Dictionary<string, string[]>
+        {
+            { "Lubed", new[] { "Lube", "Raw", "Wet" } },
+            { "Holed", new[] { "Anal", "Ass" } },
+            { "POVD", new[] { "Gonzo", "Pov" } },
+            { "MassageCreep", new[] { "Massage", "Oil" } },
+            { "DeepThroatLove", new[] { "Blowjob", "Deep Throat" } },
+            { "PureMature", new[] { "MILF", "Mature" } },
+            { "Cum4K", new[] { "Creampie" } },
+            { "GirlCum", new[] { "Orgasms", "Girl Orgasm", "Multiple Orgasms" } },
+            { "PassionHD", new[] { "Hardcore" } },
+            { "BBCPie", new[] { "Interracial", "BBC", "Creampie" } },
+        };
+
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
@@ -110,83 +124,13 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genres = new List<string>();
-            switch (Helper.GetSearchSiteName(siteNum))
+            var subSite = Helper.GetSearchSiteName(siteNum);
+            if (Genres.ContainsKey(subSite))
             {
-                case "Lubed":
-                    genres = new List<string>
-                    {
-                        "Lube", "Raw", "Wet",
-                    };
-                    break;
-
-                case "Holed":
-                    genres = new List<string>
-                    {
-                        "Anal", "Ass",
-                    };
-                    break;
-
-                case "POVD":
-                    genres = new List<string>
-                    {
-                        "Gonzo", "Pov",
-                    };
-                    break;
-
-                case "MassageCreep":
-                    genres = new List<string>
-                    {
-                        "Massage", "Oil",
-                    };
-                    break;
-
-                case "DeepThroatLove":
-                    genres = new List<string>
-                    {
-                        "Blowjob", "Deep Throat",
-                    };
-                    break;
-
-                case "PureMature":
-                    genres = new List<string>
-                    {
-                        "MILF", "Mature",
-                    };
-                    break;
-
-                case "Cum4K":
-                    genres = new List<string>
-                    {
-                        "Creampie",
-                    };
-                    break;
-
-                case "GirlCum":
-                    genres = new List<string>
-                    {
-                        "Orgasms", "Girl Orgasm", "Multiple Orgasms",
-                    };
-                    break;
-
-                case "PassionHD":
-                    genres = new List<string>
-                    {
-                        "Hardcore",
-                    };
-                    break;
-
-                case "BBCPie":
-                    genres = new List<string>
-                    {
-                        "Interracial", "BBC", "Creampie",
-                    };
-                    break;
-            }
-
-            foreach (var genreName in genres)
-            {
-                result.Item.AddGenre(genreName);
+                foreach (var genreName in Genres[subSite])
+                {
+                    result.Item.AddGenre(genreName);
+                }
             }
 
             var actorsNode = sceneData.SelectNodes("//div[contains(@class, 'pt-md')]//a[contains(@href, '/girls/')]");
