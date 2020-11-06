@@ -10,6 +10,12 @@
                 <h1>PhoenixAdult</h1>
                 <p>This metadata agent helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.</p>
                 <form id="phoenixAdultConfigForm">
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableActors" name="DisableActors" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Actors Saving to Metadata</span>
+                        </label>
+                    </div>
                     <div>
                         <button is="emby-button" type="submit" class="raised button-submit block emby-button">
                             <span>Save</span>
@@ -26,6 +32,7 @@
             $('#phoenixAdultConfigurationPage').on('pageshow', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
+                    $('#DisableActors').prop('checked', config.DisableActors);
                     Dashboard.hideLoadingMsg();
                 });
             });
@@ -33,6 +40,7 @@
             $('#phoenixAdultConfigForm').on('submit', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
+                    config.DisableActors = $('#DisableActors').prop('checked');
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
                     });

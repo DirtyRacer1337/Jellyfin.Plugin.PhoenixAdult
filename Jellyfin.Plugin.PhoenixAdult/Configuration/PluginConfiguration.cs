@@ -7,8 +7,11 @@ namespace PhoenixAdult.Configuration
         public PluginConfiguration()
         {
             this.DatabaseHash = string.Empty;
+            this.DisableActors = false;
         }
 
         public string DatabaseHash { get; set; }
+
+        public bool DisableActors { get; set; }
     }
 }

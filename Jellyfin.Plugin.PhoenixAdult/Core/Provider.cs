@@ -165,7 +165,7 @@ namespace PhoenixAdult
                         result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
                     }
 
-                    if (result.People != null && result.People.Any())
+                    if (result.People != null && result.People.Any() && !Plugin.Instance.Configuration.DisableActors)
                     {
                         result.People = Actors.Cleanup(result);
                     }
