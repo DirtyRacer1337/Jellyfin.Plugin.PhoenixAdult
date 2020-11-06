@@ -112,7 +112,7 @@ namespace PhoenixAdult.Sites
                 }
 
                 var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
-                if (sceneData.Item != new Movie())
+                if (!string.IsNullOrEmpty(sceneData.Item.Name))
                 {
                     sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
                     var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
