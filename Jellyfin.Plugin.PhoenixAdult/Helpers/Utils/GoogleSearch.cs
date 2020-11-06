@@ -38,11 +38,11 @@ namespace PhoenixAdult.Helpers.Utils
                         if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
                         {
                             searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", string.Empty, StringComparison.OrdinalIgnoreCase))["q"];
+                        }
 
-                            if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
-                            {
-                                results.Add(searchURL);
-                            }
+                        if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
+                        {
+                            results.Add(searchURL);
                         }
                     }
                 }
