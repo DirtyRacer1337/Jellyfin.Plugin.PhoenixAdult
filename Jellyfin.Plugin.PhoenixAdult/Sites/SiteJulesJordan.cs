@@ -172,63 +172,13 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[2]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var script = sceneData.SelectSingleNode("//script[contains(text(), 'df_movie')]").InnerText;
-            var match = Regex.Match(script, "useimage = \"(.*)\";");
-            if (match.Success)
+            var script = sceneData.SelectSingleNode("//script[contains(text(), 'df_movie')]");
+            if (script != null)
             {
-                var img = match.Groups[1].Value;
-                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                var match = Regex.Match(script.InnerText, "useimage = \"(.*)\";");
+                if (match.Success)
                 {
-                    img = Helper.GetSearchBaseURL(siteNum) + img;
-                }
-
-                result.Add(new RemoteImageInfo
-                {
-                    Url = img,
-                    Type = ImageType.Primary,
-                });
-            }
-
-            match = Regex.Match(script, "setid:.?\"(\\d{1,})\"");
-            if (match.Success)
-            {
-                var setId = match.Groups[1].Value;
-                var sceneSearch = await HTML.ElementFromURL(Helper.GetSearchSearchURL(siteNum) + Uri.EscapeDataString(item.Name), cancellationToken).ConfigureAwait(false);
-
-                var scenePosters = sceneSearch.SelectSingleNode($"//img[@id='set-target-{setId}' and contains(@class, 'hideMobile')]");
-                if (scenePosters != null)
-                {
-                    for (int i = 0; i <= scenePosters.Attributes.Count(o => o.Name.Contains("src", StringComparison.OrdinalIgnoreCase)); i++)
-                    {
-                        var attrName = $"src{i}_1x";
-                        if (scenePosters.Attributes.Contains(attrName))
-                        {
-                            var img = scenePosters.Attributes[attrName].Value;
-                            result.Add(new RemoteImageInfo
-                            {
-                                Url = img,
-                                Type = ImageType.Primary,
-                            });
-                            result.Add(new RemoteImageInfo
-                            {
-                                Url = img,
-                                Type = ImageType.Backdrop,
-                            });
-                        }
-                    }
-                }
-            }
-
-            var photoPageURL = sceneData.SelectSingleNode("//div[contains(@class, 'content_tab')]/a[text()='Photos']").Attributes["href"].Value;
-            var photoPage = await HTML.ElementFromURL(photoPageURL, cancellationToken).ConfigureAwait(false);
-            script = photoPage.SelectSingleNode("//script[contains(text(), 'ptx[\"1600\"]')]").InnerText;
-            var matches = Regex.Matches(script, "ptx\\[\"1600\"\\].*{src:.?\"(.*?)\"");
-            if (matches.Count > 0)
-            {
-                for (int i = 1; i <= 10; i++)
-                {
-                    var t = (matches.Count / 10 * i) - 1;
-                    var img = matches[t].Groups[1].Value;
+                    var img = match.Groups[1].Value;
                     if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                     {
                         img = Helper.GetSearchBaseURL(siteNum) + img;
@@ -239,11 +189,67 @@ namespace PhoenixAdult.Sites
                         Url = img,
                         Type = ImageType.Primary,
                     });
-                    result.Add(new RemoteImageInfo
+                }
+
+                match = Regex.Match(script.InnerText, "setid:.?\"(\\d{1,})\"");
+                if (match.Success)
+                {
+                    var setId = match.Groups[1].Value;
+                    var sceneSearch = await HTML.ElementFromURL(Helper.GetSearchSearchURL(siteNum) + Uri.EscapeDataString(item.Name), cancellationToken).ConfigureAwait(false);
+
+                    var scenePosters = sceneSearch.SelectSingleNode($"//img[@id='set-target-{setId}' and contains(@class, 'hideMobile')]");
+                    if (scenePosters != null)
                     {
-                        Url = img,
-                        Type = ImageType.Backdrop,
-                    });
+                        for (int i = 0; i <= scenePosters.Attributes.Count(o => o.Name.Contains("src", StringComparison.OrdinalIgnoreCase)); i++)
+                        {
+                            var attrName = $"src{i}_1x";
+                            if (scenePosters.Attributes.Contains(attrName))
+                            {
+                                var img = scenePosters.Attributes[attrName].Value;
+                                result.Add(new RemoteImageInfo
+                                {
+                                    Url = img,
+                                    Type = ImageType.Primary,
+                                });
+                                result.Add(new RemoteImageInfo
+                                {
+                                    Url = img,
+                                    Type = ImageType.Backdrop,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            var photoPageURL = sceneData.SelectSingleNode("//div[contains(@class, 'content_tab')]/a[text()='Photos']").Attributes["href"].Value;
+            var photoPage = await HTML.ElementFromURL(photoPageURL, cancellationToken).ConfigureAwait(false);
+            script = photoPage.SelectSingleNode("//script[contains(text(), 'ptx[\"1600\"]')]");
+            if (script != null)
+            {
+                var matches = Regex.Matches(script.InnerText, "ptx\\[\"1600\"\\].*{src:.?\"(.*?)\"");
+                if (matches.Count > 0)
+                {
+                    for (int i = 1; i <= 10; i++)
+                    {
+                        var t = (matches.Count / 10 * i) - 1;
+                        var img = matches[t].Groups[1].Value;
+                        if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            img = Helper.GetSearchBaseURL(siteNum) + img;
+                        }
+
+                        result.Add(new RemoteImageInfo
+                        {
+                            Url = img,
+                            Type = ImageType.Primary,
+                        });
+                        result.Add(new RemoteImageInfo
+                        {
+                            Url = img,
+                            Type = ImageType.Backdrop,
+                        });
+                    }
                 }
             }
 
