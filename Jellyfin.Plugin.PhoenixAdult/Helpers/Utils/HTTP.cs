@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
-            FlurlHTTP.AllowAnyHttpStatus().EnableCookies();
+            FlurlHTTP.AllowAnyHttpStatus();
             FlurlHTTP.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
         }
 
@@ -48,7 +49,6 @@ namespace PhoenixAdult.Helpers.Utils
 
             FlurlHTTP.BaseUrl = url;
             FlurlHTTP.Headers.Clear();
-            FlurlHTTP.Cookies.Clear();
 
             FlurlHTTP.WithHeader("User-Agent", GetUserAgent());
 
@@ -57,14 +57,14 @@ namespace PhoenixAdult.Helpers.Utils
                 FlurlHTTP.WithHeaders(request.Headers);
             }
 
-            if (request.Cookies != null)
-            {
-                FlurlHTTP.WithCookies(request.Cookies);
-            }
-
             var data = FlurlHTTP.Request();
 
-            HttpResponseMessage response = null;
+            if (request.Cookies != null)
+            {
+                data = data.WithCookies(request.Cookies);
+            }
+
+            IFlurlResponse response = null;
             try
             {
                 switch (request.Method.Method)
@@ -93,10 +93,16 @@ namespace PhoenixAdult.Helpers.Utils
 
             if (response != null)
             {
-                result.Cookies = FlurlHTTP.Cookies;
-                result.Content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                result.ContentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                result.IsOK = response.IsSuccessStatusCode;
+                var cookies = new Dictionary<string, Cookie>();
+                foreach (var cookie in response.Cookies)
+                {
+                    cookies.Add(cookie.Name, new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
+                }
+
+                result.Cookies = cookies;
+                result.Content = await response.ResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                result.ContentStream = await response.ResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                result.IsOK = response.ResponseMessage.IsSuccessStatusCode;
             }
 
             return result;
