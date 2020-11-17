@@ -170,6 +170,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - SextapeLesbians
   - WebYoung
   - WeLikeGirls
++ #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via R18) | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
   - GirlGirl
