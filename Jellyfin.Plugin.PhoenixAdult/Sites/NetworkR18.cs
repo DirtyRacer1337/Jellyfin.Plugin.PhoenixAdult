@@ -102,7 +102,7 @@ namespace PhoenixAdult.Sites
                     var res = new RemoteSearchResult
                     {
                         ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
+                        Name = $"{javID} {sceneName}",
                         ImageUrl = scenePoster,
                     };
 
