@@ -68,6 +68,7 @@ namespace PhoenixAdult
         {
             CancellationToken = cancellationToken,
             Url = url,
+            EnableDefaultUserAgent = false,
             UserAgent = HTTP.GetUserAgent(),
         });
     }

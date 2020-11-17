@@ -27,6 +27,8 @@ namespace PhoenixAdult
             var tasks = new Dictionary<string, Task<string>>();
             var imageList = new List<RemoteImageInfo>();
 
+            Logger.Info($"Searching actor images for \"{name}\"");
+
             tasks.Add("AdultDVDEmpire", GetFromAdultDVDEmpire(name, cancellationToken));
             tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
             tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
@@ -95,6 +97,7 @@ namespace PhoenixAdult
         {
             CancellationToken = cancellationToken,
             Url = url,
+            EnableDefaultUserAgent = false,
             UserAgent = HTTP.GetUserAgent(),
         });
 
