@@ -93,13 +93,16 @@ namespace PhoenixAdult
             ImageType.Primary,
         };
 
-        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken) => Provider.Http.GetResponse(new HttpRequestOptions
+        public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
         {
-            CancellationToken = cancellationToken,
-            Url = url,
-            EnableDefaultUserAgent = false,
-            UserAgent = HTTP.GetUserAgent(),
-        });
+            return Provider.Http.GetResponse(new HttpRequestOptions
+            {
+                CancellationToken = cancellationToken,
+                Url = url,
+                EnableDefaultUserAgent = false,
+                UserAgent = HTTP.GetUserAgent(),
+            });
+        }
 
         private static async Task<string> GetFromAdultDVDEmpire(string name, CancellationToken cancellationToken)
         {
