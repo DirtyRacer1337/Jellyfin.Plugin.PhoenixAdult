@@ -26,6 +26,7 @@ namespace PhoenixAdult.Helpers
                 var newPeople = new PersonInfo
                 {
                     Type = PersonType.Actor,
+                    ImageUrl = people.ImageUrl,
                 };
                 newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
                 newPeople.Name = newPeople.Name.Split('(').First().Trim();
