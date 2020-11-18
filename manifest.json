@@ -8,6 +8,14 @@
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
+                "checksum": "c0374aad840061c2fdf8bef0a73e99e3",
+                "changelog": "Added Hegre support; Added feature to disable actor saving (Issue #19); Added decensor for R18; Added javID to metadata for R18; Added genre based on actors count; Fixed Porndoe; Fixed JulesJordan GetImages; Minor changes",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.4.34/Jellyfin.Plugin.PhoenixAdult.zip",
+                "timestamp": "2020-11-18 14:33:11",
+                "version": "2.2.4.34"
+            },
+            {
                 "checksum": "2cc743ed5b04f5a6df25281a3b32099c",
                 "changelog": "Added Nublies support; Added Porndoe support; Added cleanup tasks; Improved image speed; Improved database update; Fixed JAV search scoring; Minor changes",
                 "targetAbi": "10.6.0.0",
