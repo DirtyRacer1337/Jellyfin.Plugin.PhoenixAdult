@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
@@ -16,6 +17,7 @@ namespace PhoenixAdult.Helpers.Utils
         {
             FlurlHTTP.AllowAnyHttpStatus();
             FlurlHTTP.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
+            FlurlHTTP.Configure(settings => settings.Redirects.Enabled = false);
         }
 
         private static FlurlClient FlurlHTTP { get; } = new FlurlClient();
@@ -102,6 +104,7 @@ namespace PhoenixAdult.Helpers.Utils
                 result.Content = await response.ResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                 result.ContentStream = await response.ResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 result.IsOK = response.ResponseMessage.IsSuccessStatusCode;
+                result.Headers = response.ResponseMessage.Headers;
             }
 
             return result;
@@ -148,6 +151,8 @@ namespace PhoenixAdult.Helpers.Utils
             public bool IsOK { get; set; }
 
             public IDictionary<string, Cookie> Cookies { get; set; }
+
+            public HttpResponseHeaders Headers { get; set; }
         }
 
         internal struct HTTPRequest
