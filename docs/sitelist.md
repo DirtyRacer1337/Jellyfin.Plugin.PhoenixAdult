@@ -171,7 +171,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - WebYoung
   - WeLikeGirls
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### JAV (via R18) | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
++ #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
   - GirlGirl
   - JulesJordan
@@ -444,6 +444,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - That Sitcom Show
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PureTaboo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### R18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
 + #### Reality Kings Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 40 Inch Plus
   - 8th Street Latinas

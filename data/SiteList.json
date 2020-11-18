@@ -313,7 +313,7 @@
       "36": [ "Filthy Femdom" ]
     },
     "17": {
-      "0": [ "JAV", "https://www.r18.com", "https://www.r18.com/common/search/searchword=" ]
+      "0": [ "R18", "https://www.r18.com", "https://www.r18.com/common/search/searchword=" ]
     },
     "18": {
       "0": [ "Femdom Empire", "https://femdomempire.com", "https://femdomempire.com/tour/search.php?st=advanced&qany=" ],
@@ -615,6 +615,9 @@
     },
     "37": {
       "0": [ "Hegre", "http://www.hegre.com", "http://www.hegre.com/search?q=" ]
+    },
+    "38": {
+      "0": [ "JAV", "http://www.javlibrary.com", "http://www.javlibrary.com/en/vl_searchbyid.php?keyword=" ]
     }
   },
   "SiteIDList": {
@@ -655,7 +658,8 @@
     "34": "NetworkPorndoe",
     "35": "NetworkPorndoe",
     "36": "NetworkPorndoe",
-    "37": "SiteHegre"
+    "37": "SiteHegre",
+    "38": "NetworkJAVLibrary"
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
