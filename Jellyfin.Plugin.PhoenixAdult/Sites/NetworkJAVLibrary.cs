@@ -190,7 +190,7 @@ namespace PhoenixAdult.Sites
                 });
             }
 
-            var sceneImages = sceneData.SelectNodes("//div[@class='previewthumbs']//img");
+            var sceneImages = sceneData.SelectNodes("//div[@class='previewthumbs']/img");
             if (sceneImages != null)
             {
                 foreach (var sceneImage in sceneImages)
