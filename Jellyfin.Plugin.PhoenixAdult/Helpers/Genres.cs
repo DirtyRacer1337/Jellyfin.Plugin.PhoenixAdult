@@ -38,10 +38,27 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
+            var cleanedGenres = new List<string>();
             foreach (var genreLink in genresLink)
             {
                 var genreName = WebUtility.HtmlDecode(genreLink).Trim();
-                genreName = Replace(genreName, sceneName);
+
+                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (var genre in genreName.Split(","))
+                    {
+                        cleanedGenres.Add(genre);
+                    }
+                }
+                else
+                {
+                    cleanedGenres.Add(genreName);
+                }
+            }
+
+            foreach (var genreLink in cleanedGenres)
+            {
+                var genreName = Replace(genreLink, sceneName);
 
                 if (!string.IsNullOrEmpty(genreName))
                 {
