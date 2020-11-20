@@ -246,3 +246,6 @@ dotnet_diagnostic.SA1012.severity = error
 
 # SA1013: Closing braces should be spaced correctly
 dotnet_diagnostic.SA1013.severity = error
+
+# SA1025: Code should not contain multiple whitespace in a row
+dotnet_diagnostic.SA1025.severity = error
