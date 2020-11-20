@@ -12,11 +12,11 @@ namespace PhoenixAdult.Helpers
     {
         public static string[] Cleanup(string[] genresLink, string sceneName, List<PersonInfo> actors)
         {
-            var newGenres = new List<string>();
+            var cleanedGenres = new List<string>();
 
             if (genresLink == null)
             {
-                return newGenres.ToArray();
+                return cleanedGenres.ToArray();
             }
 
             if (actors != null && actors.Any())
@@ -27,18 +27,17 @@ namespace PhoenixAdult.Helpers
                     case 2:
                         break;
                     case 3:
-                        newGenres.Add("Threesome");
+                        cleanedGenres.Add("Threesome");
                         break;
                     case 4:
-                        newGenres.Add("Foursome");
+                        cleanedGenres.Add("Foursome");
                         break;
                     default:
-                        newGenres.Add("Orgy");
+                        cleanedGenres.Add("Orgy");
                         break;
                 }
             }
 
-            var cleanedGenres = new List<string>();
             foreach (var genreLink in genresLink)
             {
                 var genreName = WebUtility.HtmlDecode(genreLink).Trim();
@@ -47,7 +46,9 @@ namespace PhoenixAdult.Helpers
                 {
                     foreach (var genre in genreName.Split(","))
                     {
-                        cleanedGenres.Add(genre);
+                        var splitedGenre = genre.Trim();
+
+                        cleanedGenres.Add(splitedGenre);
                     }
                 }
                 else
@@ -56,6 +57,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
+            var newGenres = new List<string>();
             foreach (var genreLink in cleanedGenres)
             {
                 var genreName = Replace(genreLink, sceneName);
@@ -71,7 +73,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            return newGenres.OrderBy(item => item).ToArray();
+            return newGenres.OrderBy(o => o).ToArray();
         }
 
         public static string[] Cleanup(string[] genresLink, string sceneName)

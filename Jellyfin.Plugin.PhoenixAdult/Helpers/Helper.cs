@@ -169,7 +169,7 @@ namespace PhoenixAdult.Helpers
 
         public static IProviderBase GetProviderBySiteID(int siteID)
         {
-            if (Database.SiteList.SiteIDList.ContainsKey(siteID))
+            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
             {
                 return GetBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
             }
