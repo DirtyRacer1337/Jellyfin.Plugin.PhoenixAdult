@@ -6,9 +6,12 @@ namespace PhoenixAdult.Configuration
     {
         public PluginConfiguration()
         {
+            this.DatabaseUpdateURL = "https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/contents/data";
             this.DatabaseHash = string.Empty;
             this.DisableActors = false;
         }
+
+        public string DatabaseUpdateURL { get; set; }
 
         public string DatabaseHash { get; set; }
 

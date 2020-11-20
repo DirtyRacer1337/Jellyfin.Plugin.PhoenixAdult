@@ -24,7 +24,7 @@ namespace PhoenixAdult.ScheduledTasks
             await Task.Yield();
             progress?.Report(0);
 
-            var data = await HTTP.Request("https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/contents/data", cancellationToken).ConfigureAwait(false);
+            var data = await HTTP.Request(Plugin.Instance.Configuration.DatabaseUpdateURL, cancellationToken).ConfigureAwait(false);
             var json = JArray.Parse(data.Content);
 
             var db = new JObject();
