@@ -155,14 +155,18 @@ namespace PhoenixAdult
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
                 result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
-                if (result.Item != new Movie())
+                if (!string.IsNullOrEmpty(result.Item.Name))
                 {
                     result.HasMetadata = true;
                     result.Item.OfficialRating = "XXX";
                     result.Item.ProviderIds = sceneID;
 
-                    result.Item.Name = HttpUtility.HtmlDecode(result.Item.Name);
-                    result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview);
+                    result.Item.Name = HttpUtility.HtmlDecode(result.Item.Name).Trim();
+
+                    if (!string.IsNullOrEmpty(result.Item.Overview))
+                    {
+                        result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview).Trim();
+                    }
 
                     if (result.Item.PremiereDate.HasValue)
                     {
