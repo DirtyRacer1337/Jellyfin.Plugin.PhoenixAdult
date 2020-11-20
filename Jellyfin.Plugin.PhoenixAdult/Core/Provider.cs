@@ -10,6 +10,7 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
+using System.Web;
 
 #if __EMBY__
 using MediaBrowser.Model.Logging;
@@ -159,6 +160,9 @@ namespace PhoenixAdult
                     result.HasMetadata = true;
                     result.Item.OfficialRating = "XXX";
                     result.Item.ProviderIds = sceneID;
+
+                    result.Item.Name = HttpUtility.HtmlDecode(result.Item.Name);
+                    result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview);
 
                     if (result.Item.PremiereDate.HasValue)
                     {

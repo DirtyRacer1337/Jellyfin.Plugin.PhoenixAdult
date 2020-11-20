@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -77,8 +76,7 @@ namespace PhoenixAdult.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='no-space transform-none']");
-            var description = HttpUtility.HtmlDecode(sceneData.SelectSingleText("//meta[@name='description']/@content"));
-            result.Item.Overview = description;
+            result.Item.Overview = sceneData.SelectSingleText("//meta[@name='description']/@content");
             result.Item.AddStudio("Porndoe Premium");
 
             var dateNode = sceneData.SelectSingleNode("//div[@class='h5 h5-published nowrap color-rgba255-06']");

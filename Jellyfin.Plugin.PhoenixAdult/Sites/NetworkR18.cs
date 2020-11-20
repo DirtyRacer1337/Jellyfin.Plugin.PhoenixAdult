@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -147,7 +146,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();
 
-            var sceneTitle = HttpUtility.HtmlDecode(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim());
+            var sceneTitle = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim();
             foreach (var word in CensoredWords)
             {
                 if (!sceneTitle.Contains("*", StringComparison.OrdinalIgnoreCase))
