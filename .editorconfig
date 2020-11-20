@@ -193,6 +193,9 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
 
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none
+
 # SA1200: Using directives should be placed correctly
 dotnet_diagnostic.SA1200.severity = none
 
@@ -211,6 +214,9 @@ dotnet_diagnostic.CA1054.severity = none
 # CA1308: Normalize strings to uppercase
 dotnet_diagnostic.CA1308.severity = none
 
+# CA1056: URI-like properties should not be strings
+dotnet_diagnostic.CA1056.severity = none
+
 # SA1513: Closing brace should be followed by blank line
 dotnet_diagnostic.SA1513.severity = error
 
@@ -219,9 +225,6 @@ dotnet_diagnostic.SA1503.severity = error
 
 # SA1122: Use string.Empty for empty strings
 dotnet_diagnostic.SA1122.severity = error
-
-# SA0001: XML comment analysis is disabled due to project configuration
-dotnet_diagnostic.SA0001.severity = none
 
 # SA1028: Code should not contain trailing whitespace
 dotnet_diagnostic.SA1028.severity = error
