@@ -66,7 +66,6 @@ namespace PhoenixAdult.Helpers.Utils
                 data = data.WithCookies(request.Cookies);
             }
 
-            Logger.Debug(request.AutoRedirect.ToString());
             data = data.WithAutoRedirect(request.AutoRedirect);
 
             IFlurlResponse response = null;

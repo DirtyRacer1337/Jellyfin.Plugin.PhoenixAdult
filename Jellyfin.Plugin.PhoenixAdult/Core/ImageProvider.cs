@@ -69,7 +69,7 @@ namespace PhoenixAdult
                 catch (Exception e)
                 {
                     Logger.Info($"GetImages error: \"{e.Message}\"");
-                    Logger.Debug(e.ToString());
+                    Logger.Error(e.ToString());
                 }
 
                 images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);

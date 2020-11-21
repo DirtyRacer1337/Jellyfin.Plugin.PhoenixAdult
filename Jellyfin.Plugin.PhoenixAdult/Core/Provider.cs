@@ -103,7 +103,7 @@ namespace PhoenixAdult
                     catch (Exception e)
                     {
                         Logger.Info($"Search error: \"{e.Message}\"");
-                        Logger.Debug(e.ToString());
+                        Logger.Error(e.ToString());
                     }
 
                     if (result.Any())
@@ -176,7 +176,7 @@ namespace PhoenixAdult
                 catch (Exception e)
                 {
                     Logger.Info($"Update error: \"{e.Message}\"");
-                    Logger.Debug(e.ToString());
+                    Logger.Error(e.ToString());
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.Name))
