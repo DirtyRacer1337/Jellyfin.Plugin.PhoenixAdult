@@ -37,7 +37,7 @@ namespace PhoenixAdult.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, cancellationToken, false).ConfigureAwait(false);
             var data = HTML.ElementFromStream(http.ContentStream);
 
             var searchResults = data.SelectNodes("//div[@class='videos']//div[@class='video']");
