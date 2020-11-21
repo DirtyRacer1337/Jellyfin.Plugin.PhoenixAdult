@@ -47,6 +47,7 @@ namespace PhoenixAdult
 
         public string Name => Plugin.Instance.Name;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Temporal solution")]
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
             List<RemoteSearchResult> result = new List<RemoteSearchResult>();
@@ -94,7 +95,17 @@ namespace PhoenixAdult
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
-                    result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+
+                    try
+                    {
+                        result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Info($"Search error: \"{e.Message}\"");
+                        Logger.Debug(e.ToString());
+                    }
+
                     if (result.Any())
                     {
                         if (result.Any(scene => scene.IndexNumber.HasValue))
@@ -116,6 +127,7 @@ namespace PhoenixAdult
             return result;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Temporal solution")]
         public async Task<MetadataResult<Movie>> GetMetadata(MovieInfo info, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>
@@ -154,7 +166,17 @@ namespace PhoenixAdult
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
-                result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
+
+                try
+                {
+                    result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.Info($"Update error: \"{e.Message}\"");
+                    Logger.Debug(e.ToString());
+                }
+
                 if (!string.IsNullOrEmpty(result.Item.Name))
                 {
                     result.HasMetadata = true;
