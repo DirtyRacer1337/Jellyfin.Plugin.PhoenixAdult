@@ -55,7 +55,7 @@ namespace PhoenixAdult.ScheduledTasks
 
                     if (!peoples.Select(o => o.Name).All(parent.Select(o => o.Name).Contains))
                     {
-                        Logger.Debug($"Actors cleaned in {item.Name}");
+                        Logger.Debug($"Actors cleaned in \"{item.Name}\"");
 
                         this.libraryManager.UpdatePeople(item, parent);
                     }

@@ -46,7 +46,7 @@ namespace PhoenixAdult.ScheduledTasks
 
                     if (!item.Genres.All(genres.Contains))
                     {
-                        Logger.Debug($"Genres cleaned in {item.Name}");
+                        Logger.Debug($"Genres cleaned in \"{item.Name}\"");
                         item.Genres = genres;
 
 #if __EMBY__
