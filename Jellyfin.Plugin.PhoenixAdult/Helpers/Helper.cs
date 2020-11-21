@@ -27,14 +27,17 @@ namespace PhoenixAdult.Helpers
                 return null;
             }
 
+            string url;
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
             {
-                return Database.SiteList.Sites[siteNum[0]][siteNum[1]][1];
+                url = Database.SiteList.Sites[siteNum[0]][siteNum[1]][1];
             }
             else
             {
-                return Database.SiteList.Sites[siteNum[0]].First().Value[1];
+                url = Database.SiteList.Sites[siteNum[0]].First().Value[1];
             }
+
+            return url;
         }
 
         public static string GetSearchSearchURL(int[] siteNum)
@@ -44,14 +47,27 @@ namespace PhoenixAdult.Helpers
                 return null;
             }
 
+            string url;
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
             {
-                return Database.SiteList.Sites[siteNum[0]][siteNum[1]][2];
+                url = Database.SiteList.Sites[siteNum[0]][siteNum[1]][2];
             }
             else
             {
-                return Database.SiteList.Sites[siteNum[0]].First().Value[2];
+                url = Database.SiteList.Sites[siteNum[0]].First().Value[2];
             }
+
+            if (string.IsNullOrEmpty(url))
+            {
+                return null;
+            }
+
+            if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                url = GetSearchBaseURL(siteNum) + url;
+            }
+
+            return url;
         }
 
         public static string Encode(string text)
