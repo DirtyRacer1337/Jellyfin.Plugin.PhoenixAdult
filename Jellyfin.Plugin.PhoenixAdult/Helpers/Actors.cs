@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -28,9 +29,12 @@ namespace PhoenixAdult.Helpers
                     Type = PersonType.Actor,
                     ImageUrl = people.ImageUrl,
                 };
+
+                newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
                 newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
                 newPeople.Name = newPeople.Name.Split('(').First().Trim();
                 newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
+
                 newPeople.Name = Replace(newPeople.Name, scene.Item.Studios);
 
                 if (!newPeoples.Any(person => person.Name == newPeople.Name))
