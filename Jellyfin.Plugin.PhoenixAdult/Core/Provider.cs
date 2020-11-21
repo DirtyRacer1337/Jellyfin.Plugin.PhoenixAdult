@@ -162,14 +162,16 @@ namespace PhoenixAdult
                 return result;
             }
 
-            var provider = Helper.GetProviderBySiteID(int.Parse(curID[0], CultureInfo.InvariantCulture));
+            int[] siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
+
+            var provider = Helper.GetProviderBySiteID(siteNum[0]);
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
 
                 try
                 {
-                    result = await provider.Update(curID, cancellationToken).ConfigureAwait(false);
+                    result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

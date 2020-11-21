@@ -116,7 +116,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -129,15 +129,13 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
             var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
             {
                 return result;
             }
 
-            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
+            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
@@ -185,23 +183,14 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
-
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
             if (!cookies.TryGetValue("instance_token", out Cookie cookie))
@@ -209,7 +198,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[3]}&id={sceneID[2]}";
+            var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
             var sceneData = await GetDataFromAPI(url, cookie.Value, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {

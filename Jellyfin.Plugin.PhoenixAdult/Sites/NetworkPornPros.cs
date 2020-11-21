@@ -45,35 +45,39 @@ namespace PhoenixAdult.Sites
             }
 
             string sceneURL = Helper.GetSearchSearchURL(siteNum) + directURL,
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-
+                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
             if (searchDate.HasValue)
             {
                 curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
             }
 
-            var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
-            sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-            var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+            string[] sceneID = curID.Split('#').Skip(2).ToArray();
 
-            var res = new RemoteSearchResult
+            var sceneData = await this.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(sceneData.Item.Name))
             {
-                ProviderIds = sceneData.Item.ProviderIds,
-                Name = sceneData.Item.Name,
-                PremiereDate = sceneData.Item.PremiereDate,
-            };
+                sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
+                var posters = (await this.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
-            if (posters.Any())
-            {
-                res.ImageUrl = posters.First().Url;
+                var res = new RemoteSearchResult
+                {
+                    ProviderIds = sceneData.Item.ProviderIds,
+                    Name = sceneData.Item.Name,
+                    PremiereDate = sceneData.Item.PremiereDate,
+                };
+
+                if (posters.Any())
+                {
+                    res.ImageUrl = posters.First().Url;
+                }
+
+                result.Add(res);
             }
-
-            result.Add(res);
 
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -86,9 +90,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText.Trim();
@@ -109,9 +111,9 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (sceneID.Length > 3)
+                if (sceneID.Length > 1)
                 {
-                    sceneDate = sceneID[3];
+                    sceneDate = sceneID[1];
                     dateFormat = "yyyy-MM-dd";
                 }
             }
@@ -150,23 +152,16 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var poster = sceneData.SelectSingleNode("//video[@id='player']");

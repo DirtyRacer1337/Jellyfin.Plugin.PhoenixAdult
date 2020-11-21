@@ -74,10 +74,10 @@ namespace PhoenixAdult.Sites
             }
 
             string searchJAVID = null;
-            var sceneID = searchTitle.Split();
-            if (sceneID.Length > 1 && int.TryParse(sceneID[1], out _))
+            var splitedTitle = searchTitle.Split();
+            if (splitedTitle.Length > 1 && int.TryParse(splitedTitle[1], out _))
             {
-                searchJAVID = $"{sceneID[0]}-{sceneID[1]}";
+                searchJAVID = $"{splitedTitle[0]}-{splitedTitle[1]}";
                 searchTitle = searchJAVID;
             }
 
@@ -117,7 +117,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -130,7 +130,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var javID = sceneData.SelectSingleText("//dt[text()='DVD ID:']/following-sibling::dd[1]");
@@ -220,23 +220,16 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleNode("//img[contains(@alt, 'cover')]").Attributes["src"].Value;

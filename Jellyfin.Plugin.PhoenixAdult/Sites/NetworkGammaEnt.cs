@@ -148,7 +148,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -161,12 +161,10 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
             string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
-                   sceneType = sceneID[2] == "scenes" ? "clip_id" : "movie_id",
+                   sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -179,7 +177,7 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
 
-            if (DateTime.TryParseExact(sceneID[4], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneID[2], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }
@@ -225,28 +223,19 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
-
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
 
             string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
-                   sceneType = sceneID[2] == "scenes" ? "clip_id" : "movie_id",
+                   sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[2]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[3]}", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;

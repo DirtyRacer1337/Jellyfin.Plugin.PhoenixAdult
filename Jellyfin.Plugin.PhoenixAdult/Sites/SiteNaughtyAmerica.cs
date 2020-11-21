@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,16 +65,13 @@ namespace PhoenixAdult.Sites
 
             foreach (var searchResult in searchResults["results"].First["hits"])
             {
-                string sceneID = (string)searchResult["id"],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                        sceneName = (string)searchResult["title"];
+                string sceneIDs = (string)searchResult["id"],
+                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneIDs}",
+                    sceneName = (string)searchResult["title"];
                 long sceneDate = (long)searchResult["published_at"];
+                string[] sceneID = curID.Split('#').Skip(2).ToArray();
 
-                var posters = (await this.GetImages(
-                    new Movie
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                    }, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await this.GetImages(siteNum, sceneID, null, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {
@@ -95,7 +91,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -108,10 +104,8 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
             var url = Helper.GetSearchSearchURL(siteNum) + "?x-algolia-application-id=I6P9Q9R18E&x-algolia-api-key=08396b1791d619478a55687b4deb48b4";
-            var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[2]}", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, $"filters=id={sceneID[0]}", cancellationToken).ConfigureAwait(false);
 
             if (sceneData == null)
             {
@@ -166,23 +160,16 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID[2]}";
+            var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID[0]}";
             var sceneDataHTML = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var images = sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a");

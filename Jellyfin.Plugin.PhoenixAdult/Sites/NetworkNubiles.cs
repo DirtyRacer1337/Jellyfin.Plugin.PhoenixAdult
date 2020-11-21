@@ -91,7 +91,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -104,13 +104,11 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
-            string sceneURL = sceneID[2];
+            string sceneURL = sceneID[0];
 
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[2]}";
+                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -180,28 +178,19 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
-            string sceneURL = sceneID[2];
+            string sceneURL = sceneID[0];
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[2]}";
+                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -216,7 +205,7 @@ namespace PhoenixAdult.Sites
                 });
             }
 
-            var photoPageURL = "https://nubiles-porn.com/photo/gallery/" + sceneID[2];
+            var photoPageURL = "https://nubiles-porn.com/photo/gallery/" + sceneID[0];
             var photoPage = await HTML.ElementFromURL(photoPageURL, cancellationToken).ConfigureAwait(false);
             var sceneImages = photoPage.SelectNodes("//div[@class='img-wrapper']//source[1]");
             if (sceneImages != null)

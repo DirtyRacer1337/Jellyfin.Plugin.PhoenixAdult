@@ -13,8 +13,8 @@ namespace PhoenixAdult
     {
         Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken);
 
-        Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken);
+        Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken);
 
-        Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken);
+        Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken);
     }
 }

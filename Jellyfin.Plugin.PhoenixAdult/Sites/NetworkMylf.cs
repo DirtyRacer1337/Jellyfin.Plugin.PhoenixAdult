@@ -111,11 +111,13 @@ namespace PhoenixAdult.Sites
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
                 }
 
-                var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
+                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+
+                var sceneData = await this.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (!string.IsNullOrEmpty(sceneData.Item.Name))
                 {
                     sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                    var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                    var posters = (await this.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                     var res = new RemoteSearchResult
                     {
@@ -136,7 +138,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -144,19 +146,17 @@ namespace PhoenixAdult.Sites
                 People = new List<PersonInfo>(),
             };
 
-            if (sceneID == null)
+            if (sceneID == null || siteNum == null)
             {
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(sceneID[0], CultureInfo.InvariantCulture), int.Parse(sceneID[1], CultureInfo.InvariantCulture) };
-
-            string sceneURL = Helper.Decode(sceneID[2]),
+            string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = string.Empty;
 
-            if (sceneID.Length > 3)
+            if (sceneID.Length > 1)
             {
-                sceneDate = sceneID[3];
+                sceneDate = sceneID[1];
             }
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -204,12 +204,9 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (sceneID.Length > 3)
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 {
-                    if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
-                    {
-                        releaseDate = sceneDateObj;
-                    }
+                    releaseDate = sceneDateObj;
                 }
             }
 
@@ -262,23 +259,16 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            string sceneURL = Helper.Decode(sceneID[2]);
+            string sceneURL = Helper.Decode(sceneID[0]);
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)

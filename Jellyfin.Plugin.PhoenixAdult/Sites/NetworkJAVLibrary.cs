@@ -25,10 +25,10 @@ namespace PhoenixAdult.Sites
             }
 
             string searchJAVID = null;
-            var sceneID = searchTitle.Split();
-            if (sceneID.Length > 1 && int.TryParse(sceneID[1], out _))
+            var splitedTitle = searchTitle.Split();
+            if (splitedTitle.Length > 1 && int.TryParse(splitedTitle[1], out _))
             {
-                searchJAVID = $"{sceneID[0]}-{sceneID[1]}";
+                searchJAVID = $"{splitedTitle[0]}-{splitedTitle[1]}";
             }
 
             if (!string.IsNullOrEmpty(searchJAVID))
@@ -70,12 +70,13 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={http.Headers.Location.ToString().Split('=')[1]}",
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+                string[] sceneID = curID.Split('#').Skip(2).ToArray();
 
-                var sceneData = await this.Update(curID.Split('#'), cancellationToken).ConfigureAwait(false);
+                var sceneData = await this.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (!string.IsNullOrEmpty(sceneData.Item.Name))
                 {
                     sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                    var posters = (await this.GetImages(sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                    var posters = (await this.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
                     var res = new RemoteSearchResult
                     {
@@ -96,7 +97,7 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>()
             {
@@ -109,7 +110,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var javID = sceneData.SelectSingleText("//div[@id='video_id']//td[@class='text']");
@@ -161,23 +162,16 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteImageInfo>> GetImages(int[] siteNum, string[] sceneID, BaseItem item, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
 
-            if (item == null)
+            if (sceneID == null)
             {
                 return result;
             }
 
-            if (!item.ProviderIds.TryGetValue(Plugin.Instance.Name, out string externalId))
-            {
-                return result;
-            }
-
-            var sceneID = externalId.Split('#');
-
-            var sceneURL = Helper.Decode(sceneID[2]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleText("//img[@id='video_jacket_img']/@src");
