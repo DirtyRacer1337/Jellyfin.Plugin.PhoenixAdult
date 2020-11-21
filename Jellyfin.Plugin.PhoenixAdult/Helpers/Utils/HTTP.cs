@@ -94,10 +94,10 @@ namespace PhoenixAdult.Helpers.Utils
 
             if (response != null)
             {
-                var cookies = new Dictionary<string, Cookie>();
+                var cookies = new List<Cookie>();
                 foreach (var cookie in response.Cookies)
                 {
-                    cookies.Add(cookie.Name, new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
+                    cookies.Add(new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
                 }
 
                 result.Cookies = cookies;
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Helpers.Utils
 
             public bool IsOK { get; set; }
 
-            public IDictionary<string, Cookie> Cookies { get; set; }
+            public IList<Cookie> Cookies { get; set; }
 
             public HttpResponseHeaders Headers { get; set; }
         }
