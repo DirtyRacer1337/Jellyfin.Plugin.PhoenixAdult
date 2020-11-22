@@ -617,7 +617,7 @@
       "0": [ "Hegre", "http://www.hegre.com", "/search?q=" ]
     },
     "38": {
-      "0": [ "JAV", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ]
+      "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ]
     }
   },
   "SiteIDList": {
@@ -750,6 +750,7 @@
     "^ihaw": "IHaveAWife",
     "^iktg": "IKnowThatGirl",
     "^il": "ImmoralLive",
+    "^jav": "JAVLibrary",
     "^kha": "KarupsHA",
     "^kow": "KarupsOW",
     "^kpc": "KarupsPC",
