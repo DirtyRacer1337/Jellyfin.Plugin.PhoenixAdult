@@ -2,6 +2,12 @@ using MediaBrowser.Model.Plugins;
 
 namespace PhoenixAdult.Configuration
 {
+    public enum JAVActorNamingStyle
+    {
+        WesternStyle,
+        JapaneseStyle,
+    }
+
     public class PluginConfiguration : BasePluginConfiguration
     {
         public PluginConfiguration()
@@ -9,6 +15,8 @@ namespace PhoenixAdult.Configuration
             this.DatabaseUpdateURL = "https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/contents/data";
             this.DatabaseHash = string.Empty;
             this.DisableActors = false;
+
+            this.JAVActorNamingStyle = JAVActorNamingStyle.WesternStyle;
         }
 
         public string DatabaseUpdateURL { get; set; }
@@ -16,5 +24,7 @@ namespace PhoenixAdult.Configuration
         public string DatabaseHash { get; set; }
 
         public bool DisableActors { get; set; }
+
+        public JAVActorNamingStyle JAVActorNamingStyle { get; set; }
     }
 }

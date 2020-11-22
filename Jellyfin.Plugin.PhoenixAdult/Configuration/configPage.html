@@ -16,11 +16,16 @@
                             <span>Disable Actors Saving to Metadata</span>
                         </label>
                     </div>
-                    <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                            <span>Save</span>
-                        </button>
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="JAVActorNamingStyle">Actor Naming Style</label>
+                        <select is="emby-select" id="JAVActorNamingStyle" name="JAVActorNamingStyle" class="emby-select-withcolor emby-select">
+                            <option value="WesternStyle">Western Style</option>
+                            <option value="JapaneseStyle">Japanese Style</option>
+                        </select>
                     </div>
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>Save</span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -33,6 +38,7 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#DisableActors').prop('checked', config.DisableActors);
+                    $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
                     Dashboard.hideLoadingMsg();
                 });
             });
@@ -41,6 +47,7 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.DisableActors = $('#DisableActors').prop('checked');
+                    config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
                     });

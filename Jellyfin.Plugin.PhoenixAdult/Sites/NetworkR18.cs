@@ -9,6 +9,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
 
@@ -198,6 +199,11 @@ namespace PhoenixAdult.Sites
                     if (actorName != "----")
                     {
                         actorName = actorName.Split('(')[0].Trim();
+
+                        if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                        {
+                            actorName = string.Join(" ", actorName.Split().Reverse());
+                        }
 
                         var actor = new PersonInfo
                         {
