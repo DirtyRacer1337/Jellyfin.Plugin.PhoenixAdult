@@ -217,6 +217,9 @@ dotnet_diagnostic.CA1308.severity = none
 # CA1056: URI-like properties should not be strings
 dotnet_diagnostic.CA1056.severity = none
 
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none
+
 # SA1513: Closing brace should be followed by blank line
 dotnet_diagnostic.SA1513.severity = error
 

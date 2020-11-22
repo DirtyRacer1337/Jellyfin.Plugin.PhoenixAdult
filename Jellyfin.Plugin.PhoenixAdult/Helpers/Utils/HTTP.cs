@@ -134,14 +134,14 @@ namespace PhoenixAdult.Helpers.Utils
             };
         }
 
-        public static HTTPRequest CreateRequest(HttpMethod method, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = false)
+        public static HTTPRequest CreateRequest(HttpMethod method, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
         {
             return CreateRequest(method, null, headers, cookies, redirect);
         }
 
-        public static HTTPRequest CreateRequest(IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        public static HTTPRequest CreateRequest(IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
         {
-            return CreateRequest(null, null, headers, cookies);
+            return CreateRequest(null, null, headers, cookies, redirect);
         }
 
         public static HTTPRequest CreateRequest(string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
