@@ -7,6 +7,7 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
+using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Helpers
@@ -35,7 +36,25 @@ namespace PhoenixAdult.Helpers
                 newPeople.Name = newPeople.Name.Split('(').First().Trim();
                 newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
 
-                newPeople.Name = Replace(newPeople.Name, scene.Item.Studios);
+                string japaneseName = string.Join(" ", newPeople.Name.Split().Reverse()),
+                    newJapaneseName = string.Empty,
+                    newName = Replace(newPeople.Name, scene.Item.Studios);
+
+                if (newName == newPeople.Name)
+                {
+                    if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                    {
+                        newJapaneseName = Replace(japaneseName, scene.Item.Studios);
+                        newJapaneseName = string.Join(" ", newJapaneseName.Split().Reverse());
+                    }
+
+                    if (newJapaneseName != japaneseName)
+                    {
+                        newName = newJapaneseName;
+                    }
+                }
+
+                newPeople.Name = newName;
 
                 if (!newPeoples.Any(person => person.Name == newPeople.Name))
                 {
