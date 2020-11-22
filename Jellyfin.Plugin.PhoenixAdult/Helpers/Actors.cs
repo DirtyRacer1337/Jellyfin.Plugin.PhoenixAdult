@@ -46,11 +46,11 @@ namespace PhoenixAdult.Helpers
                     {
                         newJapaneseName = Replace(japaneseName, scene.Item.Studios);
                         newJapaneseName = string.Join(" ", newJapaneseName.Split().Reverse());
-                    }
 
-                    if (newJapaneseName != japaneseName)
-                    {
-                        newName = newJapaneseName;
+                        if (newJapaneseName != japaneseName)
+                        {
+                            newName = newJapaneseName;
+                        }
                     }
                 }
 
