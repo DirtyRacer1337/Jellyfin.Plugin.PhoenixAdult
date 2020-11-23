@@ -117,7 +117,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var genreLink in sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a"))
             {
-                var genreName = genreLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase);
+                var genreName = genreLink.InnerText;
 
                 result.Item.AddGenre(genreName);
             }
