@@ -92,9 +92,9 @@ namespace PhoenixAdult.Sites
             string sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[@class='title']/h1").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//div[@class='title']/h1").InnerText;
 
-            var description = sceneData.SelectSingleNode("//div[contains(@class, 'record-description-content')]").InnerText.Trim();
+            var description = sceneData.SelectSingleNode("//div[contains(@class, 'record-description-content')]").InnerText;
             description = description.Substring(0, description.IndexOf("Runtime", StringComparison.OrdinalIgnoreCase));
             result.Item.Overview = description;
 
@@ -115,7 +115,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
@@ -155,7 +155,9 @@ namespace PhoenixAdult.Sites
 
             result.Add(new RemoteImageInfo
             {
-                Url = img.Replace("board-image", "poster-image", StringComparison.OrdinalIgnoreCase).Replace("1600x", "640x", StringComparison.OrdinalIgnoreCase),
+                Url = img
+                .Replace("board-image", "poster-image", StringComparison.OrdinalIgnoreCase)
+                .Replace("1600x", "640x", StringComparison.OrdinalIgnoreCase),
                 Type = ImageType.Primary,
             });
             result.Add(new RemoteImageInfo

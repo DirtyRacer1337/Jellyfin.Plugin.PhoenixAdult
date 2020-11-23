@@ -33,7 +33,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = searchResult.SelectSingleNode("./a[last()]").Attributes["href"].Value,
                         curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode("./a[last()]").InnerText.Trim(),
+                        sceneName = searchResult.SelectSingleNode("./a[last()]").InnerText,
                         scenePoster = searchResult.SelectSingleNode(".//img[1]").Attributes["src"].Value;
                 var sceneDateNode = searchResult.SelectSingleNode(".//div[contains(@class, 'update_date')]");
 
@@ -51,7 +51,10 @@ namespace PhoenixAdult.Sites
                         sceneDate = sceneDateNode.InnerHtml.Trim();
                         if (sceneDate.Contains("<!--", StringComparison.OrdinalIgnoreCase))
                         {
-                            sceneDate = sceneDate.Replace("<!--", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("-->", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("Date OFF", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                            sceneDate = sceneDate
+                                .Replace("<!--", string.Empty, StringComparison.OrdinalIgnoreCase)
+                                .Replace("-->", string.Empty, StringComparison.OrdinalIgnoreCase)
+                                .Replace("Date OFF", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
                         }
                     }
 
@@ -87,8 +90,8 @@ namespace PhoenixAdult.Sites
                 sceneDate = sceneID[1];
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//span[@class='title_bar_hilite']").InnerText.Trim();
-            result.Item.Overview = sceneData.SelectSingleNode("//span[@class='update_description']").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//span[@class='title_bar_hilite']").InnerText;
+            result.Item.Overview = sceneData.SelectSingleNode("//span[@class='update_description']").InnerText;
             result.Item.AddStudio("Jules Jordan");
 
             if (!string.IsNullOrEmpty(sceneDate))
@@ -117,7 +120,7 @@ namespace PhoenixAdult.Sites
                 {
                     var actor = new PersonInfo
                     {
-                        Name = actorLink.InnerText.Trim(),
+                        Name = actorLink.InnerText,
                     };
 
                     var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);

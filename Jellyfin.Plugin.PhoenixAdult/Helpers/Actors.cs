@@ -33,8 +33,9 @@ namespace PhoenixAdult.Helpers
 
                 newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
                 newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
-                newPeople.Name = newPeople.Name.Split('(').First().Trim();
+                newPeople.Name = newPeople.Name.Split('(').First();
                 newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
+                newPeople.Name = newPeople.Name.Trim();
 
                 var newName = Replace(newPeople.Name, scene.Item.Studios);
 

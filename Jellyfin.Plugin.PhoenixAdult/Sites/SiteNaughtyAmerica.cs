@@ -134,7 +134,9 @@ namespace PhoenixAdult.Sites
                         actorPhoto = string.Empty,
                         actorsPageURL;
 
-                actorsPageURL = actorName.ToLowerInvariant().Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
+                actorsPageURL = actorName.ToLowerInvariant()
+                    .Replace(" ", "-", StringComparison.OrdinalIgnoreCase)
+                    .Replace("'", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                 var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
                 var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);

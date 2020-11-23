@@ -67,7 +67,7 @@ namespace PhoenixAdult.Sites
                 {
                     string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value.Trim(),
+                            sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value,
                             scenePoster = searchResult.SelectSingleNode(".//img").Attributes["src"].Value,
                             sceneDate = searchResult.SelectSingleNode(".//div[@class='date']").InnerText.Trim();
 
@@ -105,8 +105,8 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText().Trim();
-            result.Item.Overview = sceneData.SelectSingleNode("//*[@class='description-text']").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='shoot-title']").GetDirectInnerText();
+            result.Item.Overview = sceneData.SelectSingleNode("//*[@class='description-text']").InnerText;
             result.Item.AddStudio("Kink");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
@@ -117,7 +117,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var genreLink in sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a"))
             {
-                var genreName = genreLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                var genreName = genreLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                 result.Item.AddGenre(genreName);
             }
@@ -127,7 +127,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actors)
                 {
-                    string actorName = actorLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(),
+                    string actorName = actorLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase),
                            actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 

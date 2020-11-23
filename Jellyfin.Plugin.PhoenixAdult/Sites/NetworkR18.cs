@@ -147,7 +147,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();
 
-            var sceneTitle = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText.Trim();
+            var sceneTitle = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText;
             foreach (var word in CensoredWords)
             {
                 if (!sceneTitle.Contains("*", StringComparison.OrdinalIgnoreCase))
@@ -163,15 +163,21 @@ namespace PhoenixAdult.Sites
             var description = sceneData.SelectSingleNode("//div[@class='cmn-box-description01']");
             if (description != null)
             {
-                result.Item.Overview = description.InnerText.Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                result.Item.Overview = description.InnerText.Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase);
             }
 
-            result.Item.AddStudio(sceneData.SelectSingleNode("//dd[@itemprop='productionCompany']").InnerText.Trim());
+            result.Item.AddStudio(sceneData.SelectSingleNode("//dd[@itemprop='productionCompany']").InnerText);
 
             var dateNode = sceneData.SelectSingleNode("//dd[@itemprop='dateCreated']");
             if (dateNode != null)
             {
-                var date = dateNode.InnerText.Replace(".", string.Empty, StringComparison.OrdinalIgnoreCase).Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase).Replace("June", "Jun", StringComparison.OrdinalIgnoreCase).Replace("July", "Jul", StringComparison.OrdinalIgnoreCase).Trim();
+                var date = dateNode.InnerText
+                    .Replace(".", string.Empty, StringComparison.OrdinalIgnoreCase)
+                    .Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase)
+                    .Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase)
+                    .Replace("June", "Jun", StringComparison.OrdinalIgnoreCase)
+                    .Replace("July", "Jul", StringComparison.OrdinalIgnoreCase)
+                    .Trim();
                 if (DateTime.TryParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
@@ -183,7 +189,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.ToLowerInvariant().Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
@@ -194,12 +200,10 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Trim();
+                    string actorName = actorLink.InnerText;
 
                     if (actorName != "----")
                     {
-                        actorName = actorName.Split('(')[0].Trim();
-
                         if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
                         {
                             actorName = string.Join(" ", actorName.Split().Reverse());

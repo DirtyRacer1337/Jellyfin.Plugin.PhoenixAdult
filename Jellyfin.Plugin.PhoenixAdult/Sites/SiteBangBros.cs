@@ -32,7 +32,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[contains(@href, '/video')]").Attributes["href"].Value,
                         curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode(".//span[@class='thmb_ttl']").InnerText.Trim(),
+                        sceneName = searchResult.SelectSingleNode(".//span[@class='thmb_ttl']").InnerText,
                         scenePoster = $"https:{searchResult.SelectSingleNode(".//img").Attributes["data-src"].Value}",
                         sceneDate = searchResult.SelectSingleNode(".//span[contains(@class, 'thmb_mr_2')]").InnerText.Trim();
 
@@ -71,7 +71,7 @@ namespace PhoenixAdult.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
-            result.Item.Overview = sceneData.SelectSingleNode("//div[@class='vdoDesc']").InnerText.Trim();
+            result.Item.Overview = sceneData.SelectSingleNode("//div[@class='vdoDesc']").InnerText;
             result.Item.AddStudio("Bang Bros");
 
             var dateNode = sceneData.SelectSingleNode("//span[contains(@class, 'thmb_mr_2')]");
@@ -88,7 +88,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
@@ -99,7 +99,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Trim(),
+                    string actorName = actorLink.InnerText,
                            actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
                            actorPhoto;
 

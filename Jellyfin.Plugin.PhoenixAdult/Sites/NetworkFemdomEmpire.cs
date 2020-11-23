@@ -33,7 +33,7 @@ namespace PhoenixAdult.Sites
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'item-info')]//a").InnerText.Trim(),
+                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'item-info')]//a").InnerText,
                             sceneDate = searchResult.SelectSingleNode(".//span[@class='date']").InnerText.Trim(),
                             scenePoster = string.Empty;
 
@@ -94,11 +94,11 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//h3").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//h3").InnerText;
             var description = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//p");
             if (description != null)
             {
-                result.Item.Overview = description.InnerText.Trim();
+                result.Item.Overview = description.InnerText;
             }
 
             result.Item.AddStudio("Femdom Empire");
@@ -118,7 +118,9 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Replace("categories:", string.Empty, StringComparison.OrdinalIgnoreCase).Replace("tags:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                    var genreName = genreLink.InnerText
+                        .Replace("categories:", string.Empty, StringComparison.OrdinalIgnoreCase)
+                        .Replace("tags:", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                     if (!string.IsNullOrEmpty(genreName))
                     {
@@ -134,7 +136,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Replace("Featuring:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                    string actorName = actorLink.InnerText.Replace("Featuring:", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                     if (!string.IsNullOrEmpty(actorName))
                     {

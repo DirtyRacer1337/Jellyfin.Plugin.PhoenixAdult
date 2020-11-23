@@ -89,7 +89,7 @@ namespace PhoenixAdult.Sites
             var genres = sceneData.SelectNodes("//a[@class='inline-links']");
             foreach (var genreLink in genres)
             {
-                var genreName = genreLink.InnerText.Trim();
+                var genreName = genreLink.InnerText;
 
                 result.Item.AddGenre(genreName);
             }

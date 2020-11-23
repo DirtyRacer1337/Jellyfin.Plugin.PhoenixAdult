@@ -61,7 +61,7 @@ namespace PhoenixAdult.Sites
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'thumbnail-title')]//a").InnerText.Trim(),
+                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'thumbnail-title')]//a").InnerText,
                             scenePoster = string.Empty,
                             sceneDate = searchResult.SelectSingleNode(".").Attributes["release"].Value;
 
@@ -110,7 +110,7 @@ namespace PhoenixAdult.Sites
             string sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='watchpage-title']").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='watchpage-title']").InnerText;
             result.Item.AddStudio("LegalPorno");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='scene-description__detail']//a").InnerText.Trim();
@@ -137,7 +137,7 @@ namespace PhoenixAdult.Sites
                 {
                     var actor = new PersonInfo
                     {
-                        Name = actorLink.InnerText.Trim(),
+                        Name = actorLink.InnerText,
                     };
 
                     var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);

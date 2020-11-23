@@ -132,7 +132,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
@@ -143,12 +143,10 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Trim();
+                    string actorName = actorLink.InnerText;
 
                     if (actorName != "----")
                     {
-                        actorName = actorName.Split('(')[0].Trim();
-
                         if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.WesternStyle)
                         {
                             actorName = string.Join(" ", actorName.Split().Reverse());

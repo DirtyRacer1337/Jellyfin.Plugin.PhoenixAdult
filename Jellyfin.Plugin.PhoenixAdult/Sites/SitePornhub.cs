@@ -97,8 +97,8 @@ namespace PhoenixAdult.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
             var sceneDataJSON = JObject.Parse(sceneData.SelectSingleNode("//script[@type='application/ld+json']").InnerText.Trim());
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='title']").InnerText.Trim();
-            var studioName = sceneData.SelectSingleNode("//div[@class='userInfo']//a").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='title']").InnerText;
+            var studioName = sceneData.SelectSingleNode("//div[@class='userInfo']//a").InnerText;
             result.Item.AddStudio(studioName);
 
             var date = (string)sceneDataJSON["uploadDate"];
@@ -115,7 +115,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }

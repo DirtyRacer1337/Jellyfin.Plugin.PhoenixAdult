@@ -108,6 +108,11 @@ namespace PhoenixAdult
 
                     if (result.Any())
                     {
+                        foreach (var scene in result)
+                        {
+                            scene.Name = scene.Name.Trim();
+                        }
+
                         if (result.Any(scene => scene.IndexNumber.HasValue))
                         {
                             result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
@@ -191,6 +196,14 @@ namespace PhoenixAdult
                     {
                         result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview).Trim();
                     }
+
+                    var newStudios = new string[result.Item.Studios.Length];
+                    for (int i = 0; i < result.Item.Studios.Length; i++)
+                    {
+                        newStudios[i] = result.Item.Studios[i].Trim();
+                    }
+
+                    result.Item.Studios = newStudios;
 
                     if (result.Item.PremiereDate.HasValue)
                     {

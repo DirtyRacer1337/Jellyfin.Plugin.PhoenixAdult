@@ -36,7 +36,7 @@ namespace PhoenixAdult.Sites
                     {
                         string sceneID = searchResult.SelectSingleNode(".//span[@class='title']/a").Attributes["href"].Value.Split('/')[3],
                             curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                            sceneName = searchResult.SelectSingleNode(".//span[@class='title']/a | //h2").InnerText.Trim(),
+                            sceneName = searchResult.SelectSingleNode(".//span[@class='title']/a | //h2").InnerText,
                             posterURL = searchResult.SelectSingleNode(".//noscript/picture/img").Attributes["src"].Value,
                             sceneDate = searchResult.SelectSingleNode(".//span[@class='date']").InnerText;
 
@@ -67,7 +67,7 @@ namespace PhoenixAdult.Sites
                     if (sceneData != null)
                     {
                         string curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID.ToString(CultureInfo.InvariantCulture)}",
-                            sceneName = sceneData.SelectSingleNode("//h2").InnerText.Trim(),
+                            sceneName = sceneData.SelectSingleNode("//h2").InnerText,
                             posterURL = sceneData.SelectSingleNode("//video").Attributes["poster"].Value,
                             sceneDate = sceneData.SelectSingleNode("//span[@class='date']").InnerText;
 
@@ -113,7 +113,7 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'content-pane-title')]//h2").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'content-pane-title')]//h2").InnerText;
             var description = sceneData.SelectSingleNode("//div[@class='col-12 content-pane-column']/div");
             if (description == null)
             {
@@ -131,7 +131,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                result.Item.Overview = description.InnerText.Trim();
+                result.Item.Overview = description.InnerText;
             }
 
             result.Item.AddStudio("Nubiles");
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var genreLink in genreNode)
                 {
-                    var genreName = genreLink.InnerText.Trim();
+                    var genreName = genreLink.InnerText;
 
                     result.Item.AddGenre(genreName);
                 }
@@ -161,7 +161,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Trim(),
+                    string actorName = actorLink.InnerText,
                         actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value;
 
                     var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);

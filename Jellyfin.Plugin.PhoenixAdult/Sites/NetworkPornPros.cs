@@ -38,7 +38,9 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase).Replace("'", "-", StringComparison.OrdinalIgnoreCase);
+            var directURL = searchTitle
+                .Replace(" ", "-", StringComparison.OrdinalIgnoreCase)
+                .Replace("'", "-", StringComparison.OrdinalIgnoreCase);
             if (int.TryParse(directURL.Substring(directURL.Length - 1, 1), out _) && directURL.Substring(directURL.Length - 2, 1) == "-")
             {
                 directURL = $"{directURL.Substring(0, directURL.Length - 1)}-{directURL.Substring(directURL.Length - 1, 1)}";
@@ -93,11 +95,11 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText.Trim();
+            result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
             var description = sceneData.SelectSingleNode("//div[contains(@id, 'description')]");
             if (description != null)
             {
-                result.Item.Overview = description.InnerText.Trim();
+                result.Item.Overview = description.InnerText;
             }
 
             result.Item.AddStudio("Porn Pros");
@@ -129,8 +131,10 @@ namespace PhoenixAdult.Sites
             var subSite = Helper.GetSearchSiteName(siteNum);
             if (Genres.ContainsKey(subSite))
             {
-                foreach (var genreName in Genres[subSite])
+                foreach (var genreLink in Genres[subSite])
                 {
+                    var genreName = genreLink;
+
                     result.Item.AddGenre(genreName);
                 }
             }
@@ -140,7 +144,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Trim();
+                    string actorName = actorLink.InnerText;
 
                     result.People.Add(new PersonInfo
                     {
