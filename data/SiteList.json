@@ -618,6 +618,10 @@
     },
     "38": {
       "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ]
+    },
+    "39": {
+      "0": [ "Caribbeancom", "https://en.caribbeancom.com", "/eng/search/?q=" ],
+      "1": [ "CaribbeancomPR", "https://en.caribbeancompr.com" ]
     }
   },
   "SiteIDList": {
@@ -659,7 +663,8 @@
     "35": "NetworkPorndoe",
     "36": "NetworkPorndoe",
     "37": "SiteHegre",
-    "38": "NetworkJAVLibrary"
+    "38": "NetworkJAVLibrary",
+    "39": "NetworkCaribbeancom"
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -701,6 +706,8 @@
     "^btra": "BigTitsRoundAsses",
     "^burna": "BurningAngel",
     "^bwb": "BigWetButts",
+    "^carib": "Caribbeancom",
+    "^caribpr": "CaribbeancomPR",
     "^clip": "LegalPorno",
     "^cps": "CherryPimps",
     "^css": "CzechStreets",
