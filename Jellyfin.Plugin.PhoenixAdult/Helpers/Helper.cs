@@ -14,7 +14,7 @@ namespace PhoenixAdult.Helpers
         {
             if (siteNum == null)
             {
-                return null;
+                return string.Empty;
             }
 
             return Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
@@ -24,7 +24,7 @@ namespace PhoenixAdult.Helpers
         {
             if (siteNum == null)
             {
-                return null;
+                return string.Empty;
             }
 
             string url;
@@ -44,7 +44,7 @@ namespace PhoenixAdult.Helpers
         {
             if (siteNum == null)
             {
-                return null;
+                return string.Empty;
             }
 
             string url;
@@ -59,7 +59,7 @@ namespace PhoenixAdult.Helpers
 
             if (string.IsNullOrEmpty(url))
             {
-                return null;
+                return string.Empty;
             }
 
             if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
