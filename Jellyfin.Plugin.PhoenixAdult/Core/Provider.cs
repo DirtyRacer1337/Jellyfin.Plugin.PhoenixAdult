@@ -197,13 +197,15 @@ namespace PhoenixAdult
                         result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview).Trim();
                     }
 
-                    var newStudios = new string[result.Item.Studios.Length];
-                    for (int i = 0; i < result.Item.Studios.Length; i++)
+                    var newStudios = new List<string>();
+                    foreach (var studio in result.Item.Studios)
                     {
-                        newStudios[i] = result.Item.Studios[i].Trim();
+                        var studioName = studio.Trim();
+
+                        newStudios.Add(studioName);
                     }
 
-                    result.Item.Studios = newStudios;
+                    result.Item.Studios = newStudios.ToArray();
 
                     if (result.Item.PremiereDate.HasValue)
                     {
