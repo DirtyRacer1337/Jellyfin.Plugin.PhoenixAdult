@@ -4,6 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Helpers
@@ -204,6 +208,47 @@ namespace PhoenixAdult.Helpers
             }
 
             return null;
+        }
+
+        public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(IProviderBase provider, int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        {
+            var result = new List<RemoteSearchResult>();
+
+            var curID = new List<string>()
+            {
+                siteNum[0].ToString(CultureInfo.InvariantCulture),
+                siteNum[1].ToString(CultureInfo.InvariantCulture),
+            };
+
+            curID.AddRange(sceneID);
+
+            var sceneData = await provider.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(sceneData.Item.Name))
+            {
+                sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, string.Join("#", curID));
+                var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+
+                var res = new RemoteSearchResult
+                {
+                    ProviderIds = sceneData.Item.ProviderIds,
+                    Name = sceneData.Item.Name,
+                    PremiereDate = sceneData.Item.PremiereDate,
+                };
+
+                if (!string.IsNullOrEmpty(sceneData.Item.OriginalTitle))
+                {
+                    res.Name = $"{sceneData.Item.OriginalTitle} {sceneData.Item.Name}";
+                }
+
+                if (posters.Any())
+                {
+                    res.ImageUrl = posters.First().Url;
+                }
+
+                result.Add(res);
+            }
+
+            return result;
         }
     }
 }

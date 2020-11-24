@@ -73,25 +73,10 @@ namespace PhoenixAdult.Sites
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 string[] sceneID = curID.Split('#').Skip(2).ToArray();
 
-                var sceneData = await this.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
-                if (!string.IsNullOrEmpty(sceneData.Item.Name))
+                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
+                if (searchResult.Any())
                 {
-                    sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, curID);
-                    var posters = (await this.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
-
-                    var res = new RemoteSearchResult
-                    {
-                        ProviderIds = sceneData.Item.ProviderIds,
-                        Name = $"{sceneData.Item.OriginalTitle} {sceneData.Item.Name}",
-                        PremiereDate = sceneData.Item.PremiereDate,
-                    };
-
-                    if (posters.Any())
-                    {
-                        res.ImageUrl = posters.First().Url;
-                    }
-
-                    result.Add(res);
+                    result.AddRange(searchResult);
                 }
             }
 

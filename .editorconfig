@@ -255,3 +255,6 @@ dotnet_diagnostic.SA1013.severity = error
 
 # SA1025: Code should not contain multiple whitespace in a row
 dotnet_diagnostic.SA1025.severity = error
+
+# SA1001: Commas should be spaced correctly
+dotnet_diagnostic.SA1001.severity = error
