@@ -8,6 +8,14 @@
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
+                "checksum": "767015a971c2a16e95d3431eae9496a6",
+                "changelog": "Minor changes",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.3.37/Jellyfin.Plugin.PhoenixAdult.zip",
+                "timestamp": "2020-11-25 23:43:28",
+                "version": "2.3.3.37"
+            },
+            {
                 "checksum": "ac90a0a91eefcbef74437feeccfbc3c9",
                 "changelog": "Added Caribbeancom support; Minor changes",
                 "targetAbi": "10.6.0.0",
