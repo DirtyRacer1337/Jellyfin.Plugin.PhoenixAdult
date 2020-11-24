@@ -202,7 +202,10 @@ namespace PhoenixAdult
                     {
                         var studioName = studio.Trim();
 
-                        newStudios.Add(studioName);
+                        if (!newStudios.Contains(studioName))
+                        {
+                            newStudios.Add(studioName);
+                        }
                     }
 
                     result.Item.Studios = newStudios.ToArray();
