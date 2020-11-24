@@ -15,7 +15,6 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
-            FlurlHTTP.AllowAnyHttpStatus();
             FlurlHTTP.Configure(settings => settings.Timeout = TimeSpan.FromSeconds(120));
             FlurlHTTP.Configure(settings => settings.Redirects.AllowSecureToInsecure = true);
             FlurlHTTP.Configure(settings => settings.Redirects.ForwardAuthorizationHeader = true);
@@ -50,16 +49,14 @@ namespace PhoenixAdult.Helpers.Utils
             Logger.Debug(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", url, request.Method.Method));
 
             FlurlHTTP.BaseUrl = url;
-            FlurlHTTP.Headers.Clear();
 
-            FlurlHTTP.WithHeader("User-Agent", GetUserAgent());
+            var data = FlurlHTTP.AllowAnyHttpStatus().Request();
+            data = data.WithHeader("User-Agent", GetUserAgent());
 
             if (request.Headers != null)
             {
-                FlurlHTTP.WithHeaders(request.Headers);
+                data = data.WithHeaders(request.Headers);
             }
-
-            var data = FlurlHTTP.Request();
 
             if (request.Cookies != null)
             {
@@ -113,14 +110,11 @@ namespace PhoenixAdult.Helpers.Utils
             return result;
         }
 
-        public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken)
-            => await Request(url, null, cancellationToken).ConfigureAwait(false);
+        public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
+            => await Request(url, CreateRequest(method, headers, cookies, redirect), cancellationToken).ConfigureAwait(false);
 
         public static async Task<HTTPResponse> Request(string url, CancellationToken cancellationToken, bool redirect = true)
             => await Request(url, null, cancellationToken, null, null, redirect).ConfigureAwait(false);
-
-        public static async Task<HTTPResponse> Request(string url, HttpMethod method, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
-            => await Request(url, HTTP.CreateRequest(method, headers, cookies, redirect), cancellationToken).ConfigureAwait(false);
 
         public static HTTPRequest CreateRequest(HttpMethod method, string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
         {
@@ -144,9 +138,9 @@ namespace PhoenixAdult.Helpers.Utils
             return CreateRequest(null, null, headers, cookies, redirect);
         }
 
-        public static HTTPRequest CreateRequest(string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
+        public static HTTPRequest CreateRequest(string param, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
         {
-            return CreateRequest(null, param, headers, cookies);
+            return CreateRequest(null, param, headers, cookies, redirect);
         }
 
         internal struct HTTPResponse
