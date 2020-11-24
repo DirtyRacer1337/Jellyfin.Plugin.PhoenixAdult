@@ -20,7 +20,7 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
         {
-            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url + "/en/login", cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 var regEx = Regex.Match(http.Content, "\"apiKey\":\"(.*?)\"");
