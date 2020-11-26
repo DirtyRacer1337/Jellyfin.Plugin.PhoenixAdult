@@ -65,31 +65,37 @@ namespace PhoenixAdult.Helpers.Utils
 
             data = data.WithAutoRedirect(request.AutoRedirect);
 
-            IFlurlResponse response = null;
-            try
+            Task<IFlurlResponse> responseTask = null;
+            switch (request.Method.Method)
             {
-                switch (request.Method.Method)
-                {
-                    case "GET":
-                        response = await data.GetAsync(cancellationToken).ConfigureAwait(false);
-                        break;
+                case "GET":
+                    responseTask = data.GetAsync(cancellationToken);
+                    break;
 
-                    case "POST":
-                        response = await data.PostStringAsync(request.Param, cancellationToken).ConfigureAwait(false);
-                        break;
+                case "POST":
+                    responseTask = data.PostStringAsync(request.Param, cancellationToken);
+                    break;
 
-                    case "HEAD":
-                        response = await data.HeadAsync(cancellationToken).ConfigureAwait(false);
-                        break;
+                case "HEAD":
+                    responseTask = data.HeadAsync(cancellationToken);
+                    break;
 
-                    default:
-                        Logger.Error($"Method {request.Method.Method} not implemented");
-                        break;
-                }
+                default:
+                    Logger.Error($"Method {request.Method.Method} not implemented");
+                    break;
             }
-            catch (FlurlHttpException e)
+
+            IFlurlResponse response = null;
+            if (responseTask != null)
             {
-                Logger.Error(e.Message);
+                try
+                {
+                    response = await responseTask.ConfigureAwait(false);
+                }
+                catch (FlurlHttpException e)
+                {
+                    Logger.Error(e.Message);
+                }
             }
 
             if (response != null)
