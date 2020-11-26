@@ -131,7 +131,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            if (matched)
+            if (matched || !clearName.Contains(" "))
             {
                 clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
                 clearName = string.Join(" ", clearName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
