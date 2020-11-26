@@ -35,15 +35,19 @@ namespace PhoenixAdult
 
             Logger.Info($"Searching actor images for \"{name}\"");
 
-            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
-            {
-                name = string.Join(" ", name.Split().Reverse());
-            }
-
             tasks.Add("AdultDVDEmpire", GetFromAdultDVDEmpire(name, cancellationToken));
             tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
             tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
             tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
+
+            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+            {
+                name = string.Join(" ", name.Split().Reverse());
+
+                tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
+                tasks.Add("Babepedia", GetFromBabepedia(name, cancellationToken));
+                tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
+            }
 
             try
             {
@@ -59,7 +63,7 @@ namespace PhoenixAdult
                 {
                     var res = image.Value.Result;
 
-                    if (!string.IsNullOrEmpty(res))
+                    if (!string.IsNullOrEmpty(res) && !imageList.Where(o => o.Url == res).Any())
                     {
                         imageList.Add(new RemoteImageInfo
                         {
