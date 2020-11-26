@@ -61,71 +61,78 @@ namespace PhoenixAdult
 
             var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
             var site = Helper.GetSiteFromTitle(title);
-            if (site.Key != null)
+            if (site.Key == null)
             {
-                string searchTitle = Helper.GetClearTitle(title, site.Value),
-                       searchDate = string.Empty;
-                DateTime? searchDateObj;
-                var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
+                return result;
+            }
 
-                var siteNum = new int[2]
-                {
+            string searchTitle = Helper.GetClearTitle(title, site.Value),
+                   searchDate = string.Empty;
+            DateTime? searchDateObj;
+            var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
+
+            var siteNum = new int[2]
+            {
                     site.Key[0],
                     site.Key[1],
-                };
-                searchTitle = titleAfterDate.Item1;
-                searchDateObj = titleAfterDate.Item2;
-                if (searchDateObj.HasValue)
+            };
+            searchTitle = titleAfterDate.Item1;
+            searchDateObj = titleAfterDate.Item2;
+            if (searchDateObj.HasValue)
+            {
+                searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                if (searchInfo.PremiereDate.HasValue)
                 {
-                    searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    searchDateObj = searchInfo.PremiereDate;
+                    searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
-                else
+            }
+
+            if (string.IsNullOrEmpty(searchTitle))
+            {
+                return result;
+            }
+
+            Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
+            Logger.Info($"searchTitle: {searchTitle}");
+            Logger.Info($"searchDate: {searchDate}");
+
+            var provider = Helper.GetProviderBySiteID(siteNum[0]);
+            if (provider != null)
+            {
+                Logger.Info($"provider: {provider}");
+
+                try
                 {
-                    if (searchInfo.PremiereDate.HasValue)
-                    {
-                        searchDateObj = searchInfo.PremiereDate;
-                        searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    }
+                    result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.Info($"Search error: \"{e.Message}\"");
+                    Logger.Error(e.ToString());
                 }
 
-                Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
-                Logger.Info($"searchTitle: {searchTitle}");
-                Logger.Info($"searchDate: {searchDate}");
-
-                var provider = Helper.GetProviderBySiteID(siteNum[0]);
-                if (provider != null)
+                if (result.Any())
                 {
-                    Logger.Info($"provider: {provider}");
-
-                    try
+                    foreach (var scene in result)
                     {
-                        result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Info($"Search error: \"{e.Message}\"");
-                        Logger.Error(e.ToString());
+                        scene.Name = scene.Name.Trim();
                     }
 
-                    if (result.Any())
+                    if (result.Any(scene => scene.IndexNumber.HasValue))
                     {
-                        foreach (var scene in result)
-                        {
-                            scene.Name = scene.Name.Trim();
-                        }
-
-                        if (result.Any(scene => scene.IndexNumber.HasValue))
-                        {
-                            result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
-                        }
-                        else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue) && result.Any(scene => scene.PremiereDate.Value != searchDateObj))
-                        {
-                            result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
-                        }
-                        else
-                        {
-                            result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
-                        }
+                        result = result.OrderByDescending(scene => scene.IndexNumber.HasValue).ThenByDescending(scene => scene.IndexNumber).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(searchDate) && result.All(scene => scene.PremiereDate.HasValue) && result.Any(scene => scene.PremiereDate.Value != searchDateObj))
+                    {
+                        result = result.OrderBy(scene => Math.Abs((searchDateObj - scene.PremiereDate).Value.TotalDays)).ToList();
+                    }
+                    else
+                    {
+                        result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
                     }
                 }
             }
