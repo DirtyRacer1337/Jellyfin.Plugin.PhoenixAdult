@@ -10,6 +10,10 @@
                 <h1>PhoenixAdult</h1>
                 <p>This metadata agent helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.</p>
                 <form id="phoenixAdultConfigForm">
+                    <div class="inputContainer">
+                        <label class="inputeLabel inputLabelUnfocused" for="DefaultSiteName">Default SiteName</label>
+                        <input id="DefaultSiteName" name="DefaultSiteName" type="text" is="emby-input" />
+                    </div>
                     <div class="checkboxContainer checkboxContainer-withDescripton">
                         <label class="emby-checkbox-label">
                             <input id="DisableActors" name="DisableActors" type="checkbox" is="emby-checkbox" />
@@ -17,7 +21,7 @@
                         </label>
                     </div>
                     <div class="selectContainer">
-                        <label class="selectLabel" for="JAVActorNamingStyle">Actor Naming Style</label>
+                        <label class="selectLabel" for="JAVActorNamingStyle">JAV Actor Naming Style</label>
                         <select is="emby-select" id="JAVActorNamingStyle" name="JAVActorNamingStyle" class="emby-select-withcolor emby-select">
                             <option value="WesternStyle">Western Style</option>
                             <option value="JapaneseStyle">Japanese Style</option>
@@ -37,6 +41,7 @@
             $('#phoenixAdultConfigurationPage').on('pageshow', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
+                    $('#DefaultSiteName').val(config.DefaultSiteName).change();
                     $('#DisableActors').prop('checked', config.DisableActors);
                     $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
                     Dashboard.hideLoadingMsg();
@@ -46,6 +51,7 @@
             $('#phoenixAdultConfigForm').on('submit', function () {
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
+                    config.DefaultSiteName = $('#DefaultSiteName').val();
                     config.DisableActors = $('#DisableActors').prop('checked');
                     config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {

@@ -63,7 +63,19 @@ namespace PhoenixAdult
             var site = Helper.GetSiteFromTitle(title);
             if (site.Key == null)
             {
-                return result;
+                if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DefaultSiteName))
+                {
+                    searchInfo.Name = $"{Plugin.Instance.Configuration.DefaultSiteName} {searchInfo.Name}";
+                    Logger.Info($"searchInfo.Name: {searchInfo.Name}");
+
+                    title = Helper.ReplaceAbbrieviation(searchInfo.Name);
+                    site = Helper.GetSiteFromTitle(title);
+                }
+
+                if (site.Key == null)
+                {
+                    return result;
+                }
             }
 
             string searchTitle = Helper.GetClearTitle(title, site.Value),
