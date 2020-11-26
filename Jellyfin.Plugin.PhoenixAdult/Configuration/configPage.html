@@ -20,6 +20,12 @@
                             <span>Disable Actors Saving to Metadata</span>
                         </label>
                     </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableImageValidation" name="DisableImageValidation" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Image Validation</span>
+                        </label>
+                    </div>
                     <div class="selectContainer">
                         <label class="selectLabel" for="JAVActorNamingStyle">JAV Actor Naming Style</label>
                         <select is="emby-select" id="JAVActorNamingStyle" name="JAVActorNamingStyle" class="emby-select-withcolor emby-select">
@@ -43,6 +49,7 @@
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#DefaultSiteName').val(config.DefaultSiteName).change();
                     $('#DisableActors').prop('checked', config.DisableActors);
+                    $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
                     $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
                     Dashboard.hideLoadingMsg();
                 });
@@ -53,6 +60,7 @@
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.DefaultSiteName = $('#DefaultSiteName').val();
                     config.DisableActors = $('#DisableActors').prop('checked');
+                    config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
                     config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);

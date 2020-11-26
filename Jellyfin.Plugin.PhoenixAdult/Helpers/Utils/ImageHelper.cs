@@ -118,6 +118,11 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static async Task<RemoteImageInfo> GetImageSizeAndValidate(RemoteImageInfo item, CancellationToken cancellationToken)
         {
+            if (Plugin.Instance.Configuration.DisableImageValidation)
+            {
+                return item;
+            }
+
             var http = await HTTP.Request(item.Url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
