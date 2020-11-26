@@ -69,7 +69,13 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={http.Headers.Location.ToString().Split('=')[1]}",
+                if (!http.Headers.Contains("Location"))
+                {
+                    return result;
+                }
+
+                string location = http.Headers.Location.ToString(),
+                    sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={location.Split('=')[1]}",
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 string[] sceneID = curID.Split('#').Skip(2).ToArray();
 
