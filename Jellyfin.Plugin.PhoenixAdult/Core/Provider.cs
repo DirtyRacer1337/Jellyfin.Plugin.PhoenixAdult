@@ -83,6 +83,7 @@ namespace PhoenixAdult
                 {
                     if (searchInfo.PremiereDate.HasValue)
                     {
+                        searchDateObj = searchInfo.PremiereDate;
                         searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                     }
                 }
