@@ -172,17 +172,19 @@ namespace PhoenixAdult.Helpers
 
         public static string ReplaceAbbrieviation(string title)
         {
-            string newTitle = title;
+            string newTitle = title + " ";
 
             foreach (var abbrieviation in Database.SiteList.Abbrieviations)
             {
                 Regex regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
-                if (regex.IsMatch(title))
+                if (regex.IsMatch(newTitle))
                 {
-                    newTitle = regex.Replace(title, abbrieviation.Value + " ", 1);
+                    newTitle = regex.Replace(newTitle, abbrieviation.Value + " ", 1);
                     break;
                 }
             }
+
+            newTitle = newTitle.Trim();
 
             return newTitle;
         }
