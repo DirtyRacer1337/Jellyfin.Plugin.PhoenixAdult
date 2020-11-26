@@ -73,8 +73,8 @@ namespace PhoenixAdult
 
             var siteNum = new int[2]
             {
-                    site.Key[0],
-                    site.Key[1],
+                site.Key[0],
+                site.Key[1],
             };
             searchTitle = titleAfterDate.Item1;
             searchDateObj = titleAfterDate.Item2;
