@@ -9,6 +9,7 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
@@ -27,7 +28,17 @@ namespace PhoenixAdult
             var tasks = new Dictionary<string, Task<string>>();
             var imageList = new List<RemoteImageInfo>();
 
+            if (string.IsNullOrEmpty(name))
+            {
+                return imageList;
+            }
+
             Logger.Info($"Searching actor images for \"{name}\"");
+
+            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+            {
+                name = string.Join(" ", name.Split().Reverse());
+            }
 
             tasks.Add("AdultDVDEmpire", GetFromAdultDVDEmpire(name, cancellationToken));
             tasks.Add("Boobpedia", GetFromBoobpedia(name, cancellationToken));
