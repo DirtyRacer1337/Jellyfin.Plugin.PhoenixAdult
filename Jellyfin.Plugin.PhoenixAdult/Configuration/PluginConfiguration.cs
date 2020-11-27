@@ -17,6 +17,7 @@ namespace PhoenixAdult.Configuration
             this.DefaultSiteName = string.Empty;
             this.DisableActors = false;
             this.DisableImageValidation = false;
+            this.DisableImageSize = false;
 
             this.JAVActorNamingStyle = JAVActorNamingStyle.WesternStyle;
         }
@@ -30,6 +31,8 @@ namespace PhoenixAdult.Configuration
         public bool DisableActors { get; set; }
 
         public bool DisableImageValidation { get; set; }
+
+        public bool DisableImageSize { get; set; }
 
         public JAVActorNamingStyle JAVActorNamingStyle { get; set; }
     }

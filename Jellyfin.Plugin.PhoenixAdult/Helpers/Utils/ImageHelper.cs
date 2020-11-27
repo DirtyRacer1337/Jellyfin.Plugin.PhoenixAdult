@@ -126,6 +126,11 @@ namespace PhoenixAdult.Helpers.Utils
             var http = await HTTP.Request(item.Url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
+                if (Plugin.Instance.Configuration.DisableImageSize)
+                {
+                    return item;
+                }
+
                 http = await HTTP.Request(item.Url, cancellationToken).ConfigureAwait(false);
                 if (http.IsOK)
                 {
