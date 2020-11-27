@@ -173,6 +173,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - WebYoung
   - WeLikeGirls
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Heyzo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
   - GirlGirl
