@@ -253,5 +253,18 @@ namespace PhoenixAdult.Helpers
 
             return result;
         }
+
+        public static string GetSiteNameFromTitle(string searchTitle)
+        {
+            searchTitle = GetClearTitle(searchTitle, string.Empty);
+
+            var splitedTitle = searchTitle.Split();
+            if (splitedTitle.Length == 2 && int.TryParse(splitedTitle[1], out _))
+            {
+                searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
+            }
+
+            return searchTitle;
+        }
     }
 }

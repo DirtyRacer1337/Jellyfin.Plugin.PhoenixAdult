@@ -63,12 +63,21 @@ namespace PhoenixAdult
             var site = Helper.GetSiteFromTitle(title);
             if (site.Key == null)
             {
+                string newTitle;
                 if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DefaultSiteName))
                 {
-                    searchInfo.Name = $"{Plugin.Instance.Configuration.DefaultSiteName} {searchInfo.Name}";
-                    Logger.Info($"searchInfo.Name: {searchInfo.Name}");
+                    newTitle = $"{Plugin.Instance.Configuration.DefaultSiteName} {searchInfo.Name}";
+                }
+                else
+                {
+                    newTitle = Helper.GetSiteNameFromTitle(searchInfo.Name);
+                }
 
-                    title = Helper.ReplaceAbbrieviation(searchInfo.Name);
+                if (!string.IsNullOrEmpty(newTitle) && !newTitle.Equals(searchInfo.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Info($"newTitle: {newTitle}");
+
+                    title = Helper.ReplaceAbbrieviation(newTitle);
                     site = Helper.GetSiteFromTitle(title);
                 }
 
