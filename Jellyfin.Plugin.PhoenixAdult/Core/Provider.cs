@@ -107,7 +107,11 @@ namespace PhoenixAdult
             {
                 if (searchInfo.PremiereDate.HasValue)
                 {
-                    searchDateObj = searchInfo.PremiereDate;
+#if __EMBY__
+                    searchDateObj = searchInfo.PremiereDate.Value.DateTime;
+#else
+                    searchDateObj = searchInfo.PremiereDate.Value;
+#endif
                     searchDate = searchInfo.PremiereDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
             }
