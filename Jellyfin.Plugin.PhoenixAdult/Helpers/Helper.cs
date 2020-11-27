@@ -147,8 +147,8 @@ namespace PhoenixAdult.Helpers
                    searchTitle = title;
             var regExRules = new Dictionary<string, string>
             {
-                { @"\b\d{4} \d{2} \d{2}\b", "yyyy MM dd" },
-                { @"\b\d{2} \d{2} \d{2}\b", "yy MM dd" },
+                { @"\b[0-9]{4} [0-9]{2} [0-9]{2}\b", "yyyy MM dd" },
+                { @"\b[0-9]{2} [0-9]{2} [0-9]{2}\b", "yy MM dd" },
             };
             (string, DateTime?) searchData = (searchTitle, null);
 

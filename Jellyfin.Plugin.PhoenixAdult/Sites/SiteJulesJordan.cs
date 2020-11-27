@@ -183,7 +183,7 @@ namespace PhoenixAdult.Sites
                     });
                 }
 
-                match = Regex.Match(script.InnerText, "setid:.?\"(\\d{1,})\"");
+                match = Regex.Match(script.InnerText, "setid:.?\"([0-9]{1,})\"");
                 if (match.Success)
                 {
                     var setId = match.Groups[1].Value;
