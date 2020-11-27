@@ -622,6 +622,9 @@
     "39": {
       "0": [ "Caribbeancom", "https://en.caribbeancom.com", "/eng/search/?q=" ],
       "1": [ "CaribbeancomPR", "https://en.caribbeancompr.com" ]
+    },
+    "40": {
+      "0": [ "Heyzo", "https://en.heyzo.com", "/search/{0}/1.html" ]
     }
   },
   "SiteIDList": {
@@ -664,7 +667,8 @@
     "36": "NetworkPorndoe",
     "37": "SiteHegre",
     "38": "NetworkJAVLibrary",
-    "39": "NetworkCaribbeancom"
+    "39": "NetworkCaribbeancom",
+    "40": "NetworkHeyzo"
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
