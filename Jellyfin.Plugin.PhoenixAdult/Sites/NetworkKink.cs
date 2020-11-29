@@ -48,26 +48,30 @@ namespace PhoenixAdult.Sites
                 var data = await HTML.ElementFromURL(url, cancellationToken, null, this.cookies).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodes("//div[@class='shoot-card scene']");
-                foreach (var searchResult in searchResults)
+                if (searchResults != null)
                 {
-                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value,
-                            scenePoster = searchResult.SelectSingleNode(".//img").Attributes["src"].Value,
-                            sceneDate = searchResult.SelectSingleNode(".//div[@class='date']").InnerText.Trim();
+                    foreach (var searchResult in searchResults)
+                    {
+                        string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[@class='shoot-link']").Attributes["href"].Value,
+                                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                                sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value,
+                                scenePoster = searchResult.SelectSingleNode(".//img").Attributes["src"].Value,
+                                sceneDate = searchResult.SelectSingleNode(".//div[@class='date']").InnerText.Trim();
 
-                    var res = new RemoteSearchResult
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = sceneName,
-                        ImageUrl = scenePoster,
-                    };
-                    if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
-                    {
-                        res.PremiereDate = sceneDateObj;
+                        var res = new RemoteSearchResult
+                        {
+                            ProviderIds = { { Plugin.Instance.Name, curID } },
+                            Name = sceneName,
+                            ImageUrl = scenePoster,
+                        };
+
+                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                        {
+                            res.PremiereDate = sceneDateObj;
+                        }
+
+                        result.Add(res);
                     }
-
-                    result.Add(res);
                 }
             }
 
@@ -100,11 +104,15 @@ namespace PhoenixAdult.Sites
                 result.Item.PremiereDate = sceneDateObj;
             }
 
-            foreach (var genreLink in sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a"))
+            var genres = sceneData.SelectNodes("//p[@class='tag-list category-tag-list']//a");
+            if (genres != null)
             {
-                var genreName = genreLink.InnerText;
+                foreach (var genreLink in genres)
+                {
+                    var genreName = genreLink.InnerText;
 
-                result.Item.AddGenre(genreName);
+                    result.Item.AddGenre(genreName);
+                }
             }
 
             var actors = sceneData.SelectNodes("//p[@class='starring']//a");
