@@ -84,7 +84,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var description in descriptionNodes)
                 {
-                    result.Item.Overview = description.InnerText.Trim();
+                    result.Item.Overview = description.InnerText.Trim() + "\n";
                 }
             }
 
