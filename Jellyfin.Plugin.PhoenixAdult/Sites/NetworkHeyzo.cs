@@ -107,7 +107,6 @@ namespace PhoenixAdult.Sites
                 {
                     case "Released":
                         var date = cellNode[1].InnerText.Trim();
-                        Logger.Debug(date);
                         if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
                         {
                             result.Item.PremiereDate = sceneDateObj;
