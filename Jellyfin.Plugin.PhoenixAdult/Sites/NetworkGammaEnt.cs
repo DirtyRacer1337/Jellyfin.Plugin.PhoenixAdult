@@ -190,7 +190,7 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
-            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["network_name"]));
+            result.Item.AddStudio((string)sceneData["network_name"]);
 
             if (DateTime.TryParseExact(sceneID[2], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
             {

@@ -110,7 +110,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = (string)sceneData["name"];
             result.Item.Overview = (string)sceneData["description"];
-            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["studio"]["name"]));
+            result.Item.AddStudio((string)sceneData["studio"]["name"]);
 
             DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
             result.Item.PremiereDate = sceneDateObj;

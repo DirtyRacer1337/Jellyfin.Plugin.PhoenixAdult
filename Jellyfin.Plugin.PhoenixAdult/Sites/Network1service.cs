@@ -219,7 +219,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
-            result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["brand"]));
+            result.Item.AddStudio((string)sceneData["brand"]);
 
             DateTime sceneDateObj = (DateTime)sceneData["dateReleased"];
             result.Item.PremiereDate = sceneDateObj;
