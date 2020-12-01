@@ -14,6 +14,8 @@ namespace PhoenixAdult.Configuration
         {
             this.DatabaseUpdateURL = "https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/contents/data";
             this.DatabaseHash = string.Empty;
+            this.TokenStorage = string.Empty;
+
             this.DefaultSiteName = string.Empty;
             this.DisableActors = false;
             this.DisableImageValidation = false;
@@ -25,6 +27,8 @@ namespace PhoenixAdult.Configuration
         public string DatabaseUpdateURL { get; set; }
 
         public string DatabaseHash { get; set; }
+
+        public string TokenStorage { get; set; }
 
         public string DefaultSiteName { get; set; }
 

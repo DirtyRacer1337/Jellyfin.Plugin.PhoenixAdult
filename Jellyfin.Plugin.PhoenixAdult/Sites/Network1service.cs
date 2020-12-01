@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -11,6 +12,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
@@ -19,6 +21,60 @@ namespace PhoenixAdult.Sites
 {
     public class Network1service : IProviderBase
     {
+        public static async Task<string> GetToken(int[] siteNum, CancellationToken cancellationToken)
+        {
+            string result = string.Empty;
+
+            if (siteNum == null)
+            {
+                return result;
+            }
+
+            var db = new JObject();
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.TokenStorage))
+            {
+                db = JObject.Parse(Plugin.Instance.Configuration.TokenStorage);
+            }
+
+            var keyName = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase);
+            if (db.ContainsKey(keyName))
+            {
+                string token = (string)db[keyName],
+                    source = ((string)db[keyName]).Split('.')[1] + "=",
+                    res = Encoding.UTF8.GetString(Convert.FromBase64String(source));
+
+                if ((int)JObject.Parse(res)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                {
+                    result = token;
+                }
+            }
+            else
+            {
+                var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
+                var instanceToken = cookies.Where(o => o.Name == "instance_token");
+                if (!instanceToken.Any())
+                {
+                    return result;
+                }
+
+                result = instanceToken.First().Value;
+
+                if (db.ContainsKey(keyName))
+                {
+                    db[keyName] = result;
+                }
+                else
+                {
+                    db.Add(keyName, result);
+                }
+
+                Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
+                Plugin.Instance.SaveConfiguration();
+            }
+
+            return result;
+        }
+
         public static async Task<IList<Cookie>> GetCookies(string url, CancellationToken cancellationToken)
         {
             var http = await HTTP.Request(url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
@@ -58,9 +114,8 @@ namespace PhoenixAdult.Sites
                 searchSceneID = null;
             }
 
-            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
-            var instanceToken = cookies.Where(o => o.Name == "instance_token");
-            if (!instanceToken.Any())
+            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
             }
@@ -77,7 +132,7 @@ namespace PhoenixAdult.Sites
                     url = $"/v2/releases?type={sceneType}&id={searchSceneID}";
                 }
 
-                var searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum) + url, instanceToken.First().Value, cancellationToken).ConfigureAwait(false);
+                var searchResults = await GetDataFromAPI(Helper.GetSearchSearchURL(siteNum) + url, instanceToken, cancellationToken).ConfigureAwait(false);
                 if (searchResults == null)
                 {
                     break;
@@ -131,15 +186,14 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
-            var instanceToken = cookies.Where(o => o.Name == "instance_token");
-            if (!instanceToken.Any())
+            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
             }
 
             var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, instanceToken.First().Value, cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -164,7 +218,7 @@ namespace PhoenixAdult.Sites
             foreach (var actorLink in sceneData["actors"])
             {
                 var actorPageURL = $"{Helper.GetSearchSearchURL(siteNum)}/v1/actors?id={actorLink["id"]}";
-                var actorData = await GetDataFromAPI(actorPageURL, instanceToken.First().Value, cancellationToken).ConfigureAwait(false);
+                var actorData = await GetDataFromAPI(actorPageURL, instanceToken, cancellationToken).ConfigureAwait(false);
                 if (actorData != null)
                 {
                     actorData = (JObject)actorData["result"].First;
@@ -195,15 +249,14 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
-            var instanceToken = cookies.Where(o => o.Name == "instance_token");
-            if (!instanceToken.Any())
+            var instanceToken = await GetToken(siteNum, cancellationToken).ConfigureAwait(false);
+            if (string.IsNullOrEmpty(instanceToken))
             {
                 return result;
             }
 
             var url = $"{Helper.GetSearchSearchURL(siteNum)}/v2/releases?type={sceneID[1]}&id={sceneID[0]}";
-            var sceneData = await GetDataFromAPI(url, instanceToken.First().Value, cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, instanceToken, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
