@@ -105,6 +105,8 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             var javID = sceneData.SelectSingleText("//div[@id='video_id']//td[@class='text']");
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();

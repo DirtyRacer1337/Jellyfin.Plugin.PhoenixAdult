@@ -89,6 +89,8 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//div[@class='icon-container']/a").Attributes["title"].Value;
             result.Item.Overview = sceneData.SelectSingleNode("//div[contains(@class, 'description')]").InnerText.Replace("...read more", string.Empty, StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio("Dogfart Network");

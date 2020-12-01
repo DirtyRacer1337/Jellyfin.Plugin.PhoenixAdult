@@ -92,6 +92,8 @@ namespace PhoenixAdult.Sites
             string sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//div[@class='title']/h1").InnerText;
 
             var description = sceneData.SelectSingleNode("//div[contains(@class, 'record-description-content')]").InnerText;

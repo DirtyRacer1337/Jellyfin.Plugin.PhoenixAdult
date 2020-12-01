@@ -9,13 +9,13 @@ using MediaBrowser.Model.Providers;
 
 namespace PhoenixAdult
 {
-    public class ExternalId : IExternalId
+    public class ExternalIdURL : IExternalId
     {
 #if __EMBY__
-        public string Name => Plugin.Instance.Name + " ID";
+        public string Name => Plugin.Instance.Name;
 #else
         public string ProviderName
-            => Plugin.Instance.Name + " ID";
+            => Plugin.Instance.Name;
 #endif
 
 #if __EMBY__
@@ -25,10 +25,10 @@ namespace PhoenixAdult
 #endif
 
         public string Key
-            => Plugin.Instance.Name;
+            => Plugin.Instance.Name + "URL";
 
         public string UrlFormatString
-            => null;
+            => "{0}";
 
         public bool Supports(IHasProviderIds item)
             => item is Movie;

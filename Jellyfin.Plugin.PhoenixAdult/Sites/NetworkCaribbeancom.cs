@@ -110,6 +110,8 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'heading')]//h1");
             result.Item.Overview = sceneData.SelectSingleText("//p[@itemprop='description']");
             result.Item.AddStudio("Caribbeancom");

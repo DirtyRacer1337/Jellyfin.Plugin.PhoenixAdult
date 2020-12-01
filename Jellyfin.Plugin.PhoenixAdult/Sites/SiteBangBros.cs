@@ -70,6 +70,8 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
             result.Item.Overview = sceneData.SelectSingleNode("//div[@class='vdoDesc']").InnerText;
             result.Item.AddStudio("Bang Bros");

@@ -102,7 +102,11 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            sceneData = (JObject)sceneData["hits"]["hits"].First["_source"];
+            sceneData = (JObject)sceneData["hits"]["hits"].First;
+
+            // Don't know where get id
+            // result.Item.HomePageUrl = Helper.GetSearchBaseURL(siteNum) + $"/{(string)sceneData["_type"]}/{(string)sceneData["_id"]}/";
+            sceneData = (JObject)sceneData["_source"];
 
             result.Item.Name = (string)sceneData["name"];
             result.Item.Overview = (string)sceneData["description"];

@@ -82,6 +82,8 @@ namespace PhoenixAdult.Sites
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
             var sceneDataJSON = JObject.Parse(sceneData.SelectSingleNode("//script[@type='application/ld+json']").InnerText.Trim());
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='title']").InnerText;
             var studioName = sceneData.SelectSingleNode("//div[@class='userInfo']//a").InnerText;
             result.Item.AddStudio(studioName);

@@ -171,7 +171,10 @@ namespace PhoenixAdult
             var result = new MetadataResult<Movie>
             {
                 HasMetadata = false,
-                Item = new Movie(),
+                Item = new Movie()
+                {
+                    OfficialRating = "Error",
+                },
             };
 
             if (info == null)
@@ -221,7 +224,7 @@ namespace PhoenixAdult
                 {
                     result.HasMetadata = true;
                     result.Item.OfficialRating = "XXX";
-                    result.Item.ProviderIds = sceneID;
+                    result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
 
                     result.Item.Name = HttpUtility.HtmlDecode(result.Item.Name).Trim();
 
@@ -261,6 +264,11 @@ namespace PhoenixAdult
                     if (result.Item.Genres != null && result.Item.Genres.Any())
                     {
                         result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People);
+                    }
+
+                    if (!string.IsNullOrEmpty(result.Item.HomePageUrl))
+                    {
+                        result.Item.ProviderIds.Update(this.Name + "URL", result.Item.HomePageUrl);
                     }
                 }
             }

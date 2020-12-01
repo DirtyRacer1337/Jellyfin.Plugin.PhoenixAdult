@@ -90,6 +90,8 @@ namespace PhoenixAdult.Sites
                 sceneDate = sceneID[1];
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//span[@class='title_bar_hilite']").InnerText;
             result.Item.Overview = sceneData.SelectSingleNode("//span[@class='update_description']").InnerText;
             result.Item.AddStudio("Jules Jordan");

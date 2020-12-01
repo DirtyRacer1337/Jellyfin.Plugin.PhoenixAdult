@@ -78,6 +78,8 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleText("//h1");
             var descriptionNodes = sceneData.SelectNodes("//div[@class='heading-detail']//p");
             if (descriptionNodes != null)

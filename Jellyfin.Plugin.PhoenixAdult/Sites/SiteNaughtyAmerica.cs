@@ -114,6 +114,9 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/scene/0{sceneID[0]}";
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["synopsis"];
             result.Item.AddStudio("Naughty America");
@@ -171,7 +174,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = $"https://www.naughtyamerica.com/scene/0{sceneID[0]}";
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/scene/0{sceneID[0]}";
             var sceneDataHTML = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var images = sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a");

@@ -95,6 +95,8 @@ namespace PhoenixAdult.Sites
             string sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//h1[@class='watchpage-title']").InnerText;
             result.Item.AddStudio("LegalPorno");
 

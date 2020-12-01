@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -172,6 +173,20 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
+            var sceneTypeURL = sceneID[0] == "scenes" ? "video" : "movie";
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/{sceneTypeURL}/0/{sceneID[1]}/";
+
+            if (sceneTypeURL == "movie")
+            {
+                var data = await HTTP.Request(sceneURL, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
+                if (!data.IsOK)
+                {
+                    sceneURL = sceneURL.Replace("/movie/", "/dvd/", StringComparison.OrdinalIgnoreCase);
+                }
+            }
+
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
@@ -245,9 +260,9 @@ namespace PhoenixAdult.Sites
 
             var ignore = false;
             var siteList = new List<string>
-                {
-                    "girlsway.com", "puretaboo.com",
-                };
+            {
+                "girlsway.com", "puretaboo.com",
+            };
             foreach (var site in siteList)
             {
                 if (Helper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))

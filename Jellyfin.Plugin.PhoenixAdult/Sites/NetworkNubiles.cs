@@ -113,6 +113,8 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
+            result.Item.HomePageUrl = sceneURL;
+
             result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'content-pane-title')]//h2").InnerText;
             var description = sceneData.SelectSingleNode("//div[@class='col-12 content-pane-column']/div");
             if (description == null)

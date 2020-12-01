@@ -201,6 +201,8 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["result"].First;
 
+            result.Item.HomePageUrl = Helper.GetSearchBaseURL(siteNum) + $"/{sceneID[1]}/{sceneID[0]}/";
+
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio(CultureInfo.InvariantCulture.TextInfo.ToTitleCase((string)sceneData["brand"]));
