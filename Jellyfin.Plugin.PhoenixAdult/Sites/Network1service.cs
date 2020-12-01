@@ -23,7 +23,7 @@ namespace PhoenixAdult.Sites
     {
         public static async Task<string> GetToken(int[] siteNum, CancellationToken cancellationToken)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
             if (siteNum == null)
             {
@@ -40,8 +40,7 @@ namespace PhoenixAdult.Sites
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],
-                    source = ((string)db[keyName]).Split('.')[1],
-                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(source));
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]));
 
                 if ((int)JObject.Parse(res)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
