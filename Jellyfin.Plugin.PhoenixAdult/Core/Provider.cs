@@ -171,10 +171,7 @@ namespace PhoenixAdult
             var result = new MetadataResult<Movie>
             {
                 HasMetadata = false,
-                Item = new Movie()
-                {
-                    OfficialRating = "Error",
-                },
+                Item = new Movie(),
             };
 
             if (info == null)

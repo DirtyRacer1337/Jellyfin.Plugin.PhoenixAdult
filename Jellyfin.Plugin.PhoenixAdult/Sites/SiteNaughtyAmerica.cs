@@ -20,7 +20,7 @@ namespace PhoenixAdult.Sites
         {
             JObject json = null;
 
-            var param = $"{{'requests':[{{'indexName':'nacms_scenes_production','params':'{searchData}&hitsPerPage=100'}}]}}".Replace('\'', '"');
+            var param = $"{{'requests':[{{'indexName':'nacms_combined_production','params':'{searchData}&hitsPerPage=100'}}]}}".Replace('\'', '"');
             var headers = new Dictionary<string, string>
             {
                 { "Content-Type", "application/json" },
