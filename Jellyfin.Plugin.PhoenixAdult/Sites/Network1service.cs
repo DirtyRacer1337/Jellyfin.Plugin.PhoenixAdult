@@ -203,8 +203,6 @@ namespace PhoenixAdult.Sites
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
                 sceneTypeURL = sceneID[1];
 
-            Logger.Debug(domain);
-
             if (!sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase) || !sceneTypeURL.Equals("serie", StringComparison.OrdinalIgnoreCase))
             {
                 switch (domain)
