@@ -173,19 +173,32 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            var sceneTypeURL = sceneID[0] == "scenes" ? "video" : "movie";
-            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/{sceneTypeURL}/0/{sceneID[1]}/";
+            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
+                sceneTypeURL = sceneID[1] == "scenes" ? "video" : "movie";
 
-            if (sceneTypeURL == "movie")
+            if (sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase))
             {
-                var data = await HTTP.Request(sceneURL, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
-                if (!data.IsOK)
+                switch (domain)
                 {
-                    sceneURL = sceneURL.Replace("/movie/", "/dvd/", StringComparison.OrdinalIgnoreCase);
+                    case "freetour.adulttime.com":
+                        sceneTypeURL = string.Empty;
+                        break;
+
+                    case "burningangel.com":
+                    case "devilsfilm.com":
+                    case "roccosiffredi.com":
+                    case "genderx.com":
+                        sceneTypeURL = "dvd";
+                        break;
                 }
             }
 
-            result.Item.ExternalId = sceneURL;
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/{sceneTypeURL}/0/{sceneID[1]}/";
+
+            if (!string.IsNullOrWhiteSpace(sceneTypeURL))
+            {
+                result.Item.ExternalId = sceneURL;
+            }
 
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];
