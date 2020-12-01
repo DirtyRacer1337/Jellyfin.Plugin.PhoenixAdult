@@ -8,8 +8,16 @@
         "overview": "Manage Your Adult Videos in Jellyfin/Emby",
         "versions": [
             {
+                "checksum": "ec495e2eef91140107b671e603f67906",
+                "changelog": "Added PornCZ Support; Added Token Saving for (Network1Service); Added Scene URL; Fixed Disable Actor; Fixed Naughty America; Minor Changes",
+                "targetAbi": "10.6.0.0",
+                "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.5.39/Jellyfin.Plugin.PhoenixAdult.zip",
+                "timestamp": "2020-12-01 13:26:28",
+                "version": "2.3.5.39"
+            },
+            {
                 "checksum": "d927abf1d9ad9af5f4406e63d3580cb3",
-                "changelog": "Add Heyzo Support; Add DefaultSiteName; Add DisableImageValidation and DisableImageSize; Add Detection JAV Movie Code; Minor Changes",
+                "changelog": "Added Heyzo Support; Added DefaultSiteName; Added DisableImageValidation and DisableImageSize; Added Detection JAV Movie Code; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.4.38/Jellyfin.Plugin.PhoenixAdult.zip",
                 "timestamp": "2020-11-27 04:26:56",
