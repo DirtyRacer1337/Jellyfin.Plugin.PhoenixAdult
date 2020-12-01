@@ -173,7 +173,9 @@ namespace PhoenixAdult.Sites
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
-                sceneTypeURL = sceneID[1] == "scenes" ? "video" : "movie";
+                sceneTypeURL = sceneID[0] == "scenes" ? "video" : "movie";
+
+            Logger.Debug(sceneTypeURL);
 
             if (sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase))
             {
