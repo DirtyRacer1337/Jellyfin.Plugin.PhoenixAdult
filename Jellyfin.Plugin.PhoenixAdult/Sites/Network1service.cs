@@ -40,7 +40,7 @@ namespace PhoenixAdult.Sites
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],
-                    source = ((string)db[keyName]).Split('.')[1] + "=",
+                    source = ((string)db[keyName]).Split('.')[1],
                     res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(source));
 
                 if ((int)JObject.Parse(res)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
