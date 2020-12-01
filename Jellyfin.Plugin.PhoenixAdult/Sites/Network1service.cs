@@ -41,7 +41,7 @@ namespace PhoenixAdult.Sites
             {
                 string token = (string)db[keyName],
                     source = ((string)db[keyName]).Split('.')[1] + "=",
-                    res = Encoding.UTF8.GetString(Convert.FromBase64String(source));
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(source));
 
                 if ((int)JObject.Parse(res)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
