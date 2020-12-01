@@ -200,7 +200,24 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["result"].First;
 
-            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{sceneID[1]}/{sceneID[0]}/";
+            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
+                sceneTypeURL = sceneID[1];
+
+            Logger.Debug(domain);
+
+            if (!sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase) || !sceneTypeURL.Equals("serie", StringComparison.OrdinalIgnoreCase))
+            {
+                switch (domain)
+                {
+                    case "brazzers.com":
+                        sceneTypeURL = "video";
+                        break;
+                }
+            }
+
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneTypeURL}/{sceneID[0]}/";
+
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
