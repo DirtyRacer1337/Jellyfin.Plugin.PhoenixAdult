@@ -263,9 +263,9 @@ namespace PhoenixAdult
                         result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People);
                     }
 
-                    if (!string.IsNullOrEmpty(result.Item.HomePageUrl))
+                    if (!string.IsNullOrEmpty(result.Item.ExternalId))
                     {
-                        result.Item.ProviderIds.Update(this.Name + "URL", result.Item.HomePageUrl);
+                        result.Item.ProviderIds.Update(this.Name + "URL", result.Item.ExternalId);
                     }
                 }
             }

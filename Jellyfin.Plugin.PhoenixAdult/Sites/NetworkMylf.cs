@@ -169,7 +169,7 @@ namespace PhoenixAdult.Sites
             var sceneName = sceneData.Properties().First().Name;
             sceneData = (JObject)sceneData[sceneName];
 
-            result.Item.HomePageUrl = sceneURL;
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];

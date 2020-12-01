@@ -115,7 +115,7 @@ namespace PhoenixAdult.Sites
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
             var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/scene/0{sceneID[0]}";
-            result.Item.HomePageUrl = sceneURL;
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["synopsis"];

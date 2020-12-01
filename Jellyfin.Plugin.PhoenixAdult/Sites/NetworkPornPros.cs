@@ -80,7 +80,7 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.HomePageUrl = sceneURL;
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
             var description = sceneData.SelectSingleNode("//div[contains(@id, 'description')]");

@@ -73,7 +73,7 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            result.Item.HomePageUrl = sceneURL;
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='no-space transform-none']");
             result.Item.Overview = sceneData.SelectSingleText("//meta[@name='description']/@content");

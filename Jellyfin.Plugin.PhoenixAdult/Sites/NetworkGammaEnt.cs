@@ -185,7 +185,7 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            result.Item.HomePageUrl = sceneURL;
+            result.Item.ExternalId = sceneURL;
 
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];

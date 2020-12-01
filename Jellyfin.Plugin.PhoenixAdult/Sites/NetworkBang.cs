@@ -105,7 +105,7 @@ namespace PhoenixAdult.Sites
             sceneData = (JObject)sceneData["hits"]["hits"].First;
 
             // Don't know where get id
-            // result.Item.HomePageUrl = Helper.GetSearchBaseURL(siteNum) + $"/{(string)sceneData["_type"]}/{(string)sceneData["_id"]}/";
+            // result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{(string)sceneData["_type"]}/{(string)sceneData["_id"]}/";
             sceneData = (JObject)sceneData["_source"];
 
             result.Item.Name = (string)sceneData["name"];
