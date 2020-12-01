@@ -248,9 +248,14 @@ namespace PhoenixAdult
                         result.Item.ProductionYear = result.Item.PremiereDate.Value.Year;
                     }
 
-                    if (result.People != null && result.People.Any() && !Plugin.Instance.Configuration.DisableActors)
+                    if (result.People != null && result.People.Any())
                     {
                         result.People = Actors.Cleanup(result);
+                    }
+
+                    if (Plugin.Instance.Configuration.DisableActors)
+                    {
+                        result.People.Clear();
                     }
 
                     if (result.Item.Genres != null && result.Item.Genres.Any())
