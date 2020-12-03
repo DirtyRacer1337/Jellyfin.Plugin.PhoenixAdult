@@ -27,9 +27,14 @@ namespace PhoenixAdult.Helpers
             {
                 var newPeople = new PersonInfo
                 {
-                    Type = PersonType.Actor,
+                    Type = people.Type,
                     ImageUrl = people.ImageUrl,
                 };
+
+                if (newPeople.Type == null)
+                {
+                    newPeople.Type = PersonType.Actor;
+                }
 
                 newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
                 newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
