@@ -284,8 +284,8 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            string image = sceneData["url_title"].ToString().ToLowerInvariant().Replace('-', '_'),
-                   imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
+            string image = (sceneData.ContainsKey("url_movie_title") ? sceneData["url_movie_title"] : sceneData["url_title"]).ToString().ToLowerInvariant().Replace('-', '_'),
+                imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
 
             if (!ignore)
             {
@@ -300,6 +300,7 @@ namespace PhoenixAdult.Sites
             {
                 image = (string)sceneData["pictures"].Last(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
                 imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
+
                 result.Add(new RemoteImageInfo
                 {
                     Url = imageURL,
