@@ -46,7 +46,8 @@ namespace PhoenixAdult.Sites
                     result = token;
                 }
             }
-            else
+
+            if (string.IsNullOrEmpty(result))
             {
                 var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
                 var instanceToken = cookies.Where(o => o.Name == "instance_token");
