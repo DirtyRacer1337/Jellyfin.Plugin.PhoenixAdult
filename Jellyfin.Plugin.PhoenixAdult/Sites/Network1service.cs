@@ -49,8 +49,8 @@ namespace PhoenixAdult.Sites
 
             if (string.IsNullOrEmpty(result))
             {
-                var cookies = await GetCookies(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false);
-                var instanceToken = cookies.Where(o => o.Name == "instance_token");
+                var http = await HTTP.Request(Helper.GetSearchBaseURL(siteNum), HttpMethod.Head, cancellationToken).ConfigureAwait(false);
+                var instanceToken = http.Cookies.Where(o => o.Name == "instance_token");
                 if (!instanceToken.Any())
                 {
                     return result;
@@ -72,13 +72,6 @@ namespace PhoenixAdult.Sites
             }
 
             return result;
-        }
-
-        public static async Task<IList<Cookie>> GetCookies(string url, CancellationToken cancellationToken)
-        {
-            var http = await HTTP.Request(url, HttpMethod.Head, cancellationToken).ConfigureAwait(false);
-
-            return http.Cookies;
         }
 
         public static async Task<JObject> GetDataFromAPI(string url, string instance, CancellationToken cancellationToken)
