@@ -258,3 +258,6 @@ dotnet_diagnostic.SA1025.severity = error
 
 # SA1001: Commas should be spaced correctly
 dotnet_diagnostic.SA1001.severity = error
+
+# SA1002: Semicolons should be spaced correctly
+dotnet_diagnostic.SA1002.severity = error

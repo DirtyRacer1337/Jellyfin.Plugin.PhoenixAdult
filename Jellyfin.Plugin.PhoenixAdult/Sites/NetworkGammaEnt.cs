@@ -271,24 +271,34 @@ namespace PhoenixAdult.Sites
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
             var ignore = false;
-            var siteList = new List<string>
+            string image, imageURL;
+
+            if (sceneID[0].Equals("scenes", StringComparison.OrdinalIgnoreCase))
             {
-                "girlsway.com", "puretaboo.com",
-            };
-            foreach (var site in siteList)
+                ignore = true;
+            }
+            else
             {
-                if (Helper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))
+                var siteList = new List<string>
                 {
-                    ignore = true;
-                    break;
+                    "girlsway.com", "puretaboo.com",
+                };
+
+                foreach (var site in siteList)
+                {
+                    if (Helper.GetSearchBaseURL(siteNum).EndsWith(site, StringComparison.OrdinalIgnoreCase))
+                    {
+                        ignore = true;
+                        break;
+                    }
                 }
             }
 
-            string image = (sceneData.ContainsKey("url_movie_title") ? sceneData["url_movie_title"] : sceneData["url_title"]).ToString().ToLowerInvariant().Replace('-', '_'),
-                imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
-
             if (!ignore)
             {
+                image = (sceneData.ContainsKey("url_movie_title") ? sceneData["url_movie_title"] : sceneData["url_title"]).ToString().ToLowerInvariant().Replace('-', '_');
+                imageURL = $"https://images-fame.gammacdn.com/movies/{sceneData["movie_id"]}/{sceneData["movie_id"]}_{image}_front_400x625.jpg";
+
                 result.Add(new RemoteImageInfo
                 {
                     Url = imageURL,
