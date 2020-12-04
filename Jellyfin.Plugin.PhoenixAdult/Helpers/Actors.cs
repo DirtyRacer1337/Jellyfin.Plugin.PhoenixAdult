@@ -27,14 +27,11 @@ namespace PhoenixAdult.Helpers
             {
                 var newPeople = new PersonInfo
                 {
+                    Type = people.Type,
                     ImageUrl = people.ImageUrl,
                 };
 
-                if (newPeople.Type != null)
-                {
-                    newPeople.Type = people.Type;
-                }
-                else
+                if (string.IsNullOrEmpty(newPeople.Type))
                 {
                     newPeople.Type = PersonType.Actor;
                 }
