@@ -66,7 +66,7 @@ namespace PhoenixAdult.Helpers
                 {
                     genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
-                    if (!newGenres.Contains(genreName))
+                    if (!newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                     {
                         newGenres.Add(genreName);
                     }
@@ -94,7 +94,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
+            var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Key.Equals(genreName, StringComparison.OrdinalIgnoreCase) || x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
             {
                 genreName = newGenreName;
@@ -103,12 +103,19 @@ namespace PhoenixAdult.Helpers
             {
                 foreach (var genreDic in Database.Genres.GenresPartialReplace)
                 {
-                    foreach (var genre in genreDic.Value)
+                    if (genreName.Equals(genreDic.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                        genreName = genreDic.Key;
+                    }
+                    else
+                    {
+                        foreach (var genre in genreDic.Value)
                         {
-                            genreName = genreDic.Key;
-                            break;
+                            if (genreName.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                            {
+                                genreName = genreDic.Key;
+                                break;
+                            }
                         }
                     }
                 }
