@@ -98,8 +98,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleText("//h1");
-
+            result.Item.Name = sceneData.SelectSingleText("//h1").Trim().Split("\n").First();
             result.Item.AddStudio("Heyzo");
 
             foreach (var movieInfo in sceneData.SelectNodes("//table[@class='movieInfo']//tr"))
