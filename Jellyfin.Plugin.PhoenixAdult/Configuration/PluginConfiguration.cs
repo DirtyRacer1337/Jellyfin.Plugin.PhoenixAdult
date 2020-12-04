@@ -4,8 +4,8 @@ namespace PhoenixAdult.Configuration
 {
     public enum JAVActorNamingStyle
     {
-        WesternStyle,
-        JapaneseStyle,
+        WesternStyle = 0,
+        JapaneseStyle = 1,
     }
 
     public class PluginConfiguration : BasePluginConfiguration
