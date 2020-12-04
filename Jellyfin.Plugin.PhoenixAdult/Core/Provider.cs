@@ -47,7 +47,6 @@ namespace PhoenixAdult
 
         public string Name => Plugin.Instance.Name;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Temporal solution")]
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
             List<RemoteSearchResult> result = new List<RemoteSearchResult>();
@@ -165,7 +164,6 @@ namespace PhoenixAdult
             return result;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Temporal solution")]
         public async Task<MetadataResult<Movie>> GetMetadata(MovieInfo info, CancellationToken cancellationToken)
         {
             var result = new MetadataResult<Movie>

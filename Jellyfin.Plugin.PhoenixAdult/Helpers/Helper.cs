@@ -267,7 +267,6 @@ namespace PhoenixAdult.Helpers
             return searchTitle;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Dirty hack for https://github.com/dotnet/corefx/issues/30793")]
         public static byte[] ConvertFromBase64String(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
