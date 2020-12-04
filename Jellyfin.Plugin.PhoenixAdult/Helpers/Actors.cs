@@ -31,10 +31,13 @@ namespace PhoenixAdult.Helpers
                     ImageUrl = people.ImageUrl,
                 };
 
+#if __EMBY__
+#else
                 if (string.IsNullOrEmpty(newPeople.Type))
                 {
                     newPeople.Type = PersonType.Actor;
                 }
+#endif
 
                 newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
                 newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
