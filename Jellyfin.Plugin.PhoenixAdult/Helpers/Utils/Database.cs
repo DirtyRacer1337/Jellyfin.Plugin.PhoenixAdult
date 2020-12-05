@@ -95,6 +95,8 @@ namespace PhoenixAdult.Helpers.Utils
 
             public Dictionary<string, string[]> GenresPartialReplace { get; set; }
 
+            public Dictionary<string, string[]> GenresSplit { get; set; }
+
             public List<string> GenresSkip { get; set; }
 
             public List<string> GenresPartialSkip { get; set; }

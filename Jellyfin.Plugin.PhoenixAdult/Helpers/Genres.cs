@@ -41,6 +41,8 @@ namespace PhoenixAdult.Helpers
             foreach (var genreLink in genresLink)
             {
                 var genreName = WebUtility.HtmlDecode(genreLink).Trim();
+                genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
+                genreName = genreName.Replace(" And ", " and ", StringComparison.Ordinal);
 
                 if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase))
                 {
@@ -61,11 +63,22 @@ namespace PhoenixAdult.Helpers
             foreach (var genreLink in cleanedGenres)
             {
                 var genreName = Replace(genreLink, sceneName);
+                var genreNames = Split(genreName);
 
-                if (!string.IsNullOrEmpty(genreName))
+                if (genreNames.Any())
                 {
-                    genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
+                    foreach (var genre in genreNames)
+                    {
+                        genreName = Replace(genre, sceneName);
 
+                        if (!string.IsNullOrEmpty(genreName) && !newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
+                        {
+                            newGenres.Add(genreName);
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(genreName))
+                {
                     if (!newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                     {
                         newGenres.Add(genreName);
@@ -150,6 +163,21 @@ namespace PhoenixAdult.Helpers
             }
 
             return genreName;
+        }
+
+        private static List<string> Split(string genreName)
+        {
+            var result = new List<string>();
+
+            foreach (var genre in Database.Genres.GenresSplit)
+            {
+                if (genre.Key.Equals(genreName, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.AddRange(genre.Value);
+                }
+            }
+
+            return result;
         }
     }
 }
