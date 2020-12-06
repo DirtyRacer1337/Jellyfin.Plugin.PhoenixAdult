@@ -18,7 +18,7 @@ namespace PhoenixAdult.Helpers
         {
             var newPeoples = new List<PersonInfo>();
 
-            if (scene == null)
+            if (scene == null || Plugin.Instance.Configuration.DisableActors)
             {
                 return newPeoples;
             }

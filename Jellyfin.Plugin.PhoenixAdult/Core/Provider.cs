@@ -252,11 +252,6 @@ namespace PhoenixAdult
                         result.People = Actors.Cleanup(result);
                     }
 
-                    if (Plugin.Instance.Configuration.DisableActors)
-                    {
-                        result.People.Clear();
-                    }
-
                     if (result.Item.Genres != null && result.Item.Genres.Any())
                     {
                         result.Item.Genres = Genres.Cleanup(result.Item.Genres, result.Item.Name, result.People);
