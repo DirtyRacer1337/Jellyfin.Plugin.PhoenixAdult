@@ -124,16 +124,26 @@ namespace PhoenixAdult.Sites
                 {
                     string actorName = actorLink.InnerText.Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase),
                            actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
-                           actorPhoto;
+                           actorPhoto = string.Empty;
 
-                    var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
-                    actorPhoto = actorHTML.SelectSingleNode("//div[contains(@class, 'biography-container')]//img").Attributes["src"].Value;
-
-                    result.People.Add(new PersonInfo
+                    var res = new PersonInfo
                     {
                         Name = actorName,
-                        ImageUrl = actorPhoto,
-                    });
+                    };
+
+                    var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken, null, this.cookies).ConfigureAwait(false);
+                    var actorPhotoNode = actorHTML.SelectSingleNode("//div[contains(@class, 'biography-container')]//img");
+                    if (actorPhotoNode != null)
+                    {
+                        actorPhoto = actorPhotoNode.Attributes["src"].Value;
+                    }
+
+                    if (!string.IsNullOrEmpty(actorPhoto))
+                    {
+                        res.ImageUrl = actorPhoto;
+                    }
+
+                    result.People.Add(res);
                 }
             }
 
