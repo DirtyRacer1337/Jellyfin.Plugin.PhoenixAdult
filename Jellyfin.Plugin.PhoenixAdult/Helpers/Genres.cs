@@ -40,9 +40,11 @@ namespace PhoenixAdult.Helpers
 
             foreach (var genreLink in genresLink)
             {
-                var genreName = WebUtility.HtmlDecode(genreLink).Trim();
-                genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
-                genreName = genreName.Replace(" And ", " and ", StringComparison.Ordinal);
+                var genreName = WebUtility.HtmlDecode(genreLink);
+                genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName)
+                    .Replace(" And ", " and ", StringComparison.OrdinalIgnoreCase)
+                    .Replace(" To ", " to ", StringComparison.OrdinalIgnoreCase)
+                    .Trim();
 
                 if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase))
                 {
