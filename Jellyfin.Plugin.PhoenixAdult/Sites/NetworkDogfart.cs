@@ -52,11 +52,11 @@ namespace PhoenixAdult.Sites
 
                     if (subSite == Helper.GetSearchSiteName(siteNum))
                     {
-                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName);
+                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
                     }
                     else
                     {
-                        res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName);
+                        res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
                     }
 
                     result.Add(res);

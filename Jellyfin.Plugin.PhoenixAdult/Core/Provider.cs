@@ -156,7 +156,7 @@ namespace PhoenixAdult
                     }
                     else
                     {
-                        result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name)).ToList();
+                        result = result.OrderByDescending(scene => 100 - LevenshteinDistance.Calculate(searchTitle, scene.Name, StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                 }
             }

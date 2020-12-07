@@ -108,7 +108,7 @@ namespace PhoenixAdult.Sites
 
                     if (!string.IsNullOrEmpty(searchJAVID))
                     {
-                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID);
+                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID, StringComparison.OrdinalIgnoreCase);
                     }
 
                     result.Add(res);

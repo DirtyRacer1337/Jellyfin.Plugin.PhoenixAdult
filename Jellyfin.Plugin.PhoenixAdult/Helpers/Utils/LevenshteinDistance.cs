@@ -45,5 +45,24 @@ namespace PhoenixAdult.Helpers.Utils
 
             return matrix[source1Length][source2Length];
         }
+
+        public static int Calculate(string source1, string source2, StringComparison comparsion)
+        {
+            int result;
+
+            switch (comparsion)
+            {
+                case StringComparison.CurrentCultureIgnoreCase:
+                case StringComparison.InvariantCultureIgnoreCase:
+                case StringComparison.OrdinalIgnoreCase:
+                    result = Calculate(source1.ToLowerInvariant(), source2.ToLowerInvariant());
+                    break;
+                default:
+                    result = Calculate(source1, source2);
+                    break;
+            }
+
+            return result;
+        }
     }
 }
