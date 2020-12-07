@@ -153,15 +153,6 @@ namespace PhoenixAdult.Helpers
                         return null;
                     }
                 }
-
-                /*if (sceneName.Contains(genreName, StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(newGenreName))
-                    return null;
-                */
-            }
-
-            if (genreName.Length > 25 || genreName.Split().Length > 3)
-            {
-                return null;
             }
 
             return genreName;
