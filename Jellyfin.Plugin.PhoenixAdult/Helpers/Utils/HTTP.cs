@@ -64,7 +64,7 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 foreach (var cookie in cookies)
                 {
-                    CookieContainer.Add(new Cookie(cookie.Key, cookie.Value));
+                    CookieContainer.Add(request.RequestUri, new Cookie(cookie.Key, cookie.Value));
                 }
             }
 
