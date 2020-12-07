@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
@@ -13,8 +12,10 @@ using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
+using MediaBrowser.Common.Net;
 using MediaBrowser.Model.Logging;
 #else
+using System.Net.Http;
 using Microsoft.Extensions.Logging;
 #endif
 
@@ -22,28 +23,29 @@ namespace PhoenixAdult
 {
     public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
-        public Provider(
 #if __EMBY__
-            ILogManager logger,
-#else
-            ILogger<Provider> logger,
-#endif
-            IHttpClient http)
+        public Provider(ILogManager logger, IHttpClient http)
         {
-#if __EMBY__
             if (logger != null)
             {
                 Log = logger.GetLogger(this.Name);
             }
-#else
-            Log = logger;
-#endif
+
             Http = http;
         }
 
-        public static ILogger Log { get; set; }
-
         public static IHttpClient Http { get; set; }
+#else
+        public Provider(ILogger<Provider> logger, IHttpClientFactory http)
+        {
+            Log = logger;
+            Http = http;
+        }
+
+        public static IHttpClientFactory Http { get; set; }
+#endif
+
+        public static ILogger Log { get; set; }
 
         public string Name => Plugin.Instance.Name;
 
@@ -267,6 +269,7 @@ namespace PhoenixAdult
             return result;
         }
 
+#if __EMBY__
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
         {
             return Http.GetResponse(new HttpRequestOptions
@@ -277,5 +280,11 @@ namespace PhoenixAdult
                 UserAgent = HTTP.GetUserAgent(),
             });
         }
+#else
+        public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
+        {
+            return Http.CreateClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, url), cancellationToken);
+        }
+#endif
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
@@ -13,8 +12,10 @@ using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
+using MediaBrowser.Common.Net;
 using MediaBrowser.Model.Configuration;
 #else
+using System.Net.Http;
 #endif
 
 namespace PhoenixAdult
@@ -109,15 +110,13 @@ namespace PhoenixAdult
             ImageType.Primary,
         };
 
+#if __EMBY__
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
+#else
+        public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
+#endif
         {
-            return Provider.Http.GetResponse(new HttpRequestOptions
-            {
-                CancellationToken = cancellationToken,
-                Url = url,
-                EnableDefaultUserAgent = false,
-                UserAgent = HTTP.GetUserAgent(),
-            });
+            return new Provider(null, Provider.Http).GetImageResponse(url, cancellationToken);
         }
 
         private static async Task<string> GetFromAdultDVDEmpire(string name, CancellationToken cancellationToken)
