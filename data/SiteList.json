@@ -660,6 +660,9 @@
       "30": [ "Czech Bi Porn", "https://czechbiporn.com" ],
       "31": [ "Czech Shemale", "https://czechshemale.com" ],
       "32": [ "Czech Gay City", "https://czechgaycity.com" ]
+    },
+    "42": {
+      "0": [ "JAV" ]
     }
   },
   "SiteIDList": {
@@ -704,7 +707,8 @@
     "38": "NetworkJAVLibrary",
     "39": "NetworkCaribbeancom",
     "40": "NetworkHeyzo",
-    "41": "NetworkPornCZ"
+    "41": "NetworkPornCZ",
+    "42": "NetworkJAV",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -797,7 +801,6 @@
     "^ihaw": "IHaveAWife",
     "^iktg": "IKnowThatGirl",
     "^il": "ImmoralLive",
-    "^jav": "JAVLibrary",
     "^kha": "KarupsHA",
     "^kow": "KarupsOW",
     "^kpc": "KarupsPC",
