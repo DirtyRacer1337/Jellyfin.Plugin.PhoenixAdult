@@ -13,36 +13,36 @@ namespace PhoenixAdult
         public static void Info(string text)
         {
 #if __EMBY__
-            Log.Info(text);
+            Log?.Info(text);
 #else
-            Log.LogInformation(text);
+            Log?.LogInformation(text);
 #endif
         }
 
         public static void Error(string text)
         {
 #if __EMBY__
-            Log.Error(text);
+            Log?.Error(text);
 #else
-            Log.LogError(text);
+            Log?.LogError(text);
 #endif
         }
 
         public static void Debug(string text)
         {
 #if __EMBY__
-            Log.Debug(text);
+            Log?.Debug(text);
 #else
-            Log.LogDebug(text);
+            Log?.LogDebug(text);
 #endif
         }
 
         public static void Warning(string text)
         {
 #if __EMBY__
-            Log.Warn(text);
+            Log?.Warn(text);
 #else
-            Log.LogWarning(text);
+            Log?.LogWarning(text);
 #endif
         }
     }
