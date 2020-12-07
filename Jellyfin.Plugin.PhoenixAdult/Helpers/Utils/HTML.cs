@@ -9,10 +9,10 @@ namespace PhoenixAdult.Helpers.Utils
 {
     internal static class HTML
     {
-        public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null, bool redirect = true)
+        public static async Task<HtmlNode> ElementFromURL(string url, CancellationToken cancellationToken, IDictionary<string, string> headers = null, IDictionary<string, string> cookies = null)
         {
             HtmlNode html = new HtmlDocument().DocumentNode;
-            var http = await HTTP.Request(url, HTTP.CreateRequest(headers, cookies, redirect), cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, cancellationToken, headers, cookies).ConfigureAwait(false);
             if (http.IsOK)
             {
                 html = ElementFromStream(http.ContentStream);
@@ -20,9 +20,6 @@ namespace PhoenixAdult.Helpers.Utils
 
             return html;
         }
-
-        public static async Task<HtmlNode> ElementFromURL(string url, bool redirect, CancellationToken cancellationToken)
-            => await ElementFromURL(url, cancellationToken, null, null, redirect).ConfigureAwait(false);
 
         public static HtmlNode ElementFromString(string data)
         {

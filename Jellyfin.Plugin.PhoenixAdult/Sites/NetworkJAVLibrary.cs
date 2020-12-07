@@ -38,8 +38,7 @@ namespace PhoenixAdult.Sites
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-            var http = await HTTP.Request(url, cancellationToken, false).ConfigureAwait(false);
-            var data = HTML.ElementFromStream(http.ContentStream);
+            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodes("//div[@class='videos']//div[@class='video']");
             if (searchResults != null)
@@ -69,13 +68,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (!http.Headers.Contains("Location"))
-                {
-                    return result;
-                }
-
-                string location = http.Headers.Location.ToString(),
-                    sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={location.Split('=')[1]}",
+                string sceneURL = Helper.GetSearchBaseURL(siteNum) + data.SelectSingleText("//div[@id='video_title']//a/@href"),
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 string[] sceneID = curID.Split('#').Skip(2).ToArray();
 

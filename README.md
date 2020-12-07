@@ -52,7 +52,6 @@ Real world examples:
 
 ## Used Libraries
 - [Html Agility Pack](https://github.com/zzzprojects/html-agility-pack)
-- [Flurl](https://github.com/tmenier/Flurl)
 - [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
 - [SkiaSharp](https://www.nuget.org/packages/SkiaSharp)
 

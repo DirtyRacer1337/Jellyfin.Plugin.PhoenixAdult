@@ -3,8 +3,6 @@
   <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release.Emby'">
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)$(AssemblyName).dll" />
-      <InputAssemblies Include="$(OutputPath)Flurl.dll"/>
-      <InputAssemblies Include="$(OutputPath)Flurl.Http.dll" />
       <InputAssemblies Include="$(OutputPath)HtmlAgilityPack.dll" />
       <InputAssemblies Include="$(OutputPath)Newtonsoft.Json.dll" Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'" />
       <InputAssemblies Include="$(OutputPath)SkiaSharp.dll" />

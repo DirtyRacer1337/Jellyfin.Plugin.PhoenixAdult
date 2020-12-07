@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,14 +39,15 @@ namespace PhoenixAdult.Sites
         {
             JObject json = null;
 
-            var param = $"{{'requests':[{{'indexName':'{indexName}','params':'{searchParams}'}}]}}".Replace('\'', '"');
+            var text = $"{{'requests':[{{'indexName':'{indexName}','params':'{searchParams}'}}]}}".Replace('\'', '"');
+            var param = new StringContent(text, Encoding.UTF8, "application/json");
             var headers = new Dictionary<string, string>
             {
                 { "Content-Type", "application/json" },
                 { "Referer",  referer },
             };
 
-            var http = await HTTP.Request(url, HTTP.CreateRequest(param, headers), cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken, headers).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);
