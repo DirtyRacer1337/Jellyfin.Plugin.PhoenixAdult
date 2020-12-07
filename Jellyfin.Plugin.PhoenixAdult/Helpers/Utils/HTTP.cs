@@ -43,7 +43,7 @@ namespace PhoenixAdult.Helpers.Utils
 
             var request = new HttpRequestMessage(method, new Uri(url));
 
-            Logger.Debug(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request.RequestUri, method.Method));
+            Logger.Debug(string.Format(CultureInfo.InvariantCulture, "Requesting {1} \"{0}\"", request.RequestUri.AbsoluteUri, method.Method));
 
             request.Headers.TryAddWithoutValidation("User-Agent", GetUserAgent());
 
