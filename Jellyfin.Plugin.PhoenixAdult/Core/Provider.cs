@@ -283,7 +283,10 @@ namespace PhoenixAdult
 #else
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
         {
-            return Http.CreateClient().SendAsync(new HttpRequestMessage(HttpMethod.Get, url), cancellationToken);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.TryAddWithoutValidation("User-Agent", HTTP.GetUserAgent());
+
+            return Http.CreateClient().SendAsync(request, cancellationToken);
         }
 #endif
     }
