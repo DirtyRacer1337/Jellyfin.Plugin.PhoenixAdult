@@ -92,7 +92,7 @@ namespace PhoenixAdult.Sites
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
                             curID,
-                            sceneName = searchResult.SelectSingleNode(".//dt").InnerText,
+                            sceneName = Decensor(searchResult.SelectSingleNode(".//dt").InnerText),
                             scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
                             javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
 
@@ -148,24 +148,15 @@ namespace PhoenixAdult.Sites
             }
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();
-
-            var sceneTitle = sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText;
-            foreach (var word in CensoredWords)
-            {
-                if (!sceneTitle.Contains("*", StringComparison.OrdinalIgnoreCase))
-                {
-                    break;
-                }
-
-                sceneTitle = sceneTitle.Replace(word.Key, word.Value, StringComparison.OrdinalIgnoreCase);
-            }
-
-            result.Item.Name = sceneTitle;
+            result.Item.Name = Decensor(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText);
 
             var description = sceneData.SelectSingleNode("//div[@class='cmn-box-description01']");
             if (description != null)
             {
-                result.Item.Overview = description.InnerText.Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase);
+                var desc = description.InnerText.Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase);
+                desc = Decensor(desc);
+
+                result.Item.Overview = desc;
             }
 
             result.Item.AddStudio(sceneData.SelectSingleNode("//dd[@itemprop='productionCompany']").InnerText);
@@ -192,6 +183,7 @@ namespace PhoenixAdult.Sites
                 foreach (var genreLink in genreNode)
                 {
                     var genreName = genreLink.InnerText;
+                    genreName = Decensor(genreName);
 
                     result.Item.AddGenre(genreName);
                 }
@@ -264,6 +256,23 @@ namespace PhoenixAdult.Sites
                     Url = sceneImages.Attributes["data-src"].Value,
                     Type = ImageType.Backdrop,
                 });
+            }
+
+            return result;
+        }
+
+        private static string Decensor(string text)
+        {
+            var result = text;
+
+            foreach (var word in CensoredWords)
+            {
+                if (!result.Contains("*", StringComparison.OrdinalIgnoreCase))
+                {
+                    break;
+                }
+
+                result = result.Replace(word.Key, word.Value, StringComparison.OrdinalIgnoreCase);
             }
 
             return result;
