@@ -58,7 +58,7 @@ namespace PhoenixAdult.Sites
                         }
                     }
 
-                    if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MM/dd/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                         curID += $"#{sceneDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
@@ -98,7 +98,7 @@ namespace PhoenixAdult.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -194,7 +194,7 @@ namespace PhoenixAdult.Sites
                     var scenePosters = sceneSearch.SelectSingleNode($"//img[@id='set-target-{setId}' and contains(@class, 'hideMobile')]");
                     if (scenePosters != null)
                     {
-                        for (int i = 0; i <= scenePosters.Attributes.Count(o => o.Name.Contains("src", StringComparison.OrdinalIgnoreCase)); i++)
+                        for (var i = 0; i <= scenePosters.Attributes.Count(o => o.Name.Contains("src", StringComparison.OrdinalIgnoreCase)); i++)
                         {
                             var attrName = $"src{i}_1x";
                             if (scenePosters.Attributes.Contains(attrName))
@@ -224,7 +224,7 @@ namespace PhoenixAdult.Sites
                 var matches = Regex.Matches(script.InnerText, "ptx\\[\"1600\"\\].*{src:.?\"(.*?)\"");
                 if (matches.Count > 0)
                 {
-                    for (int i = 1; i <= 10; i++)
+                    for (var i = 1; i <= 10; i++)
                     {
                         var t = (matches.Count / 10 * i) - 1;
                         var img = matches[t].Groups[1].Value;

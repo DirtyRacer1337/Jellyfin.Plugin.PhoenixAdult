@@ -25,13 +25,13 @@ namespace PhoenixAdult
         public override Guid Id => Guid.Parse("dc40637f-6ebd-4a34-b8a1-8799629120cf");
 
         public IEnumerable<PluginPageInfo> GetPages()
-        => new[]
-        {
+            => new[]
+            {
                 new PluginPageInfo
                 {
                     Name = this.Name,
                     EmbeddedResourcePath = $"{this.GetType().Namespace}.Configuration.configPage.html",
                 },
-        };
+            };
     }
 }

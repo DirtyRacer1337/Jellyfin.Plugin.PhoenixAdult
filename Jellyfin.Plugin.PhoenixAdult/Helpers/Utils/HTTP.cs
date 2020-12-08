@@ -29,7 +29,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         public static async Task<HTTPResponse> Request(string url, HttpMethod method, HttpContent param, IDictionary<string, string> headers, IDictionary<string, string> cookies, CancellationToken cancellationToken)
         {
-            HTTPResponse result = new HTTPResponse()
+            var result = new HTTPResponse()
             {
                 IsOK = false,
             };

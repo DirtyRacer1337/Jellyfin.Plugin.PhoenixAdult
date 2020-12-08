@@ -12,25 +12,20 @@ namespace PhoenixAdult
     public class ExternalIdURL : IExternalId
     {
 #if __EMBY__
-        public string Name => Plugin.Instance.Name;
+        public string Name => Plugin.Instance.Name + " URL";
 #else
-        public string ProviderName
-            => Plugin.Instance.Name;
+        public string ProviderName => Plugin.Instance.Name + " URL";
 #endif
 
 #if __EMBY__
 #else
-        public ExternalIdMediaType? Type
-            => ExternalIdMediaType.Movie;
+        public ExternalIdMediaType? Type => ExternalIdMediaType.Movie;
 #endif
 
-        public string Key
-            => Plugin.Instance.Name + "URL";
+        public string Key => Plugin.Instance.Name + "URL";
 
-        public string UrlFormatString
-            => "{0}";
+        public string UrlFormatString => "{0}";
 
-        public bool Supports(IHasProviderIds item)
-            => item is Movie;
+        public bool Supports(IHasProviderIds item) => item is Movie;
     }
 }

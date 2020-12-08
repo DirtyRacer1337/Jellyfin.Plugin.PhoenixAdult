@@ -45,7 +45,7 @@ namespace PhoenixAdult.Sites
                         ImageUrl = scenePoster,
                     };
 
-                    if (DateTime.TryParseExact(sceneDate, "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -82,7 +82,7 @@ namespace PhoenixAdult.Sites
             var dateNode = sceneData.SelectSingleNode("//div[@class='h5 h5-published nowrap color-rgba255-06']");
             if (dateNode != null)
             {
-                if (DateTime.TryParseExact(dateNode.InnerText.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(dateNode.InnerText.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }

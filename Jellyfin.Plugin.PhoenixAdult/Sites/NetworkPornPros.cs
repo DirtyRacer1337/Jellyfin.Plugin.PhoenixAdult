@@ -53,7 +53,7 @@ namespace PhoenixAdult.Sites
                 curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
             }
 
-            string[] sceneID = curID.Split('#').Skip(2).ToArray();
+            var sceneID = curID.Split('#').Skip(2).ToArray();
 
             var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
             if (searchResult.Any())
@@ -109,7 +109,7 @@ namespace PhoenixAdult.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -131,7 +131,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText;
+                    var actorName = actorLink.InnerText;
 
                     result.People.Add(new PersonInfo
                     {

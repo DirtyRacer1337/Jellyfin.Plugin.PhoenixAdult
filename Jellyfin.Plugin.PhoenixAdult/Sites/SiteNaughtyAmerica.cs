@@ -71,8 +71,8 @@ namespace PhoenixAdult.Sites
                 string sceneIDs = (string)searchResult["id"],
                     curID = $"{siteNum[0]}#{siteNum[1]}#{sceneIDs}",
                     sceneName = (string)searchResult["title"];
-                long sceneDate = (long)searchResult["published_at"];
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneDate = (long)searchResult["published_at"];
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var posters = (await this.GetImages(siteNum, sceneID, null, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
 
@@ -124,7 +124,7 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = (string)sceneData["synopsis"];
             result.Item.AddStudio("Naughty America");
 
-            DateTimeOffset sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
+            var sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
             result.Item.PremiereDate = sceneDateObj.DateTime;
 
             foreach (var genreLink in sceneData["fantasies"])

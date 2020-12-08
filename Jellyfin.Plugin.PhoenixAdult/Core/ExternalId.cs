@@ -14,23 +14,18 @@ namespace PhoenixAdult
 #if __EMBY__
         public string Name => Plugin.Instance.Name + " ID";
 #else
-        public string ProviderName
-            => Plugin.Instance.Name + " ID";
+        public string ProviderName => Plugin.Instance.Name + " ID";
 #endif
 
 #if __EMBY__
 #else
-        public ExternalIdMediaType? Type
-            => ExternalIdMediaType.Movie;
+        public ExternalIdMediaType? Type => ExternalIdMediaType.Movie;
 #endif
 
-        public string Key
-            => Plugin.Instance.Name;
+        public string Key => Plugin.Instance.Name;
 
-        public string UrlFormatString
-            => null;
+        public string UrlFormatString => null;
 
-        public bool Supports(IHasProviderIds item)
-            => item is Movie;
+        public bool Supports(IHasProviderIds item) => item is Movie;
     }
 }

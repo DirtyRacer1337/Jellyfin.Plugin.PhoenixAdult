@@ -91,8 +91,7 @@ namespace PhoenixAdult.Helpers
             return newGenres.OrderBy(o => o).ToArray();
         }
 
-        public static string[] Cleanup(string[] genresLink, string sceneName)
-            => Cleanup(genresLink, sceneName, null);
+        public static string[] Cleanup(string[] genresLink, string sceneName) => Cleanup(genresLink, sceneName, null);
 
         private static string Replace(string genreName, string sceneName)
         {

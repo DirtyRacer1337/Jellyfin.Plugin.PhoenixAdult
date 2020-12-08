@@ -29,7 +29,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/view_video.php?viewkey={searchTitle}",
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -91,7 +91,7 @@ namespace PhoenixAdult.Sites
             var date = (string)sceneDataJSON["uploadDate"];
             if (date != null)
             {
-                if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }

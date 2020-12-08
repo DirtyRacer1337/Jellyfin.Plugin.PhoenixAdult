@@ -171,7 +171,7 @@ namespace PhoenixAdult.Sites
                     .Replace("June", "Jun", StringComparison.OrdinalIgnoreCase)
                     .Replace("July", "Jul", StringComparison.OrdinalIgnoreCase)
                     .Trim();
-                if (DateTime.TryParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -194,7 +194,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText;
+                    var actorName = actorLink.InnerText;
 
                     if (actorName != "----")
                     {

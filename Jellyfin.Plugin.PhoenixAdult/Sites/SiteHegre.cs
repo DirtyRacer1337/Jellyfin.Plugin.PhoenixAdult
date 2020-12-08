@@ -34,7 +34,7 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodes("//div[contains(@class, 'item')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value;
+                var sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value;
 
                 if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
@@ -61,7 +61,7 @@ namespace PhoenixAdult.Sites
                             .Replace("th", string.Empty, StringComparison.OrdinalIgnoreCase)
                             .Replace("rd", string.Empty, StringComparison.OrdinalIgnoreCase)
                             .Replace("st", string.Empty, StringComparison.OrdinalIgnoreCase);
-                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                         {
                             res.PremiereDate = sceneDateObj;
                         }
@@ -89,7 +89,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -106,7 +106,7 @@ namespace PhoenixAdult.Sites
             if (dateNode != null)
             {
                 var date = dateNode.InnerText.Trim();
-                if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }

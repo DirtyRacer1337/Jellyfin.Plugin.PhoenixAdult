@@ -26,7 +26,7 @@ namespace PhoenixAdult.Sites
             }
 
             var splitedSearchTitle = searchTitle.Split();
-            string movieID = string.Empty;
+            var movieID = string.Empty;
             if (int.TryParse(splitedSearchTitle[0], out _))
             {
                 movieID = splitedSearchTitle[0];
@@ -36,7 +36,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/moviepages/{movieID}/index.html",
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -67,7 +67,7 @@ namespace PhoenixAdult.Sites
                             ImageUrl = scenePoster,
                         };
 
-                        if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                        if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                         {
                             res.PremiereDate = sceneDateObj;
                         }
@@ -108,7 +108,7 @@ namespace PhoenixAdult.Sites
                 {
                     case "Released":
                         var date = cellNode[1].InnerText.Trim();
-                        if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                        if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                         {
                             result.Item.PremiereDate = sceneDateObj;
                         }
@@ -133,7 +133,7 @@ namespace PhoenixAdult.Sites
                         {
                             foreach (var actorLink in actorsNode)
                             {
-                                string actorName = actorLink.InnerText;
+                                var actorName = actorLink.InnerText;
 
                                 if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
                                 {

@@ -82,14 +82,14 @@ namespace PhoenixAdult.Helpers
 
         public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
         {
-            string clearName = Regex.Replace(title, @"\W", string.Empty);
+            var clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
 
             foreach (var site in Database.SiteList.Sites)
             {
                 foreach (var siteData in site.Value)
                 {
-                    string clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
+                    var clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
                     if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                     {
                         possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
@@ -120,7 +120,7 @@ namespace PhoenixAdult.Helpers
             clearName = Regex.Replace(clearName, @"[^a-zA-Z0-9 ]", " ");
             clearSite = Regex.Replace(clearSite, @"\W", string.Empty);
 
-            bool matched = false;
+            var matched = false;
             while (!string.IsNullOrEmpty(clearSite) && clearName.Contains(" ", StringComparison.OrdinalIgnoreCase))
             {
                 clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
@@ -157,7 +157,7 @@ namespace PhoenixAdult.Helpers
                 var regEx = Regex.Match(searchTitle, regExRule.Key);
                 if (regEx.Groups.Count > 0)
                 {
-                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDateObj))
+                    if (DateTime.TryParseExact(regEx.Groups[0].Value, regExRule.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var searchDateObj))
                     {
                         searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
@@ -173,11 +173,11 @@ namespace PhoenixAdult.Helpers
 
         public static string ReplaceAbbrieviation(string title)
         {
-            string newTitle = title + " ";
+            var newTitle = title + " ";
 
             foreach (var abbrieviation in Database.SiteList.Abbrieviations)
             {
-                Regex regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
+                var regex = new Regex(abbrieviation.Key + " ", RegexOptions.IgnoreCase);
                 if (regex.IsMatch(newTitle))
                 {
                     newTitle = regex.Replace(newTitle, abbrieviation.Value + " ", 1);
@@ -276,7 +276,7 @@ namespace PhoenixAdult.Helpers
 
             try
             {
-                string working = input.Replace('-', '+').Replace('_', '/');
+                var working = input.Replace('-', '+').Replace('_', '/');
                 while (working.Length % 4 != 0)
                 {
                     working += '=';

@@ -66,7 +66,7 @@ namespace PhoenixAdult.Sites
                         res.ImageUrl = scenePoster;
                     }
 
-                    if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -109,7 +109,7 @@ namespace PhoenixAdult.Sites
             if (dateNode != null)
             {
                 var date = dateNode.InnerText.Replace("Date Added:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
-                if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -138,7 +138,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText.Replace("Featuring:", string.Empty, StringComparison.OrdinalIgnoreCase);
+                    var actorName = actorLink.InnerText.Replace("Featuring:", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                     if (!string.IsNullOrEmpty(actorName))
                     {
@@ -162,7 +162,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleNode("//a[@class='fake_trailer']//img");

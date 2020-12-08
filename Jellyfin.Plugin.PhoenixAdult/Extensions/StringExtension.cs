@@ -3,7 +3,8 @@ using System.Text.RegularExpressions;
 
 internal static class StringExtension
 {
-    public static bool Contains(this string source, string toCheck, StringComparison stringComparison) => source?.IndexOf(toCheck, stringComparison) >= 0;
+    public static bool Contains(this string source, string toCheck, StringComparison stringComparison)
+        => source?.IndexOf(toCheck, stringComparison) >= 0;
 
     public static string Replace(this string source, string from, string to, int nums, StringComparison stringComparison)
     {
@@ -14,7 +15,7 @@ internal static class StringExtension
 
         for (var i = 0; i < nums; i++)
         {
-            int pos = source.IndexOf(from, stringComparison);
+            var pos = source.IndexOf(from, stringComparison);
             if (pos < 0)
             {
                 return source;

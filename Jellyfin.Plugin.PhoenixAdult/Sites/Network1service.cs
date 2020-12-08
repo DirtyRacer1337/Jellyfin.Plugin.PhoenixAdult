@@ -135,7 +135,7 @@ namespace PhoenixAdult.Sites
                             curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}#{sceneType}",
                             sceneName = (string)searchResult["title"],
                             scenePoster = string.Empty;
-                    DateTime sceneDateObj = (DateTime)searchResult["dateReleased"];
+                    var sceneDateObj = (DateTime)searchResult["dateReleased"];
 
                     var imageTypes = new List<string> { "poster", "cover" };
                     foreach (var imageType in imageTypes)
@@ -213,7 +213,7 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio((string)sceneData["brand"]);
 
-            DateTime sceneDateObj = (DateTime)sceneData["dateReleased"];
+            var sceneDateObj = (DateTime)sceneData["dateReleased"];
             result.Item.PremiereDate = sceneDateObj;
 
             foreach (var genreLink in sceneData["tags"])

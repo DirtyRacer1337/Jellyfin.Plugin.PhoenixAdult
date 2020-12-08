@@ -94,7 +94,7 @@ namespace PhoenixAdult.Helpers
                 return newActorName;
             }
 
-            int siteIndex = -1;
+            var siteIndex = -1;
             foreach (var studio in studios)
             {
                 var studioName = studio.Split('!').First().Trim();

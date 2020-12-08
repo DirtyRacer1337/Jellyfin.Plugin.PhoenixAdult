@@ -34,7 +34,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/shoot/{splitedTitle}",
                     curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -65,7 +65,7 @@ namespace PhoenixAdult.Sites
                             ImageUrl = scenePoster,
                         };
 
-                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                         {
                             res.PremiereDate = sceneDateObj;
                         }
@@ -101,7 +101,7 @@ namespace PhoenixAdult.Sites
             result.Item.AddStudio("Kink");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='shoot-date']").InnerText.Trim();
-            if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }

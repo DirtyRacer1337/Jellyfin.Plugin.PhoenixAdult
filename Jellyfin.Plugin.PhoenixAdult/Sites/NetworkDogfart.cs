@@ -97,7 +97,7 @@ namespace PhoenixAdult.Sites
 
             if (!string.IsNullOrEmpty(sceneDate))
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
                 }
@@ -119,7 +119,7 @@ namespace PhoenixAdult.Sites
             {
                 foreach (var actorLink in actorsNode)
                 {
-                    string actorName = actorLink.InnerText;
+                    var actorName = actorLink.InnerText;
 
                     result.People.Add(new PersonInfo
                     {
@@ -140,7 +140,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var poster = sceneData.SelectSingleNode("//div[@class='icon-container']//img");

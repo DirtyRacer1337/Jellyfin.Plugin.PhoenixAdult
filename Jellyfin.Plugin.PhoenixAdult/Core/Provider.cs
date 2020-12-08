@@ -49,7 +49,7 @@ namespace PhoenixAdult
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
-            List<RemoteSearchResult> result = new List<RemoteSearchResult>();
+            var result = new List<RemoteSearchResult>();
 
             if (searchInfo == null)
             {
@@ -187,7 +187,7 @@ namespace PhoenixAdult
                 }
             }
 
-            if (!sceneID.TryGetValue(this.Name, out string externalID))
+            if (!sceneID.TryGetValue(this.Name, out var externalID))
             {
                 return result;
             }
@@ -198,7 +198,7 @@ namespace PhoenixAdult
                 return result;
             }
 
-            int[] siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
+            var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
 
             var provider = Helper.GetProviderBySiteID(siteNum[0]);
             if (provider != null)

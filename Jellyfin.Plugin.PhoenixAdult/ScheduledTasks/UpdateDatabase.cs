@@ -33,7 +33,7 @@ namespace PhoenixAdult.ScheduledTasks
                 db = JObject.Parse(Plugin.Instance.Configuration.DatabaseHash);
             }
 
-            for (int i = 0; i < json.Count; i++)
+            for (var i = 0; i < json.Count; i++)
             {
                 var file = json[i];
 

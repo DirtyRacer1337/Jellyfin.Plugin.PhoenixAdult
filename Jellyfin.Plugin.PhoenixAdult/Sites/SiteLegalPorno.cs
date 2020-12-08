@@ -31,7 +31,7 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = data.SelectSingleNode("//div[@class='user--guest']//a").Attributes["href"].Value,
                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -56,7 +56,7 @@ namespace PhoenixAdult.Sites
                         Name = sceneName,
                     };
 
-                    if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                    if (DateTime.TryParseExact(sceneDate, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                     {
                         res.PremiereDate = sceneDateObj;
                     }
@@ -92,7 +92,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]);
+            var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -101,7 +101,7 @@ namespace PhoenixAdult.Sites
             result.Item.AddStudio("LegalPorno");
 
             var sceneDate = sceneData.SelectSingleNode("//span[@class='scene-description__detail']//a").InnerText.Trim();
-            if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+            if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }

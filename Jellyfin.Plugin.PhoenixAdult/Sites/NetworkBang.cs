@@ -69,7 +69,7 @@ namespace PhoenixAdult.Sites
                         curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
                         sceneName = (string)sceneData["name"],
                         scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
-                DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+                var sceneDateObj = (DateTime)sceneData["releaseDate"];
 
                 var item = new RemoteSearchResult
                 {
@@ -114,7 +114,7 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio((string)sceneData["studio"]["name"]);
 
-            DateTime sceneDateObj = (DateTime)sceneData["releaseDate"];
+            var sceneDateObj = (DateTime)sceneData["releaseDate"];
             result.Item.PremiereDate = sceneDateObj;
 
             foreach (var genreLink in sceneData["genres"])

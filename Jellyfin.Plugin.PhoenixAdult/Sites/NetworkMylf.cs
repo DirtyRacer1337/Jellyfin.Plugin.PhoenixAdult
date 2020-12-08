@@ -105,13 +105,13 @@ namespace PhoenixAdult.Sites
 
             foreach (var sceneURL in searchResultsURLs)
             {
-                string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+                var curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 if (searchDate.HasValue)
                 {
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
                 }
 
-                string[] sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = curID.Split('#').Skip(2).ToArray();
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string contentName = string.Empty;
+            var contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
             {
                 if (sceneData.ContainsKey(name) && sceneData[name].Any())
@@ -191,7 +191,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime sceneDateObj))
+                if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     releaseDate = sceneDateObj;
                 }
@@ -255,7 +255,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string sceneURL = Helper.Decode(sceneID[0]);
+            var sceneURL = Helper.Decode(sceneID[0]);
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
@@ -263,7 +263,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string contentName = string.Empty;
+            var contentName = string.Empty;
             foreach (var name in new List<string>() { "moviesContent", "videosContent" })
             {
                 if (sceneData.ContainsKey(name) && (sceneData[name] != null))

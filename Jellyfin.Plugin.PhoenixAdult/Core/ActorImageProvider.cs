@@ -104,10 +104,11 @@ namespace PhoenixAdult
             return images;
         }
 
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item) => new List<ImageType>
-        {
-            ImageType.Primary,
-        };
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item)
+            => new List<ImageType>
+            {
+                ImageType.Primary,
+            };
 
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
         {
