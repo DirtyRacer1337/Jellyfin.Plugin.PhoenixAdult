@@ -220,6 +220,15 @@ dotnet_diagnostic.CA1056.severity = none
 # SA1602: Enumeration items should be documented
 dotnet_diagnostic.SA1602.severity = none
 
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = none
+
+# IDE0057: Use range operator
+dotnet_diagnostic.IDE0057.severity = none
+
+# CS1998: Async method lacks 'await' operators and will run synchronously
+dotnet_diagnostic.CS1998.severity = silent
+
 # SA1513: Closing brace should be followed by blank line
 dotnet_diagnostic.SA1513.severity = error
 
