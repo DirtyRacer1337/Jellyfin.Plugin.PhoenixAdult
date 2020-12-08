@@ -12,9 +12,9 @@ namespace PhoenixAdult
     public class ExternalIdURL : IExternalId
     {
 #if __EMBY__
-        public string Name => Plugin.Instance.Name + " URL";
+        public string Name => Plugin.Instance.Name;
 #else
-        public string ProviderName => Plugin.Instance.Name + " URL";
+        public string ProviderName => Plugin.Instance.Name;
 #endif
 
 #if __EMBY__
