@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Tasks;
+using PhoenixAdult.Helpers;
 
 namespace PhoenixAdult.ScheduledTasks
 {
@@ -42,7 +43,7 @@ namespace PhoenixAdult.ScheduledTasks
 
                 if (item.Genres != null && item.Genres.Any())
                 {
-                    var genres = Helpers.Genres.Cleanup(item.Genres, item.Name);
+                    var genres = Genres.Cleanup(item.Genres, item.Name);
 
                     if (!item.Genres.All(genres.Contains))
                     {
