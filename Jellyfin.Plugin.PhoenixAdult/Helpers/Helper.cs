@@ -141,7 +141,7 @@ namespace PhoenixAdult.Helpers
             return clearName;
         }
 
-        public static (string, DateTime?) GetDateFromTitle(string title)
+        public static (string searchTitle, DateTime? searchDateObj) GetDateFromTitle(string title)
         {
             string searchDate,
                    searchTitle = title;
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Helpers
                 { @"\b[0-9]{4} [0-9]{2} [0-9]{2}\b", "yyyy MM dd" },
                 { @"\b[0-9]{2} [0-9]{2} [0-9]{2}\b", "yy MM dd" },
             };
-            (string, DateTime?) searchData = (searchTitle, null);
+            var searchData = (searchTitle, default(DateTime?));
 
             foreach (var regExRule in regExRules)
             {

@@ -96,8 +96,8 @@ namespace PhoenixAdult
                 site.Key[0],
                 site.Key[1],
             };
-            searchTitle = titleAfterDate.Item1;
-            searchDateObj = titleAfterDate.Item2;
+            searchTitle = titleAfterDate.searchTitle;
+            searchDateObj = titleAfterDate.searchDateObj;
             if (searchDateObj.HasValue)
             {
                 searchDate = searchDateObj.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
