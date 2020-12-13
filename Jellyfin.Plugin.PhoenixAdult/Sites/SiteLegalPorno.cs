@@ -47,7 +47,6 @@ namespace PhoenixAdult.Sites
                     string sceneURL = searchResult.SelectSingleText(".//a/@href"),
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
                             sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'thumbnail-title')]//a"),
-                            scenePoster = string.Empty,
                             sceneDate = searchResult.SelectSingleText("./@release");
 
                     var res = new RemoteSearchResult
@@ -61,7 +60,7 @@ namespace PhoenixAdult.Sites
                         res.PremiereDate = sceneDateObj;
                     }
 
-                    scenePoster = searchResult.SelectSingleText(".//div[@class='thumbnail-image']/a/@style");
+                    var scenePoster = searchResult.SelectSingleText(".//div[@class='thumbnail-image']/a/@style");
                     if (!string.IsNullOrEmpty(scenePoster))
                     {
                         scenePoster = scenePoster.Split('(')[1].Split(')')[0];
