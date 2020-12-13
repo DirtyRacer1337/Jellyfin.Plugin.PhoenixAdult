@@ -34,7 +34,7 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'item')]");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value;
+                var sceneURL = searchResult.SelectSingleText(".//a/@href");
 
                 if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
@@ -44,9 +44,9 @@ namespace PhoenixAdult.Sites
                 if (sceneURL.Contains("/films/", StringComparison.OrdinalIgnoreCase) || sceneURL.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
                 {
                     string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value,
-                        scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-src"].Value,
-                        sceneDate = searchResult.SelectSingleNode(".//div[@class='details']/span[last()]").InnerText.Trim();
+                        sceneName = searchResult.SelectSingleText(".//img/@alt"),
+                        scenePoster = searchResult.SelectSingleText(".//img/@data-src"),
+                        sceneDate = searchResult.SelectSingleText(".//div[@class='details']/span[last()]");
 
                     var res = new RemoteSearchResult
                     {
@@ -94,22 +94,18 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[@class='title']/h1").InnerText;
+            result.Item.Name = sceneData.SelectSingleText("//div[@class='title']/h1");
 
-            var description = sceneData.SelectSingleNode("//div[contains(@class, 'record-description-content')]").InnerText;
+            var description = sceneData.SelectSingleText("//div[contains(@class, 'record-description-content')]");
             description = description.Substring(0, description.IndexOf("Runtime", StringComparison.OrdinalIgnoreCase));
             result.Item.Overview = description;
 
             result.Item.AddStudio("Hegre");
 
-            var dateNode = sceneData.SelectSingleNode("//span[@class='date']");
-            if (dateNode != null)
+            var date = sceneData.SelectSingleText("//span[@class='date']");
+            if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
-                var date = dateNode.InnerText.Trim();
-                if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                {
-                    result.Item.PremiereDate = sceneDateObj;
-                }
+                result.Item.PremiereDate = sceneDateObj;
             }
 
             var genreNode = sceneData.SelectNodesSafe("//a[@class='tag']");
@@ -126,7 +122,7 @@ namespace PhoenixAdult.Sites
                 var actor = new PersonInfo
                 {
                     Name = actorLink.Attributes["title"].Value,
-                    ImageUrl = actorLink.SelectSingleNode(".//img").Attributes["src"].Value.Replace("150x", "480x", StringComparison.OrdinalIgnoreCase).Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
+                    ImageUrl = actorLink.SelectSingleText(".//img/@src").Replace("150x", "480x", StringComparison.OrdinalIgnoreCase).Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
                 };
 
                 result.People.Add(actor);
@@ -147,7 +143,7 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var img = sceneData.SelectSingleNode("//meta[@name='twitter:image']").Attributes["content"].Value;
+            var img = sceneData.SelectSingleText("//meta[@name='twitter:image']/@content");
 
             result.Add(new RemoteImageInfo
             {

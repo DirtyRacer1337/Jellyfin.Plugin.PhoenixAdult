@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -33,11 +32,11 @@ namespace PhoenixAdult.Sites
                 var searchResults = data.SelectNodesSafe("//div[contains(@class, 'content-grid-item')]");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneID = searchResult.SelectSingleNode(".//span[@class='title']/a").Attributes["href"].Value.Split('/')[3],
+                    string sceneID = searchResult.SelectSingleText(".//span[@class='title']/a/@href").Split('/')[3],
                         curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
-                        sceneName = searchResult.SelectSingleNode(".//span[@class='title']/a | //h2").InnerText,
-                        posterURL = searchResult.SelectSingleNode(".//noscript/picture/img").Attributes["src"].Value,
-                        sceneDate = searchResult.SelectSingleNode(".//span[@class='date']").InnerText;
+                        sceneName = searchResult.SelectSingleText(".//span[@class='title']/a | //h2"),
+                        posterURL = searchResult.SelectSingleText(".//noscript/picture/img/@src"),
+                        sceneDate = searchResult.SelectSingleText(".//span[@class='date']");
 
                     var res = new RemoteSearchResult
                     {
@@ -65,9 +64,9 @@ namespace PhoenixAdult.Sites
                     if (sceneData != null)
                     {
                         string curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID.ToString(CultureInfo.InvariantCulture)}",
-                            sceneName = sceneData.SelectSingleNode("//h2").InnerText,
-                            posterURL = sceneData.SelectSingleNode("//video").Attributes["poster"].Value,
-                            sceneDate = sceneData.SelectSingleNode("//span[@class='date']").InnerText;
+                            sceneName = sceneData.SelectSingleText("//h2"),
+                            posterURL = sceneData.SelectSingleText("//video/@poster"),
+                            sceneDate = sceneData.SelectSingleText("//span[@class='date']");
 
                         var res = new RemoteSearchResult
                         {
@@ -113,36 +112,28 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'content-pane-title')]//h2").InnerText;
-            var description = sceneData.SelectSingleNode("//div[@class='col-12 content-pane-column']/div");
-            if (description == null)
+            result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'content-pane-title')]//h2");
+            var description = sceneData.SelectSingleText("//div[@class='col-12 content-pane-column']/div");
+            if (string.IsNullOrEmpty(description))
             {
-                var desc = string.Empty;
                 var paragraphs = sceneData.SelectNodesSafe("//div[@class='col-12 content-pane-column']//p");
                 foreach (var paragraph in paragraphs)
                 {
-                    desc += "\n\n" + paragraph.InnerText.Trim();
-                }
-
-                if (!string.IsNullOrEmpty(desc))
-                {
-                    result.Item.Overview = desc;
+                    description += "\n\n" + paragraph.InnerText.Trim();
                 }
             }
-            else
+
+            if (!string.IsNullOrEmpty(description))
             {
-                result.Item.Overview = description.InnerText;
+                result.Item.Overview = description;
             }
 
             result.Item.AddStudio("Nubiles");
 
-            var sceneDate = sceneData.SelectSingleNode("//div[contains(@class, 'content-pane')]//span[@class='date']");
-            if (sceneDate != null)
+            var sceneDate = sceneData.SelectSingleText("//div[contains(@class, 'content-pane')]//span[@class='date']");
+            if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
-                if (DateTime.TryParseExact(sceneDate.InnerText.Trim(), "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                {
-                    result.Item.PremiereDate = sceneDateObj;
-                }
+                result.Item.PremiereDate = sceneDateObj;
             }
 
             var genreNode = sceneData.SelectNodesSafe("//div[@class='categories']/a");
@@ -160,7 +151,7 @@ namespace PhoenixAdult.Sites
                     actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value;
 
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
-                var actorPhotoURL = actorPage.SelectSingleNode("//div[contains(@class, 'model-profile')]//img").Attributes["src"].Value;
+                var actorPhotoURL = actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
 
                 result.People.Add(new PersonInfo
                 {
@@ -189,12 +180,12 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var poster = sceneData.SelectSingleNode("//video");
-            if (poster != null)
+            var poster = sceneData.SelectSingleText("//video/@poster");
+            if (!string.IsNullOrEmpty(poster))
             {
                 result.Add(new RemoteImageInfo
                 {
-                    Url = poster.Attributes["poster"].Value,
+                    Url = poster,
                     Type = ImageType.Primary,
                 });
             }

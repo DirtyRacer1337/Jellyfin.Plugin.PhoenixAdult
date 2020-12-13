@@ -76,13 +76,10 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = sceneData.SelectSingleText("//meta[@name='description']/@content");
             result.Item.AddStudio("Porndoe Premium");
 
-            var dateNode = sceneData.SelectSingleNode("//div[@class='h5 h5-published nowrap color-rgba255-06']");
-            if (dateNode != null)
+            var dateNode = sceneData.SelectSingleText("//div[@class='h5 h5-published nowrap color-rgba255-06']");
+            if (DateTime.TryParseExact(dateNode.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
-                if (DateTime.TryParseExact(dateNode.InnerText.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                {
-                    result.Item.PremiereDate = sceneDateObj;
-                }
+                result.Item.PremiereDate = sceneDateObj;
             }
 
             var genres = sceneData.SelectNodesSafe("//a[@class='inline-links']");
@@ -136,17 +133,15 @@ namespace PhoenixAdult.Sites
 
             var xpaths = new List<string>
             {
-                "//picture[@class='poster']//img",
-                "//div[@id='gallery-thumbs']//img",
+                "//picture[@class='poster']//img/@src",
+                "//div[@id='gallery-thumbs']//img/@src",
             };
 
             foreach (var xpath in xpaths)
             {
-                var poster = sceneData.SelectSingleNode(xpath);
-                if (poster != null)
+                var img = sceneData.SelectSingleText(xpath);
+                if (!string.IsNullOrEmpty(img))
                 {
-                    var img = poster.Attributes["src"].Value;
-
                     result.Add(new RemoteImageInfo
                     {
                         Url = img,

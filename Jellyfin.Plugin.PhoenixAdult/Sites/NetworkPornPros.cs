@@ -82,20 +82,17 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1").InnerText;
-            var description = sceneData.SelectSingleNode("//div[contains(@id, 'description')]");
-            if (description != null)
-            {
-                result.Item.Overview = description.InnerText;
-            }
+            result.Item.Name = sceneData.SelectSingleText("//h1");
+            result.Item.Overview = sceneData.SelectSingleText("//div[contains(@id, 'description')]");
 
             result.Item.AddStudio("Porn Pros");
 
-            var dateNode = sceneData.SelectSingleNode("//div[@class='d-inline d-lg-block mb-1']/span");
-            string sceneDate = string.Empty, dateFormat = string.Empty;
-            if (dateNode != null)
+            string date = sceneData.SelectSingleText("//div[@class='d-inline d-lg-block mb-1']/span"),
+                sceneDate = string.Empty,
+                dateFormat = string.Empty;
+            if (!string.IsNullOrEmpty(date))
             {
-                sceneDate = dateNode.InnerText.Trim();
+                sceneDate = date;
                 dateFormat = "MMMM dd, yyyy";
             }
             else
@@ -152,13 +149,12 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var poster = sceneData.SelectSingleNode("//video[@id='player']");
-            if (poster != null)
+            var img = sceneData.SelectSingleText("//video[@id='player']/@poster");
+            if (!string.IsNullOrEmpty(img))
             {
-                var img = poster.Attributes["poster"].Value;
                 if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    img = $"https:{img}";
+                    img = "https:" + img;
                 }
 
                 result.Add(new RemoteImageInfo

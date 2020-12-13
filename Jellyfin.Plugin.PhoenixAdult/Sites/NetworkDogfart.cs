@@ -31,9 +31,9 @@ namespace PhoenixAdult.Sites
             {
                 string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
                         curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode(".//div/h3[@class='scene-title']").InnerText,
-                        posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}",
-                        subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
+                        sceneName = searchResult.SelectSingleText(".//div/h3[@class='scene-title']"),
+                        posterURL = $"https:{searchResult.SelectSingleText(".//img/@src")}",
+                        subSite = searchResult.SelectSingleText(".//div/p[@class='help-block']").Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                 var res = new RemoteSearchResult
                 {
@@ -88,8 +88,8 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[@class='icon-container']/a").Attributes["title"].Value;
-            result.Item.Overview = sceneData.SelectSingleNode("//div[contains(@class, 'description')]").InnerText.Replace("...read more", string.Empty, StringComparison.OrdinalIgnoreCase);
+            result.Item.Name = sceneData.SelectSingleText("//div[@class='icon-container']/a/@title");
+            result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'description')]").Replace("...read more", string.Empty, StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio("Dogfart Network");
 
             if (!string.IsNullOrEmpty(sceneDate))
@@ -134,12 +134,12 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var poster = sceneData.SelectSingleNode("//div[@class='icon-container']//img");
-            if (poster != null)
+            var poster = sceneData.SelectSingleText("//div[@class='icon-container']//img/@src");
+            if (!string.IsNullOrEmpty(poster))
             {
                 result.Add(new RemoteImageInfo
                 {
-                    Url = $"https:{poster.Attributes["src"].Value}",
+                    Url = "https:" + poster,
                     Type = ImageType.Primary,
                 });
             }
@@ -150,12 +150,15 @@ namespace PhoenixAdult.Sites
                 var url = Helper.GetSearchBaseURL(siteNum) + sceneImages.Attributes["href"].Value;
                 var posterHTML = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var posterData = posterHTML.SelectSingleNode("//div[contains(@class, 'remove-bs-padding')]/img").Attributes["src"].Value;
-                result.Add(new RemoteImageInfo
+                var posterData = posterHTML.SelectSingleText("//div[contains(@class, 'remove-bs-padding')]/img/@src");
+                if (!string.IsNullOrEmpty(posterData))
                 {
-                    Url = posterData,
-                    Type = ImageType.Backdrop,
-                });
+                    result.Add(new RemoteImageInfo
+                    {
+                        Url = posterData,
+                        Type = ImageType.Backdrop,
+                    });
+                }
             }
 
             return result;

@@ -46,10 +46,10 @@ namespace PhoenixAdult.Sites
                 var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@_vkey]");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"),
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//span[@class='title']").InnerText.Trim(),
-                            scenePoster = searchResult.SelectSingleNode(".//div[@class='phimage']//img").Attributes["data-thumb_url"].Value;
+                            sceneName = searchResult.SelectSingleText(".//span[@class='title']"),
+                            scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@thumb_url");
 
                     var res = new RemoteSearchResult
                     {
@@ -80,12 +80,12 @@ namespace PhoenixAdult.Sites
 
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-            var sceneDataJSON = JObject.Parse(sceneData.SelectSingleNode("//script[@type='application/ld+json']").InnerText.Trim());
+            var sceneDataJSON = JObject.Parse(sceneData.SelectSingleText("//script[@type='application/ld+json']"));
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='title']").InnerText;
-            var studioName = sceneData.SelectSingleNode("//div[@class='userInfo']//a").InnerText;
+            result.Item.Name = sceneData.SelectSingleText("//h1[@class='title']");
+            var studioName = sceneData.SelectSingleText("//div[@class='userInfo']//a");
             result.Item.AddStudio(studioName);
 
             var date = (string)sceneDataJSON["uploadDate"];
@@ -109,7 +109,8 @@ namespace PhoenixAdult.Sites
             foreach (var actorLink in actorsNode)
             {
                 string actorName = actorLink.Attributes["data-mxptext"].Value,
-                        actorPhotoURL = actorLink.SelectSingleNode(".//img[@class='avatar']").Attributes["src"].Value;
+                        actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
+
                 result.People.Add(new PersonInfo
                 {
                     Name = actorName,
@@ -132,12 +133,12 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var imgNode = sceneData.SelectSingleNode("//div[@id='player']//img");
-            if (imgNode != null)
+            var img = sceneData.SelectSingleText("//div[@id='player']//img/@src");
+            if (!string.IsNullOrEmpty(img))
             {
                 result.Add(new RemoteImageInfo
                 {
-                    Url = imgNode.Attributes["src"].Value,
+                    Url = img,
                     Type = ImageType.Primary,
                 });
             }

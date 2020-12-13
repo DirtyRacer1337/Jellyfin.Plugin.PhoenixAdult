@@ -29,10 +29,10 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'item') and contains(@class, 'hover')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                string sceneURL = searchResult.SelectSingleText(".//a/@href"),
                         curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'item-info')]//a").InnerText,
-                        sceneDate = searchResult.SelectSingleNode(".//span[@class='date']").InnerText.Trim(),
+                        sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'item-info')]//a"),
+                        sceneDate = searchResult.SelectSingleText(".//span[@class='date']"),
                         scenePoster = string.Empty;
 
                 var res = new RemoteSearchResult
@@ -93,19 +93,15 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//h3").InnerText;
-            var description = sceneData.SelectSingleNode("//div[contains(@class, 'videoDetails')]//p");
-            if (description != null)
-            {
-                result.Item.Overview = description.InnerText;
-            }
+            result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'videoDetails')]//h3");
+            result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'videoDetails')]//p");
 
             result.Item.AddStudio("Femdom Empire");
 
-            var dateNode = sceneData.SelectSingleNode("//div[contains(@class, 'videoInfo')]//p");
-            if (dateNode != null)
+            var dateNode = sceneData.SelectSingleText("//div[contains(@class, 'videoInfo')]//p");
+            if (!string.IsNullOrEmpty(dateNode))
             {
-                var date = dateNode.InnerText.Replace("Date Added:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                var date = dateNode.Replace("Date Added:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
                 if (DateTime.TryParseExact(date, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
@@ -156,10 +152,14 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var img = sceneData.SelectSingleNode("//a[@class='fake_trailer']//img");
-            if (img != null)
+            var image = sceneData.SelectSingleText("//a[@class='fake_trailer']//img/@src0_1x");
+            if (!string.IsNullOrEmpty(image))
             {
-                var image = Helper.GetSearchBaseURL(siteNum) + img.Attributes["src0_1x"].Value;
+                if (!image.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    image = Helper.GetSearchBaseURL(siteNum) + image;
+                }
+
                 result.Add(new RemoteImageInfo
                 {
                     Url = image,

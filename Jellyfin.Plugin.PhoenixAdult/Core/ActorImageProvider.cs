@@ -135,16 +135,20 @@ namespace PhoenixAdult
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var actorNode = actorData.SelectSingleNode("//div[@id='performerlist']/div//a");
-            if (actorNode != null)
+            var actorPageURL = actorData.SelectSingleText("//div[@id='performerlist']/div//a/@href");
+            if (!string.IsNullOrEmpty(actorPageURL))
             {
-                var actorPageURL = "https://www.adultdvdempire.com" + actorNode.Attributes["href"].Value;
+                if (actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    actorPageURL = "https://www.adultdvdempire.com" + actorPageURL;
+                }
+
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
 
-                var img = actorPage.SelectSingleNode("//div[contains(@class, 'performer-image-container')]/a");
-                if (img != null)
+                var img = actorPage.SelectSingleText("//div[contains(@class, 'performer-image-container')]/a/@href");
+                if (!string.IsNullOrEmpty(img))
                 {
-                    image = img.Attributes["href"].Value;
+                    image = img;
                 }
             }
 
@@ -165,14 +169,15 @@ namespace PhoenixAdult
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var actorImageNode = actorData.SelectSingleNode("//table[@class='infobox']//a[@class='image']//img");
-            if (actorImageNode != null)
+            var img = actorData.SelectSingleText("//table[@class='infobox']//a[@class='image']//img/@src");
+            if (!string.IsNullOrEmpty(img) && !img.Contains("NoImage", StringComparison.OrdinalIgnoreCase))
             {
-                var img = actorImageNode.Attributes["src"].Value;
-                if (!img.Contains("NoImage", StringComparison.OrdinalIgnoreCase))
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    image = "http://www.boobpedia.com" + actorImageNode.Attributes["src"].Value;
+                    img = "http://www.boobpedia.com" + img;
                 }
+
+                image = img;
             }
 
             return image;
@@ -192,14 +197,15 @@ namespace PhoenixAdult
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var actorImageNode = actorData.SelectSingleNode("//div[@id='profimg']/a");
-            if (actorImageNode != null)
+            var img = actorData.SelectSingleText("//div[@id='profimg']/a/@href");
+            if (!string.IsNullOrEmpty(img) && !img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
             {
-                var img = actorImageNode.Attributes["href"].Value;
-                if (!img.StartsWith("javascript:", StringComparison.OrdinalIgnoreCase))
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    image = "https://www.babepedia.com" + img;
+                    img = "https://www.babepedia.com" + img;
                 }
+
+                image = img;
             }
 
             return image;
@@ -219,13 +225,17 @@ namespace PhoenixAdult
 
             var actorData = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var actorNode = actorData.SelectSingleNode("//table[@id='tblFem']//tbody//a");
-            if (actorNode != null)
+            var actorPageURL = actorData.SelectSingleText("//table[@id='tblFem']//tbody//a/@href");
+            if (!string.IsNullOrEmpty(actorPageURL))
             {
-                var actorPageURL = "http://www.iafd.com" + actorNode.Attributes["href"].Value;
+                if (!actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    actorPageURL = "http://www.iafd.com" + actorPageURL;
+                }
+
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
 
-                var actorImage = actorPage.SelectSingleNode("//div[@id='headshot']//img").Attributes["src"].Value;
+                var actorImage = actorPage.SelectSingleText("//div[@id='headshot']//img/@src");
                 if (!actorImage.Contains("nophoto", StringComparison.OrdinalIgnoreCase))
                 {
                     image = actorImage;

@@ -88,11 +88,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//li[contains(@class, 'item-list')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                string sceneURL = searchResult.SelectSingleText(".//a/@href"),
                         curID,
-                        sceneName = Decensor(searchResult.SelectSingleNode(".//dt").InnerText),
-                        scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
-                        javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
+                        sceneName = Decensor(searchResult.SelectSingleText(".//dt")),
+                        scenePoster = searchResult.SelectSingleText(".//img/@data-original"),
+                        javID = searchResult.SelectSingleText(".//img/@alt");
 
                 sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
                 curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
@@ -145,29 +145,22 @@ namespace PhoenixAdult.Sites
             }
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();
-            result.Item.Name = Decensor(sceneData.SelectSingleNode("//cite[@itemprop='name']").InnerText);
+            result.Item.Name = Decensor(sceneData.SelectSingleText("//cite[@itemprop='name']"));
+            result.Item.Overview = Decensor(sceneData.SelectSingleText("//div[@class='cmn-box-description01']").Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase));
 
-            var description = sceneData.SelectSingleNode("//div[@class='cmn-box-description01']");
-            if (description != null)
+            result.Item.AddStudio(sceneData.SelectSingleText("//dd[@itemprop='productionCompany']"));
+
+            var date = sceneData.SelectSingleText("//dd[@itemprop='dateCreated']");
+            if (!string.IsNullOrEmpty(date))
             {
-                var desc = description.InnerText.Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase);
-                desc = Decensor(desc);
-
-                result.Item.Overview = desc;
-            }
-
-            result.Item.AddStudio(sceneData.SelectSingleNode("//dd[@itemprop='productionCompany']").InnerText);
-
-            var dateNode = sceneData.SelectSingleNode("//dd[@itemprop='dateCreated']");
-            if (dateNode != null)
-            {
-                var date = dateNode.InnerText
+                date = date
                     .Replace(".", string.Empty, StringComparison.OrdinalIgnoreCase)
                     .Replace(",", string.Empty, StringComparison.OrdinalIgnoreCase)
                     .Replace("Sept", "Sep", StringComparison.OrdinalIgnoreCase)
                     .Replace("June", "Jun", StringComparison.OrdinalIgnoreCase)
                     .Replace("July", "Jul", StringComparison.OrdinalIgnoreCase)
                     .Trim();
+
                 if (DateTime.TryParseExact(date, "MMM dd yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
                 {
                     result.Item.PremiereDate = sceneDateObj;
@@ -200,8 +193,8 @@ namespace PhoenixAdult.Sites
                         Name = actorName,
                     };
 
-                    var photoXpath = string.Format(CultureInfo.InvariantCulture, "//div[@id='{0}']//img[contains(@alt, '{1}')]", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
-                    var actorPhoto = sceneData.SelectSingleNode(photoXpath).Attributes["src"].Value;
+                    var photoXpath = string.Format(CultureInfo.InvariantCulture, "//div[@id='{0}']//img[contains(@alt, '{1}')]/@src", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
+                    var actorPhoto = sceneData.SelectSingleText(photoXpath);
 
                     if (!actorPhoto.Contains("nowprinting.gif", StringComparison.OrdinalIgnoreCase))
                     {
@@ -227,7 +220,7 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var img = sceneData.SelectSingleNode("//img[contains(@alt, 'cover')]").Attributes["src"].Value;
+            var img = sceneData.SelectSingleText("//img[contains(@alt, 'cover')]/@src");
             result.Add(new RemoteImageInfo
             {
                 Url = img,

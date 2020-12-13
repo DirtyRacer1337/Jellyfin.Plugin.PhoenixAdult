@@ -137,7 +137,6 @@ namespace PhoenixAdult.Sites
             foreach (var actorLink in sceneData["performers"])
             {
                 string actorName = (string)actorLink,
-                        actorPhoto = string.Empty,
                         actorsPageURL;
 
                 actorsPageURL = actorName.ToLowerInvariant()
@@ -146,23 +145,19 @@ namespace PhoenixAdult.Sites
 
                 var actorURL = $"https://www.naughtyamerica.com/pornstar/{actorsPageURL}";
                 var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
+                var actorPhoto = actorData.SelectSingleText("//img[@class='performer-pic']/@src");
 
-                var actorImageNode = actorData.SelectSingleNode("//img[@class='performer-pic']");
-                if (actorImageNode != null)
-                {
-                    actorPhoto = actorImageNode.Attributes["src"]?.Value;
-                }
-
-                var actor = new PersonInfo
+                var res = new PersonInfo
                 {
                     Name = actorName,
                 };
+
                 if (!string.IsNullOrEmpty(actorPhoto))
                 {
-                    actor.ImageUrl = $"https:{actorPhoto}";
+                    res.ImageUrl = $"https:" + actorPhoto;
                 }
 
-                result.People.Add(actor);
+                result.People.Add(res);
             }
 
             return result;

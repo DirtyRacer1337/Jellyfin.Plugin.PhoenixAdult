@@ -27,9 +27,9 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            if (!data.SelectSingleNode("//title").InnerText.Contains("Search for", StringComparison.OrdinalIgnoreCase))
+            if (!data.SelectSingleText("//title").Contains("Search for", StringComparison.OrdinalIgnoreCase))
             {
-                string sceneURL = data.SelectSingleNode("//div[@class='user--guest']//a").Attributes["href"].Value,
+                string sceneURL = data.SelectSingleText("//div[@class='user--guest']//a/@href"),
                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 var sceneID = curID.Split('#').Skip(2).ToArray();
 
@@ -44,11 +44,11 @@ namespace PhoenixAdult.Sites
                 var searchResults = data.SelectNodesSafe("//div[@class='thumbnails']/div");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                    string sceneURL = searchResult.SelectSingleText(".//a/@href"),
                             curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//div[contains(@class, 'thumbnail-title')]//a").InnerText,
+                            sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'thumbnail-title')]//a"),
                             scenePoster = string.Empty,
-                            sceneDate = searchResult.SelectSingleNode(".").Attributes["release"].Value;
+                            sceneDate = searchResult.SelectSingleText("./@release");
 
                     var res = new RemoteSearchResult
                     {
@@ -61,10 +61,10 @@ namespace PhoenixAdult.Sites
                         res.PremiereDate = sceneDateObj;
                     }
 
-                    var scenePosterNode = searchResult.SelectSingleNode(".//div[@class='thumbnail-image']/a");
-                    if (scenePosterNode != null && scenePosterNode.Attributes.Contains("style"))
+                    scenePoster = searchResult.SelectSingleText(".//div[@class='thumbnail-image']/a/@style");
+                    if (!string.IsNullOrEmpty(scenePoster))
                     {
-                        scenePoster = scenePosterNode.Attributes["style"].Value.Split('(')[1].Split(')')[0];
+                        scenePoster = scenePoster.Split('(')[1].Split(')')[0];
                     }
 
                     if (!string.IsNullOrEmpty(scenePoster))
@@ -97,10 +97,10 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//h1[@class='watchpage-title']").InnerText;
+            result.Item.Name = sceneData.SelectSingleText("//h1[@class='watchpage-title']");
             result.Item.AddStudio("LegalPorno");
 
-            var sceneDate = sceneData.SelectSingleNode("//span[@class='scene-description__detail']//a").InnerText.Trim();
+            var sceneDate = sceneData.SelectSingleText("//span[@class='scene-description__detail']//a");
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
@@ -123,10 +123,10 @@ namespace PhoenixAdult.Sites
                 };
 
                 var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
-                var actorPhotoNode = actorPage.SelectSingleNode("//div[@class='model--avatar']//img");
-                if (actorPhotoNode != null)
+                var actorPhoto = actorPage.SelectSingleText("//div[@class='model--avatar']//img/@src");
+                if (!string.IsNullOrEmpty(actorPhoto))
                 {
-                    actor.ImageUrl = actorPhotoNode.Attributes["src"].Value;
+                    actor.ImageUrl = actorPhoto;
                 }
 
                 result.People.Add(actor);
@@ -147,7 +147,7 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var scenePoster = sceneData.SelectSingleNode("//div[@id='player']").Attributes["style"].Value.Split('(')[1].Split(')')[0];
+            var scenePoster = sceneData.SelectSingleText("//div[@id='player']/@style").Split('(')[1].Split(')')[0];
             result.Add(new RemoteImageInfo
             {
                 Url = scenePoster,

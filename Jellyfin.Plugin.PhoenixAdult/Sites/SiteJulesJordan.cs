@@ -31,10 +31,10 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[@class='update_details']");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleNode("./a[last()]").Attributes["href"].Value,
+                string sceneURL = searchResult.SelectSingleText("./a[last()]/@href"),
                         curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleNode("./a[last()]").InnerText,
-                        scenePoster = searchResult.SelectSingleNode(".//img[1]").Attributes["src"].Value;
+                        sceneName = searchResult.SelectSingleText("./a[last()]"),
+                        scenePoster = searchResult.SelectSingleText(".//img[1]/@src");
                 var sceneDateNode = searchResult.SelectSingleNode(".//div[contains(@class, 'update_date')]");
 
                 var res = new RemoteSearchResult
@@ -92,8 +92,8 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleNode("//span[@class='title_bar_hilite']").InnerText;
-            result.Item.Overview = sceneData.SelectSingleNode("//span[@class='update_description']").InnerText;
+            result.Item.Name = sceneData.SelectSingleText("//span[@class='title_bar_hilite']");
+            result.Item.Overview = sceneData.SelectSingleText("//span[@class='update_description']");
             result.Item.AddStudio("Jules Jordan");
 
             if (!string.IsNullOrEmpty(sceneDate))
@@ -160,10 +160,10 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var script = sceneData.SelectSingleNode("//script[contains(text(), 'df_movie')]");
-            if (script != null)
+            var script = sceneData.SelectSingleText("//script[contains(text(), 'df_movie')]");
+            if (!string.IsNullOrEmpty(script))
             {
-                var match = Regex.Match(script.InnerText, "useimage = \"(.*)\";");
+                var match = Regex.Match(script, "useimage = \"(.*)\";");
                 if (match.Success)
                 {
                     var img = match.Groups[1].Value;
@@ -179,7 +179,7 @@ namespace PhoenixAdult.Sites
                     });
                 }
 
-                match = Regex.Match(script.InnerText, "setid:.?\"([0-9]{1,})\"");
+                match = Regex.Match(script, "setid:.?\"([0-9]{1,})\"");
                 if (match.Success)
                 {
                     var setId = match.Groups[1].Value;
@@ -210,12 +210,12 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var photoPageURL = sceneData.SelectSingleNode("//div[contains(@class, 'content_tab')]/a[text()='Photos']").Attributes["href"].Value;
+            var photoPageURL = sceneData.SelectSingleText("//div[contains(@class, 'content_tab')]/a[text()='Photos']/@href");
             var photoPage = await HTML.ElementFromURL(photoPageURL, cancellationToken).ConfigureAwait(false);
-            script = photoPage.SelectSingleNode("//script[contains(text(), 'ptx[\"1600\"]')]");
-            if (script != null)
+            script = photoPage.SelectSingleText("//script[contains(text(), 'ptx[\"1600\"]')]");
+            if (!string.IsNullOrEmpty(script))
             {
-                var matches = Regex.Matches(script.InnerText, "ptx\\[\"1600\"\\].*{src:.?\"(.*?)\"");
+                var matches = Regex.Matches(script, "ptx\\[\"1600\"\\].*{src:.?\"(.*?)\"");
                 if (matches.Count > 0)
                 {
                     for (var i = 1; i <= 10; i++)
