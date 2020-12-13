@@ -40,4 +40,16 @@ internal static class HtmlNodeExtension
             return string.Empty;
         }
     }
+
+    public static HtmlNodeCollection SelectNodesSafe(this HtmlNode source, string xpath)
+    {
+        var nodes = source.SelectNodes(xpath);
+
+        if (nodes == null)
+        {
+            nodes = (HtmlNodeCollection)Enumerable.Empty<HtmlNode>();
+        }
+
+        return nodes;
+    }
 }

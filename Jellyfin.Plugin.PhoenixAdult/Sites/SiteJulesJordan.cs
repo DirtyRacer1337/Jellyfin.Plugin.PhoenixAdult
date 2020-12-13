@@ -28,7 +28,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodes("//div[@class='update_details']");
+            var searchResults = data.SelectNodesSafe("//div[@class='update_details']");
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = searchResult.SelectSingleNode("./a[last()]").Attributes["href"].Value,
@@ -104,51 +104,45 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("//span[@class='update_tags']/a");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//span[@class='update_tags']/a");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//div[@class='gallery_info']/*[1]//span[@class='update_models']//a");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//div[@class='gallery_info']/*[1]//span[@class='update_models']//a");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                var actor = new PersonInfo
                 {
-                    var actor = new PersonInfo
+                    Name = actorLink.InnerText,
+                };
+
+                var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
+                var actorPhotoNode = actorPage.SelectSingleNode("//img[contains(@class, 'model_bio_thumb')]");
+                if (actorPhotoNode != null)
+                {
+                    string actorPhoto;
+                    if (actorPhotoNode.Attributes.Contains("src0_3x"))
                     {
-                        Name = actorLink.InnerText,
-                    };
-
-                    var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
-                    var actorPhotoNode = actorPage.SelectSingleNode("//img[contains(@class, 'model_bio_thumb')]");
-                    if (actorPhotoNode != null)
+                        actorPhoto = actorPhotoNode.Attributes["src0_3x"].Value;
+                    }
+                    else
                     {
-                        string actorPhoto;
-                        if (actorPhotoNode.Attributes.Contains("src0_3x"))
-                        {
-                            actorPhoto = actorPhotoNode.Attributes["src0_3x"].Value;
-                        }
-                        else
-                        {
-                            actorPhoto = actorPhotoNode.Attributes["src0"].Value;
-                        }
-
-                        if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-                        {
-                            actorPhoto = Helper.GetSearchBaseURL(siteNum) + actorPhoto;
-                        }
-
-                        actor.ImageUrl = actorPhoto;
+                        actorPhoto = actorPhotoNode.Attributes["src0"].Value;
                     }
 
-                    result.People.Add(actor);
+                    if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    {
+                        actorPhoto = Helper.GetSearchBaseURL(siteNum) + actorPhoto;
+                    }
+
+                    actor.ImageUrl = actorPhoto;
                 }
+
+                result.People.Add(actor);
             }
 
             return result;

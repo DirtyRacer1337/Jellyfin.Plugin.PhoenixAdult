@@ -29,21 +29,18 @@ namespace PhoenixAdult.Helpers.Utils
                 var url = "https://www.google.com/search?q=" + searchTerm;
                 var html = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = html.SelectNodes("//a[@href]");
-                if (searchResults != null)
+                var searchResults = html.SelectNodesSafe("//a[@href]");
+                foreach (var searchResult in searchResults)
                 {
-                    foreach (var searchResult in searchResults)
+                    var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
+                    if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
                     {
-                        var searchURL = WebUtility.HtmlDecode(searchResult.Attributes["href"].Value);
-                        if (searchURL.StartsWith("/url", StringComparison.OrdinalIgnoreCase))
-                        {
-                            searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", string.Empty, StringComparison.OrdinalIgnoreCase))["q"];
-                        }
+                        searchURL = HttpUtility.ParseQueryString(searchURL.Replace("/url", string.Empty, StringComparison.OrdinalIgnoreCase))["q"];
+                    }
 
-                        if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
-                        {
-                            results.Add(searchURL);
-                        }
+                    if (searchURL.StartsWith("http", StringComparison.OrdinalIgnoreCase) && !searchURL.Contains("google", StringComparison.OrdinalIgnoreCase))
+                    {
+                        results.Add(searchURL);
                     }
                 }
             }

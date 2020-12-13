@@ -180,23 +180,20 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/scene/0{sceneID[0]}";
             var sceneDataHTML = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var images = sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a");
-            if (images != null)
+            var images = sceneDataHTML.SelectNodesSafe("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a");
+            foreach (var sceneImages in images)
             {
-                foreach (var sceneImages in sceneDataHTML.SelectNodes("//div[contains(@class, 'contain-scene-images') and contains(@class, 'desktop-only')]/a"))
+                var image = $"https:{sceneImages.Attributes["href"].Value}";
+                result.Add(new RemoteImageInfo
                 {
-                    var image = $"https:{sceneImages.Attributes["href"].Value}";
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = image,
-                        Type = ImageType.Primary,
-                    });
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = image,
-                        Type = ImageType.Backdrop,
-                    });
-                }
+                    Url = image,
+                    Type = ImageType.Primary,
+                });
+                result.Add(new RemoteImageInfo
+                {
+                    Url = image,
+                    Type = ImageType.Backdrop,
+                });
             }
 
             return result;

@@ -26,41 +26,38 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodes("//a[contains(@class, 'thumbnail')]");
-            if (searchResults != null)
+            var searchResults = data.SelectNodesSafe("//a[contains(@class, 'thumbnail')]");
+            foreach (var searchResult in searchResults)
             {
-                foreach (var searchResult in searchResults)
+                string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                        sceneName = searchResult.SelectSingleNode(".//div/h3[@class='scene-title']").InnerText,
+                        posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}",
+                        subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
+
+                var res = new RemoteSearchResult
                 {
-                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleNode(".//div/h3[@class='scene-title']").InnerText,
-                            posterURL = $"https:{searchResult.SelectSingleNode(".//img").Attributes["src"].Value}",
-                            subSite = searchResult.SelectSingleNode(".//div/p[@class='help-block']").InnerText.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
+                    Name = $"{sceneName} from {subSite}",
+                    ImageUrl = posterURL,
+                };
 
-                    var res = new RemoteSearchResult
-                    {
-                        Name = $"{sceneName} from {subSite}",
-                        ImageUrl = posterURL,
-                    };
-
-                    if (searchDate.HasValue)
-                    {
-                        curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
-                    }
-
-                    res.ProviderIds.Add(Plugin.Instance.Name, curID);
-
-                    if (subSite == Helper.GetSearchSiteName(siteNum))
-                    {
-                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
-                    }
-                    else
-                    {
-                        res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
-                    }
-
-                    result.Add(res);
+                if (searchDate.HasValue)
+                {
+                    curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
                 }
+
+                res.ProviderIds.Add(Plugin.Instance.Name, curID);
+
+                if (subSite == Helper.GetSearchSiteName(siteNum))
+                {
+                    res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
+                }
+                else
+                {
+                    res.IndexNumber = 60 - LevenshteinDistance.Calculate(searchTitle, sceneName, StringComparison.OrdinalIgnoreCase);
+                }
+
+                result.Add(res);
             }
 
             return result;
@@ -103,29 +100,23 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("//div[@class='categories']/p/a");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//div[@class='categories']/p/a");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//h4[@class='more-scenes']/a");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//h4[@class='more-scenes']/a");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
-                {
-                    var actorName = actorLink.InnerText;
+                var actorName = actorLink.InnerText;
 
-                    result.People.Add(new PersonInfo
-                    {
-                        Name = actorName,
-                    });
-                }
+                result.People.Add(new PersonInfo
+                {
+                    Name = actorName,
+                });
             }
 
             return result;
@@ -153,21 +144,18 @@ namespace PhoenixAdult.Sites
                 });
             }
 
-            var img = sceneData.SelectNodes("//div[contains(@class, 'preview-image-container')]//a");
-            if (img != null)
+            var img = sceneData.SelectNodesSafe("//div[contains(@class, 'preview-image-container')]//a");
+            foreach (var sceneImages in img)
             {
-                foreach (var sceneImages in img)
-                {
-                    var url = Helper.GetSearchBaseURL(siteNum) + sceneImages.Attributes["href"].Value;
-                    var posterHTML = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
+                var url = Helper.GetSearchBaseURL(siteNum) + sceneImages.Attributes["href"].Value;
+                var posterHTML = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                    var posterData = posterHTML.SelectSingleNode("//div[contains(@class, 'remove-bs-padding')]/img").Attributes["src"].Value;
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = posterData,
-                        Type = ImageType.Backdrop,
-                    });
-                }
+                var posterData = posterHTML.SelectSingleNode("//div[contains(@class, 'remove-bs-padding')]/img").Attributes["src"].Value;
+                result.Add(new RemoteImageInfo
+                {
+                    Url = posterData,
+                    Type = ImageType.Backdrop,
+                });
             }
 
             return result;

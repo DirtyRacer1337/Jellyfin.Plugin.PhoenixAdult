@@ -85,34 +85,31 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle.Replace("-", " ", 1, StringComparison.OrdinalIgnoreCase);
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodes("//li[contains(@class, 'item-list')]");
-            if (searchResults != null)
+            var searchResults = data.SelectNodesSafe("//li[contains(@class, 'item-list')]");
+            foreach (var searchResult in searchResults)
             {
-                foreach (var searchResult in searchResults)
+                string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
+                        curID,
+                        sceneName = Decensor(searchResult.SelectSingleNode(".//dt").InnerText),
+                        scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
+                        javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
+
+                sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
+                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+
+                var res = new RemoteSearchResult
                 {
-                    string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
-                            curID,
-                            sceneName = Decensor(searchResult.SelectSingleNode(".//dt").InnerText),
-                            scenePoster = searchResult.SelectSingleNode(".//img").Attributes["data-original"].Value,
-                            javID = searchResult.SelectSingleNode(".//img").Attributes["alt"].Value;
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
+                    Name = $"{javID} {sceneName}",
+                    ImageUrl = scenePoster,
+                };
 
-                    sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-
-                    var res = new RemoteSearchResult
-                    {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = $"{javID} {sceneName}",
-                        ImageUrl = scenePoster,
-                    };
-
-                    if (!string.IsNullOrEmpty(searchJAVID))
-                    {
-                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID, StringComparison.OrdinalIgnoreCase);
-                    }
-
-                    result.Add(res);
+                if (!string.IsNullOrEmpty(searchJAVID))
+                {
+                    res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID, StringComparison.OrdinalIgnoreCase);
                 }
+
+                result.Add(res);
             }
 
             return result;
@@ -177,47 +174,41 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("//a[@itemprop='genre']");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//a[@itemprop='genre']");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
-                    genreName = Decensor(genreName);
+                var genreName = genreLink.InnerText;
+                genreName = Decensor(genreName);
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//div[@itemprop='actors']//span[@itemprop='name']");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//div[@itemprop='actors']//span[@itemprop='name']");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                var actorName = actorLink.InnerText;
+
+                if (actorName != "----")
                 {
-                    var actorName = actorLink.InnerText;
-
-                    if (actorName != "----")
+                    if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
                     {
-                        if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
-                        {
-                            actorName = string.Join(" ", actorName.Split().Reverse());
-                        }
-
-                        var actor = new PersonInfo
-                        {
-                            Name = actorName,
-                        };
-
-                        var photoXpath = string.Format(CultureInfo.InvariantCulture, "//div[@id='{0}']//img[contains(@alt, '{1}')]", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
-                        var actorPhoto = sceneData.SelectSingleNode(photoXpath).Attributes["src"].Value;
-
-                        if (!actorPhoto.Contains("nowprinting.gif", StringComparison.OrdinalIgnoreCase))
-                        {
-                            actor.ImageUrl = actorPhoto;
-                        }
-
-                        result.People.Add(actor);
+                        actorName = string.Join(" ", actorName.Split().Reverse());
                     }
+
+                    var actor = new PersonInfo
+                    {
+                        Name = actorName,
+                    };
+
+                    var photoXpath = string.Format(CultureInfo.InvariantCulture, "//div[@id='{0}']//img[contains(@alt, '{1}')]", actorName.Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase), actorName);
+                    var actorPhoto = sceneData.SelectSingleNode(photoXpath).Attributes["src"].Value;
+
+                    if (!actorPhoto.Contains("nowprinting.gif", StringComparison.OrdinalIgnoreCase))
+                    {
+                        actor.ImageUrl = actorPhoto;
+                    }
+
+                    result.People.Add(actor);
                 }
             }
 
@@ -243,7 +234,8 @@ namespace PhoenixAdult.Sites
                 Type = ImageType.Primary,
             });
 
-            foreach (var sceneImages in sceneData.SelectNodes("//section[@id='product-gallery']//img"))
+            var imgNodes = sceneData.SelectNodesSafe("//section[@id='product-gallery']//img");
+            foreach (var sceneImages in imgNodes)
             {
                 result.Add(new RemoteImageInfo
                 {

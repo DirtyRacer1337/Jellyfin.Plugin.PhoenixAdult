@@ -43,7 +43,7 @@ namespace PhoenixAdult.Sites
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = data.SelectNodes("//ul[@id='videoSearchResult']/li[@_vkey]");
+                var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@_vkey]");
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
@@ -97,30 +97,24 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("(//div[@class='categoriesWrapper'] | //div[@class='tagsWrapper'])/a");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("(//div[@class='categoriesWrapper'] | //div[@class='tagsWrapper'])/a");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//div[@class='pornstarsWrapper']/a");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//div[@class='pornstarsWrapper']/a");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                string actorName = actorLink.Attributes["data-mxptext"].Value,
+                        actorPhotoURL = actorLink.SelectSingleNode(".//img[@class='avatar']").Attributes["src"].Value;
+                result.People.Add(new PersonInfo
                 {
-                    string actorName = actorLink.Attributes["data-mxptext"].Value,
-                           actorPhotoURL = actorLink.SelectSingleNode(".//img[@class='avatar']").Attributes["src"].Value;
-                    result.People.Add(new PersonInfo
-                    {
-                        Name = actorName,
-                        ImageUrl = actorPhotoURL,
-                    });
-                }
+                    Name = actorName,
+                    ImageUrl = actorPhotoURL,
+                });
             }
 
             return result;

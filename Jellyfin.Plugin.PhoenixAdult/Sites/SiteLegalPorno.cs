@@ -41,7 +41,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                var searchResults = data.SelectNodes("//div[@class='thumbnails']/div");
+                var searchResults = data.SelectNodesSafe("//div[@class='thumbnails']/div");
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value,
@@ -106,36 +106,30 @@ namespace PhoenixAdult.Sites
                 result.Item.PremiereDate = sceneDateObj;
             }
 
-            var genreNode = sceneData.SelectNodes("//dd/a[contains(@href, '/niche/')]");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//dd/a[contains(@href, '/niche/')]");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//dd/a[contains(@href, 'model') and not(contains(@href, 'forum'))]");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//dd/a[contains(@href, 'model') and not(contains(@href, 'forum'))]");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                var actor = new PersonInfo
                 {
-                    var actor = new PersonInfo
-                    {
-                        Name = actorLink.InnerText,
-                    };
+                    Name = actorLink.InnerText,
+                };
 
-                    var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
-                    var actorPhotoNode = actorPage.SelectSingleNode("//div[@class='model--avatar']//img");
-                    if (actorPhotoNode != null)
-                    {
-                        actor.ImageUrl = actorPhotoNode.Attributes["src"].Value;
-                    }
-
-                    result.People.Add(actor);
+                var actorPage = await HTML.ElementFromURL(actorLink.Attributes["href"].Value, cancellationToken).ConfigureAwait(false);
+                var actorPhotoNode = actorPage.SelectSingleNode("//div[@class='model--avatar']//img");
+                if (actorPhotoNode != null)
+                {
+                    actor.ImageUrl = actorPhotoNode.Attributes["src"].Value;
                 }
+
+                result.People.Add(actor);
             }
 
             return result;
@@ -160,23 +154,20 @@ namespace PhoenixAdult.Sites
                 Type = ImageType.Primary,
             });
 
-            var scenePosters = sceneData.SelectNodes("//div[contains(@class, 'thumbs2 gallery')]//img");
-            if (scenePosters != null)
+            var scenePosters = sceneData.SelectNodesSafe("//div[contains(@class, 'thumbs2 gallery')]//img");
+            foreach (var poster in scenePosters)
             {
-                foreach (var poster in scenePosters)
+                scenePoster = poster.Attributes["src"].Value.Split('?')[0];
+                result.Add(new RemoteImageInfo
                 {
-                    scenePoster = poster.Attributes["src"].Value.Split('?')[0];
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = scenePoster,
-                        Type = ImageType.Primary,
-                    });
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = scenePoster,
-                        Type = ImageType.Backdrop,
-                    });
-                }
+                    Url = scenePoster,
+                    Type = ImageType.Primary,
+                });
+                result.Add(new RemoteImageInfo
+                {
+                    Url = scenePoster,
+                    Type = ImageType.Backdrop,
+                });
             }
 
             return result;

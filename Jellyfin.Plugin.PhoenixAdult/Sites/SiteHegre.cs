@@ -31,7 +31,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodes("//div[contains(@class, 'item')]");
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'item')]");
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = searchResult.SelectSingleNode(".//a").Attributes["href"].Value;
@@ -112,30 +112,24 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("//a[@class='tag']");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//a[@class='tag']");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//a[@class='record-model']");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//a[@class='record-model']");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                var actor = new PersonInfo
                 {
-                    var actor = new PersonInfo
-                    {
-                        Name = actorLink.Attributes["title"].Value,
-                        ImageUrl = actorLink.SelectSingleNode(".//img").Attributes["src"].Value.Replace("150x", "480x", StringComparison.OrdinalIgnoreCase).Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
-                    };
+                    Name = actorLink.Attributes["title"].Value,
+                    ImageUrl = actorLink.SelectSingleNode(".//img").Attributes["src"].Value.Replace("150x", "480x", StringComparison.OrdinalIgnoreCase).Replace("240x", "480x", StringComparison.OrdinalIgnoreCase),
+                };
 
-                    result.People.Add(actor);
-                }
+                result.People.Add(actor);
             }
 
             return result;

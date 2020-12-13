@@ -49,31 +49,28 @@ namespace PhoenixAdult.Sites
                 var url = string.Format(CultureInfo.InvariantCulture, Helper.GetSearchSearchURL(siteNum), searchTitle);
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = data.SelectNodes("//div[@id='movies']//div[contains(@class, 'movie')]");
-                if (searchResults != null)
+                var searchResults = data.SelectNodesSafe("//div[@id='movies']//div[contains(@class, 'movie')]");
+                foreach (var searchResult in searchResults)
                 {
-                    foreach (var searchResult in searchResults)
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/?v={searchResult.SelectSingleText(".//a/@href")}",
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                        sceneName = searchResult.SelectSingleText(".//a[@class='actor']"),
+                        sceneDate = searchResult.SelectSingleText(".//p[@class='release']").Replace("Release:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(),
+                        scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//img/@data-original");
+
+                    var res = new RemoteSearchResult
                     {
-                        string sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/?v={searchResult.SelectSingleText(".//a/@href")}",
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleText(".//a[@class='actor']"),
-                            sceneDate = searchResult.SelectSingleText(".//p[@class='release']").Replace("Release:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(),
-                            scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//img/@data-original");
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        Name = sceneName,
+                        ImageUrl = scenePoster,
+                    };
 
-                        var res = new RemoteSearchResult
-                        {
-                            ProviderIds = { { Plugin.Instance.Name, curID } },
-                            Name = sceneName,
-                            ImageUrl = scenePoster,
-                        };
-
-                        if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                        {
-                            res.PremiereDate = sceneDateObj;
-                        }
-
-                        result.Add(res);
+                    if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    {
+                        res.PremiereDate = sceneDateObj;
                     }
+
+                    result.Add(res);
                 }
             }
 
@@ -101,9 +98,9 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//h1").Trim().Split("\n").First();
             result.Item.AddStudio("Heyzo");
 
-            foreach (var movieInfo in sceneData.SelectNodes("//table[@class='movieInfo']//tr"))
+            foreach (var movieInfo in sceneData.SelectNodesSafe("//table[@class='movieInfo']//tr"))
             {
-                var cellNode = movieInfo.SelectNodes("./td");
+                var cellNode = movieInfo.SelectNodesSafe("./td");
                 switch (cellNode[0].InnerText)
                 {
                     case "Released":
@@ -115,38 +112,32 @@ namespace PhoenixAdult.Sites
 
                         break;
                     case "Sex Styles":
-                        var genreNode = cellNode[1].SelectNodes(".//a[contains(@href, 'category')]");
-                        if (genreNode != null)
+                        var genreNode = cellNode[1].SelectNodesSafe(".//a[contains(@href, 'category')]");
+                        foreach (var genreLink in genreNode)
                         {
-                            foreach (var genreLink in genreNode)
-                            {
-                                var genreName = genreLink.InnerText;
+                            var genreName = genreLink.InnerText;
 
-                                result.Item.AddGenre(genreName);
-                            }
+                            result.Item.AddGenre(genreName);
                         }
 
                         break;
                     case "Actress(es)":
-                        var actorsNode = cellNode[1].SelectNodes(".//a[contains(@href, 'actor')]");
-                        if (actorsNode != null)
+                        var actorsNode = cellNode[1].SelectNodesSafe(".//a[contains(@href, 'actor')]");
+                        foreach (var actorLink in actorsNode)
                         {
-                            foreach (var actorLink in actorsNode)
+                            var actorName = actorLink.InnerText;
+
+                            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
                             {
-                                var actorName = actorLink.InnerText;
-
-                                if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
-                                {
-                                    actorName = string.Join(" ", actorName.Split().Reverse());
-                                }
-
-                                var actor = new PersonInfo
-                                {
-                                    Name = actorName,
-                                };
-
-                                result.People.Add(actor);
+                                actorName = string.Join(" ", actorName.Split().Reverse());
                             }
+
+                            var actor = new PersonInfo
+                            {
+                                Name = actorName,
+                            };
+
+                            result.People.Add(actor);
                         }
 
                         break;

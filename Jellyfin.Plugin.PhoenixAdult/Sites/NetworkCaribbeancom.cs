@@ -63,31 +63,28 @@ namespace PhoenixAdult.Sites
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = data.SelectNodes("//div[contains(@class, 'list') or contains(@class, 'is-movie')]//div[@class='grid-item']");
-                if (searchResults != null)
+                var searchResults = data.SelectNodesSafe("//div[contains(@class, 'list') or contains(@class, 'is-movie')]//div[@class='grid-item']");
+                foreach (var searchResult in searchResults)
                 {
-                    foreach (var searchResult in searchResults)
+                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='meta-title']/a/@href"),
+                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                        sceneName = searchResult.SelectSingleText(".//div[@class='meta-title']"),
+                        sceneDate = searchResult.SelectSingleText(".//div[@class='meta-data']"),
+                        scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='media-thum']//img/@src");
+
+                    var res = new RemoteSearchResult
                     {
-                        string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='meta-title']/a/@href"),
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                            sceneName = searchResult.SelectSingleText(".//div[@class='meta-title']"),
-                            sceneDate = searchResult.SelectSingleText(".//div[@class='meta-data']"),
-                            scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='media-thum']//img/@src");
+                        ProviderIds = { { Plugin.Instance.Name, curID } },
+                        Name = sceneName,
+                        ImageUrl = scenePoster,
+                    };
 
-                        var res = new RemoteSearchResult
-                        {
-                            ProviderIds = { { Plugin.Instance.Name, curID } },
-                            Name = sceneName,
-                            ImageUrl = scenePoster,
-                        };
-
-                        if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                        {
-                            res.PremiereDate = sceneDateObj;
-                        }
-
-                        result.Add(res);
+                    if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    {
+                        res.PremiereDate = sceneDateObj;
                     }
+
+                    result.Add(res);
                 }
             }
 
@@ -116,59 +113,50 @@ namespace PhoenixAdult.Sites
             result.Item.Overview = sceneData.SelectSingleText("//p[@itemprop='description']");
             result.Item.AddStudio("Caribbeancom");
 
-            var movieSpecNodes = sceneData.SelectNodes("//li[@class='movie-spec' or @class='movie-detail__spec']");
-            if (movieSpecNodes != null)
+            var movieSpecNodes = sceneData.SelectNodesSafe("//li[@class='movie-spec' or @class='movie-detail__spec']");
+            foreach (var movieSpec in movieSpecNodes)
             {
-                foreach (var movieSpec in movieSpecNodes)
+                var movieSpecTitle = movieSpec.SelectSingleText(".//span[@class='spec-title']").Replace(":", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+                switch (movieSpecTitle)
                 {
-                    var movieSpecTitle = movieSpec.SelectSingleText(".//span[@class='spec-title']").Replace(":", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
-                    switch (movieSpecTitle)
-                    {
-                        case "Release Date":
-                            var date = movieSpec.SelectSingleText(".//span[@class='spec-content']").Replace("/", "-", StringComparison.OrdinalIgnoreCase);
-                            if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    case "Release Date":
+                        var date = movieSpec.SelectSingleText(".//span[@class='spec-content']").Replace("/", "-", StringComparison.OrdinalIgnoreCase);
+                        if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                        {
+                            result.Item.PremiereDate = sceneDateObj;
+                        }
+
+                        break;
+                    case "Tags":
+                        var genreNode = movieSpec.SelectNodesSafe(".//span[@class='spec-content']/a");
+                        foreach (var genreLink in genreNode)
+                        {
+                            var genreName = genreLink.InnerText;
+
+                            result.Item.AddGenre(genreName);
+                        }
+
+                        break;
+                    case "Starring":
+                        var actorsNode = movieSpec.SelectNodesSafe(".//span[@class='spec-content']/a");
+                        foreach (var actorLink in actorsNode)
+                        {
+                            var actorName = actorLink.InnerText;
+
+                            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
                             {
-                                result.Item.PremiereDate = sceneDateObj;
+                                actorName = string.Join(" ", actorName.Split().Reverse());
                             }
 
-                            break;
-                        case "Tags":
-                            var genreNode = movieSpec.SelectNodes(".//span[@class='spec-content']/a");
-                            if (genreNode != null)
+                            var actor = new PersonInfo
                             {
-                                foreach (var genreLink in genreNode)
-                                {
-                                    var genreName = genreLink.InnerText;
+                                Name = actorName,
+                            };
 
-                                    result.Item.AddGenre(genreName);
-                                }
-                            }
+                            result.People.Add(actor);
+                        }
 
-                            break;
-                        case "Starring":
-                            var actorsNode = movieSpec.SelectNodes(".//span[@class='spec-content']/a");
-                            if (actorsNode != null)
-                            {
-                                foreach (var actorLink in actorsNode)
-                                {
-                                    var actorName = actorLink.InnerText;
-
-                                    if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
-                                    {
-                                        actorName = string.Join(" ", actorName.Split().Reverse());
-                                    }
-
-                                    var actor = new PersonInfo
-                                    {
-                                        Name = actorName,
-                                    };
-
-                                    result.People.Add(actor);
-                                }
-                            }
-
-                            break;
-                    }
+                        break;
                 }
             }
 
@@ -200,32 +188,29 @@ namespace PhoenixAdult.Sites
                 Type = ImageType.Primary,
             });
 
-            var sceneImages = sceneData.SelectNodes("//div[@class='gallery' or contains(@class, 'is-gallery')]//a");
-            if (sceneImages != null)
+            var sceneImages = sceneData.SelectNodesSafe("//div[@class='gallery' or contains(@class, 'is-gallery')]//a");
+            foreach (var sceneImage in sceneImages)
             {
-                foreach (var sceneImage in sceneImages)
+                var img = sceneImage.Attributes["href"].Value;
+
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    var img = sceneImage.Attributes["href"].Value;
+                    img = Helper.GetSearchBaseURL(siteNum) + img;
+                }
 
-                    if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                if (!img.Contains("/member/", StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Add(new RemoteImageInfo
                     {
-                        img = Helper.GetSearchBaseURL(siteNum) + img;
-                    }
+                        Url = img,
+                        Type = ImageType.Primary,
+                    });
 
-                    if (!img.Contains("/member/", StringComparison.OrdinalIgnoreCase))
+                    result.Add(new RemoteImageInfo
                     {
-                        result.Add(new RemoteImageInfo
-                        {
-                            Url = img,
-                            Type = ImageType.Primary,
-                        });
-
-                        result.Add(new RemoteImageInfo
-                        {
-                            Url = img,
-                            Type = ImageType.Backdrop,
-                        });
-                    }
+                        Url = img,
+                        Type = ImageType.Backdrop,
+                    });
                 }
             }
 

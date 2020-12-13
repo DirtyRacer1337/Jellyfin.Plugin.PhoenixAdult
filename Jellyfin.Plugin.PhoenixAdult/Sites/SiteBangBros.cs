@@ -27,7 +27,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodes("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleNode(".//a[contains(@href, '/video')]").Attributes["href"].Value,
@@ -85,35 +85,29 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var genreNode = sceneData.SelectNodes("//div[contains(@class, 'vdoTags')]//a");
-            if (genreNode != null)
+            var genreNode = sceneData.SelectNodesSafe("//div[contains(@class, 'vdoTags')]//a");
+            foreach (var genreLink in genreNode)
             {
-                foreach (var genreLink in genreNode)
-                {
-                    var genreName = genreLink.InnerText;
+                var genreName = genreLink.InnerText;
 
-                    result.Item.AddGenre(genreName);
-                }
+                result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodes("//div[@class='vdoCast']//a[contains(@href, '/model')]");
-            if (actorsNode != null)
+            var actorsNode = sceneData.SelectNodesSafe("//div[@class='vdoCast']//a[contains(@href, '/model')]");
+            foreach (var actorLink in actorsNode)
             {
-                foreach (var actorLink in actorsNode)
+                string actorName = actorLink.InnerText,
+                        actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
+                        actorPhoto;
+
+                var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
+                actorPhoto = $"https:{actorHTML.SelectSingleNode("//div[@class='profilePic_in']//img").Attributes["src"].Value}";
+
+                result.People.Add(new PersonInfo
                 {
-                    string actorName = actorLink.InnerText,
-                           actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value,
-                           actorPhoto;
-
-                    var actorHTML = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
-                    actorPhoto = $"https:{actorHTML.SelectSingleNode("//div[@class='profilePic_in']//img").Attributes["src"].Value}";
-
-                    result.People.Add(new PersonInfo
-                    {
-                        Name = actorName,
-                        ImageUrl = actorPhoto,
-                    });
-                }
+                    Name = actorName,
+                    ImageUrl = actorPhoto,
+                });
             }
 
             return result;
@@ -131,30 +125,24 @@ namespace PhoenixAdult.Sites
             var sceneURL = Helper.Decode(sceneID[0]);
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var imgNode = sceneData.SelectNodes("//img[contains(@id, 'player-overlay-image')]");
-            if (imgNode != null)
+            var imgNode = sceneData.SelectNodesSafe("//img[contains(@id, 'player-overlay-image')]");
+            foreach (var sceneImages in imgNode)
             {
-                foreach (var sceneImages in imgNode)
+                result.Add(new RemoteImageInfo
                 {
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = $"https:{sceneImages.Attributes["src"].Value}",
-                        Type = ImageType.Primary,
-                    });
-                }
+                    Url = $"https:{sceneImages.Attributes["src"].Value}",
+                    Type = ImageType.Primary,
+                });
             }
 
-            imgNode = sceneData.SelectNodes("//div[@id='img-slider']//img");
-            if (imgNode != null)
+            imgNode = sceneData.SelectNodesSafe("//div[@id='img-slider']//img");
+            foreach (var sceneImages in imgNode)
             {
-                foreach (var sceneImages in imgNode)
+                result.Add(new RemoteImageInfo
                 {
-                    result.Add(new RemoteImageInfo
-                    {
-                        Url = $"https:{sceneImages.Attributes["src"].Value}",
-                        Type = ImageType.Backdrop,
-                    });
-                }
+                    Url = $"https:{sceneImages.Attributes["src"].Value}",
+                    Type = ImageType.Backdrop,
+                });
             }
 
             return result;
