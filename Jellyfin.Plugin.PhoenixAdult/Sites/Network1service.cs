@@ -191,6 +191,10 @@ namespace PhoenixAdult.Sites
             }
 
             sceneData = (JObject)sceneData["result"].First;
+            if (sceneData == null)
+            {
+                return result;
+            }
 
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
                 sceneTypeURL = sceneID[1];
