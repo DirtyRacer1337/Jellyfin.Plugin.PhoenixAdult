@@ -93,7 +93,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
 
-            result.Item.Name = sceneData.SelectSingleText("//h1[@class='shoot-title']/@text()");
+            result.Item.Name = sceneData.SelectSingleText("//h1[@class='shoot-title']/text()");
             result.Item.Overview = sceneData.SelectSingleText("//*[@class='description-text']");
             result.Item.AddStudio("Kink");
 
