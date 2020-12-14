@@ -47,7 +47,7 @@ internal static class HtmlNodeExtension
 
         if (nodes == null)
         {
-            nodes = (HtmlNodeCollection)Enumerable.Empty<HtmlNode>();
+            nodes = new HtmlNodeCollection(HtmlNode.CreateNode(string.Empty));
         }
 
         return nodes;
