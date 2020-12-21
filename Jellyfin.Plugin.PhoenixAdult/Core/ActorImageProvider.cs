@@ -138,7 +138,7 @@ namespace PhoenixAdult
             var actorPageURL = actorData.SelectSingleText("//div[@id='performerlist']/div//a/@href");
             if (!string.IsNullOrEmpty(actorPageURL))
             {
-                if (actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                if (!actorPageURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
                     actorPageURL = "https://www.adultdvdempire.com" + actorPageURL;
                 }
