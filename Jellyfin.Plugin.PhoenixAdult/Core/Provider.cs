@@ -144,6 +144,10 @@ namespace PhoenixAdult
                     foreach (var scene in result)
                     {
                         scene.Name = scene.Name.Trim();
+                        if (scene.PremiereDate.HasValue)
+                        {
+                            scene.ProductionYear = scene.PremiereDate.Value.Year;
+                        }
                     }
 
                     if (result.Any(scene => scene.IndexNumber.HasValue))
