@@ -43,7 +43,6 @@ namespace PhoenixAdult.Sites
             var param = new StringContent(text, Encoding.UTF8, "application/json");
             var headers = new Dictionary<string, string>
             {
-                { "Content-Type", "application/json" },
                 { "Referer",  referer },
             };
 

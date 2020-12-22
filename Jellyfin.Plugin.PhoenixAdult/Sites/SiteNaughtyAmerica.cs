@@ -24,12 +24,8 @@ namespace PhoenixAdult.Sites
 
             var text = $"{{'requests':[{{'indexName':'nacms_combined_production','params':'{searchData}&hitsPerPage=100'}}]}}".Replace('\'', '"');
             var param = new StringContent(text, Encoding.UTF8, "application/json");
-            var headers = new Dictionary<string, string>
-            {
-                { "Content-Type", "application/json" },
-            };
 
-            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken, headers).ConfigureAwait(false);
+            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);

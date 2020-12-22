@@ -26,7 +26,6 @@ namespace PhoenixAdult.Sites
             var headers = new Dictionary<string, string>
             {
                 { "Authorization", "Basic YmFuZy1yZWFkOktqVDN0RzJacmQ1TFNRazI=" },
-                { "Content-Type", "application/json" },
             };
 
             var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken, headers).ConfigureAwait(false);
