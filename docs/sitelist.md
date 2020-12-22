@@ -232,6 +232,21 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Bi Empire
   - FamilySinners
   - Transsensual
++ #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Don't Break Me
+  - Girls Gone Pink
+  - I Know That Girl
+  - Latina Sextapes
+  - Let's Try Anal
+  - Mofos
+  - Mofos B Sides
+  - Mofos Lab
+  - Pervs On Patrol
+  - Public Pickups
+  - Real Slut Party
+  - Share My BF
+  - She's A Freak
+  - Stranded Teens
 + #### Mylf Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
   - Anal Mom
   - Full Of JOI
@@ -242,15 +257,15 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Mom Drips
   - Mylf
   - Mylf Of The Month
-  - Mylf X CamSoda
-  - Mylf X Fucking Awesome
-  - Mylf X James Deen
-  - Mylf X Mindi Mink
-  - Mylf X Owen Gray
-  - Mylf X SpankMonster
+  - Mylf x CamSoda
+  - Mylf x Fucking Awesome
   - Mylf x Hussie Pass
+  - Mylf x James Deen
   - Mylf x Joybear
   - Mylf x Lady Fyre
+  - Mylf x Mindi Mink
+  - Mylf x Owen Gray
+  - Mylf x SpankMonster
   - Mylf x Teamskeet
   - MylfBlows
   - MylfBoss
@@ -377,21 +392,6 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - SpyFam
   - Tiny4k
 + #### Pornhub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - Don't Break Me
-  - Girls Gone Pink
-  - I Know That Girl
-  - Latina Sextapes
-  - Let's Try Anal
-  - Mofos
-  - Mofos B Sides
-  - Mofos Lab
-  - Pervs On Patrol
-  - Public Pickups
-  - Real Slut Party
-  - Share My BF
-  - She's A Freak
-  - Stranded Teens
 + #### Naughty America Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 2 Chicks Same Time
   - American Daydreams
