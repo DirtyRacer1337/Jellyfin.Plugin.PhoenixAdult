@@ -6,9 +6,13 @@ using System.Net;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
-using MediaBrowser.Model.Entities;
 using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers.Utils;
+
+#if __EMBY__
+#else
+using MediaBrowser.Model.Entities;
+#endif
 
 namespace PhoenixAdult.Helpers
 {

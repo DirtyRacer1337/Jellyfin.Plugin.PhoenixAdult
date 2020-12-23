@@ -226,6 +226,9 @@ dotnet_diagnostic.IDE0063.severity = none
 # IDE0057: Use range operator
 dotnet_diagnostic.IDE0057.severity = none
 
+# IDE0071: Simplify interpolation
+dotnet_diagnostic.IDE0071.severity = none
+
 # CS1998: Async method lacks 'await' operators and will run synchronously
 dotnet_diagnostic.CS1998.severity = silent
 

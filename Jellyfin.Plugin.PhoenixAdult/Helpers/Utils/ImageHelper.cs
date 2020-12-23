@@ -44,9 +44,10 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 await Task.WhenAll(tasks).ConfigureAwait(false);
             }
-            catch (AggregateException e)
+            catch (Exception e)
             {
-                Logger.Error(e.Message);
+                Logger.Info($"GetImagesSizeAndValidate error: \"{e.Message}\"");
+                Logger.Error(e.ToString());
             }
             finally
             {

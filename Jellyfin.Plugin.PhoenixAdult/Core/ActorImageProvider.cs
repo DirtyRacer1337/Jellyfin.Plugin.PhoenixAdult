@@ -43,20 +43,21 @@ namespace PhoenixAdult
             var splitedName = name.Split();
             if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle && splitedName.Length > 1)
             {
-                name = string.Join(" ", splitedName.Reverse());
+                var nameReversed = string.Join(" ", splitedName.Reverse());
 
-                tasks.Add("Boobpedia 2", GetFromBoobpedia(name, cancellationToken));
-                tasks.Add("Babepedia 2", GetFromBabepedia(name, cancellationToken));
-                tasks.Add("IAFD 2", GetFromIAFD(name, cancellationToken));
+                tasks.Add("Boobpedia 2", GetFromBoobpedia(nameReversed, cancellationToken));
+                tasks.Add("Babepedia 2", GetFromBabepedia(nameReversed, cancellationToken));
+                tasks.Add("IAFD 2", GetFromIAFD(nameReversed, cancellationToken));
             }
 
             try
             {
                 await Task.WhenAll(tasks.Values).ConfigureAwait(false);
             }
-            catch (AggregateException e)
+            catch (Exception e)
             {
-                Logger.Error(e.Message);
+                Logger.Info($"GetActorPhotos error: \"{e.Message}\"");
+                Logger.Error(e.ToString());
             }
             finally
             {
