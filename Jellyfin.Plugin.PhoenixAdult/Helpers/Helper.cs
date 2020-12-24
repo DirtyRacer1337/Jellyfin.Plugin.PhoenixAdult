@@ -117,7 +117,7 @@ namespace PhoenixAdult.Helpers
 
             clearName = clearName.Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
 
-            clearName = Regex.Replace(clearName, @"[^a-zA-Z0-9 ]", " ");
+            clearName = Regex.Replace(clearName, @"[^a-zA-Z0-9 ']", " ");
             clearSite = Regex.Replace(clearSite, @"\W", string.Empty);
 
             var matched = false;
