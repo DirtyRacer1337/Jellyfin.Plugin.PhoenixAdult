@@ -35,9 +35,22 @@ namespace PhoenixAdult.ScheduledTasks
             foreach (var site in db)
             {
                 var token = (string)site.Value;
-                token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]));
+                var timestamp = 0;
 
-                if ((int)JObject.Parse(token)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                if (token.Contains("."))
+                {
+                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]));
+                    timestamp = (int)JObject.Parse(token)["exp"];
+                }
+                else
+                {
+                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token));
+                    if (token.Contains("validUntil") && int.TryParse(token.Split("validUntil=")[1].Split("&")[0], out timestamp))
+                    {
+                    }
+                }
+
+                if (timestamp > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
                     new_db.Add(site.Key, site.Value);
                 }

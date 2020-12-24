@@ -12,6 +12,7 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
@@ -20,19 +21,62 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkGammaEnt : IProviderBase
     {
-        public static async Task<string> GetAPIKey(string url, CancellationToken cancellationToken)
+        public static async Task<string> GetAPIKey(int[] siteNum, CancellationToken cancellationToken)
         {
-            var http = await HTTP.Request(url + "/en/login", cancellationToken).ConfigureAwait(false);
-            if (http.IsOK)
+            var result = string.Empty;
+
+            if (siteNum == null)
             {
-                var regEx = Regex.Match(http.Content, "\"apiKey\":\"(.*?)\"");
-                if (regEx.Groups.Count > 0)
+                return result;
+            }
+
+            var db = new JObject();
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.TokenStorage))
+            {
+                db = JObject.Parse(Plugin.Instance.Configuration.TokenStorage);
+            }
+
+            var keyName = new Uri(Helper.GetSearchBaseURL(siteNum)).Host;
+            if (db.ContainsKey(keyName))
+            {
+                string token = (string)db[keyName],
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token));
+
+                if (res.Contains("validUntil") && int.TryParse(res.Split("validUntil=")[1].Split("&")[0], out var timestamp))
                 {
-                    return regEx.Groups[1].Value;
+                    if (timestamp > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+                    {
+                        result = token;
+                    }
                 }
             }
 
-            return string.Empty;
+            if (string.IsNullOrEmpty(result))
+            {
+                var http = await HTTP.Request(Helper.GetSearchBaseURL(siteNum) + "/en/login", cancellationToken).ConfigureAwait(false);
+                if (http.IsOK)
+                {
+                    var regEx = Regex.Match(http.Content, "\"apiKey\":\"(.*?)\"");
+                    if (regEx.Groups.Count > 0)
+                    {
+                        result = regEx.Groups[1].Value;
+                    }
+                }
+
+                if (db.ContainsKey(keyName))
+                {
+                    db[keyName] = result;
+                }
+                else
+                {
+                    db.Add(keyName, result);
+                }
+
+                Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(db);
+                Plugin.Instance.SaveConfiguration();
+            }
+
+            return result;
         }
 
         public static async Task<JObject> GetDataFromAPI(string url, string indexName, string referer, string searchParams, CancellationToken cancellationToken)
@@ -69,7 +113,7 @@ namespace PhoenixAdult.Sites
                 searchSceneID = null;
             }
 
-            string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
+            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                    searchParams;
 
             var sceneTypes = new List<string> { "scenes", "movies" };
@@ -163,7 +207,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
+            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                    sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
@@ -261,7 +305,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string apiKEY = await GetAPIKey(Helper.GetSearchBaseURL(siteNum), cancellationToken).ConfigureAwait(false),
+            string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
                    sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
             var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
