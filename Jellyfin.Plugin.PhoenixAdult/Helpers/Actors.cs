@@ -92,7 +92,7 @@ namespace PhoenixAdult.Helpers
 
         private static string Replace(string actorName, string[] studios)
         {
-            var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(x => x.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
+            var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(o => o.Key.Equals(actorName, StringComparison.OrdinalIgnoreCase) || o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newActorName))
             {
                 return newActorName;
