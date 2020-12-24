@@ -99,7 +99,7 @@ namespace PhoenixAdult.Helpers
 
             if (possibleSites.Count > 0)
             {
-                return possibleSites.OrderByDescending(x => x.Value.Length).First();
+                return possibleSites.OrderByDescending(o => o.Value.Length).First();
             }
 
             return new KeyValuePair<int[], string>(null, null);
@@ -229,7 +229,7 @@ namespace PhoenixAdult.Helpers
             if (!string.IsNullOrEmpty(sceneData.Item.Name))
             {
                 sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, string.Join("#", curID));
-                var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {

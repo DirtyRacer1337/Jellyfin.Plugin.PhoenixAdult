@@ -136,7 +136,7 @@ namespace PhoenixAdult.Sites
 
                     if (searchResult.ContainsKey("pictures"))
                     {
-                        var images = searchResult["pictures"].Where(item => !item.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                        var images = searchResult["pictures"].Where(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
                         if (images.Any())
                         {
                             res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";

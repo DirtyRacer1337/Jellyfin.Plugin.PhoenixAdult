@@ -108,7 +108,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(x => x.Key.Equals(genreName, StringComparison.OrdinalIgnoreCase) || x.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
+            var newGenreName = Database.Genres.GenresReplace.FirstOrDefault(o => o.Key.Equals(genreName, StringComparison.OrdinalIgnoreCase) || o.Value.Contains(genreName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newGenreName))
             {
                 genreName = newGenreName;

@@ -70,7 +70,7 @@ namespace PhoenixAdult.Sites
                 var sceneDate = (long)searchResult["published_at"];
                 var sceneID = curID.Split('#').Skip(2).ToArray();
 
-                var posters = (await this.GetImages(siteNum, sceneID, null, cancellationToken).ConfigureAwait(false)).Where(item => item.Type == ImageType.Primary);
+                var posters = (await this.GetImages(siteNum, sceneID, null, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
                 {

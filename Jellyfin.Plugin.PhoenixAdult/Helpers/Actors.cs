@@ -69,7 +69,7 @@ namespace PhoenixAdult.Helpers
 
                 newPeople.Name = newName;
 
-                if (!newPeoples.Any(person => person.Name == newPeople.Name))
+                if (!newPeoples.Any(o => o.Name == newPeople.Name))
                 {
                     newPeoples.Add(newPeople);
                 }
@@ -114,7 +114,7 @@ namespace PhoenixAdult.Helpers
 
             if (siteIndex > -1)
             {
-                newActorName = Database.Actors.ActorsReplaceStudios[siteIndex].FirstOrDefault(item => item.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
+                newActorName = Database.Actors.ActorsReplaceStudios[siteIndex].FirstOrDefault(o => o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
                 if (!string.IsNullOrEmpty(newActorName))
                 {
                     return newActorName;
