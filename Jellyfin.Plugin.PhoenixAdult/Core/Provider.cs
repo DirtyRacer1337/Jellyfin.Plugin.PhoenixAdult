@@ -137,6 +137,8 @@ namespace PhoenixAdult
                 {
                     Logger.Info($"Search error: \"{e.Message}\"");
                     Logger.Error(e.ToString());
+
+                    await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDate, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (result.Any())
@@ -217,6 +219,8 @@ namespace PhoenixAdult
                 {
                     Logger.Info($"Update error: \"{e.Message}\"");
                     Logger.Error(e.ToString());
+
+                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.Name))

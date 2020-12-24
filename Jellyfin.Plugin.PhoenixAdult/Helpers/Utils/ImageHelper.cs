@@ -48,6 +48,8 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 Logger.Info($"GetImagesSizeAndValidate error: \"{e.Message}\"");
                 Logger.Error(e.ToString());
+
+                await Analitycs.Send(null, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

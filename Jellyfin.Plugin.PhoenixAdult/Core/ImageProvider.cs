@@ -70,6 +70,8 @@ namespace PhoenixAdult
                 {
                     Logger.Info($"GetImages error: \"{e.Message}\"");
                     Logger.Error(e.ToString());
+
+                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
                 }
 
                 images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);

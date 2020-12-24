@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using MediaBrowser.Model.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
+using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.ScheduledTasks
 {
@@ -58,6 +60,14 @@ namespace PhoenixAdult.ScheduledTasks
 
             Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(new_db);
             Plugin.Instance.SaveConfiguration();
+
+            foreach (var file in Directory.GetFiles(Analitycs.LogsPath, "*.json.gz"))
+            {
+                if (Math.Abs((DateTime.Now - File.GetCreationTime(file)).TotalDays) > 3)
+                {
+                    File.Delete(file);
+                }
+            }
 
             progress?.Report(100);
         }

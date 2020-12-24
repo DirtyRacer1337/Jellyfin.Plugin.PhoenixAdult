@@ -1,3 +1,4 @@
+using System;
 using MediaBrowser.Model.Plugins;
 
 namespace PhoenixAdult.Configuration
@@ -16,6 +17,9 @@ namespace PhoenixAdult.Configuration
             this.DatabaseHash = string.Empty;
             this.TokenStorage = string.Empty;
 
+            this.UID = Guid.NewGuid().ToString();
+            this.DisableAnalytics = false;
+
             this.DefaultSiteName = string.Empty;
             this.DisableActors = false;
             this.DisableImageValidation = false;
@@ -29,6 +33,10 @@ namespace PhoenixAdult.Configuration
         public string DatabaseHash { get; set; }
 
         public string TokenStorage { get; set; }
+
+        public string UID { get; set; }
+
+        public bool DisableAnalytics { get; set; }
 
         public string DefaultSiteName { get; set; }
 

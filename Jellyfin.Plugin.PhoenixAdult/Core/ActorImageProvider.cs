@@ -58,6 +58,8 @@ namespace PhoenixAdult
             {
                 Logger.Info($"GetActorPhotos error: \"{e.Message}\"");
                 Logger.Error(e.ToString());
+
+                await Analitycs.Send(name, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
