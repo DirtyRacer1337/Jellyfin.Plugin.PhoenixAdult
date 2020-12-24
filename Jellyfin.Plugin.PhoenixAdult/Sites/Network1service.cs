@@ -34,7 +34,7 @@ namespace PhoenixAdult.Sites
                 db = JObject.Parse(Plugin.Instance.Configuration.TokenStorage);
             }
 
-            var keyName = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase);
+            var keyName = new Uri(Helper.GetSearchBaseURL(siteNum)).Host;
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],

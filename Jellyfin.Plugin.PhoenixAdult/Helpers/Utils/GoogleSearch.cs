@@ -16,7 +16,7 @@ namespace PhoenixAdult.Helpers.Utils
 
             if (siteNum != null)
             {
-                var site = Helper.GetSearchBaseURL(siteNum).Split(':')[1].Replace("//", string.Empty, StringComparison.OrdinalIgnoreCase);
+                var site = new Uri(Helper.GetSearchBaseURL(siteNum)).Host;
                 searchTerm = $"site:{site} {text}";
             }
             else
