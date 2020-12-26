@@ -47,7 +47,7 @@ namespace PhoenixAdult.Helpers.Utils
                     Error = new ErrorStructure
                     {
                         Name = e.Message,
-                        Text = e.ToString(),
+                        Text = e.StackTrace,
                     },
                 };
 
