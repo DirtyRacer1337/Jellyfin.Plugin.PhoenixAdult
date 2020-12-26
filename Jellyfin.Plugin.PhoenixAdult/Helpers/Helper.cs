@@ -213,7 +213,7 @@ namespace PhoenixAdult.Helpers
             return null;
         }
 
-        public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(IProviderBase provider, int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(IProviderBase provider, int[] siteNum, string[] sceneID, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
@@ -237,6 +237,11 @@ namespace PhoenixAdult.Helpers
                     Name = sceneData.Item.Name,
                     PremiereDate = sceneData.Item.PremiereDate,
                 };
+
+                if (searchDate.HasValue && !res.PremiereDate.HasValue)
+                {
+                    res.PremiereDate = searchDate.Value;
+                }
 
                 if (!string.IsNullOrEmpty(sceneData.Item.OriginalTitle))
                 {

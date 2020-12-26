@@ -33,7 +33,7 @@ namespace PhoenixAdult.Sites
                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
                 var sceneID = curID.Split('#').Skip(2).ToArray();
 
-                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, cancellationToken).ConfigureAwait(false);
+                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
                 {
                     result.AddRange(searchResult);
