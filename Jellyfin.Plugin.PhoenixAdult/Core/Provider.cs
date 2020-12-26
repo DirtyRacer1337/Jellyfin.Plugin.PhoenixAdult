@@ -137,7 +137,7 @@ namespace PhoenixAdult
                 {
                     Logger.Error($"Search error: \"{e.ToString()}\"");
 
-                    await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDate, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (result.Any())
@@ -218,7 +218,7 @@ namespace PhoenixAdult
                 {
                     Logger.Error($"Update error: \"{e.ToString()}\"");
 
-                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, info.PremiereDate, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.Name))

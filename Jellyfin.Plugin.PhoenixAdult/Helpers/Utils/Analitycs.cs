@@ -15,7 +15,7 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static AnalitycsStructure AnalitycsData { get; set; }
 
-        public static async Task Send(string request, int[] siteNum, string siteName, string searchTitle, string searchDate, string providerName, Exception e, CancellationToken cancellationToken)
+        public static async Task Send(string request, int[] siteNum, string siteName, string searchTitle, DateTime? searchDate, string providerName, Exception e, CancellationToken cancellationToken)
         {
             if (!Plugin.Instance.Configuration.DisableAnalytics)
             {
@@ -41,7 +41,7 @@ namespace PhoenixAdult.Helpers.Utils
                         SiteNum = siteNum != null ? $"{siteNum[0]}#{siteNum[1]}" : null,
                         SiteName = siteName,
                         SearchTitle = searchTitle,
-                        SearchDate = searchDate,
+                        SearchDate = searchDate.HasValue ? searchDate.Value.ToString("yyyy-MM-dd") : null,
                         ProviderName = providerName,
                     },
                     Error = new ErrorStructure
