@@ -105,7 +105,7 @@ namespace PhoenixAdult.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodesSafe("//div[@class='pornstarsWrapper']/a");
+            var actorsNode = sceneData.SelectNodesSafe("//div[contains(@class, 'pornstarsWrapper')]/a");
             foreach (var actorLink in actorsNode)
             {
                 string actorName = actorLink.Attributes["data-mxptext"].Value,
