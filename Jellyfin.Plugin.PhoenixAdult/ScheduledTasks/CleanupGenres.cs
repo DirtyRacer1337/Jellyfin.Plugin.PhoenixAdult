@@ -45,7 +45,7 @@ namespace PhoenixAdult.ScheduledTasks
                 {
                     var genres = Genres.Cleanup(item.Genres, item.Name);
 
-                    if (!item.Genres.All(genres.Contains))
+                    if (!item.Genres.SequenceEqual(genres, StringComparer.Ordinal))
                     {
                         Logger.Debug($"Genres cleaned in \"{item.Name}\"");
                         item.Genres = genres;
