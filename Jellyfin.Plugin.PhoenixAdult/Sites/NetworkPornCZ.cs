@@ -44,6 +44,7 @@ namespace PhoenixAdult.Sites
                     ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = sceneName,
                     ImageUrl = scenePoster,
+                    PremiereDate = searchDate.Value,
                 };
 
                 result.Add(res);

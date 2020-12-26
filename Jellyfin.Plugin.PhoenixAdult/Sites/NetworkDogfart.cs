@@ -39,6 +39,7 @@ namespace PhoenixAdult.Sites
                 {
                     Name = $"{sceneName} from {subSite}",
                     ImageUrl = posterURL,
+                    PremiereDate = searchDate.Value,
                 };
 
                 if (searchDate.HasValue)
