@@ -196,14 +196,14 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
+            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
                 sceneTypeURL = sceneID[1];
 
             if (sceneTypeURL.Equals("scene", StringComparison.OrdinalIgnoreCase))
             {
                 switch (domain)
                 {
-                    case "brazzers.com":
+                    case "www.brazzers.com":
                         sceneTypeURL = "video";
                         break;
                 }

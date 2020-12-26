@@ -218,7 +218,7 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
-            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase),
+            string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
                 sceneTypeURL = sceneID[0] == "scenes" ? "video" : "movie";
 
             if (sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase))
@@ -229,10 +229,10 @@ namespace PhoenixAdult.Sites
                         sceneTypeURL = string.Empty;
                         break;
 
-                    case "burningangel.com":
-                    case "devilsfilm.com":
-                    case "roccosiffredi.com":
-                    case "genderx.com":
+                    case "www.burningangel.com":
+                    case "www.devilsfilm.com":
+                    case "www.roccosiffredi.com":
+                    case "www.genderx.com":
                         sceneTypeURL = "dvd";
                         break;
                 }
