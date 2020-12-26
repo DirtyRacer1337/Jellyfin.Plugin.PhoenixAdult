@@ -228,7 +228,7 @@ namespace PhoenixAdult
                 {
                     Logger.Error($"Update error: \"{e}\"");
 
-                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, info.PremiereDate, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, premiereDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.Name))
