@@ -88,7 +88,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            return newGenres.OrderBy(o => o).ToArray();
+            return newGenres.OrderBy(o => o.Contains("Position")).ThenBy(o => o).ToArray();
         }
 
         public static string[] Cleanup(string[] genresLink, string sceneName) => Cleanup(genresLink, sceneName, null);
