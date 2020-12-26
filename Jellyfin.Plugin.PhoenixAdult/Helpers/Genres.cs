@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using MediaBrowser.Controller.Entities;
+using PhoenixAdult.Configuration;
 using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Helpers
@@ -88,7 +89,18 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            return newGenres.OrderBy(o => o.Contains("Position")).ThenBy(o => o).ToArray();
+            switch (Plugin.Instance.Configuration.GenresSortingStyle)
+            {
+                case GenresSortingStyle.PositionsLast:
+                    newGenres = newGenres.OrderBy(o => o.Contains("Position")).ThenBy(o => o).ToList();
+                    break;
+
+                default:
+                    newGenres = newGenres.OrderBy(o => o).ToList();
+                    break;
+            }
+
+            return newGenres.ToArray();
         }
 
         public static string[] Cleanup(string[] genresLink, string sceneName) => Cleanup(genresLink, sceneName, null);

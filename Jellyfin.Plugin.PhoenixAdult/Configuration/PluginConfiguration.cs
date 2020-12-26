@@ -9,6 +9,12 @@ namespace PhoenixAdult.Configuration
         JapaneseStyle = 1,
     }
 
+    public enum GenresSortingStyle
+    {
+        Alphabetical = 0,
+        PositionsLast = 1,
+    }
+
     public class PluginConfiguration : BasePluginConfiguration
     {
         public PluginConfiguration()
@@ -26,6 +32,7 @@ namespace PhoenixAdult.Configuration
             this.DisableImageSize = false;
 
             this.JAVActorNamingStyle = JAVActorNamingStyle.WesternStyle;
+            this.GenresSortingStyle = GenresSortingStyle.Alphabetical;
         }
 
         public string DatabaseUpdateURL { get; set; }
@@ -47,5 +54,7 @@ namespace PhoenixAdult.Configuration
         public bool DisableImageSize { get; set; }
 
         public JAVActorNamingStyle JAVActorNamingStyle { get; set; }
+
+        public GenresSortingStyle GenresSortingStyle { get; set; }
     }
 }

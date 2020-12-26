@@ -39,6 +39,13 @@
                             <option value="JapaneseStyle">Japanese Style</option>
                         </select>
                     </div>
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="GenresSortingStyle">JAV Actor Naming Style</label>
+                        <select is="emby-select" id="GenresSortingStyle" name="GenresSortingStyle" class="emby-select-withcolor emby-select">
+                            <option value="Alphabetical">Alphabetical</option>
+                            <option value="PositionsLast">Positions Last</option>
+                        </select>
+                    </div>
                     <button is="emby-button" type="submit" class="raised button-submit block emby-button">
                         <span>Save</span>
                     </button>
@@ -62,6 +69,7 @@
                     $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
                     $('#DisableImageSize').prop('checked', config.DisableImageSize);
                     $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
+                    $('#GenresSortingStyle').val(config.GenresSortingStyle).change();
                     Dashboard.hideLoadingMsg();
                 });
             });
@@ -74,6 +82,7 @@
                     config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
                     config.DisableImageSize = $('#DisableImageSize').prop('checked');
                     config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
+                    config.GenresSortingStyle = $('#GenresSortingStyle').val();
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
                     });
