@@ -62,7 +62,7 @@ namespace PhoenixAdult
             }
             catch (Exception e)
             {
-                Logger.Error($"GetActorPhotos error: \"{e.ToString()}\"");
+                Logger.Error($"GetActorPhotos error: \"{e}\"");
 
                 await Analitycs.Send(name, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }

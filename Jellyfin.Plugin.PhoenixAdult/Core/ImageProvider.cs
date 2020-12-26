@@ -68,7 +68,7 @@ namespace PhoenixAdult
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"GetImages error: \"{e.ToString()}\"");
+                    Logger.Error($"GetImages error: \"{e}\"");
 
                     await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
                 }

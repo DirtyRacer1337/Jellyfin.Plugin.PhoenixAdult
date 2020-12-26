@@ -135,7 +135,7 @@ namespace PhoenixAdult
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Search error: \"{e.ToString()}\"");
+                    Logger.Error($"Search error: \"{e}\"");
 
                     await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
@@ -216,7 +216,7 @@ namespace PhoenixAdult
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Update error: \"{e.ToString()}\"");
+                    Logger.Error($"Update error: \"{e}\"");
 
                     await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, info.PremiereDate, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }

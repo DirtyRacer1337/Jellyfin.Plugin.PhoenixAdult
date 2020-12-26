@@ -46,7 +46,7 @@ namespace PhoenixAdult.Helpers.Utils
             }
             catch (Exception e)
             {
-                Logger.Error($"GetImagesSizeAndValidate error: \"{e.ToString()}\"");
+                Logger.Error($"GetImagesSizeAndValidate error: \"{e}\"");
 
                 await Analitycs.Send(null, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
