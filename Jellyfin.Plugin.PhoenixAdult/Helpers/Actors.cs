@@ -53,17 +53,20 @@ namespace PhoenixAdult.Helpers
 
                 if (newName == newPeople.Name)
                 {
-                    if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                    switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
                     {
-                        string japaneseName = string.Join(" ", newPeople.Name.Split().Reverse()),
-                            newJapaneseName = Replace(japaneseName, scene.Item.Studios);
+                        case JAVActorNamingStyle.JapaneseStyle:
+                            string japaneseName = string.Join(" ", newPeople.Name.Split().Reverse()),
+                                newJapaneseName = Replace(japaneseName, scene.Item.Studios);
 
-                        newJapaneseName = string.Join(" ", newJapaneseName.Split().Reverse());
+                            newJapaneseName = string.Join(" ", newJapaneseName.Split().Reverse());
 
-                        if (newJapaneseName != japaneseName)
-                        {
-                            newName = newJapaneseName;
-                        }
+                            if (newJapaneseName != japaneseName)
+                            {
+                                newName = newJapaneseName;
+                            }
+
+                            break;
                     }
                 }
 

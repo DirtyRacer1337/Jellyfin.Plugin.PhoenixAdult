@@ -111,6 +111,7 @@ namespace PhoenixAdult.Sites
                         }
 
                         break;
+
                     case "Sex Styles":
                         var genreNode = cellNode[1].SelectNodesSafe(".//a[contains(@href, 'category')]");
                         foreach (var genreLink in genreNode)
@@ -127,9 +128,12 @@ namespace PhoenixAdult.Sites
                         {
                             var actorName = actorLink.InnerText;
 
-                            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                            switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
                             {
-                                actorName = string.Join(" ", actorName.Split().Reverse());
+                                case JAVActorNamingStyle.JapaneseStyle:
+                                    actorName = string.Join(" ", actorName.Split().Reverse());
+
+                                    break;
                             }
 
                             var actor = new PersonInfo

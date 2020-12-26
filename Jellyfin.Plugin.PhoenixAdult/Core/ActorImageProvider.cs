@@ -41,13 +41,19 @@ namespace PhoenixAdult
             tasks.Add("IAFD", GetFromIAFD(name, cancellationToken));
 
             var splitedName = name.Split();
-            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle && splitedName.Length > 1)
+            switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
             {
-                var nameReversed = string.Join(" ", splitedName.Reverse());
+                case JAVActorNamingStyle.JapaneseStyle:
+                    if (splitedName.Length > 1)
+                    {
+                        var nameReversed = string.Join(" ", splitedName.Reverse());
 
-                tasks.Add("Boobpedia 2", GetFromBoobpedia(nameReversed, cancellationToken));
-                tasks.Add("Babepedia 2", GetFromBabepedia(nameReversed, cancellationToken));
-                tasks.Add("IAFD 2", GetFromIAFD(nameReversed, cancellationToken));
+                        tasks.Add("Boobpedia 2", GetFromBoobpedia(nameReversed, cancellationToken));
+                        tasks.Add("Babepedia 2", GetFromBabepedia(nameReversed, cancellationToken));
+                        tasks.Add("IAFD 2", GetFromIAFD(nameReversed, cancellationToken));
+                    }
+
+                    break;
             }
 
             try

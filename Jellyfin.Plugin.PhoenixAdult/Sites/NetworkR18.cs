@@ -183,9 +183,11 @@ namespace PhoenixAdult.Sites
 
                 if (actorName != "----")
                 {
-                    if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                    switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
                     {
-                        actorName = string.Join(" ", actorName.Split().Reverse());
+                        case JAVActorNamingStyle.JapaneseStyle:
+                            actorName = string.Join(" ", actorName.Split().Reverse());
+                            break;
                     }
 
                     var actor = new PersonInfo

@@ -127,6 +127,7 @@ namespace PhoenixAdult.Sites
                         }
 
                         break;
+
                     case "Tags":
                         var genreNode = movieSpec.SelectNodesSafe(".//span[@class='spec-content']/a");
                         foreach (var genreLink in genreNode)
@@ -137,15 +138,19 @@ namespace PhoenixAdult.Sites
                         }
 
                         break;
+
                     case "Starring":
                         var actorsNode = movieSpec.SelectNodesSafe(".//span[@class='spec-content']/a");
                         foreach (var actorLink in actorsNode)
                         {
                             var actorName = actorLink.InnerText;
 
-                            if (Plugin.Instance.Configuration.JAVActorNamingStyle == JAVActorNamingStyle.JapaneseStyle)
+                            switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
                             {
-                                actorName = string.Join(" ", actorName.Split().Reverse());
+                                case JAVActorNamingStyle.JapaneseStyle:
+                                    actorName = string.Join(" ", actorName.Split().Reverse());
+
+                                    break;
                             }
 
                             var actor = new PersonInfo
