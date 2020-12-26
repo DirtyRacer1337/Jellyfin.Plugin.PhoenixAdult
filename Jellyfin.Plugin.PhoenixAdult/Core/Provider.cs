@@ -210,6 +210,16 @@ namespace PhoenixAdult
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
 
+                DateTime? premiereDateObj = null;
+                if (info.PremiereDate.HasValue)
+                {
+#if __EMBY__
+                    premiereDateObj = info.PremiereDate.Value.DateTime;
+#else
+                    premiereDateObj = info.PremiereDate.Value;
+#endif
+                }
+
                 try
                 {
                     result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
@@ -247,6 +257,11 @@ namespace PhoenixAdult
                     }
 
                     result.Item.Studios = newStudios.ToArray();
+
+                    if (!result.Item.PremiereDate.HasValue)
+                    {
+                        result.Item.PremiereDate = premiereDateObj;
+                    }
 
                     if (result.Item.PremiereDate.HasValue)
                     {
