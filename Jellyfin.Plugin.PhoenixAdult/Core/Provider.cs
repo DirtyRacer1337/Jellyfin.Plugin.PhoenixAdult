@@ -182,13 +182,33 @@ namespace PhoenixAdult
                 return result;
             }
 
+            DateTime? premiereDateObj = null;
+            if (info.PremiereDate.HasValue)
+            {
+#if __EMBY__
+                premiereDateObj = info.PremiereDate.Value.DateTime;
+#else
+                premiereDateObj = info.PremiereDate.Value;
+#endif
+            }
+
             var sceneID = info.ProviderIds;
             if (!sceneID.ContainsKey(this.Name))
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
                 {
-                    sceneID = searchResults.First().ProviderIds;
+                    var first = searchResults.First();
+
+                    sceneID = first.ProviderIds;
+                    if (first.PremiereDate.HasValue)
+                    {
+#if __EMBY__
+                        premiereDateObj = first.PremiereDate.Value.DateTime;
+#else
+                        premiereDateObj = first.PremiereDate.Value;
+#endif
+                    }
                 }
             }
 
@@ -209,16 +229,6 @@ namespace PhoenixAdult
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
-
-                DateTime? premiereDateObj = null;
-                if (info.PremiereDate.HasValue)
-                {
-#if __EMBY__
-                    premiereDateObj = info.PremiereDate.Value.DateTime;
-#else
-                    premiereDateObj = info.PremiereDate.Value;
-#endif
-                }
 
                 try
                 {

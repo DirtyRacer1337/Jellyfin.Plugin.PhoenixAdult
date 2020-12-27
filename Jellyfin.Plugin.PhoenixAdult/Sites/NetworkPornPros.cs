@@ -46,16 +46,15 @@ namespace PhoenixAdult.Sites
                 directURL = $"{directURL.Substring(0, directURL.Length - 1)}-{directURL.Substring(directURL.Length - 1, 1)}";
             }
 
-            string sceneURL = Helper.GetSearchSearchURL(siteNum) + directURL,
-                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+            var sceneURL = Helper.GetSearchSearchURL(siteNum) + directURL;
+            var sceneID = new List<string> { Helper.Encode(sceneURL) };
+
             if (searchDate.HasValue)
             {
-                curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+                sceneID.Add(searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
-            var sceneID = curID.Split('#').Skip(2).ToArray();
-
-            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
+            var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
             if (searchResult.Any())
             {
                 result.AddRange(searchResult);

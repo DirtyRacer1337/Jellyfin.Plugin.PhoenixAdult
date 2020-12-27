@@ -34,9 +34,8 @@ namespace PhoenixAdult.Sites
 
             if (!string.IsNullOrEmpty(movieID))
             {
-                string sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/moviepages/{movieID}/index.html",
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
-                var sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/moviepages/{movieID}/index.html";
+                var sceneID = new string[] { Helper.Encode(sceneURL) };
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
