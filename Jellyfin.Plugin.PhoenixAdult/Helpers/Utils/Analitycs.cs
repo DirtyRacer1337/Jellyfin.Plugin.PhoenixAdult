@@ -33,6 +33,7 @@ namespace PhoenixAdult.Helpers.Utils
                     User = new UserStructure
                     {
                         DateTime = DateTime.UtcNow,
+                        PluginVersion = Plugin.Instance.Version.ToString(),
                         Options = Plugin.Instance.Configuration,
                     },
                     Info = new InfoStructure
@@ -79,6 +80,8 @@ namespace PhoenixAdult.Helpers.Utils
             public string UID { get; set; }
 
             public DateTime DateTime { get; set; }
+
+            public string PluginVersion { get; set; }
 
             public PluginConfiguration Options { get; set; }
         }
