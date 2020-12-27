@@ -102,9 +102,19 @@ namespace PhoenixAdult.Sites
             var javID = sceneData.SelectSingleText("//div[@id='video_id']//td[@class='text']");
 
             result.Item.OriginalTitle = javID.ToUpperInvariant();
-            result.Item.Name = sceneData.SelectSingleText("//div[@id='video_title']//h3").Replace(javID, string.Empty, StringComparison.OrdinalIgnoreCase);
+            var title = sceneData.SelectSingleText("//div[@id='video_title']//h3");
+            if (!string.IsNullOrEmpty(javID))
+            {
+                title = title.Replace(javID, string.Empty, StringComparison.OrdinalIgnoreCase);
+            }
 
-            result.Item.AddStudio(sceneData.SelectSingleText("//div[@id='video_maker']//td[@class='text']"));
+            result.Item.Name = title;
+
+            var studio = sceneData.SelectSingleText("//div[@id='video_maker']//td[@class='text']");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var date = sceneData.SelectSingleText("//div[@id='video_date']//td[@class='text']");
             if (DateTime.TryParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

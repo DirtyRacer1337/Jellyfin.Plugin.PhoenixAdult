@@ -34,18 +34,19 @@ namespace PhoenixAdult.Sites
                         sceneName = searchResult.SelectSingleText(".//div[@class='product-item-bottom']//a"),
                         scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//img/@data-src");
 
+                var res = new RemoteSearchResult
+                {
+                    Name = sceneName,
+                    ImageUrl = scenePoster,
+                };
+
                 if (searchDate.HasValue)
                 {
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+                    res.PremiereDate = searchDate.Value;
                 }
 
-                var res = new RemoteSearchResult
-                {
-                    ProviderIds = { { Plugin.Instance.Name, curID } },
-                    Name = sceneName,
-                    ImageUrl = scenePoster,
-                    PremiereDate = searchDate.Value,
-                };
+                res.ProviderIds.Add(Plugin.Instance.Name, curID);
 
                 result.Add(res);
             }

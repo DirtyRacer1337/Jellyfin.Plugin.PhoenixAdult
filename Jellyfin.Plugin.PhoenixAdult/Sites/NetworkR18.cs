@@ -148,7 +148,11 @@ namespace PhoenixAdult.Sites
             result.Item.Name = Decensor(sceneData.SelectSingleText("//cite[@itemprop='name']"));
             result.Item.Overview = Decensor(sceneData.SelectSingleText("//div[@class='cmn-box-description01']").Replace("Product Description", string.Empty, StringComparison.OrdinalIgnoreCase));
 
-            result.Item.AddStudio(sceneData.SelectSingleText("//dd[@itemprop='productionCompany']"));
+            var studio = sceneData.SelectSingleText("//dd[@itemprop='productionCompany']");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var date = sceneData.SelectSingleText("//dd[@itemprop='dateCreated']");
             if (!string.IsNullOrEmpty(date))

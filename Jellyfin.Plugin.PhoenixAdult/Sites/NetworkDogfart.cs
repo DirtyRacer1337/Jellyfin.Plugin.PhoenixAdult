@@ -39,12 +39,13 @@ namespace PhoenixAdult.Sites
                 {
                     Name = $"{sceneName} from {subSite}",
                     ImageUrl = posterURL,
-                    PremiereDate = searchDate.Value,
                 };
 
                 if (searchDate.HasValue)
                 {
                     curID += $"#{searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+
+                    res.PremiereDate = searchDate.Value;
                 }
 
                 res.ProviderIds.Add(Plugin.Instance.Name, curID);

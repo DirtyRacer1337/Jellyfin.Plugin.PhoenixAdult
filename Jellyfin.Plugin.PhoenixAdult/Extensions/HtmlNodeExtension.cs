@@ -6,6 +6,8 @@ internal static class HtmlNodeExtension
 {
     public static string SelectSingleText(this HtmlNode source, string xpath)
     {
+        var result = string.Empty;
+
         var res = xpath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
         var node = source.SelectSingleNode(xpath);
 
@@ -16,29 +18,23 @@ internal static class HtmlNodeExtension
                 var attrName = res.Last().Substring(1);
                 if (node.Attributes.Contains(attrName))
                 {
-                    return node.Attributes[attrName].Value.Trim();
-                }
-                else
-                {
-                    return string.Empty;
+                    result = node.Attributes[attrName].Value.Trim();
                 }
             }
             else
             {
                 if (res.Last().Equals("text()", StringComparison.OrdinalIgnoreCase))
                 {
-                    return node.GetDirectInnerText().Trim();
+                    result = node.GetDirectInnerText().Trim();
                 }
                 else
                 {
-                    return node.InnerText.Trim();
+                    result = node.InnerText.Trim();
                 }
             }
         }
-        else
-        {
-            return string.Empty;
-        }
+
+        return result;
     }
 
     public static HtmlNodeCollection SelectNodesSafe(this HtmlNode source, string xpath)
