@@ -144,7 +144,7 @@ namespace PhoenixAdult
                 {
                     foreach (var scene in result)
                     {
-                        scene.ProviderIds[this.Name] = $"{siteNum[0]}#{siteNum[1]}" + scene.ProviderIds[this.Name];
+                        scene.ProviderIds[this.Name] = $"{siteNum[0]}#{siteNum[1]}#" + scene.ProviderIds[this.Name];
                         scene.Name = scene.Name.Trim();
                         if (scene.PremiereDate.HasValue)
                         {
