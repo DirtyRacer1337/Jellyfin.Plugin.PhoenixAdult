@@ -25,12 +25,12 @@ namespace PhoenixAdult.Sites
 
             foreach (var site in siteList)
             {
-                var movieInfo = new MovieInfo
+                var searchInfo = new MovieInfo
                 {
                     Name = $"{site} {searchTitle}",
                     PremiereDate = searchDate,
                 };
-                var searchResults = await provider.GetSearchResults(movieInfo, cancellationToken).ConfigureAwait(false);
+                var searchResults = await provider.GetSearchResults(searchInfo, cancellationToken).ConfigureAwait(false);
 
                 if ((!searchResults.All(o => o.IndexNumber.HasValue) && searchResults.Any()) || searchResults.Any(o => o.IndexNumber == 100))
                 {
@@ -55,6 +55,12 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
+            var provider = new Provider(null, Provider.Http);
+            var info = new MovieInfo();
+            info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
+
+            result = await provider.GetMetadata(info, cancellationToken).ConfigureAwait(false);
+
             return result;
         }
 
@@ -66,6 +72,12 @@ namespace PhoenixAdult.Sites
             {
                 return result;
             }
+
+            var provider = new ImageProvider();
+            var info = new Movie();
+            info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
+
+            result = (await provider.GetImages(info, cancellationToken).ConfigureAwait(false)).ToList();
 
             return result;
         }

@@ -21,7 +21,13 @@ namespace PhoenixAdult.Helpers
                 return string.Empty;
             }
 
-            return Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
+            string siteName = Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
+            if (string.IsNullOrEmpty(siteName))
+            {
+                siteName = Database.SiteList.Sites[siteNum[0]][0][0];
+            }
+
+            return siteName;
         }
 
         public static string GetSearchBaseURL(int[] siteNum)
@@ -240,18 +246,10 @@ namespace PhoenixAdult.Helpers
         {
             var result = new List<RemoteSearchResult>();
 
-            var curID = new List<string>()
-            {
-                siteNum[0].ToString(CultureInfo.InvariantCulture),
-                siteNum[1].ToString(CultureInfo.InvariantCulture),
-            };
-
-            curID.AddRange(sceneID);
-
             var sceneData = await provider.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(sceneData.Item.Name))
             {
-                sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, string.Join("#", curID));
+                sceneData.Item.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
                 var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult
