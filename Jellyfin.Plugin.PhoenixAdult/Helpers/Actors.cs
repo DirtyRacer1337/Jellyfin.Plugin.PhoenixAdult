@@ -31,9 +31,16 @@ namespace PhoenixAdult.Helpers
             {
                 var newPeople = new PersonInfo
                 {
+                    Name = people.Name,
                     Type = people.Type,
                     ImageUrl = people.ImageUrl,
                 };
+
+                newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
+                newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(newPeople.Name);
+                newPeople.Name = newPeople.Name.Split('(').First();
+                newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
+                newPeople.Name = newPeople.Name.Trim();
 
 #if __EMBY__
 #else
@@ -42,22 +49,55 @@ namespace PhoenixAdult.Helpers
                     newPeople.Type = PersonType.Actor;
                 }
 #endif
+                if (!newPeoples.Any(o => o.Name == newPeople.Name))
+                {
+                    newPeoples.Add(newPeople);
+                }
+            }
 
-                newPeople.Name = WebUtility.HtmlDecode(newPeople.Name);
-                newPeople.Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(people.Name);
-                newPeople.Name = newPeople.Name.Split('(').First();
-                newPeople.Name = newPeople.Name.Replace("™", string.Empty, StringComparison.OrdinalIgnoreCase);
-                newPeople.Name = newPeople.Name.Trim();
+            switch (Plugin.Instance.Configuration.PreferedActorNameSource)
+            {
+                case PreferedActorNameSource.LocalDatabase:
+                    newPeoples = CleanupFromDatabase(newPeoples, scene.Item);
+                    break;
+            }
 
-                var newName = Replace(newPeople.Name, scene.Item.Studios);
+            return newPeoples;
+        }
 
+        public static List<PersonInfo> Cleanup(List<PersonInfo> peoples, BaseItem item)
+        {
+            return Cleanup(new MetadataResult<Movie>
+            {
+                People = peoples,
+                Item = new Movie
+                {
+                    Studios = item.Studios,
+                },
+            });
+        }
+
+        public static List<PersonInfo> CleanupFromDatabase(List<PersonInfo> peoples, BaseItem item)
+        {
+            var newPeoples = new List<PersonInfo>();
+
+            foreach (var people in peoples)
+            {
+                var newPeople = new PersonInfo
+                {
+                    Name = people.Name,
+                    Type = people.Type,
+                    ImageUrl = people.ImageUrl,
+                };
+
+                var newName = ReplaceFromDatabase(newPeople.Name, item.Studios);
                 if (newName == newPeople.Name)
                 {
                     switch (Plugin.Instance.Configuration.JAVActorNamingStyle)
                     {
                         case JAVActorNamingStyle.JapaneseStyle:
-                            string japaneseName = string.Join(" ", newPeople.Name.Split().Reverse()),
-                                newJapaneseName = Replace(japaneseName, scene.Item.Studios);
+                            string japaneseName = string.Join(" ", newName.Split().Reverse()),
+                                newJapaneseName = ReplaceFromDatabase(japaneseName, item.Studios);
 
                             newJapaneseName = string.Join(" ", newJapaneseName.Split().Reverse());
 
@@ -81,19 +121,7 @@ namespace PhoenixAdult.Helpers
             return newPeoples;
         }
 
-        public static List<PersonInfo> Cleanup(List<PersonInfo> peoples, BaseItem item)
-        {
-            return Cleanup(new MetadataResult<Movie>
-            {
-                People = peoples,
-                Item = new Movie
-                {
-                    Studios = item.Studios,
-                },
-            });
-        }
-
-        private static string Replace(string actorName, string[] studios)
+        private static string ReplaceFromDatabase(string actorName, string[] studios)
         {
             var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(o => o.Key.Equals(actorName, StringComparison.OrdinalIgnoreCase) || o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
             if (!string.IsNullOrEmpty(newActorName))

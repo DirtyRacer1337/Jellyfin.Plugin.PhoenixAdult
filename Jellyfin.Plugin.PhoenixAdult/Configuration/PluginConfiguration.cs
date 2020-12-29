@@ -15,6 +15,12 @@ namespace PhoenixAdult.Configuration
         PositionsLast = 1,
     }
 
+    public enum PreferedActorNameSource
+    {
+        LocalDatabase = 0,
+        NoChange = 1,
+    }
+
     public class PluginConfiguration : BasePluginConfiguration
     {
         public PluginConfiguration()
@@ -33,6 +39,7 @@ namespace PhoenixAdult.Configuration
 
             this.JAVActorNamingStyle = JAVActorNamingStyle.WesternStyle;
             this.GenresSortingStyle = GenresSortingStyle.Alphabetical;
+            this.PreferedActorNameSource = PreferedActorNameSource.LocalDatabase;
         }
 
         public string DatabaseUpdateURL { get; set; }
@@ -56,5 +63,7 @@ namespace PhoenixAdult.Configuration
         public JAVActorNamingStyle JAVActorNamingStyle { get; set; }
 
         public GenresSortingStyle GenresSortingStyle { get; set; }
+
+        public PreferedActorNameSource PreferedActorNameSource { get; set; }
     }
 }
