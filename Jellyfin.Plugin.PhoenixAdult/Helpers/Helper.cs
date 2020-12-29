@@ -200,6 +200,16 @@ namespace PhoenixAdult.Helpers
             return null;
         }
 
+        public static IProviderBaseActor GetActorProviderBySiteID(int siteID)
+        {
+            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
+            {
+                return GetActorBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+            }
+
+            return null;
+        }
+
         public static IProviderBase GetBaseSiteByName(string name)
         {
             name = $"{typeof(Plugin).Namespace}.Sites.{name}";
@@ -208,6 +218,19 @@ namespace PhoenixAdult.Helpers
             if (provider != null)
             {
                 return (IProviderBase)Activator.CreateInstance(provider);
+            }
+
+            return null;
+        }
+
+        public static IProviderBaseActor GetActorBaseSiteByName(string name)
+        {
+            name = $"{typeof(Plugin).Namespace}.Sites.{name}";
+            var provider = Type.GetType(name, false, true);
+
+            if (provider != null)
+            {
+                return (IProviderBaseActor)Activator.CreateInstance(provider);
             }
 
             return null;
