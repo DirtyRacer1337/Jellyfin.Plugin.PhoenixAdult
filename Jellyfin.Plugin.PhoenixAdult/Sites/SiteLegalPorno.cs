@@ -44,7 +44,7 @@ namespace PhoenixAdult.Sites
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = searchResult.SelectSingleText(".//a/@href"),
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                            curID = Helper.Encode(sceneURL),
                             sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'thumbnail-title')]//a"),
                             sceneDate = searchResult.SelectSingleText("./@release");
 

@@ -46,7 +46,7 @@ namespace PhoenixAdult.Sites
                 foreach (var searchResult in searchResults)
                 {
                     string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"),
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                            curID = Helper.Encode(sceneURL),
                             sceneName = searchResult.SelectSingleText(".//span[@class='title']"),
                             scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@thumb_url");
 

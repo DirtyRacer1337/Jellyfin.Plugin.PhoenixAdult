@@ -32,7 +32,7 @@ namespace PhoenixAdult.Sites
             foreach (var searchResult in searchResults)
             {
                 string sceneURL = searchResult.SelectSingleText("./a[last()]/@href"),
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                        curID = Helper.Encode(sceneURL),
                         sceneName = searchResult.SelectSingleText("./a[last()]"),
                         scenePoster = searchResult.SelectSingleText(".//img[1]/@src");
                 var sceneDateNode = searchResult.SelectSingleNode(".//div[contains(@class, 'update_date')]");

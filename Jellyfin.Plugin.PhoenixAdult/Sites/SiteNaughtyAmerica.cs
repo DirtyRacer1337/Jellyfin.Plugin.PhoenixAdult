@@ -65,7 +65,7 @@ namespace PhoenixAdult.Sites
             foreach (var searchResult in searchResults["results"].First["hits"])
             {
                 string sceneIDs = (string)searchResult["id"],
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneIDs}",
+                    curID = sceneIDs,
                     sceneName = (string)searchResult["title"];
                 var sceneDate = (long)searchResult["published_at"];
                 var sceneID = curID.Split('#').Skip(2).ToArray();

@@ -43,7 +43,7 @@ namespace PhoenixAdult.Sites
 
                 if (sceneURL.Contains("/films/", StringComparison.OrdinalIgnoreCase) || sceneURL.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
                 {
-                    string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                    string curID = Helper.Encode(sceneURL),
                         sceneName = searchResult.SelectSingleText(".//img/@alt"),
                         scenePoster = searchResult.SelectSingleText(".//img/@data-src"),
                         sceneDate = searchResult.SelectSingleText(".//div[@class='details']/span[last()]");

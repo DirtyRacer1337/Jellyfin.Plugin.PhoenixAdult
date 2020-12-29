@@ -95,7 +95,7 @@ namespace PhoenixAdult.Sites
                         javID = searchResult.SelectSingleText(".//img/@alt");
 
                 sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
-                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+                curID = Helper.Encode(sceneURL);
 
                 var res = new RemoteSearchResult
                 {

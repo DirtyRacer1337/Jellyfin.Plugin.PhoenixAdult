@@ -63,7 +63,7 @@ namespace PhoenixAdult.Sites
                     var sceneData = data.SelectSingleNode("//div[contains(@class, 'content-pane-title')]");
                     if (sceneData != null)
                     {
-                        string curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID.ToString(CultureInfo.InvariantCulture)}",
+                        string curID = sceneID.ToString(CultureInfo.InvariantCulture),
                             sceneName = sceneData.SelectSingleText("//h2"),
                             posterURL = sceneData.SelectSingleText("//video/@poster"),
                             sceneDate = sceneData.SelectSingleText("//span[@class='date']");

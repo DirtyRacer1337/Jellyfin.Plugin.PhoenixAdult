@@ -167,7 +167,7 @@ namespace PhoenixAdult.Sites
                         Name = sceneName,
                     };
 
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}";
+                    curID = $"{sceneType}#{sceneID}";
 
                     if (sceneDateObj.HasValue)
                     {

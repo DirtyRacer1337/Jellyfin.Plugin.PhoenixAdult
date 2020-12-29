@@ -144,6 +144,7 @@ namespace PhoenixAdult
                 {
                     foreach (var scene in result)
                     {
+                        scene.ProviderIds[this.Name] = $"{siteNum[0]}#{siteNum[1]}" + scene.ProviderIds[this.Name];
                         scene.Name = scene.Name.Trim();
                         if (scene.PremiereDate.HasValue)
                         {
@@ -182,6 +183,13 @@ namespace PhoenixAdult
                 return result;
             }
 
+            var sceneID = info.ProviderIds;
+            if (!sceneID.TryGetValue(this.Name, out var externalID))
+            {
+                return result;
+            }
+
+            var curID = externalID.Split('#');
             DateTime? premiereDateObj = null;
             if (info.PremiereDate.HasValue)
             {
@@ -192,8 +200,7 @@ namespace PhoenixAdult
 #endif
             }
 
-            var sceneID = info.ProviderIds;
-            if (!sceneID.ContainsKey(this.Name))
+            if (!sceneID.ContainsKey(this.Name) || curID.Length < 3)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
@@ -201,6 +208,10 @@ namespace PhoenixAdult
                     var first = searchResults.First();
 
                     sceneID = first.ProviderIds;
+
+                    sceneID.TryGetValue(this.Name, out externalID);
+                    curID = externalID.Split('#');
+
                     if (first.PremiereDate.HasValue)
                     {
 #if __EMBY__
@@ -210,17 +221,6 @@ namespace PhoenixAdult
 #endif
                     }
                 }
-            }
-
-            if (!sceneID.TryGetValue(this.Name, out var externalID))
-            {
-                return result;
-            }
-
-            var curID = externalID.Split('#');
-            if (curID.Length < 3)
-            {
-                return result;
             }
 
             var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
