@@ -127,7 +127,7 @@ namespace PhoenixAdult
             var sceneID = item.ProviderIds;
             if (sceneID.ContainsKey(this.Name))
             {
-                var provider = (IProviderBaseActor)Helper.GetProviderBySiteID(siteNum[0]);
+                var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
                     var imgs = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
