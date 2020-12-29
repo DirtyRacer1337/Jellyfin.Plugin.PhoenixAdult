@@ -37,44 +37,53 @@ namespace PhoenixAdult.Sites
                 searchTitle = searchJAVID;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
-            var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
-
-            var searchResults = data.SelectNodesSafe("//div[@class='videos']//div[@class='video']");
-            if (searchResults.Any())
+            for (var i = 0; i < Database.SiteList.Sites[siteNum[0]].Count(); i++)
             {
-                foreach (var searchResult in searchResults)
+                siteNum[1] = i;
+                var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
+                var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
+
+                var searchResults = data.SelectNodesSafe("//div[@class='videos']//div[@class='video']");
+                if (searchResults.Any())
                 {
-                    string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={searchResult.SelectSingleText(".//a/@id")}",
-                        curID = Helper.Encode(sceneURL),
-                        sceneName = searchResult.SelectSingleText(".//div[@class='title']"),
-                        scenePoster = $"http:{searchResult.SelectSingleText(".//img/@src").Replace("ps.", "pl.", StringComparison.OrdinalIgnoreCase)}",
-                        javID = searchResult.SelectSingleText(".//div[@class='id']");
-
-                    var res = new RemoteSearchResult
+                    foreach (var searchResult in searchResults)
                     {
-                        ProviderIds = { { Plugin.Instance.Name, curID } },
-                        Name = $"{javID} {sceneName}",
-                        ImageUrl = scenePoster,
-                    };
+                        string sceneURL = $"{Helper.GetSearchBaseURL(siteNum)}/en/?v={searchResult.SelectSingleText(".//a/@id")}",
+                            curID = Helper.Encode(sceneURL),
+                            sceneName = searchResult.SelectSingleText(".//div[@class='title']"),
+                            scenePoster = $"http:{searchResult.SelectSingleText(".//img/@src").Replace("ps.", "pl.", StringComparison.OrdinalIgnoreCase)}",
+                            javID = searchResult.SelectSingleText(".//div[@class='id']");
 
-                    if (!string.IsNullOrEmpty(searchJAVID))
-                    {
-                        res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID, StringComparison.OrdinalIgnoreCase);
+                        var res = new RemoteSearchResult
+                        {
+                            ProviderIds = { { Plugin.Instance.Name, curID } },
+                            Name = $"{javID} {sceneName}",
+                            ImageUrl = scenePoster,
+                        };
+
+                        if (!string.IsNullOrEmpty(searchJAVID))
+                        {
+                            res.IndexNumber = 100 - LevenshteinDistance.Calculate(searchJAVID, javID, StringComparison.OrdinalIgnoreCase);
+                        }
+
+                        result.Add(res);
                     }
-
-                    result.Add(res);
                 }
-            }
-            else
-            {
-                var sceneURL = Helper.GetSearchBaseURL(siteNum) + data.SelectSingleText("//div[@id='video_title']//a/@href");
-                var sceneID = new string[] { Helper.Encode(sceneURL) };
-
-                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
-                if (searchResult.Any())
+                else
                 {
-                    result.AddRange(searchResult);
+                    var sceneURL = Helper.GetSearchBaseURL(siteNum) + data.SelectSingleText("//div[@id='video_title']//a/@href");
+                    var sceneID = new string[] { Helper.Encode(sceneURL) };
+
+                    var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
+                    if (searchResult.Any())
+                    {
+                        result.AddRange(searchResult);
+                    }
+                }
+
+                if (result.Any())
+                {
+                    break;
                 }
             }
 

@@ -618,7 +618,10 @@
       "0": [ "Hegre", "http://www.hegre.com", "/search?q=" ]
     },
     "38": {
-      "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ]
+      "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ],
+      "1": [ "", "http://www.m45e.com" ],
+      "2": [ "", "http://www.u44r.com" ],
+      "3": [ "", "http://www.g46e.com" ],
     },
     "39": {
       "0": [ "Caribbeancom", "https://en.caribbeancom.com", "/eng/search/?q=" ],
