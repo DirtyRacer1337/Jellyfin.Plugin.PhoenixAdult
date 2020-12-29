@@ -183,13 +183,6 @@ namespace PhoenixAdult
                 return result;
             }
 
-            var sceneID = info.ProviderIds;
-            if (!sceneID.TryGetValue(this.Name, out var externalID))
-            {
-                return result;
-            }
-
-            var curID = externalID.Split('#');
             DateTime? premiereDateObj = null;
             if (info.PremiereDate.HasValue)
             {
@@ -200,7 +193,14 @@ namespace PhoenixAdult
 #endif
             }
 
-            if (!sceneID.ContainsKey(this.Name) || curID.Length < 3)
+            string[] curID = null;
+            var sceneID = info.ProviderIds;
+            if (sceneID.TryGetValue(this.Name, out var externalID))
+            {
+                curID = externalID.Split('#');
+            }
+
+            if (!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
@@ -221,6 +221,11 @@ namespace PhoenixAdult
 #endif
                     }
                 }
+            }
+
+            if (curID == null)
+            {
+                return result;
             }
 
             var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
