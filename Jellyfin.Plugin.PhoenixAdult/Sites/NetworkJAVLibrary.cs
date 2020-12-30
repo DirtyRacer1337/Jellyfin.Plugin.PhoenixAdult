@@ -37,7 +37,7 @@ namespace PhoenixAdult.Sites
                 searchTitle = searchJAVID;
             }
 
-            for (var i = 0; i < Database.SiteList.Sites[siteNum[0]].Count(); i++)
+            for (var i = 0; i < Database.SiteList.Sites[siteNum[0]].Count; i++)
             {
                 siteNum[1] = i;
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;

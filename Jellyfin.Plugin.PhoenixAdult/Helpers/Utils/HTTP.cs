@@ -73,9 +73,11 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 response = await Http.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
-                Logger.Error(e.Message);
+                Logger.Error($"Request error: {e.Message}");
+
+                await Analitycs.Send(url, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
 
             if (response != null)
