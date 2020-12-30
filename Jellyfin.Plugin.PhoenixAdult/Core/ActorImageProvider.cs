@@ -109,42 +109,42 @@ namespace PhoenixAdult
                 return images;
             }
 
-            if (!item.ProviderIds.TryGetValue(this.Name, out var externalID))
-            {
-                return images;
-            }
+            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
 
-            var curID = externalID.Split('#');
-            if (curID.Length < 3)
+            if (item.ProviderIds.TryGetValue(this.Name, out var externalID))
             {
-                return images;
-            }
-
-            var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
-
-            var sceneID = item.ProviderIds;
-            if (sceneID.ContainsKey(this.Name))
-            {
-                var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
-                if (provider != null)
+                var curID = externalID.Split('#');
+                if (curID.Length > 2)
                 {
-                    try
-                    {
-                        images = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Error($"GetImages error: \"{e}\"");
+                    var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
+                    var sceneID = item.ProviderIds;
 
-                        await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                    if (sceneID.ContainsKey(this.Name))
+                    {
+                        var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+                        if (provider != null)
+                        {
+                            var imgs = new List<RemoteImageInfo>();
+                            try
+                            {
+                                imgs = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.Error($"GetImages error: \"{e}\"");
+
+                                await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                            }
+                            finally
+                            {
+                                if (imgs.Any())
+                                {
+                                    images.AddRange(imgs);
+                                }
+                            }
+                        }
                     }
                 }
-            }
-
-            var imgs = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
-            if (imgs.Any())
-            {
-                images.AddRange(imgs);
             }
 
             images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
