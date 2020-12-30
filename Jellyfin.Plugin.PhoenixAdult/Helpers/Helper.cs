@@ -95,10 +95,15 @@ namespace PhoenixAdult.Helpers
             {
                 foreach (var siteData in site.Value)
                 {
-                    var clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
-                    if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
+                    var siteName = siteData.Value[0];
+
+                    if (!string.IsNullOrEmpty(siteName))
                     {
-                        possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
+                        var clearSite = Regex.Replace(siteName, @"\W", string.Empty);
+                        if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
+                        {
+                            possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
+                        }
                     }
                 }
             }
