@@ -109,8 +109,6 @@ namespace PhoenixAdult
                 return images;
             }
 
-            images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
-
             if (!item.ProviderIds.TryGetValue(this.Name, out var externalID))
             {
                 return images;
@@ -130,9 +128,23 @@ namespace PhoenixAdult
                 var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
                 if (provider != null)
                 {
-                    var imgs = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
-                    images.AddRange(imgs);
+                    try
+                    {
+                        images = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"GetImages error: \"{e}\"");
+
+                        await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                    }
                 }
+            }
+
+            var imgs = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
+            if (imgs.Any())
+            {
+                images.AddRange(imgs);
             }
 
             images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
