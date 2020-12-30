@@ -23,8 +23,8 @@ namespace PhoenixAdult.Sites
 
             foreach (var actorNode in actorData.SelectNodesSafe("//div[contains(@class, 'grid-item')]"))
             {
-                string actorURL = Helper.GetSearchBaseURL(siteNum) + $"{actorNode.SelectSingleText(".//a/@href")}/profile",
-                    curID = Helper.Encode(actorURL),
+                var actorURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"{actorNode.SelectSingleText(".//a/@href")}/profile");
+                string curID = Helper.Encode(actorURL.AbsolutePath),
                     name = actorNode.SelectSingleText(".//p/@title"),
                     imageURL = actorNode.SelectSingleText(".//img/@src");
 
@@ -49,6 +49,11 @@ namespace PhoenixAdult.Sites
             };
 
             var actorURL = Helper.Decode(sceneID[0]);
+            if (!actorURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                actorURL = Helper.GetSearchBaseURL(siteNum) + actorURL;
+            }
+
             var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = actorURL;
@@ -89,12 +94,17 @@ namespace PhoenixAdult.Sites
         {
             var result = new List<RemoteImageInfo>();
 
-            if (string.IsNullOrEmpty(sceneID[0]))
+            if (sceneID == null)
             {
                 return result;
             }
 
             var actorURL = Helper.Decode(sceneID[0]);
+            if (!actorURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                actorURL = Helper.GetSearchBaseURL(siteNum) + actorURL;
+            }
+
             var actorData = await HTML.ElementFromURL(actorURL, cancellationToken).ConfigureAwait(false);
 
             var img = actorData.SelectSingleText("//div[contains(@class, 'image-container')]//a/img/@src");

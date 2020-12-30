@@ -30,11 +30,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[contains(@class, 'card-video')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleText(".//a/@href"),
-                        curID = Helper.Encode(sceneURL),
-                        sceneName = searchResult.SelectSingleText(".//a/@aria-label"),
-                        sceneDate = searchResult.SelectSingleText(".//p[contains(@class, 'extra-info') and not(contains(@class, 'actors'))]"),
-                        scenePoster = searchResult.SelectSingleText(".//div[contains(@class, 'thumb')]/@data-bg");
+                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText(".//a/@aria-label"),
+                    sceneDate = searchResult.SelectSingleText(".//p[contains(@class, 'extra-info') and not(contains(@class, 'actors'))]"),
+                    scenePoster = searchResult.SelectSingleText(".//div[contains(@class, 'thumb')]/@data-bg");
 
                 var res = new RemoteSearchResult
                 {
@@ -68,6 +68,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -129,6 +134,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var xpaths = new List<string>

@@ -29,10 +29,10 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'product-items')]//div[contains(@class, 'video-box-item')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"),
-                        curID = Helper.Encode(sceneURL),
-                        sceneName = searchResult.SelectSingleText(".//div[@class='product-item-bottom']//a"),
-                        scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//img/@data-src");
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText(".//div[@class='product-item-bottom']//a"),
+                    scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//img/@data-src");
 
                 var res = new RemoteSearchResult
                 {
@@ -69,6 +69,11 @@ namespace PhoenixAdult.Sites
 
             string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = string.Empty;
+
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
 
             if (sceneID.Length > 1)
             {
@@ -149,6 +154,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleText("//div[@id='video-poster']/@data-poster");

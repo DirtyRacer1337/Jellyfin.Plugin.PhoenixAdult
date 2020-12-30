@@ -46,8 +46,8 @@ namespace PhoenixAdult.Sites
                 directURL = $"{directURL.Substring(0, directURL.Length - 1)}-{directURL.Substring(directURL.Length - 1, 1)}";
             }
 
-            var sceneURL = Helper.GetSearchSearchURL(siteNum) + directURL;
-            var sceneID = new List<string> { Helper.Encode(sceneURL) };
+            var sceneURL = new Uri(Helper.GetSearchSearchURL(siteNum) + directURL);
+            var sceneID = new List<string> { Helper.Encode(sceneURL.AbsolutePath) };
 
             if (searchDate.HasValue)
             {
@@ -77,6 +77,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -146,6 +151,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleText("//video[@id='player']/@poster");

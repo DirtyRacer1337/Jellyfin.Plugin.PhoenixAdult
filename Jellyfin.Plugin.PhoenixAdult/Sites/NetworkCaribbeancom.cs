@@ -48,8 +48,8 @@ namespace PhoenixAdult.Sites
 
             if (!string.IsNullOrEmpty(movieID))
             {
-                var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/eng/moviepages/{movieID}/index.html";
-                var sceneID = new string[] { Helper.Encode(sceneURL) };
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/eng/moviepages/{movieID}/index.html");
+                var sceneID = new string[] { Helper.Encode(sceneURL.AbsolutePath) };
 
                 var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID, searchDate, cancellationToken).ConfigureAwait(false);
                 if (searchResult.Any())
@@ -65,8 +65,8 @@ namespace PhoenixAdult.Sites
                 var searchResults = data.SelectNodesSafe("//div[contains(@class, 'list') or contains(@class, 'is-movie')]//div[@class='grid-item']");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='meta-title']/a/@href"),
-                        curID = Helper.Encode(sceneURL),
+                    var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='meta-title']/a/@href"));
+                    string curID = Helper.Encode(sceneURL.AbsolutePath),
                         sceneName = searchResult.SelectSingleText(".//div[@class='meta-title']"),
                         sceneDate = searchResult.SelectSingleText(".//div[@class='meta-data']"),
                         scenePoster = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//div[@class='media-thum']//img/@src");
@@ -104,6 +104,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -177,8 +182,12 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
 
+            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
             var movieID = sceneURL.Replace("/index.html", string.Empty, StringComparison.OrdinalIgnoreCase).Split("/").Last();
 
             result.Add(new RemoteImageInfo

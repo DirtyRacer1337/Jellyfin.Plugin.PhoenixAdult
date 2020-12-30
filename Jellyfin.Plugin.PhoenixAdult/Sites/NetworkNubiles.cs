@@ -102,7 +102,6 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = sceneID[0];
-
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
                 sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";

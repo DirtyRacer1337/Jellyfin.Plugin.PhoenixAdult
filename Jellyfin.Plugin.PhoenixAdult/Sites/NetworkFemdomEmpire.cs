@@ -29,11 +29,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'item') and contains(@class, 'hover')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleText(".//a/@href"),
-                        curID = Helper.Encode(sceneURL),
-                        sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'item-info')]//a"),
-                        sceneDate = searchResult.SelectSingleText(".//span[@class='date']"),
-                        scenePoster = string.Empty;
+                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText(".//div[contains(@class, 'item-info')]//a"),
+                    sceneDate = searchResult.SelectSingleText(".//span[@class='date']"),
+                    scenePoster = string.Empty;
 
                 var res = new RemoteSearchResult
                 {
@@ -89,6 +89,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -150,6 +155,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var image = sceneData.SelectSingleText("//a[@class='fake_trailer']//img/@src0_1x");

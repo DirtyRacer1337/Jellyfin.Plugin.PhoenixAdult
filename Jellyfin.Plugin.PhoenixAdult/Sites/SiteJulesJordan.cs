@@ -31,10 +31,10 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[@class='update_details']");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleText("./a[last()]/@href"),
-                        curID = Helper.Encode(sceneURL),
-                        sceneName = searchResult.SelectSingleText("./a[last()]"),
-                        scenePoster = searchResult.SelectSingleText(".//img[1]/@src");
+                var sceneURL = new Uri(searchResult.SelectSingleText("./a[last()]/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText("./a[last()]"),
+                    scenePoster = searchResult.SelectSingleText(".//img[1]/@src");
                 var sceneDateNode = searchResult.SelectSingleNode(".//div[contains(@class, 'update_date')]");
 
                 var res = new RemoteSearchResult
@@ -88,6 +88,12 @@ namespace PhoenixAdult.Sites
 
             string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = sceneID[1];
+
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -158,6 +164,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var script = sceneData.SelectSingleText("//script[contains(text(), 'df_movie')]");
