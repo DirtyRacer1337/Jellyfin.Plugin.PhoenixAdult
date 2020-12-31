@@ -58,9 +58,9 @@ namespace PhoenixAdult.ScheduledTasks
                         }
                     }
                 }
-
-                Database.Update(fileName);
             }
+
+            Database.LoadAll();
 
             Plugin.Instance.Configuration.DatabaseHash = JsonConvert.SerializeObject(db);
             Plugin.Instance.SaveConfiguration();

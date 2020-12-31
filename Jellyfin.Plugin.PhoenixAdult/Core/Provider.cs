@@ -39,6 +39,8 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
+
+            Database.LoadAll();
         }
 
         public static ILogger Log { get; set; }
