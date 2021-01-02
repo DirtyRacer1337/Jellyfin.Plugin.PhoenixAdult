@@ -40,12 +40,14 @@ namespace PhoenixAdult.Helpers.Utils
 
         public static void LoadAll()
         {
-            var filePaths = Directory.GetFiles(DatabasePath, "*.json");
-            foreach (var filePath in filePaths)
+            if (Directory.Exists(DatabasePath))
             {
-                var fileName = Path.GetFileName(filePath);
+                foreach (var filePath in Directory.GetFiles(DatabasePath, "*.json"))
+                {
+                    var fileName = Path.GetFileName(filePath);
 
-                Load(fileName);
+                    Load(fileName);
+                }
             }
         }
 
