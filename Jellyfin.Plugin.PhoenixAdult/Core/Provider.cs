@@ -62,7 +62,7 @@ namespace PhoenixAdult
 
             var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
             var site = Helper.GetSiteFromTitle(title);
-            if (site.Key == null)
+            if (site.siteNum == null)
             {
                 string newTitle;
                 if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DefaultSiteName))
@@ -82,22 +82,17 @@ namespace PhoenixAdult
                     site = Helper.GetSiteFromTitle(title);
                 }
 
-                if (site.Key == null)
+                if (site.siteNum == null)
                 {
                     return result;
                 }
             }
 
-            string searchTitle = Helper.GetClearTitle(title, site.Value),
+            string searchTitle = Helper.GetClearTitle(title, site.siteName),
                    searchDate = string.Empty;
             DateTime? searchDateObj;
             var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
 
-            var siteNum = new int[2]
-            {
-                site.Key[0],
-                site.Key[1],
-            };
             searchTitle = titleAfterDate.searchTitle;
             searchDateObj = titleAfterDate.searchDateObj;
             if (searchDateObj.HasValue)
@@ -122,31 +117,31 @@ namespace PhoenixAdult
                 return result;
             }
 
-            Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
+            Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
             Logger.Info($"searchTitle: {searchTitle}");
             Logger.Info($"searchDate: {searchDate}");
 
-            var provider = Helper.GetProviderBySiteID(siteNum[0]);
+            var provider = Helper.GetProviderBySiteID(site.siteNum[0]);
             if (provider != null)
             {
                 Logger.Info($"provider: {provider}");
 
                 try
                 {
-                    result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    result = await provider.Search(site.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Search error: \"{e}\"");
 
-                    await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analitycs.Send(searchInfo.Name, site.siteNum, site.siteName, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (result.Any())
                 {
                     foreach (var scene in result)
                     {
-                        scene.ProviderIds[this.Name] = $"{siteNum[0]}#{siteNum[1]}#" + scene.ProviderIds[this.Name];
+                        scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
                         scene.Name = scene.Name.Trim();
                         if (scene.PremiereDate.HasValue)
                         {

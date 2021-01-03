@@ -86,7 +86,7 @@ namespace PhoenixAdult.Helpers
         public static string Decode(string base64Text)
             => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
 
-        public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
+        public static (int[] siteNum, string siteName) GetSiteFromTitle(string title)
         {
             var clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
@@ -102,18 +102,20 @@ namespace PhoenixAdult.Helpers
                         var clearSite = Regex.Replace(siteName, @"\W", string.Empty);
                         if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                         {
-                            possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
+                            possibleSites.Add(new int[2] { site.Key, siteData.Key }, clearSite);
                         }
                     }
                 }
             }
 
-            if (possibleSites.Count > 0)
+            (int[], string) result = (null, null);
+            if (possibleSites.Any())
             {
-                return possibleSites.OrderByDescending(o => o.Value.Length).First();
+                var site = possibleSites.OrderByDescending(o => o.Value.Length).First();
+                result = (site.Key, site.Value);
             }
 
-            return new KeyValuePair<int[], string>(null, null);
+            return result;
         }
 
         public static string GetClearTitle(string title, string siteName)

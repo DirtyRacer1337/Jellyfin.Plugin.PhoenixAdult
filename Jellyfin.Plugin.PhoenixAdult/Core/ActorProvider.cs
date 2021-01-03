@@ -39,38 +39,32 @@ namespace PhoenixAdult
             {
                 var title = $"{siteName} {searchInfo.Name}";
                 var site = Helper.GetSiteFromTitle(title);
-                string actorName = Helper.GetClearTitle(title, site.Value);
+                string actorName = Helper.GetClearTitle(title, site.siteName);
 
-                var siteNum = new int[2]
-                {
-                    site.Key[0],
-                    site.Key[1],
-                };
-
-                Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
+                Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
                 Logger.Info($"actorName: {actorName}");
 
-                var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+                var provider = Helper.GetActorProviderBySiteID(site.siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
 
                     try
                     {
-                        result = await provider.Search(siteNum, actorName, cancellationToken).ConfigureAwait(false);
+                        result = await provider.Search(site.siteNum, actorName, cancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception e)
                     {
                         Logger.Error($"Actor Search error: \"{e}\"");
 
-                        await Analitycs.Send(title, siteNum, site.Value, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                        await Analitycs.Send(title, site.siteNum, site.siteName, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                     }
 
                     if (result.Any())
                     {
                         foreach (var scene in result)
                         {
-                            scene.ProviderIds[this.Name] = $"{siteNum[0]}#{siteNum[1]}#" + scene.ProviderIds[this.Name];
+                            scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
                             scene.Name = scene.Name.Trim();
                         }
 
