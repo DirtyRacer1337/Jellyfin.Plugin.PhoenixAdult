@@ -26,7 +26,7 @@ namespace PhoenixAdult.Sites
             if (searchDate.HasValue)
             {
                 var date = searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                var url = $"{Helper.GetSearchSearchURL(siteNum)}/date/{date}/{date}";
+                var url = Helper.GetSearchSearchURL(siteNum) + $"date/{date}/{date}";
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodesSafe("//div[contains(@class, 'content-grid-item')]");
