@@ -13,11 +13,6 @@ using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
 
-#if __EMBY__
-using MediaBrowser.Model.Configuration;
-#else
-#endif
-
 namespace PhoenixAdult
 {
     public class ActorProvider : IRemoteMetadataProvider<Person, PersonLookupInfo>
@@ -140,7 +135,7 @@ namespace PhoenixAdult
                     result.Item.ProviderIds.Update(this.Name + "URL", result.Item.ExternalId);
 
                     result.Item.OriginalTitle = WebUtility.HtmlDecode(result.Item.OriginalTitle);
-                    var aliases = result.Item.OriginalTitle.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                    var aliases = result.Item.OriginalTitle.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     var newAliases = new List<string>();
                     foreach (var name in aliases)
                     {

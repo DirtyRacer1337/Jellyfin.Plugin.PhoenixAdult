@@ -8,6 +8,10 @@ using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 
+#if __EMBY__
+using MediaBrowser.Model.Configuration;
+#endif
+
 namespace PhoenixAdult.Sites
 {
     public class NetworkJAV : IProviderBase
@@ -77,7 +81,11 @@ namespace PhoenixAdult.Sites
             var info = new Movie();
             info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
 
+#if __EMBY__
+            result = (await provider.GetImages(info, new LibraryOptions(), cancellationToken).ConfigureAwait(false)).ToList();
+#else
             result = (await provider.GetImages(info, cancellationToken).ConfigureAwait(false)).ToList();
+#endif
 
             return result;
         }

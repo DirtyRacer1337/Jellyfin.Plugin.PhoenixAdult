@@ -15,7 +15,6 @@ using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
 using MediaBrowser.Model.Configuration;
-#else
 #endif
 
 namespace PhoenixAdult
