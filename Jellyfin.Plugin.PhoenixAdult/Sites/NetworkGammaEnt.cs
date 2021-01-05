@@ -146,8 +146,8 @@ namespace PhoenixAdult.Sites
                 foreach (JObject searchResult in searchResults["results"].First["hits"])
                 {
                     string sceneID,
-                            sceneName = (string)searchResult["title"],
-                            curID;
+                        sceneName = (string)searchResult["title"],
+                        curID;
                     DateTime? sceneDateObj;
 
                     if (sceneType == "scenes")
@@ -167,7 +167,7 @@ namespace PhoenixAdult.Sites
                         Name = sceneName,
                     };
 
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneType}#{sceneID}";
+                    curID = $"{sceneID}#{sceneType}";
 
                     if (sceneDateObj.HasValue)
                     {
@@ -208,9 +208,9 @@ namespace PhoenixAdult.Sites
             }
 
             string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
-                   sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
+                   sceneType = sceneID[1] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[1]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[0]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -219,7 +219,7 @@ namespace PhoenixAdult.Sites
             sceneData = (JObject)sceneData["results"].First["hits"].First;
 
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
-                sceneTypeURL = sceneID[0] == "scenes" ? "video" : "movie";
+                sceneTypeURL = sceneID[1] == "scenes" ? "video" : "movie";
 
             if (sceneTypeURL.Equals("movie", StringComparison.OrdinalIgnoreCase))
             {
@@ -238,7 +238,7 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/{sceneTypeURL}/0/{sceneID[1]}/";
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/en/{sceneTypeURL}/0/{sceneID[0]}/";
 
             if (!string.IsNullOrWhiteSpace(sceneTypeURL))
             {
@@ -306,9 +306,9 @@ namespace PhoenixAdult.Sites
             }
 
             string apiKEY = await GetAPIKey(siteNum, cancellationToken).ConfigureAwait(false),
-                   sceneType = sceneID[0] == "scenes" ? "clip_id" : "movie_id",
+                   sceneType = sceneID[1] == "scenes" ? "clip_id" : "movie_id",
                    url = $"{Helper.GetSearchSearchURL(siteNum)}?x-algolia-application-id=TSMKFA364Q&x-algolia-api-key={apiKEY}";
-            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[0]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[1]}", cancellationToken).ConfigureAwait(false);
+            var sceneData = await GetDataFromAPI(url, $"all_{sceneID[1]}", Helper.GetSearchBaseURL(siteNum), $"filters={sceneType}={sceneID[0]}", cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -319,7 +319,7 @@ namespace PhoenixAdult.Sites
             var ignore = false;
             string image, imageURL;
 
-            if (sceneID[0].Equals("scenes", StringComparison.OrdinalIgnoreCase))
+            if (sceneID[1].Equals("scenes", StringComparison.OrdinalIgnoreCase))
             {
                 ignore = true;
             }

@@ -26,14 +26,14 @@ namespace PhoenixAdult.Sites
             if (searchDate.HasValue)
             {
                 var date = searchDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                var url = $"{Helper.GetSearchSearchURL(siteNum)}/date/{date}/{date}";
+                var url = Helper.GetSearchSearchURL(siteNum) + $"date/{date}/{date}";
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
                 var searchResults = data.SelectNodesSafe("//div[contains(@class, 'content-grid-item')]");
                 foreach (var searchResult in searchResults)
                 {
                     string sceneID = searchResult.SelectSingleText(".//span[@class='title']/a/@href").Split('/')[3],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                        curID = sceneID,
                         sceneName = searchResult.SelectSingleText(".//span[@class='title']/a | //h2"),
                         posterURL = searchResult.SelectSingleText(".//noscript/picture/img/@src"),
                         sceneDate = searchResult.SelectSingleText(".//span[@class='date']");
@@ -63,7 +63,7 @@ namespace PhoenixAdult.Sites
                     var sceneData = data.SelectSingleNode("//div[contains(@class, 'content-pane-title')]");
                     if (sceneData != null)
                     {
-                        string curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID.ToString(CultureInfo.InvariantCulture)}",
+                        string curID = sceneID.ToString(CultureInfo.InvariantCulture),
                             sceneName = sceneData.SelectSingleText("//h2"),
                             posterURL = sceneData.SelectSingleText("//video/@poster"),
                             sceneDate = sceneData.SelectSingleText("//span[@class='date']");
@@ -102,7 +102,6 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = sceneID[0];
-
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
                 sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";
@@ -151,7 +150,7 @@ namespace PhoenixAdult.Sites
                     actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value;
 
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
-                var actorPhotoURL = actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
+                var actorPhotoURL = "http:" + actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
 
                 result.People.Add(new PersonInfo
                 {

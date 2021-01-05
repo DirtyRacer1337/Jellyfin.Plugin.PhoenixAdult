@@ -61,11 +61,14 @@ namespace PhoenixAdult.ScheduledTasks
             Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(new_db);
             Plugin.Instance.SaveConfiguration();
 
-            foreach (var file in Directory.GetFiles(Analitycs.LogsPath, "*.json.gz"))
+            if (Directory.Exists(Analitycs.LogsPath))
             {
-                if (Math.Abs((DateTime.Now - File.GetCreationTime(file)).TotalDays) > 3)
+                foreach (var file in Directory.GetFiles(Analitycs.LogsPath, "*.json.gz"))
                 {
-                    File.Delete(file);
+                    if (Math.Abs((DateTime.Now - File.GetCreationTime(file)).TotalDays) > 3)
+                    {
+                        File.Delete(file);
+                    }
                 }
             }
 

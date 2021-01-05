@@ -34,16 +34,10 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'item')]");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = searchResult.SelectSingleText(".//a/@href");
-
-                if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
+                if (sceneURL.AbsolutePath.Contains("/films/", StringComparison.OrdinalIgnoreCase) || sceneURL.AbsolutePath.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
                 {
-                    sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
-                }
-
-                if (sceneURL.Contains("/films/", StringComparison.OrdinalIgnoreCase) || sceneURL.Contains("/massage/", StringComparison.OrdinalIgnoreCase))
-                {
-                    string curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
+                    string curID = Helper.Encode(sceneURL.AbsolutePath),
                         sceneName = searchResult.SelectSingleText(".//img/@alt"),
                         scenePoster = searchResult.SelectSingleText(".//img/@data-src"),
                         sceneDate = searchResult.SelectSingleText(".//div[@class='details']/span[last()]");
@@ -90,6 +84,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -141,6 +140,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleText("//meta[@name='twitter:image']/@content");

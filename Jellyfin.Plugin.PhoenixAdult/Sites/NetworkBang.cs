@@ -65,7 +65,7 @@ namespace PhoenixAdult.Sites
             {
                 var sceneData = searchResult["_source"];
                 string sceneID = (string)sceneData["identifier"],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                        curID = sceneID,
                         sceneName = (string)sceneData["name"],
                         scenePoster = $"https://i.bang.com/covers/{sceneData["dvd"]["id"]}/front.jpg";
                 var sceneDateObj = (DateTime)sceneData["releaseDate"];

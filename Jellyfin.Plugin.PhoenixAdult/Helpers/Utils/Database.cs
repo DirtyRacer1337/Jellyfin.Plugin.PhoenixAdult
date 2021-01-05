@@ -38,7 +38,25 @@ namespace PhoenixAdult.Helpers.Utils
             return false;
         }
 
-        public static void Update(string fileName)
+        public static void LoadAll()
+        {
+            if (Directory.Exists(DatabasePath))
+            {
+                foreach (var filePath in Directory.GetFiles(DatabasePath, "*.json"))
+                {
+                    var fileName = Path.GetFileName(filePath);
+
+                    Load(fileName);
+                }
+            }
+        }
+
+        public static bool IsExist(string fileName)
+        {
+            return File.Exists(Path.Combine(DatabasePath, fileName));
+        }
+
+        private static void Load(string fileName)
         {
             var encoding = new UTF8Encoding(false);
 
@@ -64,11 +82,6 @@ namespace PhoenixAdult.Helpers.Utils
                         break;
                 }
             }
-        }
-
-        public static bool IsExist(string fileName)
-        {
-            return File.Exists(Path.Combine(DatabasePath, fileName));
         }
 
         public struct SiteListStructure

@@ -65,10 +65,10 @@ namespace PhoenixAdult.Sites
             foreach (var searchResult in searchResults["results"].First["hits"])
             {
                 string sceneIDs = (string)searchResult["id"],
-                    curID = $"{siteNum[0]}#{siteNum[1]}#{sceneIDs}",
+                    curID = sceneIDs,
                     sceneName = (string)searchResult["title"];
                 var sceneDate = (long)searchResult["published_at"];
-                var sceneID = curID.Split('#').Skip(2).ToArray();
+                var sceneID = new string[] { curID };
 
                 var posters = (await this.GetImages(siteNum, sceneID, null, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
 

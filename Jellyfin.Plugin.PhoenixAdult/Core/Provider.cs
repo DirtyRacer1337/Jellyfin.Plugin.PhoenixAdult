@@ -39,6 +39,8 @@ namespace PhoenixAdult
             Log = logger;
 #endif
             Http = http;
+
+            Database.LoadAll();
         }
 
         public static ILogger Log { get; set; }
@@ -60,7 +62,7 @@ namespace PhoenixAdult
 
             var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
             var site = Helper.GetSiteFromTitle(title);
-            if (site.Key == null)
+            if (site.siteNum == null)
             {
                 string newTitle;
                 if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DefaultSiteName))
@@ -80,22 +82,17 @@ namespace PhoenixAdult
                     site = Helper.GetSiteFromTitle(title);
                 }
 
-                if (site.Key == null)
+                if (site.siteNum == null)
                 {
                     return result;
                 }
             }
 
-            string searchTitle = Helper.GetClearTitle(title, site.Value),
+            string searchTitle = Helper.GetClearTitle(title, site.siteName),
                    searchDate = string.Empty;
             DateTime? searchDateObj;
             var titleAfterDate = Helper.GetDateFromTitle(searchTitle);
 
-            var siteNum = new int[2]
-            {
-                site.Key[0],
-                site.Key[1],
-            };
             searchTitle = titleAfterDate.searchTitle;
             searchDateObj = titleAfterDate.searchDateObj;
             if (searchDateObj.HasValue)
@@ -120,30 +117,31 @@ namespace PhoenixAdult
                 return result;
             }
 
-            Logger.Info($"site: {siteNum[0]}:{siteNum[1]} ({site.Value})");
+            Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
             Logger.Info($"searchTitle: {searchTitle}");
             Logger.Info($"searchDate: {searchDate}");
 
-            var provider = Helper.GetProviderBySiteID(siteNum[0]);
+            var provider = Helper.GetProviderBySiteID(site.siteNum[0]);
             if (provider != null)
             {
                 Logger.Info($"provider: {provider}");
 
                 try
                 {
-                    result = await provider.Search(siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
+                    result = await provider.Search(site.siteNum, searchTitle, searchDateObj, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Search error: \"{e}\"");
 
-                    await Analitycs.Send(searchInfo.Name, siteNum, site.Value, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analitycs.Send(searchInfo.Name, site.siteNum, site.siteName, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (result.Any())
                 {
                     foreach (var scene in result)
                     {
+                        scene.ProviderIds[this.Name] = $"{site.siteNum[0]}#{site.siteNum[1]}#" + scene.ProviderIds[this.Name];
                         scene.Name = scene.Name.Trim();
                         if (scene.PremiereDate.HasValue)
                         {
@@ -192,8 +190,14 @@ namespace PhoenixAdult
 #endif
             }
 
+            string[] curID = null;
             var sceneID = info.ProviderIds;
-            if (!sceneID.ContainsKey(this.Name))
+            if (sceneID.TryGetValue(this.Name, out var externalID))
+            {
+                curID = externalID.Split('#');
+            }
+
+            if (!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
@@ -201,6 +205,10 @@ namespace PhoenixAdult
                     var first = searchResults.First();
 
                     sceneID = first.ProviderIds;
+
+                    sceneID.TryGetValue(this.Name, out externalID);
+                    curID = externalID.Split('#');
+
                     if (first.PremiereDate.HasValue)
                     {
 #if __EMBY__
@@ -212,13 +220,7 @@ namespace PhoenixAdult
                 }
             }
 
-            if (!sceneID.TryGetValue(this.Name, out var externalID))
-            {
-                return result;
-            }
-
-            var curID = externalID.Split('#');
-            if (curID.Length < 3)
+            if (curID == null)
             {
                 return result;
             }

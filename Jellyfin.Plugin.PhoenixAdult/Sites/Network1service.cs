@@ -132,7 +132,7 @@ namespace PhoenixAdult.Sites
                 foreach (var searchResult in searchResults["result"])
                 {
                     string sceneID = (string)searchResult["id"],
-                            curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}#{sceneType}",
+                            curID = $"{sceneID}#{sceneType}",
                             sceneName = (string)searchResult["title"],
                             scenePoster = string.Empty;
                     var sceneDateObj = (DateTime)searchResult["dateReleased"];

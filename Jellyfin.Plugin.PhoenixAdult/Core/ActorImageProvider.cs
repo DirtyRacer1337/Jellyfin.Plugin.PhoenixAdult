@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Configuration;
+using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
@@ -88,6 +90,12 @@ namespace PhoenixAdult
 
         public bool Supports(BaseItem item) => item is Person;
 
+        public IEnumerable<ImageType> GetSupportedImages(BaseItem item)
+            => new List<ImageType>
+            {
+                ImageType.Primary,
+            };
+
 #if __EMBY__
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, LibraryOptions libraryOptions, CancellationToken cancellationToken)
 #else
@@ -102,21 +110,60 @@ namespace PhoenixAdult
             }
 
             images = await GetActorPhotos(item.Name, cancellationToken).ConfigureAwait(false);
+
+            if (item.ProviderIds.TryGetValue(this.Name, out var externalID))
+            {
+                var curID = externalID.Split('#');
+                if (curID.Length > 2)
+                {
+                    var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
+                    var sceneID = item.ProviderIds;
+
+                    if (sceneID.ContainsKey(this.Name))
+                    {
+                        var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+                        if (provider != null)
+                        {
+                            var imgs = new List<RemoteImageInfo>();
+                            try
+                            {
+                                imgs = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.Error($"GetImages error: \"{e}\"");
+
+                                await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                            }
+                            finally
+                            {
+                                if (imgs.Any())
+                                {
+                                    images.AddRange(imgs);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
 
             if (images.Any())
             {
+                foreach (var img in images)
+                {
+                    if (string.IsNullOrEmpty(img.ProviderName))
+                    {
+                        img.ProviderName = this.Name;
+                    }
+                }
+
                 images = images.OrderByDescending(o => o.Height).ToList();
             }
 
             return images;
         }
-
-        public IEnumerable<ImageType> GetSupportedImages(BaseItem item)
-            => new List<ImageType>
-            {
-                ImageType.Primary,
-            };
 
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
         {

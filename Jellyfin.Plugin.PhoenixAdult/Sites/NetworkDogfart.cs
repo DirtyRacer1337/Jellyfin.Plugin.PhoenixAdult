@@ -29,11 +29,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//a[contains(@class, 'thumbnail')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleText(".//div/h3[@class='scene-title']"),
-                        posterURL = $"https:{searchResult.SelectSingleText(".//img/@src")}",
-                        subSite = searchResult.SelectSingleText(".//div/p[@class='help-block']").Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.Attributes["href"].Value.Split('?')[0]);
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText(".//div/h3[@class='scene-title']"),
+                    posterURL = $"https:{searchResult.SelectSingleText(".//img/@src")}",
+                    subSite = searchResult.SelectSingleText(".//div/p[@class='help-block']").Replace(".com", string.Empty, StringComparison.OrdinalIgnoreCase);
 
                 var res = new RemoteSearchResult
                 {
@@ -80,6 +80,11 @@ namespace PhoenixAdult.Sites
 
             string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = string.Empty;
+
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
 
             if (sceneID.Length > 1)
             {
@@ -134,6 +139,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var poster = sceneData.SelectSingleText("//div[@class='icon-container']//img/@src");

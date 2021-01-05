@@ -88,14 +88,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//li[contains(@class, 'item-list')]");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = searchResult.SelectSingleText(".//a/@href"),
-                        curID,
-                        sceneName = Decensor(searchResult.SelectSingleText(".//dt")),
-                        scenePoster = searchResult.SelectSingleText(".//img/@data-original"),
-                        javID = searchResult.SelectSingleText(".//img/@alt");
-
-                sceneURL = sceneURL.Replace("/" + sceneURL.Split('/').Last(), string.Empty, StringComparison.OrdinalIgnoreCase);
-                curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}";
+                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = Decensor(searchResult.SelectSingleText(".//dt")),
+                    scenePoster = searchResult.SelectSingleText(".//img/@data-original"),
+                    javID = searchResult.SelectSingleText(".//img/@alt");
 
                 var res = new RemoteSearchResult
                 {
@@ -129,6 +126,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -224,6 +226,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var img = sceneData.SelectSingleText("//img[contains(@alt, 'cover')]/@src");

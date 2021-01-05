@@ -21,7 +21,13 @@ namespace PhoenixAdult.Helpers
                 return string.Empty;
             }
 
-            return Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
+            string siteName = Database.SiteList.Sites[siteNum[0]][siteNum[1]][0];
+            if (string.IsNullOrEmpty(siteName))
+            {
+                siteName = Database.SiteList.Sites[siteNum[0]][0][0];
+            }
+
+            return siteName;
         }
 
         public static string GetSearchBaseURL(int[] siteNum)
@@ -80,7 +86,7 @@ namespace PhoenixAdult.Helpers
         public static string Decode(string base64Text)
             => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
 
-        public static KeyValuePair<int[], string> GetSiteFromTitle(string title)
+        public static (int[] siteNum, string siteName) GetSiteFromTitle(string title)
         {
             var clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
@@ -89,20 +95,27 @@ namespace PhoenixAdult.Helpers
             {
                 foreach (var siteData in site.Value)
                 {
-                    var clearSite = Regex.Replace(siteData.Value[0], @"\W", string.Empty);
-                    if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
+                    var siteName = siteData.Value[0];
+
+                    if (!string.IsNullOrEmpty(siteName))
                     {
-                        possibleSites.Add(new int[] { site.Key, siteData.Key }, clearSite);
+                        var clearSite = Regex.Replace(siteName, @"\W", string.Empty);
+                        if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
+                        {
+                            possibleSites.Add(new int[2] { site.Key, siteData.Key }, clearSite);
+                        }
                     }
                 }
             }
 
-            if (possibleSites.Count > 0)
+            (int[], string) result = (null, null);
+            if (possibleSites.Any())
             {
-                return possibleSites.OrderByDescending(o => o.Value.Length).First();
+                var site = possibleSites.OrderByDescending(o => o.Value.Length).First();
+                result = (site.Key, site.Value);
             }
 
-            return new KeyValuePair<int[], string>(null, null);
+            return result;
         }
 
         public static string GetClearTitle(string title, string siteName)
@@ -200,6 +213,16 @@ namespace PhoenixAdult.Helpers
             return null;
         }
 
+        public static IProviderBaseActor GetActorProviderBySiteID(int siteID)
+        {
+            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
+            {
+                return GetActorBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
+            }
+
+            return null;
+        }
+
         public static IProviderBase GetBaseSiteByName(string name)
         {
             name = $"{typeof(Plugin).Namespace}.Sites.{name}";
@@ -213,22 +236,27 @@ namespace PhoenixAdult.Helpers
             return null;
         }
 
+        public static IProviderBaseActor GetActorBaseSiteByName(string name)
+        {
+            name = $"{typeof(Plugin).Namespace}.Sites.{name}";
+            var provider = Type.GetType(name, false, true);
+
+            if (provider != null)
+            {
+                return (IProviderBaseActor)Activator.CreateInstance(provider);
+            }
+
+            return null;
+        }
+
         public static async Task<List<RemoteSearchResult>> GetSearchResultsFromUpdate(IProviderBase provider, int[] siteNum, string[] sceneID, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
-            var curID = new List<string>()
-            {
-                siteNum[0].ToString(CultureInfo.InvariantCulture),
-                siteNum[1].ToString(CultureInfo.InvariantCulture),
-            };
-
-            curID.AddRange(sceneID);
-
             var sceneData = await provider.Update(siteNum, sceneID, cancellationToken).ConfigureAwait(false);
             if (!string.IsNullOrEmpty(sceneData.Item.Name))
             {
-                sceneData.Item.ProviderIds.Add(Plugin.Instance.Name, string.Join("#", curID));
+                sceneData.Item.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
                 var posters = (await provider.GetImages(siteNum, sceneID, sceneData.Item, cancellationToken).ConfigureAwait(false)).Where(o => o.Type == ImageType.Primary);
 
                 var res = new RemoteSearchResult

@@ -97,16 +97,16 @@ namespace PhoenixAdult.Sites
             var searchResults = await GoogleSearch.GetSearchResults(searchTitle, siteNum, cancellationToken).ConfigureAwait(false);
             foreach (var searchResult in searchResults)
             {
-                var url = searchResult.Split('?').First();
-                if (url.Contains("/movies/", StringComparison.OrdinalIgnoreCase) && !searchResultsURLs.Contains(url))
+                if (searchResult.Contains("/movies/", StringComparison.OrdinalIgnoreCase) && !searchResultsURLs.Contains(searchResult))
                 {
-                    searchResultsURLs.Add(url);
+                    searchResultsURLs.Add(searchResult);
                 }
             }
 
-            foreach (var sceneURL in searchResultsURLs)
+            foreach (var url in searchResultsURLs)
             {
-                var sceneID = new List<string> { Helper.Encode(sceneURL) };
+                var sceneURL = new Uri(url);
+                var sceneID = new List<string> { Helper.Encode(sceneURL.AbsolutePath) };
 
                 if (searchDate.HasValue)
                 {
@@ -138,6 +138,11 @@ namespace PhoenixAdult.Sites
 
             string sceneURL = Helper.Decode(sceneID[0]),
                 sceneDate = string.Empty;
+
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
 
             if (sceneID.Length > 1)
             {
@@ -256,6 +261,10 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
 
             var sceneData = await GetJSONfromPage(sceneURL, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)

@@ -33,6 +33,13 @@
                         </label>
                     </div>
                     <div class="selectContainer">
+                        <label class="selectLabel" for="PreferedActorNameSource">Actor Name Source</label>
+                        <select is="emby-select" id="PreferedActorNameSource" name="PreferedActorNameSource" class="emby-select-withcolor emby-select">
+                            <option value="LocalDatabase">Local Database</option>
+                            <option value="NoChange">As in Source</option>
+                        </select>
+                    </div>
+                    <div class="selectContainer">
                         <label class="selectLabel" for="JAVActorNamingStyle">JAV Actor Naming Style</label>
                         <select is="emby-select" id="JAVActorNamingStyle" name="JAVActorNamingStyle" class="emby-select-withcolor emby-select">
                             <option value="WesternStyle">Western Style</option>
@@ -40,7 +47,7 @@
                         </select>
                     </div>
                     <div class="selectContainer">
-                        <label class="selectLabel" for="GenresSortingStyle">JAV Actor Naming Style</label>
+                        <label class="selectLabel" for="GenresSortingStyle">Genre Sorting Style</label>
                         <select is="emby-select" id="GenresSortingStyle" name="GenresSortingStyle" class="emby-select-withcolor emby-select">
                             <option value="Alphabetical">Alphabetical</option>
                             <option value="PositionsLast">Positions Last</option>
@@ -68,6 +75,7 @@
                     $('#DisableActors').prop('checked', config.DisableActors);
                     $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
                     $('#DisableImageSize').prop('checked', config.DisableImageSize);
+                    $('#PreferedActorNameSource').val(config.PreferedActorNameSource).change();
                     $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
                     $('#GenresSortingStyle').val(config.GenresSortingStyle).change();
                     Dashboard.hideLoadingMsg();
@@ -81,6 +89,7 @@
                     config.DisableActors = $('#DisableActors').prop('checked');
                     config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
                     config.DisableImageSize = $('#DisableImageSize').prop('checked');
+                    config.PreferedActorNameSource = $('#PreferedActorNameSource').val();
                     config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
                     config.GenresSortingStyle = $('#GenresSortingStyle').val();
                     ApiClient.updatePluginConfiguration(phoenixAdultConfig.pluginUniqueId, config).then(function (result) {

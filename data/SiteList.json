@@ -618,7 +618,10 @@
       "0": [ "Hegre", "http://www.hegre.com", "/search?q=" ]
     },
     "38": {
-      "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ]
+      "0": [ "JAVLibrary", "http://www.javlibrary.com", "/en/vl_searchbyid.php?keyword=" ],
+      "1": [ "", "http://www.m45e.com" ],
+      "2": [ "", "http://www.u44r.com" ],
+      "3": [ "", "http://www.g46e.com" ],
     },
     "39": {
       "0": [ "Caribbeancom", "https://en.caribbeancom.com", "/eng/search/?q=" ],
@@ -661,6 +664,12 @@
       "30": [ "Czech Bi Porn", "https://czechbiporn.com" ],
       "31": [ "Czech Shemale", "https://czechshemale.com" ],
       "32": [ "Czech Gay City", "https://czechgaycity.com" ]
+    },
+    "42": {
+      "0": [ "JAV" ]
+    },
+    "43": {
+      "0": [ "Freeones", "https://www.freeones.com", "/babes?q=" ]
     }
   },
   "SiteIDList": {
@@ -705,7 +714,9 @@
     "38": "NetworkJAVLibrary",
     "39": "NetworkCaribbeancom",
     "40": "NetworkHeyzo",
-    "41": "NetworkPornCZ"
+    "41": "NetworkPornCZ",
+    "42": "NetworkJAV",
+    "43": "ActorFreeones"
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -798,7 +809,6 @@
     "^ihaw": "IHaveAWife",
     "^iktg": "IKnowThatGirl",
     "^il": "ImmoralLive",
-    "^jav": "JAVLibrary",
     "^kha": "KarupsHA",
     "^kow": "KarupsOW",
     "^kpc": "KarupsPC",

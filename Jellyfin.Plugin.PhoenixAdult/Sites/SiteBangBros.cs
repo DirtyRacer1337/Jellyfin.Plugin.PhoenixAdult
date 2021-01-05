@@ -30,11 +30,11 @@ namespace PhoenixAdult.Sites
             var searchResults = data.SelectNodesSafe("//div[contains(@class, 'elipsTxt')]//div[@class='echThumb']");
             foreach (var searchResult in searchResults)
             {
-                string sceneURL = Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a[contains(@href, '/video')]/@href"),
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{Helper.Encode(sceneURL)}",
-                        sceneName = searchResult.SelectSingleText(".//span[@class='thmb_ttl']"),
-                        scenePoster = $"https:{searchResult.SelectSingleText(".//img/@data-src")}",
-                        sceneDate = searchResult.SelectSingleText(".//span[contains(@class, 'thmb_mr_2')]");
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a[contains(@href, '/video')]/@href"));
+                string curID = Helper.Encode(sceneURL.AbsolutePath),
+                    sceneName = searchResult.SelectSingleText(".//span[@class='thmb_ttl']"),
+                    scenePoster = $"https:{searchResult.SelectSingleText(".//img/@data-src")}",
+                    sceneDate = searchResult.SelectSingleText(".//span[contains(@class, 'thmb_mr_2')]");
 
                 var res = new RemoteSearchResult
                 {
@@ -68,6 +68,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             result.Item.ExternalId = sceneURL;
@@ -120,6 +125,11 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
             var imgNode = sceneData.SelectNodesSafe("//img[contains(@id, 'player-overlay-image')]");
