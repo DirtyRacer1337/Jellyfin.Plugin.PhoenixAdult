@@ -33,7 +33,7 @@ namespace PhoenixAdult.Sites
                 foreach (var searchResult in searchResults)
                 {
                     string sceneID = searchResult.SelectSingleText(".//span[@class='title']/a/@href").Split('/')[3],
-                        curID = $"{siteNum[0]}#{siteNum[1]}#{sceneID}",
+                        curID = sceneID,
                         sceneName = searchResult.SelectSingleText(".//span[@class='title']/a | //h2"),
                         posterURL = searchResult.SelectSingleText(".//noscript/picture/img/@src"),
                         sceneDate = searchResult.SelectSingleText(".//span[@class='date']");
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Sites
                     actorPageURL = Helper.GetSearchBaseURL(siteNum) + actorLink.Attributes["href"].Value;
 
                 var actorPage = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
-                var actorPhotoURL = actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
+                var actorPhotoURL = "http:" + actorPage.SelectSingleText("//div[contains(@class, 'model-profile')]//img/@src");
 
                 result.People.Add(new PersonInfo
                 {
