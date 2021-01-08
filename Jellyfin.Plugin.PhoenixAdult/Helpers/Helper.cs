@@ -292,7 +292,7 @@ namespace PhoenixAdult.Helpers
             searchTitle = GetClearTitle(searchTitle, string.Empty);
 
             var splitedTitle = searchTitle.Split();
-            if (splitedTitle.Length == 2 && int.TryParse(splitedTitle[1], out _))
+            if (splitedTitle.Length == 2 && int.TryParse(splitedTitle[1], out _) && splitedTitle[0].Length <= 7)
             {
                 searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
             }
