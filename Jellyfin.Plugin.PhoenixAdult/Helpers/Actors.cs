@@ -123,12 +123,6 @@ namespace PhoenixAdult.Helpers
 
         private static string ReplaceFromDatabase(string actorName, string[] studios)
         {
-            var newActorName = Database.Actors.ActorsReplace.FirstOrDefault(o => o.Key.Equals(actorName, StringComparison.OrdinalIgnoreCase) || o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
-            if (!string.IsNullOrEmpty(newActorName))
-            {
-                return newActorName;
-            }
-
             var siteIndex = -1;
             foreach (var studio in studios)
             {
@@ -139,17 +133,30 @@ namespace PhoenixAdult.Helpers
                     if (studioIndex.Value.Contains(studioName))
                     {
                         siteIndex = studioIndex.Key;
+                        break;
                     }
+                }
+
+                if (siteIndex > -1)
+                {
+                    break;
                 }
             }
 
+            var newActorName = string.Empty;
             if (siteIndex > -1)
             {
                 newActorName = Database.Actors.ActorsReplaceStudios[siteIndex].FirstOrDefault(o => o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
                 if (!string.IsNullOrEmpty(newActorName))
                 {
-                    return newActorName;
+                    actorName = newActorName;
                 }
+            }
+
+            newActorName = Database.Actors.ActorsReplace.FirstOrDefault(o => o.Key.Equals(actorName, StringComparison.OrdinalIgnoreCase) || o.Value.Contains(actorName, StringComparer.OrdinalIgnoreCase)).Key;
+            if (!string.IsNullOrEmpty(newActorName))
+            {
+                actorName = newActorName;
             }
 
             return actorName;
