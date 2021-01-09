@@ -140,7 +140,7 @@ namespace PhoenixAdult.Sites
                     var imageTypes = new List<string> { "poster", "cover" };
                     foreach (var imageType in imageTypes)
                     {
-                        if (searchResult["images"][imageType] != null)
+                        if (searchResult["images"].Type == JTokenType.Object && searchResult["images"][imageType] != null)
                         {
                             foreach (var image in searchResult["images"][imageType])
                             {
@@ -279,7 +279,7 @@ namespace PhoenixAdult.Sites
             var imageTypes = new List<string> { "poster", "cover" };
             foreach (var imageType in imageTypes)
             {
-                if (sceneData["images"][imageType] != null)
+                if (sceneData["images"].Type == JTokenType.Object && sceneData["images"][imageType] != null)
                 {
                     foreach (var image in sceneData["images"][imageType])
                     {
