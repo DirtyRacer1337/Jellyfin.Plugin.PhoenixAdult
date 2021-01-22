@@ -163,6 +163,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### FamilyHookups | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### FemdomEmpire / Feminized | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Gender X | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### GirlfriendsFilms | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Girlsway | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - GirlCore
   - GirlsTryAnal
