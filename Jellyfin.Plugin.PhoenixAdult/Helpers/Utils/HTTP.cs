@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using FlareSolverrSharp;
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -22,7 +23,9 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler() { CookieContainer = CookieContainer };
 
-        private static HttpClient Http { get; } = new HttpClient(HttpHandler);
+        private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL) { InnerHandler = HttpHandler };
+
+        private static HttpClient Http { get; } = new HttpClient(CloudflareHandler);
 
         public static string GetUserAgent()
             => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";

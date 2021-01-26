@@ -32,6 +32,8 @@ namespace PhoenixAdult.Configuration
             this.UID = Guid.NewGuid().ToString();
             this.DisableAnalytics = false;
 
+            this.FlareSolverrURL = "http://localhost:8191/";
+
             this.DefaultSiteName = string.Empty;
             this.DisableActors = false;
             this.DisableImageValidation = false;
@@ -51,6 +53,8 @@ namespace PhoenixAdult.Configuration
         public string UID { get; set; }
 
         public bool DisableAnalytics { get; set; }
+
+        public string FlareSolverrURL { get; set; }
 
         public string DefaultSiteName { get; set; }
 
