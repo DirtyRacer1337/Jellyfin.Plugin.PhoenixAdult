@@ -21,9 +21,13 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static CookieContainer CookieContainer { get; } = new CookieContainer();
 
-        private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler() { CookieContainer = CookieContainer };
+        private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler()
+        {
+            CookieContainer = CookieContainer,
+        };
 
-        private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL) {
+        private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
+        {
             InnerHandler = HttpHandler,
             MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
             UserAgent = GetUserAgent(),
