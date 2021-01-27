@@ -591,6 +591,13 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Massage Rooms
   - MomXXX
 + #### She Will Cheat | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Strike3 Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Blacked
+  - BlackedRaw
+  - Deeper
+  - Tushy
+  - TushyRaw
+  - Vixen
 + #### TransAngels | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Twistys | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - MomKnowsBest

@@ -671,6 +671,14 @@
     },
     "43": {
       "0": [ "Freeones", "https://www.freeones.com", "/babes?q=" ],
+    },
+    "44": {
+      "0": [ "BlackedRaw", "https://www.blackedraw.com", "/api" ],
+      "1": [ "Blacked", "https://www.blacked.com" ],
+      "2": [ "Vixen", "http://www.vixen.com" ],
+      "3": [ "Tushy", "https://www.tushy.com" ],
+      "4": [ "TushyRaw", "https://www.tushyraw.com" ],
+      "5": [ "Deeper", "https://www.deeper.com" ],
     }
   },
   "SiteIDList": {
@@ -717,7 +725,8 @@
     "40": "NetworkHeyzo",
     "41": "NetworkPornCZ",
     "42": "NetworkJAV",
-    "43": "ActorFreeones"
+    "43": "ActorFreeones",
+    "44": "NetworkStrike3",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -917,6 +926,6 @@
     "^wowg": "WowGirls",
     "^wy": "WebYoung",
     "^ztod": "ZeroTolerance",
-    "^zzs": "ZZseries"
+    "^zzs": "ZZseries",
   }
 }
