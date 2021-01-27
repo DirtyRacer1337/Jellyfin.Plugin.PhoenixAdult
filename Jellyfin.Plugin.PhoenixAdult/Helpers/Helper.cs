@@ -136,11 +136,14 @@ namespace PhoenixAdult.Helpers
             var matched = false;
             while (!string.IsNullOrEmpty(clearSite) && clearName.Contains(" ", StringComparison.OrdinalIgnoreCase))
             {
-                clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
                 if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                 {
                     matched = true;
                     break;
+                }
+                else
+                {
+                    clearName = clearName.Replace(" ", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
                 }
             }
 
