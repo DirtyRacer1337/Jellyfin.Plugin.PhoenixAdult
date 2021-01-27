@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -32,10 +33,11 @@ namespace PhoenixAdult.Sites
                 var searchResults = data.SelectNodesSafe("//div[contains(@class, 'content-grid-item')]");
                 foreach (var searchResult in searchResults)
                 {
-                    string sceneID = searchResult.SelectSingleText(".//span[@class='title']/a/@href").Split('/')[3],
-                        curID = sceneID,
+                    var sceneNum = searchResult.SelectSingleText(".//span[@class='title']/a/@href").Split('/')[3];
+                    var sceneURL = new Uri(Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneNum}");
+                    string curID = Helper.Encode(sceneURL.AbsolutePath),
                         sceneName = searchResult.SelectSingleText(".//span[@class='title']/a | //h2"),
-                        posterURL = searchResult.SelectSingleText(".//noscript/picture/img/@src"),
+                        posterURL = searchResult.SelectSingleText(".//picture/img/@data-srcset").Split(",")[0].Split(" ")[0],
                         sceneDate = searchResult.SelectSingleText(".//span[@class='date']");
 
                     var res = new RemoteSearchResult
@@ -55,32 +57,16 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                if (int.TryParse(searchTitle.Split()[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var sceneID))
+                if (int.TryParse(searchTitle.Split()[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var sceneNum))
                 {
-                    var sceneURL = $"{Helper.GetSearchSearchURL(siteNum)}watch/{sceneID}";
-                    var data = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
+                    var url = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneNum}";
+                    var sceneURL = new Uri(url);
+                    var sceneID = new string[] { Helper.Encode(sceneURL.AbsolutePath) };
 
-                    var sceneData = data.SelectSingleNode("//div[contains(@class, 'content-pane-title')]");
-                    if (sceneData != null)
+                    var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+                    if (searchResult.Any())
                     {
-                        string curID = sceneID.ToString(CultureInfo.InvariantCulture),
-                            sceneName = sceneData.SelectSingleText("//h2"),
-                            posterURL = sceneData.SelectSingleText("//video/@poster"),
-                            sceneDate = sceneData.SelectSingleText("//span[@class='date']");
-
-                        var res = new RemoteSearchResult
-                        {
-                            ProviderIds = { { Plugin.Instance.Name, curID } },
-                            Name = sceneName,
-                            ImageUrl = posterURL,
-                        };
-
-                        if (DateTime.TryParseExact(sceneDate, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
-                        {
-                            res.PremiereDate = sceneDateObj;
-                        }
-
-                        result.Add(res);
+                        result.AddRange(searchResult);
                     }
                 }
             }
@@ -101,10 +87,10 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = sceneID[0];
+            var sceneURL = Helper.Decode(sceneID[0]);
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
@@ -171,10 +157,10 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = sceneID[0];
+            var sceneURL = Helper.Decode(sceneID[0]);
             if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                sceneURL = Helper.GetSearchSearchURL(siteNum) + $"watch/{sceneID[0]}";
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
