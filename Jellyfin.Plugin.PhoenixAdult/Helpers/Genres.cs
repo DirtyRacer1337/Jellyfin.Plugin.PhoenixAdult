@@ -73,6 +73,7 @@ namespace PhoenixAdult.Helpers
                     foreach (var genre in genreNames)
                     {
                         genreName = Replace(genre, sceneName);
+                        genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
                         if (!string.IsNullOrEmpty(genreName) && !newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                         {
