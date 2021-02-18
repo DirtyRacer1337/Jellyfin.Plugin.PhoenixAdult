@@ -209,7 +209,7 @@ namespace PhoenixAdult.Sites
                 }
             }
 
-            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneTypeURL}/{sceneID[0]}/";
+            var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneTypeURL}/{sceneID[0]}/0";
 
             result.Item.ExternalId = sceneURL;
 
