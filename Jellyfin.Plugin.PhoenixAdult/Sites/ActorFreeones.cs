@@ -59,12 +59,12 @@ namespace PhoenixAdult.Sites
             result.Item.ExternalId = actorURL;
 
             string name = actorData.SelectSingleText("//h1").Replace(" Bio", string.Empty, StringComparison.OrdinalIgnoreCase),
-                aliases = actorData.SelectSingleText("//p[text()='Aliases']/following-sibling::div/p");
+                aliases = actorData.SelectSingleText("//p[contains(., 'Aliases')]/following-sibling::div/p");
 
             result.Item.OriginalTitle = name + ", " + aliases;
             result.Item.Overview = "\u200B";
 
-            var actorDate = actorData.SelectSingleText("//div[p[text()='Personal Information']]//span[contains(text(), 'Born On')]")
+            var actorDate = actorData.SelectSingleText("//div[p[contains(., 'Personal Information')]]//span[contains(., 'Born On')]")
                 .Replace("Born On", string.Empty, StringComparison.OrdinalIgnoreCase)
                 .Trim();
 
@@ -74,7 +74,7 @@ namespace PhoenixAdult.Sites
             }
 
             var bornPlaceList = new List<string>();
-            var bornPlaceNode = actorData.SelectNodesSafe("//div[p[text()='Personal Information']]//a[@data-test='link-country']/..//span[text()]");
+            var bornPlaceNode = actorData.SelectNodesSafe("//div[p[contains(., 'Personal Information')]]//a[@data-test='link-country']/..//span[text()]");
             foreach (var bornPlace in bornPlaceNode)
             {
                 var location = bornPlace.InnerText.Trim();
