@@ -281,18 +281,21 @@ namespace PhoenixAdult.Sites
             {
                 if (sceneData["images"].Type == JTokenType.Object && sceneData["images"][imageType] != null)
                 {
-                    foreach (var image in sceneData["images"][imageType])
+                    foreach (JProperty image in sceneData["images"][imageType])
                     {
-                        result.Add(new RemoteImageInfo
+                        if (int.TryParse(image.Name, out _))
                         {
-                            Url = (string)image["xx"]["url"],
-                            Type = ImageType.Primary,
-                        });
-                        result.Add(new RemoteImageInfo
-                        {
-                            Url = (string)image["xx"]["url"],
-                            Type = ImageType.Backdrop,
-                        });
+                            result.Add(new RemoteImageInfo
+                            {
+                                Url = (string)sceneData["images"][imageType][image.Name]["xx"]["url"],
+                                Type = ImageType.Primary,
+                            });
+                            result.Add(new RemoteImageInfo
+                            {
+                                Url = (string)sceneData["images"][imageType][image.Name]["xx"]["url"],
+                                Type = ImageType.Backdrop,
+                            });
+                        }
                     }
                 }
             }
