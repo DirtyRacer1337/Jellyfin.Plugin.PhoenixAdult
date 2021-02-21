@@ -142,10 +142,19 @@ namespace PhoenixAdult.Sites
                     {
                         if (searchResult["images"].Type == JTokenType.Object && searchResult["images"][imageType] != null)
                         {
-                            foreach (var image in searchResult["images"][imageType])
+                            foreach (JProperty image in searchResult["images"][imageType])
                             {
-                                scenePoster = (string)image["xx"]["url"];
+                                if (int.TryParse(image.Name, out _))
+                                {
+                                    scenePoster = (string)searchResult["images"][imageType][image.Name]["xx"]["url"];
+                                    break;
+                                }
                             }
+                        }
+
+                        if (!string.IsNullOrEmpty(scenePoster))
+                        {
+                            break;
                         }
                     }
 
