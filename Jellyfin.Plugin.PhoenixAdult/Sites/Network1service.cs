@@ -251,7 +251,7 @@ namespace PhoenixAdult.Sites
 
                     if (actorData["images"] != null && actorData["images"].Type == JTokenType.Object)
                     {
-                        actor.ImageUrl = (string)actorData["images"]["profile"].First["xs"]["url"];
+                        actor.ImageUrl = (string)actorData["images"]["profile"]["0"]["xs"]["url"];
                     }
 
                     result.People.Add(actor);
