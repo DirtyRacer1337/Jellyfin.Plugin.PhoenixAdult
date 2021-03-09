@@ -53,7 +53,7 @@ namespace PhoenixAdult.ScheduledTasks
 #if __EMBY__
                         this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit);
 #else
-                        this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit, cancellationToken);
+                        await this.libraryManager.UpdateItemAsync(item, item, ItemUpdateType.MetadataEdit, cancellationToken).ConfigureAwait(false);
 #endif
                     }
                 }
