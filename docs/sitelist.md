@@ -26,6 +26,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - LezCuties
   - PixandVideo
 + #### Adult Time | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### AdultDVDEmpire | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - AdultEmpire
 + #### Babes Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Babes
   - Babes Unleashed
