@@ -679,7 +679,11 @@
       "3": [ "Tushy", "https://www.tushy.com" ],
       "4": [ "TushyRaw", "https://www.tushyraw.com" ],
       "5": [ "Deeper", "https://www.deeper.com" ],
-    }
+    },
+    "45": {
+      "0": [ "AdultDVDEmpire", "https://www.adultdvdempire.com", "/allsearch/search?q=" ],
+      "1": [ "AdultEmpire", "https://www.adultempire.com" ],
+    },
   },
   "SiteIDList": {
     "0": "Network1service",
@@ -727,6 +731,7 @@
     "42": "NetworkJAV",
     "43": "ActorFreeones",
     "44": "NetworkStrike3",
+    "45": "NetworkAdultEmpire",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
