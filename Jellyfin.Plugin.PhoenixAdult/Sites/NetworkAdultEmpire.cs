@@ -98,12 +98,20 @@ namespace PhoenixAdult.Sites
             var actorsNode = sceneData.SelectNodesSafe("//a[@label='Performer']");
             foreach (var actorLink in actorsNode)
             {
-                var actorName = actorLink.InnerText;
+                string actorName = actorLink.InnerText,
+                    actorPhoto = actorLink.SelectSingleText(".//img/@src");
 
-                result.People.Add(new PersonInfo
+                var res = new PersonInfo
                 {
                     Name = actorName,
-                });
+                };
+
+                if (!string.IsNullOrEmpty(actorPhoto))
+                {
+                    res.ImageUrl = actorPhoto;
+                }
+
+                result.People.Add(res);
             }
 
             return result;
