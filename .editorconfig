@@ -232,6 +232,9 @@ dotnet_diagnostic.IDE0071.severity = none
 # IDE0066: Convert switch statement to expression
 dotnet_diagnostic.IDE0066.severity = none
 
+# IDE0090: Use 'new(...)'
+dotnet_diagnostic.IDE0090.severity = none
+
 # CS1998: Async method lacks 'await' operators and will run synchronously
 dotnet_diagnostic.CS1998.severity = silent
 

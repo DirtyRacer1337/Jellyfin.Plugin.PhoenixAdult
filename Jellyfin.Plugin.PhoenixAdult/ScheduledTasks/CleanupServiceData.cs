@@ -56,6 +56,11 @@ namespace PhoenixAdult.ScheduledTasks
                 {
                     new_db.Add(site.Key, site.Value);
                 }
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
             }
 
             Plugin.Instance.Configuration.TokenStorage = JsonConvert.SerializeObject(new_db);
@@ -68,6 +73,11 @@ namespace PhoenixAdult.ScheduledTasks
                     if (Math.Abs((DateTime.Now - File.GetCreationTime(file)).TotalDays) > 3)
                     {
                         File.Delete(file);
+                    }
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
                     }
                 }
             }

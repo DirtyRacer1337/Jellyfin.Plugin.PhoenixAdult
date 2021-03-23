@@ -114,11 +114,10 @@ namespace PhoenixAdult.Sites
             result.Item.ExternalId = sceneURL;
 
             var javID = sceneData.SelectSingleText("//div[@id='video_id']//td[@class='text']");
-
-            result.Item.OriginalTitle = javID.ToUpperInvariant();
             var title = sceneData.SelectSingleText("//div[@id='video_title']//h3");
             if (!string.IsNullOrEmpty(javID))
             {
+                result.Item.OriginalTitle = javID.ToUpperInvariant();
                 title = title.Replace(javID, string.Empty, StringComparison.OrdinalIgnoreCase);
             }
 

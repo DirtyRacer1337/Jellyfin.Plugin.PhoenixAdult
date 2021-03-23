@@ -32,13 +32,12 @@ namespace PhoenixAdult.Sites
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
                 string curID = Helper.Encode(sceneURL.AbsolutePath),
                     sceneName = searchResult.SelectSingleText(".//div[@class='item-title']/a/@title"),
-                    posterURL = searchResult.SelectSingleText(".//img/@data-src"),
-                    extraInfo = searchResult.SelectSingleText(".//small");
+                    posterURL = searchResult.SelectSingleText(".//img/@data-src");
 
                 var res = new RemoteSearchResult
                 {
                     ProviderIds = { { Plugin.Instance.Name, curID } },
-                    Name = $"{sceneName} [{extraInfo}]",
+                    Name = sceneName,
                     ImageUrl = posterURL,
                 };
 

@@ -94,8 +94,13 @@ namespace PhoenixAdult.Helpers.Utils
             if (response != null)
             {
                 result.IsOK = response.IsSuccessStatusCode;
+#if __EMBY__
                 result.Content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 result.ContentStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+#else
+                result.Content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+                result.ContentStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+#endif
                 result.Headers = response.Headers;
                 result.Cookies = CookieContainer.GetCookies(request.RequestUri).Cast<Cookie>();
             }
