@@ -32,12 +32,13 @@ namespace PhoenixAdult.Helpers
 
         public static string GetSearchBaseURL(int[] siteNum)
         {
+            string url = string.Empty;
+
             if (siteNum == null)
             {
-                return string.Empty;
+                return url;
             }
 
-            string url;
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(1)))
             {
                 url = Database.SiteList.Sites[siteNum[0]][siteNum[1]][1];
@@ -52,12 +53,13 @@ namespace PhoenixAdult.Helpers
 
         public static string GetSearchSearchURL(int[] siteNum)
         {
+            string url = string.Empty;
+
             if (siteNum == null)
             {
-                return string.Empty;
+                return url;
             }
 
-            string url;
             if (!string.IsNullOrEmpty(Database.SiteList.Sites[siteNum[0]][siteNum[1]].ElementAtOrDefault(2)))
             {
                 url = Database.SiteList.Sites[siteNum[0]][siteNum[1]][2];
@@ -67,14 +69,12 @@ namespace PhoenixAdult.Helpers
                 url = Database.SiteList.Sites[siteNum[0]].First().Value[2];
             }
 
-            if (string.IsNullOrEmpty(url))
+            if (!string.IsNullOrEmpty(url))
             {
-                return string.Empty;
-            }
-
-            if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-            {
-                url = GetSearchBaseURL(siteNum) + url;
+                if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    url = GetSearchBaseURL(siteNum) + url;
+                }
             }
 
             return url;
@@ -91,9 +91,9 @@ namespace PhoenixAdult.Helpers
             var clearName = Regex.Replace(title, @"\W", string.Empty);
             var possibleSites = new Dictionary<int[], string>();
 
-            foreach (var site in Database.SiteList.Sites)
+            foreach (var siteGroup in Database.SiteList.Sites)
             {
-                foreach (var siteData in site.Value)
+                foreach (var siteData in siteGroup.Value)
                 {
                     var siteName = siteData.Value[0];
 
@@ -102,7 +102,7 @@ namespace PhoenixAdult.Helpers
                         var clearSite = Regex.Replace(siteName, @"\W", string.Empty);
                         if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                         {
-                            possibleSites.Add(new int[2] { site.Key, siteData.Key }, clearSite);
+                            possibleSites.Add(new int[2] { siteGroup.Key, siteData.Key }, clearSite);
                         }
                     }
                 }
