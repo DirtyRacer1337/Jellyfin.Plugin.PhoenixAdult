@@ -1,3 +1,57 @@
+version: '{branch}.{build}'
+branches:
+  only:
+  - master
+skip_tags: true
 only_commits:
   files:
     - Jellyfin.Plugin.PhoenixAdult/
+image: Visual Studio 2019
+configuration:
+- Release
+- Release.Emby
+before_build:
+- ps: nuget restore
+build:
+  parallel: true
+  verbosity: minimal
+after_build:
+- ps: >-
+    $project = "C:\projects\jellyfin-plugin-phoenixadult\Jellyfin.Plugin.PhoenixAdult\bin"
+
+    $jellyfin = $project + "\Release\net5.0\"
+
+    $emby = $project + "\Release.Emby\netstandard2.0\"
+
+
+    $file = $jellyfin + "PhoenixAdult.dll"
+
+    if (Test-Path $file) {
+        Rename-Item -Path $file -NewName "Jellyfin.Plugin.PhoenixAdult.dll"
+        $file = $jellyfin + "Jellyfin.Plugin.PhoenixAdult.dll"
+        7z a "Jellyfin.Plugin.PhoenixAdult.zip" $file
+    }
+
+
+    $file = $emby + "PhoenixAdult.dll"
+
+    if (Test-Path -path $file) {
+        Rename-Item -Path $file -NewName "Emby.Plugins.PhoenixAdult.dll"
+        $file = $emby + "Emby.Plugins.PhoenixAdult.dll"
+        7z a "Emby.Plugins.PhoenixAdult.zip" $file
+    }
+artifacts:
+- path: Jellyfin.Plugin.PhoenixAdult.zip
+  name: Jellyfin.Plugin.PhoenixAdult
+- path: Emby.Plugins.PhoenixAdult.zip
+  name: Emby.Plugins.PhoenixAdult
+deploy:
+- provider: GitHub
+  tag: nightly
+  release: Nightly Build
+  description: Automatically generated release.
+  auth_token:
+    secure: V2LhOMe1kO7BmSuCd+QCtdegI7MBm1QyDvNTVtmO9yZXo4hzaZM8UWg4gunYfLQi
+  artifact: Jellyfin.Plugin.PhoenixAdult, Emby.Plugins.PhoenixAdult
+  prerelease: true
+  force_update: true
