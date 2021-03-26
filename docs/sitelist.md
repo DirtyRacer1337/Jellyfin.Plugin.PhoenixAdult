@@ -122,6 +122,12 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Caribbeancom | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - CaribbeancomPR
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Deviante | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Erotic Spice
+  - Forgive Me Father
+  - Love Her Ass
+  - Pretty Dirty Teens
+  - Sex Working
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Dogfart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
@@ -176,6 +182,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - WebYoung
   - WeLikeGirls
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### HentaiPros | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Heyzo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
@@ -235,21 +242,27 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Bi Empire
   - FamilySinners
   - Transsensual
++ #### Milfed | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Busted Babysitters
   - Don't Break Me
+  - Ebony Sex Tapes
   - Girls Gone Pink
   - I Know That Girl
-  - Latina Sextapes
+  - Latina Sex Tapes
   - Let's Try Anal
-  - Mofos
+  - Milfs Like It Black
   - Mofos B Sides
   - Mofos Lab
   - Pervs On Patrol
+  - Pornstar Vote
+  - Project RV
   - Public Pickups
   - Real Slut Party
   - Share My BF
-  - She's A Freak
+  - Shes a Freak
   - Stranded Teens
+  - The Sex Scout
 + #### Mylf Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
   - Anal Mom
   - Full Of JOI
@@ -482,6 +495,19 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Step Siblings Caught
   - Teacher Fucks Teens
   - That Sitcom Show
++ #### PornPortal | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 3dxstar Channel PornPortal
+  - Anal Channel PornPortal
+  - BBW Channel PornPortal
+  - Cosplay Channel PornPortal
+  - Ebony Channel PornPortal
+  - Latina Channel PornPortal
+  - Lesbian Channel PornPortal
+  - Milf Channel PornPortal
+  - RealityGang Channel PornPortal
+  - Stepfamily Channel PornPortal
+  - Teen Channel PornPortal
+  - VR Channel PornPortal
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PureTaboo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### R18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
@@ -607,6 +633,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Twistys
   - TwistysHard
   - WhenGirlsPlay
++ #### Why Not Bi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Wicked | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 
 ## Adding sites to this list
 When this plugin is inevitably updated to add or update a sites' types of searching, you can use the below markdown formatting in a PR to easily add the site in question here
