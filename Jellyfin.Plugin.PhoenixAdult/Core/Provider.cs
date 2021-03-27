@@ -55,7 +55,7 @@ namespace PhoenixAdult
         {
             var result = new List<RemoteSearchResult>();
 
-            if (searchInfo == null)
+            if (searchInfo == null || string.IsNullOrEmpty(searchInfo.Name))
             {
                 return result;
             }
