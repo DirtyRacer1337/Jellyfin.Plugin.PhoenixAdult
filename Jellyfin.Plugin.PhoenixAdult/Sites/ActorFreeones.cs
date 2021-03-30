@@ -23,7 +23,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var actorNode in actorData.SelectNodesSafe("//div[contains(@class, 'grid-item')]"))
             {
-                var actorURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"{actorNode.SelectSingleText(".//a/@href")}/profile");
+                var actorURL = new Uri(Helper.GetSearchBaseURL(siteNum) + actorNode.SelectSingleText(".//a/@href").Replace("/feed", "/bio", StringComparison.OrdinalIgnoreCase));
                 string curID = Helper.Encode(actorURL.AbsolutePath),
                     name = actorNode.SelectSingleText(".//p/@title"),
                     imageURL = actorNode.SelectSingleText(".//img/@src");
