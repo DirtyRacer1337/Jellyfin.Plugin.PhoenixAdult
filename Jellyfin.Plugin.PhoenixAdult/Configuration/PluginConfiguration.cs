@@ -38,6 +38,7 @@ namespace PhoenixAdult.Configuration
             this.DisableActors = false;
             this.DisableImageValidation = false;
             this.DisableImageSize = false;
+            this.DisableAutoIdentify = false;
 
             this.JAVActorNamingStyle = JAVActorNamingStyle.WesternStyle;
             this.GenresSortingStyle = GenresSortingStyle.Alphabetical;
@@ -63,6 +64,8 @@ namespace PhoenixAdult.Configuration
         public bool DisableImageValidation { get; set; }
 
         public bool DisableImageSize { get; set; }
+
+        public bool DisableAutoIdentify { get; set; }
 
         public JAVActorNamingStyle JAVActorNamingStyle { get; set; }
 

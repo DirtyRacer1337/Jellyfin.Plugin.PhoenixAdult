@@ -199,7 +199,7 @@ namespace PhoenixAdult
                 curID = externalID.Split('#');
             }
 
-            if (!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3)
+            if ((!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3) && !Plugin.Instance.Configuration.DisableAutoIdentify)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
