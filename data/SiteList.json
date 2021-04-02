@@ -716,6 +716,9 @@
       "11": [ "BBW Channel PornPortal", "https://bbw-channel.pornportal.com" ],
       "12": [ "VR Channel PornPortal", "https://vr-channel.pornportal.com" ],
     },
+    "48": {
+      "0": [ "MetadataAPI", "https://metadataapi.net", "https://api.metadataapi.net" ],
+    },
   },
   "SiteIDList": {
     "0": "Network1service",
@@ -766,6 +769,7 @@
     "45": "NetworkAdultEmpire",
     "46": "Network1service",
     "47": "Network1service",
+    "48": "NetworkMetadataAPI",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
