@@ -178,6 +178,8 @@ namespace PhoenixAdult.Helpers
                         searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
 
+                        searchTitle = string.Join(" ", searchTitle.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+
                         searchData = (searchTitle, searchDateObj);
                         break;
                     }
