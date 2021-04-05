@@ -299,6 +299,10 @@ namespace PhoenixAdult.Helpers
             {
                 searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
             }
+            else
+            {
+                searchTitle = $"MetadataAPI {searchTitle}";
+            }
 
             return searchTitle;
         }
