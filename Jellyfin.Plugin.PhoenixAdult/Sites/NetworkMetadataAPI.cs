@@ -19,8 +19,14 @@ namespace PhoenixAdult.Sites
         public static async Task<JObject> GetDataFromAPI(string url, CancellationToken cancellationToken)
         {
             JObject json = null;
+            var headers = new Dictionary<string, string>();
 
-            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
+            {
+                headers.Add("Authorization", $"Bearer {Plugin.Instance.Configuration.MetadataAPIToken}");
+            }
+
+            var http = await HTTP.Request(url, cancellationToken, headers).ConfigureAwait(false);
             if (http.IsOK)
             {
                 json = JObject.Parse(http.Content);

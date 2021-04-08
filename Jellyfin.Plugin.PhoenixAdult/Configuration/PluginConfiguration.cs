@@ -35,6 +35,10 @@ namespace PhoenixAdult.Configuration
             this.FlareSolverrURL = "http://localhost:8191/";
 
             this.DefaultSiteName = string.Empty;
+
+            this.UseMetadataAPI = true;
+            this.MetadataAPIToken = string.Empty;
+
             this.DisableActors = false;
             this.DisableImageValidation = false;
             this.DisableImageSize = false;
@@ -58,6 +62,10 @@ namespace PhoenixAdult.Configuration
         public string FlareSolverrURL { get; set; }
 
         public string DefaultSiteName { get; set; }
+
+        public bool UseMetadataAPI { get; set; }
+
+        public string MetadataAPIToken { get; set; }
 
         public bool DisableActors { get; set; }
 

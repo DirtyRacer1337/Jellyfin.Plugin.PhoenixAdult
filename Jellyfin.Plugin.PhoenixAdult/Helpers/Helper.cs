@@ -303,7 +303,10 @@ namespace PhoenixAdult.Helpers
             }
             else
             {
-                searchTitle = $"MetadataAPI {searchTitle}";
+                if (Plugin.Instance.Configuration.UseMetadataAPI)
+                {
+                    searchTitle = $"MetadataAPI {searchTitle}";
+                }
             }
 
             return searchTitle;
