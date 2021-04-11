@@ -12,9 +12,9 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    public class ActorFreeones : IProviderBaseActor
+    public class ActorFreeones : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string actorName, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string actorName, DateTime? actorDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
@@ -41,9 +41,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Person>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Person>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Person(),
             };

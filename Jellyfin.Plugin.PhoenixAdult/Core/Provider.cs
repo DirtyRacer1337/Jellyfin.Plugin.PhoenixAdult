@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
@@ -234,15 +235,22 @@ namespace PhoenixAdult
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
 
+                MetadataResult<BaseItem> res = null;
                 try
                 {
-                    result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
+                    res = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Update error: \"{e}\"");
 
                     await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, premiereDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                }
+
+                if (res != null)
+                {
+                    result.Item = (Movie)res.Item;
+                    result.People = res.People;
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.Name))

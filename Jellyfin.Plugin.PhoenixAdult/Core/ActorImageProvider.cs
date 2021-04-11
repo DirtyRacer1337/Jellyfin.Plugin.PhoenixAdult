@@ -122,7 +122,7 @@ namespace PhoenixAdult
 
                     if (sceneID.ContainsKey(this.Name))
                     {
-                        var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+                        var provider = Helper.GetProviderBySiteID(siteNum[0]);
                         if (provider != null)
                         {
                             var imgs = new List<RemoteImageInfo>();

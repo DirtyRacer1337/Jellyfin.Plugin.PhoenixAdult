@@ -44,14 +44,24 @@ namespace PhoenixAdult
                 Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
                 Logger.Info($"actorName: {actorName}");
 
-                var provider = Helper.GetActorProviderBySiteID(site.siteNum[0]);
+                DateTime? searchDateObj = null;
+                if (searchInfo.PremiereDate.HasValue)
+                {
+#if __EMBY__
+                    searchDateObj = searchInfo.PremiereDate.Value.DateTime;
+#else
+                    searchDateObj = searchInfo.PremiereDate.Value;
+#endif
+                }
+
+                var provider = Helper.GetProviderBySiteID(site.siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
 
                     try
                     {
-                        result = await provider.Search(site.siteNum, actorName, cancellationToken).ConfigureAwait(false);
+                        result = await provider.Search(site.siteNum, actorName, searchDateObj, cancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception e)
                     {
@@ -117,20 +127,26 @@ namespace PhoenixAdult
 
             var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
 
-            var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+            var provider = Helper.GetProviderBySiteID(siteNum[0]);
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult Actor ID: {externalID}");
 
+                MetadataResult<BaseItem> res = null;
                 try
                 {
-                    result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
+                    res = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Actor Update error: \"{e}\"");
 
                     await Analitycs.Send(externalID, null, null, info.Name, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                }
+
+                if (res != null)
+                {
+                    result.Item = (Person)res.Item;
                 }
 
                 if (!string.IsNullOrEmpty(result.Item.ExternalId))

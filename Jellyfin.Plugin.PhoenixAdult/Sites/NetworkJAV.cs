@@ -46,9 +46,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -63,7 +63,8 @@ namespace PhoenixAdult.Sites
             var info = new MovieInfo();
             info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
 
-            result = await provider.GetMetadata(info, cancellationToken).ConfigureAwait(false);
+            var res = await provider.GetMetadata(info, cancellationToken).ConfigureAwait(false);
+            result.Item = (BaseItem)res.Item;
 
             return result;
         }
