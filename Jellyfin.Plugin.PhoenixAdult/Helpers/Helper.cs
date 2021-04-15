@@ -280,7 +280,7 @@ namespace PhoenixAdult.Helpers
             }
             else
             {
-                if (Plugin.Instance.Configuration.UseMetadataAPI)
+                if (Plugin.Instance.Configuration.UseMetadataAPI && !string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
                 {
                     searchTitle = $"MetadataAPI {searchTitle}";
                 }
