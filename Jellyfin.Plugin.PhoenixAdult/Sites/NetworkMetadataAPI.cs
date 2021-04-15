@@ -55,7 +55,7 @@ namespace PhoenixAdult.Sites
                 string curID = (string)searchResult["_id"],
                     sceneName = (string)searchResult["title"],
                     sceneDate = (string)searchResult["date"],
-                    scenePoster = (string)searchResult["image"];
+                    scenePoster = (string)searchResult["poster"];
 
                 var res = new RemoteSearchResult
                 {
