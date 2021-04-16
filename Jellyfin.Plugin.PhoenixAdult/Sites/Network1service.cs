@@ -208,14 +208,15 @@ namespace PhoenixAdult.Sites
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
                 sceneTypeURL = sceneID[1];
 
-            if (sceneTypeURL.Equals("scene", StringComparison.OrdinalIgnoreCase))
+            switch (domain)
             {
-                switch (domain)
-                {
-                    case "www.brazzers.com":
+                case "www.brazzers.com":
+                    if (sceneTypeURL.Equals("serie", StringComparison.OrdinalIgnoreCase) || sceneTypeURL.Equals("scene", StringComparison.OrdinalIgnoreCase))
+                    {
                         sceneTypeURL = "video";
-                        break;
-                }
+                    }
+
+                    break;
             }
 
             var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneTypeURL}/{sceneID[0]}/0";
