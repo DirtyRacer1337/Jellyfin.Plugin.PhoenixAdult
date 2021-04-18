@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
@@ -16,6 +16,11 @@ namespace PhoenixAdult.Sites
 {
     public class SiteClips4Sale : IProviderBase
     {
+        private static readonly IList<string> TitleCleanupWords = new List<string>
+        {
+            "HD", "mp4", "wmv", "360p", "480p", "720p", "1080p", "()", "( - )",
+        };
+
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
@@ -24,38 +29,29 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var firstSpaceIndex = searchTitle.IndexOf(' ');
-            if (firstSpaceIndex == -1 || !int.TryParse(searchTitle.Substring(0, firstSpaceIndex), out var studioId))
+            var parts = searchTitle.Split(' ');
+            if (!int.TryParse(parts[0], out var studioId))
             {
-                // Studio id not specified
                 return result;
             }
 
-            var encodedSearchTitle = Uri.EscapeUriString(searchTitle.Substring(firstSpaceIndex + 1));
-            var url = Helper.GetSearchSearchURL(siteNum) + studioId + "/*/Cat0-AllCategories/Page1/SortBy-bestmatch/Limit50/search/" + encodedSearchTitle;
+            var url = Helper.GetSearchSearchURL(siteNum) + $"{studioId}/*/Cat0-AllCategories/Page1/SortBy-bestmatch/Limit50/search/{searchTitle}";
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            // Clips4Sale indicates the number of results, but will return 50 items of the studio even if they do not match
-            var resultsCount = int.Parse(data.SelectSingleNode("//div[@id=\"view-searchInfo\"]/strong").InnerText.Trim());
-
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, \"clipWrapper\")]//section[@class=\"p-0\"]");
-            for (var i = 0; i < resultsCount && i < searchResults.Count; ++i)
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'clipWrapper')]//section[@class='p-0']");
+            foreach (var searchResult in searchResults)
             {
-                var searchResult = searchResults[i];
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//h3//a/@href"));
-                var sceneId = GetSceneIdFromSceneUrl(sceneURL);
-                var titleNoFormatting = CleanupTitle(searchResult.SelectSingleText(".//h3"));
-                var curID = Helper.Encode(sceneURL.PathAndQuery);
-                var scenePoster = GetPosterUrl(studioId, sceneId);
+                var sceneId = GetSceneIdFromSceneURL(sceneURL.AbsoluteUri);
+                string curID = Helper.Encode(sceneURL.PathAndQuery),
+                    sceneName = CleanupTitle(searchResult.SelectSingleText(".//h3")),
+                    scenePoster = GetPosterUrl(studioId, sceneId);
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds =
-                    {
-                        {
-                            Plugin.Instance.Name, curID
-                        },
-                    }, Name = titleNoFormatting, ImageUrl = scenePoster,
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
+                    Name = sceneName,
+                    ImageUrl = scenePoster,
                 };
 
                 result.Add(res);
@@ -68,7 +64,8 @@ namespace PhoenixAdult.Sites
         {
             var result = new MetadataResult<BaseItem>
             {
-                Item = new Movie(), People = new List<PersonInfo>(),
+                Item = new Movie(),
+                People = new List<PersonInfo>(),
             };
 
             if (sceneID == null)
@@ -86,25 +83,28 @@ namespace PhoenixAdult.Sites
 
             result.Item.ExternalId = sceneURL;
             result.Item.Name = CleanupTitle(sceneData.SelectSingleText("//h3"));
-
-            var summary = HttpUtility.HtmlDecode(sceneData.SelectSingleText("//div[@class=\"individualClipDescription\"]")).Trim();
-            result.Item.Overview = summary;
+            result.Item.Overview = sceneData.SelectSingleText("//div[@class='individualClipDescription']");
 
             result.Item.AddStudio("Clips4Sale");
-            var studioName = sceneData.SelectSingleText("//span[contains(text(),\"From:\")]/following-sibling::a");
-            result.Item.AddStudio(studioName);
+            var studioName = sceneData.SelectSingleText("//span[contains(text(), 'From:')]/following-sibling::a");
+            if (!string.IsNullOrEmpty(studioName))
+            {
+                result.Item.AddStudio(studioName);
+            }
 
-            var sceneDate = sceneData.SelectSingleText("//span[contains(text(),\"Added:\")]/span").Split(' ')[0];
+            var sceneDate = sceneData.SelectSingleText("//span[contains(text(), 'Added:')]/span").Split(' ')[0];
             if (DateTime.TryParseExact(sceneDate, "M/d/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
                 result.Item.PremiereDate = sceneDateObj;
             }
 
-            var category = sceneData.SelectSingleText("//div[contains(@class, \"clip_details\")]//div[contains(., \"Category:\")]//a").Trim();
-            result.Item.AddGenre(category.ToLower());
-            foreach (var relatedCategoryNode in sceneData.SelectNodes("//span[@class=\"relatedCatLinks\"]//a"))
+            var category = sceneData.SelectSingleText("//div[contains(@class, 'clip_details')]//div[contains(., 'Category:')]//a");
+            result.Item.AddGenre(category);
+            foreach (var genreLink in sceneData.SelectNodesSafe("//span[@class='relatedCatLinks']//a"))
             {
-                result.Item.AddGenre(relatedCategoryNode.InnerText.Trim().ToLower());
+                var genreName = genreLink.InnerText;
+
+                result.Item.AddGenre(genreName);
             }
 
             return result;
@@ -119,22 +119,36 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var sceneURL = new Uri(Helper.Decode(sceneID[0]));
-            var sceneId = GetSceneIdFromSceneUrl(sceneURL);
-            var studioId = int.Parse(sceneURL.AbsolutePath.Split(new [] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1]);
+            var sceneURL = Helper.Decode(sceneID[0]);
+            if (!sceneURL.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
+            }
+
+            var sceneId = GetSceneIdFromSceneURL(sceneURL);
+            var studioId = GetStudioIdFromSceneURL(sceneURL);
 
             var img = GetPosterUrl(studioId, sceneId);
             if (!string.IsNullOrEmpty(img))
             {
-                result.Add(new RemoteImageInfo { Url = img, Type = ImageType.Primary });
+                result.Add(new RemoteImageInfo
+                {
+                    Url = img,
+                    Type = ImageType.Primary,
+                });
             }
 
             return result;
         }
 
-        private static int GetSceneIdFromSceneUrl(Uri sceneUrl)
+        private static int GetSceneIdFromSceneURL(string sceneUrl)
         {
-            return int.Parse(sceneUrl.AbsolutePath.Split(new [] { '/' }, StringSplitOptions.RemoveEmptyEntries)[2]);
+            return int.Parse(sceneUrl.Split("://").Last().Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[3]);
+        }
+
+        private static int GetStudioIdFromSceneURL(string sceneUrl)
+        {
+            return int.Parse(sceneUrl.Split("://").Last().Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[2]);
         }
 
         private static string GetPosterUrl(int studioId, int sceneId)
@@ -144,7 +158,22 @@ namespace PhoenixAdult.Sites
 
         private static string CleanupTitle(string title)
         {
-            return title.Replace("(HD MP4)", string.Empty).Replace("(WMV)", string.Empty).Trim();
+            foreach (var word in TitleCleanupWords)
+            {
+                if (title.Contains(word, StringComparison.OrdinalIgnoreCase))
+                {
+                    title = title.Replace(word, string.Empty, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+
+            title = title.Trim();
+
+            if (title.EndsWith("-", StringComparison.OrdinalIgnoreCase))
+            {
+                title = title.Remove(title.Length - 1, 1);
+            }
+
+            return title;
         }
     }
 }
