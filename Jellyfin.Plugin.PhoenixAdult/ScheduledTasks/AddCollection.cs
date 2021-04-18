@@ -59,6 +59,11 @@ namespace PhoenixAdult.ScheduledTasks
 #else
                 var collection = await this.collectionManager.CreateCollectionAsync(option).ConfigureAwait(false);
 #endif
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
             }
 
             progress?.Report(100);
