@@ -65,7 +65,8 @@ namespace PhoenixAdult.Helpers
             var newGenres = new List<string>();
             foreach (var genreLink in cleanedGenres)
             {
-                var genreName = Replace(genreLink, sceneName);
+                var genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreLink.ToLowerInvariant());
+                genreName = Replace(genreName, sceneName);
                 var genreNames = Split(genreName);
 
                 if (genreNames.Any())
@@ -73,7 +74,6 @@ namespace PhoenixAdult.Helpers
                     foreach (var genre in genreNames)
                     {
                         genreName = Replace(genre, sceneName);
-                        genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
                         if (!string.IsNullOrEmpty(genreName) && !newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                         {
