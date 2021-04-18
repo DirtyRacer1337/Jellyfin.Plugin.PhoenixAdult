@@ -110,22 +110,28 @@ namespace PhoenixAdult.Sites
                 result.Item.PremiereDate = sceneDateObj;
             }
 
-            foreach (var genreLink in sceneData["tags"])
+            if (sceneData.ContainsKey("tags"))
             {
-                var genreName = (string)genreLink["name"];
+                foreach (var genreLink in sceneData["tags"])
+                {
+                    var genreName = (string)genreLink["name"];
 
-                result.Item.AddGenre(genreName);
+                    result.Item.AddGenre(genreName);
+                }
             }
 
-            foreach (var actorLink in sceneData["performers"])
+            if (sceneData.ContainsKey("performers"))
             {
-                var actor = new PersonInfo
+                foreach (var actorLink in sceneData["performers"])
                 {
-                    Name = (string)actorLink["name"],
-                    ImageUrl = (string)actorLink["image"],
-                };
+                    var actor = new PersonInfo
+                    {
+                        Name = (string)actorLink["name"],
+                        ImageUrl = (string)actorLink["image"],
+                    };
 
-                result.People.Add(actor);
+                    result.People.Add(actor);
+                }
             }
 
             return result;
