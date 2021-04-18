@@ -103,6 +103,11 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='watchpage-title']");
             result.Item.AddStudio("LegalPorno");
+            var studio = sceneData.SelectSingleText("//a[@class='watchpage-studioname']/text()");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var sceneDate = sceneData.SelectSingleText("//span[@class='scene-description__detail']//a");
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

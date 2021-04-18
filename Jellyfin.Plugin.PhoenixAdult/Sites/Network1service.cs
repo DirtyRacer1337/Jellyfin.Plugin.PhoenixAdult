@@ -226,6 +226,13 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio((string)sceneData["brand"]);
+            if (sceneData.ContainsKey("collections") && sceneData["collections"].Type == JTokenType.Array)
+            {
+                foreach (var collection in sceneData["collections"])
+                {
+                    result.Item.AddStudio((string)collection["name"]);
+                }
+            }
 
             var sceneDateObj = (DateTime)sceneData["dateReleased"];
             result.Item.PremiereDate = sceneDateObj;

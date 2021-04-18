@@ -98,6 +98,11 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//div[@class='icon-container']/a/@title");
             result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'description')]").Replace("...read more", string.Empty, StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio("Dogfart Network");
+            var studio = sceneData.SelectSingleText("//h3[@class='site-name']").Replace(".com", string.Empty, 1, StringComparison.OrdinalIgnoreCase);
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             if (!string.IsNullOrEmpty(sceneDate))
             {

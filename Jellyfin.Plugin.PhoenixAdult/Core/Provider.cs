@@ -266,6 +266,7 @@ namespace PhoenixAdult
                         result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview).Trim();
                     }
 
+                    result.Item.AddStudio(Helper.GetSearchSiteName(siteNum));
                     var newStudios = new List<string>();
                     foreach (var studio in result.Item.Studios)
                     {

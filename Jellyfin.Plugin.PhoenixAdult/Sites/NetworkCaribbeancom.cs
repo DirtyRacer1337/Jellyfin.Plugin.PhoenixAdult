@@ -115,7 +115,6 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'heading')]//h1");
             result.Item.Overview = sceneData.SelectSingleText("//p[@itemprop='description']");
-            result.Item.AddStudio("Caribbeancom");
 
             var movieSpecNodes = sceneData.SelectNodesSafe("//li[@class='movie-spec' or @class='movie-detail__spec']");
             foreach (var movieSpec in movieSpecNodes)

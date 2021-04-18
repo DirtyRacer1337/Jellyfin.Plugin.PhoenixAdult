@@ -80,6 +80,11 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='no-space transform-none']");
             result.Item.Overview = sceneData.SelectSingleText("//meta[@name='description']/@content");
             result.Item.AddStudio("Porndoe Premium");
+            var studio = sceneData.SelectSingleText("//div[@class='actors']/h2/a");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var dateNode = sceneData.SelectSingleText("//div[@class='h5 h5-published nowrap color-rgba255-06']");
             if (DateTime.TryParseExact(dateNode.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

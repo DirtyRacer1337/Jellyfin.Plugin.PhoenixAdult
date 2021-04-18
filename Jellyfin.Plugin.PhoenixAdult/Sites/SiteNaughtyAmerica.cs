@@ -119,6 +119,10 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["synopsis"];
             result.Item.AddStudio("Naughty America");
+            if (sceneData.ContainsKey("site"))
+            {
+                result.Item.AddStudio((string)sceneData["site"]);
+            }
 
             var sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
             result.Item.PremiereDate = sceneDateObj.DateTime;

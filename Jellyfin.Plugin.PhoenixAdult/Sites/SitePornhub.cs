@@ -90,6 +90,7 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='title']");
             var studioName = sceneData.SelectSingleText("//div[@class='userInfo']//a");
+            result.Item.AddStudio("Pornhub");
             result.Item.AddStudio(studioName);
 
             var date = (string)sceneDataJSON["uploadDate"];

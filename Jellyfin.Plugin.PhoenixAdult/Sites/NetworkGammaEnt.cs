@@ -249,6 +249,10 @@ namespace PhoenixAdult.Sites
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio((string)sceneData["network_name"]);
+            if (sceneData.ContainsKey("studio_name"))
+            {
+                result.Item.AddStudio((string)sceneData["studio_name"]);
+            }
 
             if (DateTime.TryParseExact(sceneID[2], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
