@@ -271,7 +271,6 @@ namespace PhoenixAdult
                     foreach (var studio in result.Item.Studios)
                     {
                         var studioName = studio.Trim();
-                        studioName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(studioName);
 
                         if (!newStudios.Contains(studioName))
                         {

@@ -34,6 +34,10 @@ namespace PhoenixAdult.Sites
             {
                 return result;
             }
+            else
+            {
+                searchTitle = string.Join(' ', parts.Skip(1));
+            }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"{studioId}/*/Cat0-AllCategories/Page1/SortBy-bestmatch/Limit50/search/{searchTitle}";
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
