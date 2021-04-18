@@ -121,6 +121,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### BurningAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Caribbeancom | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - CaribbeancomPR
++ #### Clips4Sale | Matching type: *[Exact](./manualsearch.md#exact-match)* - **StudioID with Title Search**
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviante | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Erotic Spice
