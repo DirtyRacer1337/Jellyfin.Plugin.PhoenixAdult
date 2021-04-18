@@ -719,6 +719,9 @@
     "48": {
       "0": [ "MetadataAPI", "https://metadataapi.net", "https://api.metadataapi.net" ],
     },
+    "49": {
+      "0": [ "Clips4Sale", "https://www.clips4sale.com", "/studio/" ],
+    },
   },
   "SiteIDList": {
     "0": "Network1service",
@@ -770,6 +773,7 @@
     "46": "Network1service",
     "47": "Network1service",
     "48": "NetworkMetadataAPI",
+    "49": "SiteClips4Sale",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -811,6 +815,7 @@
     "^btra": "BigTitsRoundAsses",
     "^burna": "BurningAngel",
     "^bwb": "BigWetButts",
+    "^c4s": "Clips4Sale",
     "^carib": "Caribbeancom",
     "^caribpr": "CaribbeancomPR",
     "^clip": "LegalPorno",
