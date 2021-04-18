@@ -36,7 +36,7 @@ namespace PhoenixAdult.Sites
             }
             else
             {
-                searchTitle = string.Join(' ', parts.Skip(1));
+                searchTitle = string.Join(" ", parts.Skip(1));
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + $"{studioId}/*/Cat0-AllCategories/Page1/SortBy-bestmatch/Limit50/search/{searchTitle}";
