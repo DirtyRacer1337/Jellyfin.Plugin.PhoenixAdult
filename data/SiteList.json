@@ -727,6 +727,9 @@
     "49": {
       "0": [ "Clips4Sale", "https://www.clips4sale.com", "/studio/" ],
     },
+    "50": {
+      "0": [ "Manyvids", "https://www.manyvids.com", "/video/" ],
+    },
   },
   "SiteIDList": {
     "0": "Network1service",
@@ -779,6 +782,7 @@
     "47": "Network1service",
     "48": "NetworkMetadataAPI",
     "49": "SiteClips4Sale",
+    "50": "SiteManyvids",
   },
   "Abbrieviations": {
     "^18og": "18OnlyGirls",
@@ -883,6 +887,7 @@
     "^lst": "LatinaSexTapes",
     "^lta": "LetsTryAnal",
     "^maj": "ManoJob",
+    "^mav": "Manyvids",
     "^mbb": "MommyBlowsBest",
     "^mbt": "MomsBangTeens",
     "^mc": "MassageCreep",
