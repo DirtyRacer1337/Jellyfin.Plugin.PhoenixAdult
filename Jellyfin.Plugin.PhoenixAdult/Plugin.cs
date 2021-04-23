@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
+using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using PhoenixAdult.Configuration;
@@ -16,6 +17,8 @@ namespace PhoenixAdult
             : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
+
+            this.ConfigurationChanged += this.Configuration.ConfigurationChanged;
         }
 
         public static Plugin Instance { get; private set; }

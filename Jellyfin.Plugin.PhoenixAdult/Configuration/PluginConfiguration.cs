@@ -80,5 +80,15 @@ namespace PhoenixAdult.Configuration
         public GenresSortingStyle GenresSortingStyle { get; set; }
 
         public PreferedActorNameSource PreferedActorNameSource { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required")]
+        public void ConfigurationChanged(object sender, BasePluginConfiguration e)
+        {
+            this.DefaultSiteName = Plugin.Instance.Configuration.DefaultSiteName.Trim();
+            this.FlareSolverrURL = Plugin.Instance.Configuration.FlareSolverrURL.Trim();
+            this.MetadataAPIToken = Plugin.Instance.Configuration.MetadataAPIToken.Trim();
+
+            Plugin.Instance.SaveConfiguration(this);
+        }
     }
 }
