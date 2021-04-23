@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
-using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using PhoenixAdult.Configuration;
+
+#if __EMBY__
+#else
+using MediaBrowser.Controller.Library;
+#endif
 
 [assembly: CLSCompliant(false)]
 
@@ -17,8 +21,10 @@ namespace PhoenixAdult
             : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
-
+#if __EMBY__
+#else
             this.ConfigurationChanged += this.Configuration.ConfigurationChanged;
+#endif
         }
 
         public static Plugin Instance { get; private set; }
