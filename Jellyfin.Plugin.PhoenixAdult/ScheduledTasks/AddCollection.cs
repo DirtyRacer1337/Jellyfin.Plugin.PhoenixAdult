@@ -64,7 +64,7 @@ namespace PhoenixAdult.ScheduledTasks
                 var moviesImages = movies.Where(o => o.HasImage(ImageType.Primary));
                 if (moviesImages.Any())
                 {
-                    collection.SetImage(moviesImages.First()?.GetImageInfo(ImageType.Primary, 0), 0);
+                    collection.SetImage(moviesImages.Random().GetImageInfo(ImageType.Primary, 0), 0);
                 }
 
                 if (cancellationToken.IsCancellationRequested)
