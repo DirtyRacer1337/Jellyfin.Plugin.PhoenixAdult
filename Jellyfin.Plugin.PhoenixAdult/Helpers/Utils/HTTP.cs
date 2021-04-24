@@ -9,6 +9,8 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using FlareSolverrSharp;
+using Microsoft.Extensions.Caching.Abstractions;
+using Microsoft.Extensions.Caching.InMemory;
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -26,9 +28,13 @@ namespace PhoenixAdult.Helpers.Utils
             CookieContainer = CookieContainer,
         };
 
+        private static IDictionary<HttpStatusCode, TimeSpan> CacheExpirationPerHttpResponseCode { get; } = CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
+
+        private static InMemoryCacheHandler CacheHandler { get; } = new InMemoryCacheHandler(HttpHandler, CacheExpirationPerHttpResponseCode);
+
         private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
         {
-            InnerHandler = HttpHandler,
+            InnerHandler = CacheHandler,
             MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
             UserAgent = GetUserAgent(),
         };
