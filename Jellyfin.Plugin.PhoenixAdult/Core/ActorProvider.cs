@@ -28,7 +28,7 @@ namespace PhoenixAdult
         {
             var result = new List<RemoteSearchResult>();
 
-            if (searchInfo == null)
+            if (searchInfo == null || searchInfo.ProviderIds.Any(o => !string.IsNullOrEmpty(o.Value)))
             {
                 return result;
             }
