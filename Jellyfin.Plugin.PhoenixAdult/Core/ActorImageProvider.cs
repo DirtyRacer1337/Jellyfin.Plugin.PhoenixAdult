@@ -24,7 +24,7 @@ namespace PhoenixAdult
 {
     public class ActorImageProvider : IRemoteImageProvider
     {
-        public string Name => Plugin.Instance.Name + "Actor";
+        public string Name => Plugin.Instance.Name;
 
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {

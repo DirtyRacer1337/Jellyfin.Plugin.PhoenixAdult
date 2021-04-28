@@ -30,7 +30,7 @@ namespace PhoenixAdult.Sites
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name + "Actor", curID } },
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = name,
                     ImageUrl = imageURL,
                 };

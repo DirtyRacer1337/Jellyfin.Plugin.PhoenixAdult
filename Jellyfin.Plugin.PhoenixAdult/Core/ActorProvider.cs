@@ -22,7 +22,7 @@ namespace PhoenixAdult
 {
     public class ActorProvider : IRemoteMetadataProvider<Person, PersonLookupInfo>
     {
-        public string Name => Plugin.Instance.Name + "Actor";
+        public string Name => Plugin.Instance.Name;
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(PersonLookupInfo searchInfo, CancellationToken cancellationToken)
         {
