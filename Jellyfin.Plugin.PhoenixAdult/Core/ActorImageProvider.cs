@@ -125,10 +125,10 @@ namespace PhoenixAdult
                         var provider = Helper.GetProviderBySiteID(siteNum[0]);
                         if (provider != null)
                         {
-                            var imgs = new List<RemoteImageInfo>();
+                            IEnumerable<RemoteImageInfo> imgs = new List<RemoteImageInfo>();
                             try
                             {
-                                imgs = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                                imgs = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
                             }
                             catch (Exception e)
                             {

@@ -12,7 +12,7 @@ namespace PhoenixAdult.Helpers.Utils
 {
     internal static class ImageHelper
     {
-        public static async Task<List<RemoteImageInfo>> GetImagesSizeAndValidate(List<RemoteImageInfo> images, CancellationToken cancellationToken)
+        public static async Task<List<RemoteImageInfo>> GetImagesSizeAndValidate(IEnumerable<RemoteImageInfo> images, CancellationToken cancellationToken)
         {
             var result = new List<RemoteImageInfo>();
             var tasks = new List<Task<RemoteImageInfo>>();
@@ -87,7 +87,7 @@ namespace PhoenixAdult.Helpers.Utils
             return result;
         }
 
-        private static List<RemoteImageInfo> Cleanup(List<RemoteImageInfo> images)
+        private static List<RemoteImageInfo> Cleanup(IEnumerable<RemoteImageInfo> images)
         {
             var clearImages = new List<RemoteImageInfo>();
 

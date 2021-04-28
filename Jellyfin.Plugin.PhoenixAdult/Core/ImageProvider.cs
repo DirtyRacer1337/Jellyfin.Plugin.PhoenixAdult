@@ -40,7 +40,7 @@ namespace PhoenixAdult
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
 #endif
         {
-            var images = new List<RemoteImageInfo>();
+            IEnumerable<RemoteImageInfo> images = new List<RemoteImageInfo>();
 
             if (item == null)
             {
@@ -65,7 +65,7 @@ namespace PhoenixAdult
             {
                 try
                 {
-                    images = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                    images = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

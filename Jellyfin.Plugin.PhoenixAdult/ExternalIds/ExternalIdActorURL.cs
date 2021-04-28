@@ -15,14 +15,11 @@ namespace PhoenixAdult
         public string Name => Plugin.Instance.Name;
 #else
         public string ProviderName => Plugin.Instance.Name;
-#endif
 
-#if __EMBY__
-#else
         public ExternalIdMediaType? Type => ExternalIdMediaType.Person;
 #endif
 
-        public string Key => Plugin.Instance.Name + "ActorURL";
+        public string Key => Plugin.Instance.Name + "URL";
 
         public string UrlFormatString => "{0}";
 
