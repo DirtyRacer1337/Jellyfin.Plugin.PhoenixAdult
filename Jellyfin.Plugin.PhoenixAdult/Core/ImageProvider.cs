@@ -86,7 +86,7 @@ namespace PhoenixAdult
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 #endif
         {
-            return new Provider(null, Provider.Http).GetImageResponse(url, cancellationToken);
+            return Helper.GetImageResponse(url, cancellationToken);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var provider = new Provider(null, Provider.Http);
+            var provider = new Provider();
             var siteList = new List<string> { "JAVLibrary", "R18" };
 
             foreach (var site in siteList)
@@ -59,12 +59,12 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var provider = new Provider(null, Provider.Http);
+            var provider = new Provider();
             var info = new MovieInfo();
             info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
 
             var res = await provider.GetMetadata(info, cancellationToken).ConfigureAwait(false);
-            result.Item = (BaseItem)res.Item;
+            result.Item = res.Item;
 
             return result;
         }

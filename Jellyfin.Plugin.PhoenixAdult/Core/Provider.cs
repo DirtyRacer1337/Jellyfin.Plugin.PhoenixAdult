@@ -14,41 +14,18 @@ using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
 #else
 using System.Net.Http;
-using Microsoft.Extensions.Logging;
 #endif
 
 namespace PhoenixAdult
 {
     public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
-#if __EMBY__
-        public Provider(ILogManager logger, IHttpClient http)
+        public Provider()
         {
-            if (logger != null)
-            {
-                Log = logger.GetLogger(this.Name);
-            }
-
-            Http = http;
-        }
-
-        public static IHttpClient Http { get; set; }
-#else
-        public Provider(ILogger<Provider> logger, IHttpClientFactory http)
-        {
-            Log = logger;
-            Http = http;
-
             Database.LoadAll();
         }
-
-        public static IHttpClientFactory Http { get; set; }
-#endif
-
-        public static ILogger Log { get; set; }
 
         public string Name => Plugin.Instance.Name;
 
@@ -312,23 +289,11 @@ namespace PhoenixAdult
 
 #if __EMBY__
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
-        {
-            return Http.GetResponse(new HttpRequestOptions
-            {
-                CancellationToken = cancellationToken,
-                Url = url,
-                EnableDefaultUserAgent = false,
-                UserAgent = HTTP.GetUserAgent(),
-            });
-        }
 #else
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.TryAddWithoutValidation("User-Agent", HTTP.GetUserAgent());
-
-            return Http.CreateClient().SendAsync(request, cancellationToken);
-        }
 #endif
+        {
+            return Helper.GetImageResponse(url, cancellationToken);
+        }
     }
 }
