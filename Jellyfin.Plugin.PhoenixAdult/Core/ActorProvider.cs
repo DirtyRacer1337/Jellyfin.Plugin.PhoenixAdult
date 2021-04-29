@@ -67,7 +67,7 @@ namespace PhoenixAdult
                     {
                         Logger.Error($"Actor Search error: \"{e}\"");
 
-                        await Analitycs.Send(title, site.siteNum, site.siteName, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                        await Analytics.Send(title, site.siteNum, site.siteName, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                     }
 
                     if (result.Any())
@@ -141,7 +141,7 @@ namespace PhoenixAdult
                 {
                     Logger.Error($"Actor Update error: \"{e}\"");
 
-                    await Analitycs.Send(externalID, null, null, info.Name, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analytics.Send(externalID, null, null, info.Name, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (res != null)
