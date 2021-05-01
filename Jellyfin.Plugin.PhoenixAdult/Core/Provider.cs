@@ -226,13 +226,13 @@ namespace PhoenixAdult
 
                 if (res != null)
                 {
+                    result.HasMetadata = true;
                     result.Item = (Movie)res.Item;
                     result.People = res.People;
                 }
 
-                if (!string.IsNullOrEmpty(result.Item.Name))
+                if (res.HasMetadata)
                 {
-                    result.HasMetadata = true;
                     result.Item.OfficialRating = "XXX";
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
 

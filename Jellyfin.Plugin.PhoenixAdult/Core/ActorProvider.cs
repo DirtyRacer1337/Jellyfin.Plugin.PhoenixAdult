@@ -146,12 +146,12 @@ namespace PhoenixAdult
 
                 if (res != null)
                 {
+                    result.HasMetadata = true;
                     result.Item = (Person)res.Item;
                 }
 
-                if (!string.IsNullOrEmpty(result.Item.ExternalId))
+                if (res.HasMetadata)
                 {
-                    result.HasMetadata = true;
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
                     result.Item.ProviderIds.Update(this.Name + "URL", result.Item.ExternalId);
 
