@@ -231,7 +231,7 @@ namespace PhoenixAdult
                     result.People = res.People;
                 }
 
-                if (res.HasMetadata)
+                if (result.HasMetadata)
                 {
                     result.Item.OfficialRating = "XXX";
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);

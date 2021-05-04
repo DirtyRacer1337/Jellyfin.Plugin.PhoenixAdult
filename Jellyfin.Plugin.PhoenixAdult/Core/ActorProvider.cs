@@ -150,7 +150,7 @@ namespace PhoenixAdult
                     result.Item = (Person)res.Item;
                 }
 
-                if (res.HasMetadata)
+                if (result.HasMetadata)
                 {
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
                     result.Item.ProviderIds.Update(this.Name + "URL", result.Item.ExternalId);
