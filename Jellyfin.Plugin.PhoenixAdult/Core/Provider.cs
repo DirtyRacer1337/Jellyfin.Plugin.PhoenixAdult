@@ -249,7 +249,12 @@ namespace PhoenixAdult
                     {
                         var studioName = studio.Trim();
 
-                        if (!newStudios.Contains(studioName))
+                        if (studioName.All(char.IsLower))
+                        {
+                            studioName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(studioName);
+                        }
+
+                        if (!newStudios.Contains(studioName, StringComparer.OrdinalIgnoreCase))
                         {
                             newStudios.Add(studioName);
                         }
