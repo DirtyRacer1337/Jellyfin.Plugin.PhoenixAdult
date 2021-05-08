@@ -111,12 +111,12 @@ namespace PhoenixAdult.Sites
 
                 if (!site_id.Equals(network_id))
                 {
-                    url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{sceneID[0]}";
+                    url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{network_id}";
 
                     var siteData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
                     if (siteData != null)
                     {
-                        result.Item.AddStudio((string)siteData["name"]);
+                        result.Item.AddStudio((string)siteData["data"]["name"]);
                     }
                 }
             }
