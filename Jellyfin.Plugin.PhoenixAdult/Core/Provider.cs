@@ -15,6 +15,7 @@ using PhoenixAdult.Helpers.Utils;
 #if __EMBY__
 using MediaBrowser.Common.Net;
 #else
+using System.IO;
 using System.Net.Http;
 #endif
 
@@ -40,8 +41,33 @@ namespace PhoenixAdult
 
             Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
-            var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
-            var site = Helper.GetSiteFromTitle(title);
+            var title = string.Empty;
+            (int[] siteNum, string siteName) site = (null, null);
+
+            if (Plugin.Instance.Configuration.UseFilePath)
+            {
+#if __EMBY__
+#else
+                Logger.Info($"searchInfo.Path: {searchInfo.Path}");
+                var path = Path.Combine(Path.GetDirectoryName(searchInfo.Path), Path.GetFileNameWithoutExtension(searchInfo.Path));
+                foreach (var name in path.Split(Path.DirectorySeparatorChar).Reverse())
+                {
+                    title += " " + name;
+                    site = Helper.GetSiteFromTitle(name);
+                    if (site.siteNum != null)
+                    {
+                        break;
+                    }
+                }
+#endif
+            }
+
+            if (site.siteNum == null)
+            {
+                title = Helper.ReplaceAbbrieviation(searchInfo.Name);
+                site = Helper.GetSiteFromTitle(title);
+            }
+
             if (site.siteNum == null)
             {
                 string newTitle;

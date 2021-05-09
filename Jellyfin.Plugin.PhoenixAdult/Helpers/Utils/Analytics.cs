@@ -15,6 +15,8 @@ namespace PhoenixAdult.Helpers.Utils
 
         private static AnalyticsStructure AnalyticsData { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "For future")]
+
         public static async Task Send(string request, int[] siteNum, string siteName, string searchTitle, DateTime? searchDate, string providerName, Exception e, CancellationToken cancellationToken)
         {
             if (!Plugin.Instance.Configuration.DisableAnalytics)
