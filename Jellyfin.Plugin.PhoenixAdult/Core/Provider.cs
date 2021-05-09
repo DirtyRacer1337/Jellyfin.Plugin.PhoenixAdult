@@ -52,7 +52,7 @@ namespace PhoenixAdult
                 var path = Path.Combine(Path.GetDirectoryName(searchInfo.Path), Path.GetFileNameWithoutExtension(searchInfo.Path));
                 foreach (var name in path.Split(Path.DirectorySeparatorChar).Reverse())
                 {
-                    title += " " + name;
+                    title = $"{name} {title}";
                     site = Helper.GetSiteFromTitle(name);
                     if (site.siteNum != null)
                     {
