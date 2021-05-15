@@ -44,10 +44,10 @@ namespace PhoenixAdult
             var title = string.Empty;
             (int[] siteNum, string siteName) site = (null, null);
 
-            if (Plugin.Instance.Configuration.UseFilePath)
-            {
 #if __EMBY__
 #else
+            if (!string.IsNullOrEmpty(searchInfo.Path) && Plugin.Instance.Configuration.UseFilePath)
+            {
                 Logger.Info($"searchInfo.Path: {searchInfo.Path}");
                 var path = Path.Combine(Path.GetDirectoryName(searchInfo.Path), Path.GetFileNameWithoutExtension(searchInfo.Path));
                 foreach (var name in path.Split(Path.DirectorySeparatorChar).Reverse())
@@ -59,8 +59,8 @@ namespace PhoenixAdult
                         break;
                     }
                 }
-#endif
             }
+#endif
 
             if (site.siteNum == null)
             {
