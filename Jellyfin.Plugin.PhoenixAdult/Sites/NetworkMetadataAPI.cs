@@ -106,10 +106,10 @@ namespace PhoenixAdult.Sites
             {
                 result.Item.AddStudio((string)sceneData["site"]["name"]);
 
-                int site_id = (int)sceneData["site"]["id"],
-                    network_id = (int)sceneData["site"]["network_id"];
+                int? site_id = (int)sceneData["site"]["id"],
+                    network_id = (int?)sceneData["site"]["network_id"];
 
-                if (!site_id.Equals(network_id))
+                if (network_id.HasValue && !site_id.Equals(network_id))
                 {
                     url = Helper.GetSearchSearchURL(siteNum) + $"/sites/{network_id}";
 
