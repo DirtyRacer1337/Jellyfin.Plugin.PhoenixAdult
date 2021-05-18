@@ -27,14 +27,14 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[contains(@class, 'card-video')]");
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[contains(@class, 'global-video-card')]");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                var sceneURL = new Uri(searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@href"));
                 string curID = Helper.Encode(sceneURL.AbsolutePath),
-                    sceneName = searchResult.SelectSingleText(".//a/@aria-label"),
-                    sceneDate = searchResult.SelectSingleText(".//p[contains(@class, 'extra-info') and not(contains(@class, 'actors'))]"),
-                    scenePoster = searchResult.SelectSingleText(".//div[contains(@class, 'thumb')]/@data-bg");
+                    sceneName = searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@title"),
+                    sceneDate = searchResult.SelectSingleText(".//div[@class='-g-vc-item-date']"),
+                    scenePoster = searchResult.SelectSingleText(".//div[contains(@class, '-g-vc-thumb')]/@data-bg");
 
                 var res = new RemoteSearchResult
                 {
