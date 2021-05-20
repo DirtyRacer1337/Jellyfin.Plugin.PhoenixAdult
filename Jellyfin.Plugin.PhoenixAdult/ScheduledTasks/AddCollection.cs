@@ -56,7 +56,7 @@ namespace PhoenixAdult.ScheduledTasks
                 };
 
 #if __EMBY__
-                var collection = this.collectionManager.CreateCollection(option);
+                var collection = await this.collectionManager.CreateCollection(option).ConfigureAwait(false);
 #else
                 var collection = await this.collectionManager.CreateCollectionAsync(option).ConfigureAwait(false);
 #endif
