@@ -25,7 +25,7 @@ after_build:
 
       $jellyfin = $project + "\Release\net5.0\"
 
-      $emby = $project + "\Release.Emby\netstandard2.0\"
+      $emby = $project + "\Release.Emby\netstandard2.1\"
 
 
       $file = $jellyfin + "PhoenixAdult.dll"
