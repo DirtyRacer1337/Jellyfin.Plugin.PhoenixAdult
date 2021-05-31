@@ -89,11 +89,18 @@ namespace PhoenixAdult.Configuration
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required")]
         public void ConfigurationChanged(object sender, BasePluginConfiguration e)
         {
-            this.DefaultSiteName = Plugin.Instance.Configuration.DefaultSiteName.Trim();
-            this.FlareSolverrURL = Plugin.Instance.Configuration.FlareSolverrURL.Trim();
-            this.MetadataAPIToken = Plugin.Instance.Configuration.MetadataAPIToken.Trim();
+            var configuration = Plugin.Instance.Configuration;
 
-            Plugin.Instance.SaveConfiguration(this);
+            configuration.DefaultSiteName = configuration.DefaultSiteName.Trim();
+            configuration.FlareSolverrURL = configuration.FlareSolverrURL.Trim();
+            configuration.MetadataAPIToken = configuration.MetadataAPIToken.Trim();
+
+            configuration.ProxyHost = configuration.ProxyHost.Trim();
+            configuration.ProxyPort = configuration.ProxyPort.Trim();
+            configuration.ProxyLogin = configuration.ProxyLogin.Trim();
+            configuration.ProxyPassword = configuration.ProxyPassword.Trim();
+
+            Plugin.Instance.SaveConfiguration(configuration);
         }
 #endif
     }
