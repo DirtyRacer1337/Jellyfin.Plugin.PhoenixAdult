@@ -37,6 +37,7 @@
     <PackageReference Include="FlareSolverrSharp" Version="1.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.33" />
     <PackageReference Include="HttpClient.Caching" Version="1.1.21112.1" />
+    <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
   </ItemGroup>

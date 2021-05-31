@@ -32,6 +32,12 @@ namespace PhoenixAdult.Configuration
             this.UID = Guid.NewGuid().ToString();
             this.DisableAnalytics = false;
 
+            this.ProxyEnable = false;
+            this.ProxyHost = string.Empty;
+            this.ProxyPort = "0";
+            this.ProxyLogin = string.Empty;
+            this.ProxyPassword = string.Empty;
+
             this.FlareSolverrURL = "http://localhost:8191/";
 
             this.DefaultSiteName = string.Empty;
@@ -59,6 +65,16 @@ namespace PhoenixAdult.Configuration
         public string UID { get; set; }
 
         public bool DisableAnalytics { get; set; }
+
+        public bool ProxyEnable { get; set; }
+
+        public string ProxyHost { get; set; }
+
+        public string ProxyPort { get; set; }
+
+        public string ProxyLogin { get; set; }
+
+        public string ProxyPassword { get; set; }
 
         public string FlareSolverrURL { get; set; }
 

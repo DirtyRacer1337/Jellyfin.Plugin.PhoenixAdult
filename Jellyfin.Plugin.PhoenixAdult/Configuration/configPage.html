@@ -16,6 +16,28 @@
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescripton">
                         <label class="emby-checkbox-label">
+                            <input id="ProxyEnable" name="ProxyEnable" type="checkbox" is="emby-checkbox" />
+                            <span>Proxy Enable</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyHost">Proxy Host</label>
+                        <input id="ProxyHost" name="ProxyHost" type="text" is="emby-input" min="0" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyPort">Proxy Port</label>
+                        <input id="ProxyPort" name="ProxyPort" type="number" is="emby-input" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyLogin">Proxy Login</label>
+                        <input id="ProxyLogin" name="ProxyLogin" type="text" is="emby-input" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyPassword">Proxy Password</label>
+                        <input id="ProxyPassword" name="ProxyPassword" type="text" is="emby-input" />
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
                             <input id="UseFilePath" name="UseFilePath" type="checkbox" is="emby-checkbox" />
                             <span>Use FilePath for matching</span>
                         </label>
@@ -98,6 +120,11 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#FlareSolverrURL').val(config.FlareSolverrURL).change();
+                    $('#ProxyEnable').prop('checked', config.ProxyEnable);
+                    $('#ProxyHost').val(config.ProxyHost).change();
+                    $('#ProxyPort').val(config.ProxyPort).change();
+                    $('#ProxyLogin').val(config.ProxyLogin).change();
+                    $('#ProxyPassword').val(config.ProxyPassword).change();
                     $('#UseFilePath').prop('checked', config.UseFilePath);
                     $('#DefaultSiteName').val(config.DefaultSiteName).change();
                     $('#UseMetadataAPI').prop('checked', config.UseMetadataAPI);
@@ -117,6 +144,11 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.FlareSolverrURL = $('#FlareSolverrURL').val();
+                    config.ProxyEnable = $('#ProxyEnable').prop('checked');
+                    config.ProxyHost = $('#ProxyHost').val();
+                    config.ProxyPort = $('#ProxyPort').val();
+                    config.ProxyLogin = $('#ProxyLogin').val();
+                    config.ProxyPassword = $('#ProxyPassword').val();
                     config.UseFilePath = $('#UseFilePath').prop('checked');
                     config.DefaultSiteName = $('#DefaultSiteName').val();
                     config.MetadataAPIToken = $('#MetadataAPIToken').val();

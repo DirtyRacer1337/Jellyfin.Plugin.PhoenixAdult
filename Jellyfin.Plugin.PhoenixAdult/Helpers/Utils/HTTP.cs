@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using FlareSolverrSharp;
 using Microsoft.Extensions.Caching.Abstractions;
 using Microsoft.Extensions.Caching.InMemory;
+using MihaZupan;
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -18,28 +19,63 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
-            Http.Timeout = TimeSpan.FromSeconds(120);
+            if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && int.TryParse(Plugin.Instance.Configuration.ProxyPort, out int proxyPort))
+            {
+                if (proxyPort > 0)
+                {
+                    var proxy = new List<ProxyInfo>();
+
+                    if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
+                    {
+                        proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, proxyPort));
+                    }
+                    else
+                    {
+                        proxy.Add(new ProxyInfo(
+                            Plugin.Instance.Configuration.ProxyHost,
+                            proxyPort,
+                            Plugin.Instance.Configuration.ProxyLogin,
+                            Plugin.Instance.Configuration.ProxyPassword));
+                    }
+
+                    Proxy = new HttpToSocks5Proxy(proxy.ToArray());
+                }
+            }
+
+            HttpHandler = new HttpClientHandler()
+            {
+                CookieContainer = CookieContainer,
+                Proxy = Proxy,
+            };
+
+            CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationPerHttpResponseCode);
+
+            CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
+            {
+                InnerHandler = CacheHandler,
+                MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
+                UserAgent = GetUserAgent(),
+            };
+
+            Http = new HttpClient(CloudflareHandler)
+            {
+                Timeout = TimeSpan.FromSeconds(120),
+            };
         }
 
         private static CookieContainer CookieContainer { get; } = new CookieContainer();
 
-        private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler()
-        {
-            CookieContainer = CookieContainer,
-        };
+        private static IWebProxy Proxy { get; set; }
+
+        private static HttpClientHandler HttpHandler { get; set; }
 
         private static IDictionary<HttpStatusCode, TimeSpan> CacheExpirationPerHttpResponseCode { get; } = CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
 
-        private static InMemoryCacheHandler CacheHandler { get; } = new InMemoryCacheHandler(HttpHandler, CacheExpirationPerHttpResponseCode);
+        private static InMemoryCacheHandler CacheHandler { get; set; }
 
-        private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
-        {
-            InnerHandler = CacheHandler,
-            MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
-            UserAgent = GetUserAgent(),
-        };
+        private static ClearanceHandler CloudflareHandler { get; set; }
 
-        private static HttpClient Http { get; } = new HttpClient(CloudflareHandler);
+        private static HttpClient Http { get; set; }
 
         public static string GetUserAgent()
             => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
