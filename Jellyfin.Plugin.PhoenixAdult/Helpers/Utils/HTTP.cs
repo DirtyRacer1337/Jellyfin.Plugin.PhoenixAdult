@@ -19,27 +19,24 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
-            if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && int.TryParse(Plugin.Instance.Configuration.ProxyPort, out int proxyPort))
+            if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
             {
-                if (proxyPort > 0)
+                var proxy = new List<ProxyInfo>();
+
+                if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
                 {
-                    var proxy = new List<ProxyInfo>();
-
-                    if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
-                    {
-                        proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, proxyPort));
-                    }
-                    else
-                    {
-                        proxy.Add(new ProxyInfo(
-                            Plugin.Instance.Configuration.ProxyHost,
-                            proxyPort,
-                            Plugin.Instance.Configuration.ProxyLogin,
-                            Plugin.Instance.Configuration.ProxyPassword));
-                    }
-
-                    Proxy = new HttpToSocks5Proxy(proxy.ToArray());
+                    proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, Plugin.Instance.Configuration.ProxyPort));
                 }
+                else
+                {
+                    proxy.Add(new ProxyInfo(
+                        Plugin.Instance.Configuration.ProxyHost,
+                        Plugin.Instance.Configuration.ProxyPort,
+                        Plugin.Instance.Configuration.ProxyLogin,
+                        Plugin.Instance.Configuration.ProxyPassword));
+                }
+
+                Proxy = new HttpToSocks5Proxy(proxy.ToArray());
             }
 
             HttpHandler = new HttpClientHandler()

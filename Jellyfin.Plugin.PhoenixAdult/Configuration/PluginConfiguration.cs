@@ -34,7 +34,7 @@ namespace PhoenixAdult.Configuration
 
             this.ProxyEnable = false;
             this.ProxyHost = string.Empty;
-            this.ProxyPort = "0";
+            this.ProxyPort = 0;
             this.ProxyLogin = string.Empty;
             this.ProxyPassword = string.Empty;
 
@@ -70,7 +70,7 @@ namespace PhoenixAdult.Configuration
 
         public string ProxyHost { get; set; }
 
-        public string ProxyPort { get; set; }
+        public int ProxyPort { get; set; }
 
         public string ProxyLogin { get; set; }
 
@@ -112,7 +112,6 @@ namespace PhoenixAdult.Configuration
             configuration.MetadataAPIToken = configuration.MetadataAPIToken.Trim();
 
             configuration.ProxyHost = configuration.ProxyHost.Trim();
-            configuration.ProxyPort = configuration.ProxyPort.Trim();
             configuration.ProxyLogin = configuration.ProxyLogin.Trim();
             configuration.ProxyPassword = configuration.ProxyPassword.Trim();
 
