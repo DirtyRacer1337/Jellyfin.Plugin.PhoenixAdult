@@ -690,7 +690,7 @@
       "5": [ "Deeper", "https://www.deeper.com" ],
     },
     "45": {
-      "0": [ "AdultDVDEmpire", "https://www.adultdvdempire.com", "/allsearch/search?q=" ],
+      "0": [ "AdultDVDEmpire", "https://www.adultdvdempire.com", "/allsearch/search?fq=media_id:2&q=" ],
       "1": [ "AdultEmpire", "https://www.adultempire.com" ],
     },
     "46": {
