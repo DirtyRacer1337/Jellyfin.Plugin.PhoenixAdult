@@ -103,7 +103,7 @@ namespace PhoenixAdult.Configuration
 #if __EMBY__
 #else
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required")]
-        public void ConfigurationChanged(object sender, BasePluginConfiguration e)
+        public static void ConfigurationChanged(object sender, BasePluginConfiguration e)
         {
             var configuration = Plugin.Instance.Configuration;
 

@@ -37,7 +37,7 @@ namespace PhoenixAdult
             }
 #else
             Log = logger;
-            this.ConfigurationChanged += this.Configuration.ConfigurationChanged;
+            this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
 #endif
         }
 
