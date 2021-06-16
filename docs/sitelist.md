@@ -89,6 +89,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Tugjobs
   - Working Latinas
 + #### Bang! | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Blowpass | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Brazzers Network: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Asses In Public
   - Baby Got Boobs
@@ -185,6 +186,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### HentaiPros | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Heyzo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Immoral Live | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
   - GirlGirl
@@ -265,6 +267,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Shes a Freak
   - Stranded Teens
   - The Sex Scout
++ #### Mommy Blows Best | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mylf Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
   - Anal Mom
   - Full Of JOI
@@ -293,6 +296,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Mylfwood
   - Shoplyfter Mylf
   - StayHomeMilf
++ #### Only Teen Blowjobs | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PornCZ | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* **Date Add**
   - Amateri Premium
   - Amateurs From Bohemia
@@ -613,6 +617,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Thickumz
   - This Girl Sucks
   - Titty Attack
++ #### Throated | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Dane Jones
   - Fitness Rooms
