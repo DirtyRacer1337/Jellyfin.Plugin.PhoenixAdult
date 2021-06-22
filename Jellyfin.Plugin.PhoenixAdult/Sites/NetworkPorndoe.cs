@@ -27,7 +27,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[contains(@class, 'global-video-card')]");
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[@class='-g-vc-grid']/parent::div");
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@href"));
@@ -100,19 +100,19 @@ namespace PhoenixAdult.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodesSafe("//span[@class='group inline']/a");
+            var actorsNode = sceneData.SelectNodesSafe("//div[@class='actors']//a[contains(@href, '/models/')]");
             foreach (var actorLink in actorsNode)
             {
                 var actorPageURL = actorLink.Attributes["href"].Value;
                 var actorDate = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
 
-                var actorName = actorDate.SelectSingleText("//div[@data-item='c-13 r-11 m-c-15 / middle']/h1");
+                var actorName = actorLink.SelectSingleText(".//strong");
                 var res = new PersonInfo
                 {
                     Name = actorName,
                 };
 
-                var actorPhoto = actorDate.SelectSingleText("//div[@class='avatar']/picture[2]/img/@data-src");
+                var actorPhoto = actorDate.SelectSingleText("//div[@class='-api-poster-item']//img/@data-src");
                 if (!string.IsNullOrEmpty(actorPhoto))
                 {
                     if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
