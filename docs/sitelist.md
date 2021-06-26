@@ -234,7 +234,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Kinky Spa | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### LegalPorno | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### ManyVids | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID**
++ #### ManyVids | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID, Date Add**
 + #### MetadataAPI | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - DoghouseDigital
