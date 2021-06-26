@@ -124,7 +124,7 @@ namespace PhoenixAdult.Helpers
             return result;
         }
 
-        public static string GetClearTitle(string title, string siteName)
+        public static string GetClearTitle(string title, string siteName = "")
         {
             if (string.IsNullOrEmpty(title))
             {
