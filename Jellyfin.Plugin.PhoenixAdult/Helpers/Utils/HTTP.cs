@@ -118,6 +118,11 @@ namespace PhoenixAdult.Helpers.Utils
                 }
             }
 
+            if (request.RequestUri.AbsoluteUri == Plugin.Instance.Configuration.DatabaseUpdateURL)
+            {
+                CacheHandler.InvalidateCache(request.RequestUri);
+            }
+
             HttpResponseMessage response = null;
             try
             {
