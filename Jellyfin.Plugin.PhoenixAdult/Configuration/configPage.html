@@ -10,6 +10,12 @@
                 <h1>PhoenixAdult</h1>
                 <p>This metadata agent helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.</p>
                 <form id="phoenixAdultConfigForm">
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableCaching" name="DisableCaching" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Caching</span>
+                        </label>
+                    </div>
                     <div class="inputContainer">
                         <label class="inputLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
                         <input id="FlareSolverrURL" name="FlareSolverrURL" type="text" is="emby-input" />
@@ -120,6 +126,7 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#FlareSolverrURL').val(config.FlareSolverrURL).change();
+                    $('#DisableCaching').prop('checked', config.DisableCaching);
                     $('#ProxyEnable').prop('checked', config.ProxyEnable);
                     $('#ProxyHost').val(config.ProxyHost).change();
                     $('#ProxyPort').val(config.ProxyPort).change();
@@ -144,6 +151,7 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.FlareSolverrURL = $('#FlareSolverrURL').val();
+                    config.DisableCaching = $('#DisableCaching').prop('checked');
                     config.ProxyEnable = $('#ProxyEnable').prop('checked');
                     config.ProxyHost = $('#ProxyHost').val();
                     config.ProxyPort = $('#ProxyPort').val();

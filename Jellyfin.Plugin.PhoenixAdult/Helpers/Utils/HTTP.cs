@@ -45,14 +45,23 @@ namespace PhoenixAdult.Helpers.Utils
                 Proxy = Proxy,
             };
 
-            CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationPerHttpResponseCode);
-
             CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
             {
-                InnerHandler = CacheHandler,
                 MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
                 UserAgent = GetUserAgent(),
             };
+
+            if (!Plugin.Instance.Configuration.DisableCaching)
+            {
+                Logger.Debug("Caching Enabled");
+                CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5)));
+                CloudflareHandler.InnerHandler = CacheHandler;
+            }
+            else
+            {
+                Logger.Debug("Caching Disabled");
+                CloudflareHandler.InnerHandler = HttpHandler;
+            }
 
             Http = new HttpClient(CloudflareHandler)
             {
@@ -65,8 +74,6 @@ namespace PhoenixAdult.Helpers.Utils
         private static IWebProxy Proxy { get; set; }
 
         private static HttpClientHandler HttpHandler { get; set; }
-
-        private static IDictionary<HttpStatusCode, TimeSpan> CacheExpirationPerHttpResponseCode { get; } = CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5));
 
         private static InMemoryCacheHandler CacheHandler { get; set; }
 
@@ -118,7 +125,7 @@ namespace PhoenixAdult.Helpers.Utils
                 }
             }
 
-            if (request.RequestUri.AbsoluteUri == Plugin.Instance.Configuration.DatabaseUpdateURL)
+            if (CacheHandler != null && request.RequestUri.AbsoluteUri == Plugin.Instance.Configuration.DatabaseUpdateURL)
             {
                 CacheHandler.InvalidateCache(request.RequestUri);
             }

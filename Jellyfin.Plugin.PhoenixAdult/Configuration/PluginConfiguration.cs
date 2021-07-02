@@ -32,6 +32,8 @@ namespace PhoenixAdult.Configuration
             this.UID = Guid.NewGuid().ToString();
             this.DisableAnalytics = false;
 
+            this.DisableCaching = false;
+
             this.ProxyEnable = false;
             this.ProxyHost = string.Empty;
             this.ProxyPort = 0;
@@ -65,6 +67,8 @@ namespace PhoenixAdult.Configuration
         public string UID { get; set; }
 
         public bool DisableAnalytics { get; set; }
+
+        public bool DisableCaching { get; set; }
 
         public bool ProxyEnable { get; set; }
 
