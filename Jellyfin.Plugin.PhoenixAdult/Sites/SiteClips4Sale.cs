@@ -42,7 +42,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + $"{studioId}/*/Cat0-AllCategories/Page1/SortBy-bestmatch/Limit50/search/{searchTitle}";
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'clipWrapper')]//section[@class='p-0']");
+            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'clipWrapper')]//section[contains(@id, 'studioListItem')]");
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//h3//a/@href"));
