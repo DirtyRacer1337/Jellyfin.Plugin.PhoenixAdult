@@ -42,13 +42,13 @@ namespace PhoenixAdult.Sites
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@_vkey]");
+                var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@data-video-vkey]");
                 foreach (var searchResult in searchResults)
                 {
                     var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
                     string curID = Helper.Encode(sceneURL.PathAndQuery),
                         sceneName = searchResult.SelectSingleText(".//span[@class='title']"),
-                        scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@thumb_url");
+                        scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@data-thumb_url");
 
                     var res = new RemoteSearchResult
                     {
@@ -84,7 +84,12 @@ namespace PhoenixAdult.Sites
             }
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-            var sceneDataJSON = JObject.Parse(sceneData.SelectSingleText("//script[@type='application/ld+json']"));
+            var json = sceneData.SelectSingleText("//script[@type='application/ld+json']");
+            JObject sceneDataJSON = null;
+            if (!string.IsNullOrEmpty(json))
+            {
+                sceneDataJSON = JObject.Parse(json);
+            }
 
             result.Item.ExternalId = sceneURL;
 
@@ -93,12 +98,15 @@ namespace PhoenixAdult.Sites
             result.Item.AddStudio("Pornhub");
             result.Item.AddStudio(studioName);
 
-            var date = (string)sceneDataJSON["uploadDate"];
-            if (date != null)
+            if (sceneDataJSON != null)
             {
-                if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                var date = (string)sceneDataJSON["uploadDate"];
+                if (date != null)
                 {
-                    result.Item.PremiereDate = sceneDateObj;
+                    if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    {
+                        result.Item.PremiereDate = sceneDateObj;
+                    }
                 }
             }
 
