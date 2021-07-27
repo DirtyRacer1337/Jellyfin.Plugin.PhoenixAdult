@@ -116,8 +116,12 @@ namespace PhoenixAdult.Sites
                 var actor = new PersonInfo
                 {
                     Name = (string)actorLink["name"],
-                    ImageUrl = (string)actorLink["images"]["listing"].First()["highdpi"]["double"],
                 };
+
+                if (actorLink["images"] != null)
+                {
+                    actor.ImageUrl = (string)actorLink["images"]["listing"].First()["highdpi"]["double"];
+                }
 
                 result.People.Add(actor);
             }
