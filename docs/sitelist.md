@@ -123,6 +123,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Caribbeancom | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - CaribbeancomPR
 + #### Clips4Sale | Matching type: *[Exact](./manualsearch.md#exact-match)* - **StudioID with Title Search**
++ #### Data18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviante | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Erotic Spice
