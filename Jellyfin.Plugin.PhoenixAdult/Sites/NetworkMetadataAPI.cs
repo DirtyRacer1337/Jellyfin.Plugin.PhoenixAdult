@@ -43,6 +43,11 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
+            if (searchDate.HasValue)
+            {
+                searchTitle += searchDate.Value.ToString("yyyy-MM-dd");
+            }
+
             string url = Helper.GetSearchSearchURL(siteNum) + $"/scenes?parse={searchTitle}";
             var searchResults = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
             if (searchResults == null)
@@ -50,7 +55,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            foreach (var searchResult in searchResults["data"])
+            foreach (var (idx, searchResult) in searchResults["data"].WithIndex())
             {
                 string curID = (string)searchResult["_id"],
                     sceneName = (string)searchResult["title"],
@@ -62,6 +67,7 @@ namespace PhoenixAdult.Sites
                     ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = sceneName,
                     ImageUrl = scenePoster,
+                    IndexNumberEnd = idx,
                 };
 
                 if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
