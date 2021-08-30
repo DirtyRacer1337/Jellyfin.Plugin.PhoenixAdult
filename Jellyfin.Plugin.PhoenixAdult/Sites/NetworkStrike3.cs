@@ -118,7 +118,7 @@ namespace PhoenixAdult.Sites
                     Name = (string)actorLink["name"],
                 };
 
-                if (actorLink["images"] != null)
+                if (actorLink["images"].Any())
                 {
                     actor.ImageUrl = (string)actorLink["images"]["listing"].First()["highdpi"]["double"];
                 }
