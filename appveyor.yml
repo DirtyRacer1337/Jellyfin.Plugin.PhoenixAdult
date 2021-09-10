@@ -12,7 +12,7 @@ configuration:
   - Release.Emby
 environment:
   access_token:
-    secure: V2LhOMe1kO7BmSuCd+QCtdegI7MBm1QyDvNTVtmO9yZXo4hzaZM8UWg4gunYfLQi
+    secure: OrM94GG/7Vzlg2wZ496z5jHW3PejFKGbxSvmAfNFUpgpsJrqyUoN5FKlZjhssHQl
 before_build:
   - ps: nuget restore
 build:
@@ -63,7 +63,7 @@ deploy:
     release: Nightly Build
     description: Automatically generated release.
     auth_token:
-      secure: V2LhOMe1kO7BmSuCd+QCtdegI7MBm1QyDvNTVtmO9yZXo4hzaZM8UWg4gunYfLQi
+      secure: OrM94GG/7Vzlg2wZ496z5jHW3PejFKGbxSvmAfNFUpgpsJrqyUoN5FKlZjhssHQl
     artifact: 'Jellyfin.Plugin.PhoenixAdult, Emby.Plugins.PhoenixAdult'
     prerelease: true
     force_update: true
