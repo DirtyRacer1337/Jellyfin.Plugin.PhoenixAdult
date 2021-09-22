@@ -358,7 +358,7 @@ namespace PhoenixAdult.Sites
 
             if (sceneData.ContainsKey("pictures"))
             {
-                image = (string)sceneData["pictures"].Last(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                image = (string)sceneData["pictures"].Last(o => !o.ToString().Equals("resized", StringComparison.OrdinalIgnoreCase));
                 imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
 
                 result.Add(new RemoteImageInfo
