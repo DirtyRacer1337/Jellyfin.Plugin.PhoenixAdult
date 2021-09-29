@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="FlareSolverrSharp" Version="1.2.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.37" />
     <PackageReference Include="HttpClient.Caching" Version="1.2.6" />
     <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
