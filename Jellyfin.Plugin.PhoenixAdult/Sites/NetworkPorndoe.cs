@@ -27,7 +27,7 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[@class='-g-vc-grid']/parent::div");
+            var searchResults = data.SelectNodesSafe("//div[@class='global-video-listing']//div[@class='global-video-card']");
             foreach (var searchResult in searchResults)
             {
                 var sceneURL = new Uri(searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@href"));
