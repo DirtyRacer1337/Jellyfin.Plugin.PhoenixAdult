@@ -1,10 +1,38 @@
 using System;
 using System.Text.RegularExpressions;
 
+#if __EMBY__
+using System.Text;
+#endif
+
 internal static class StringExtension
 {
     public static bool Contains(this string source, string toCheck, StringComparison stringComparison)
         => source?.IndexOf(toCheck, stringComparison) >= 0;
+
+#if __EMBY__
+    public static string Replace(this string source, string from, string to, StringComparison stringComparison)
+    {
+        var builder = new StringBuilder();
+
+        var previousIndex = 0;
+        var index = source.IndexOf(from, stringComparison);
+
+        while (index != -1)
+        {
+            builder.Append(source.Substring(previousIndex, index - previousIndex));
+            builder.Append(to);
+            index += from.Length;
+
+            previousIndex = index;
+            index = source.IndexOf(from, index, stringComparison);
+        }
+
+        builder.Append(source.Substring(previousIndex));
+
+        return builder.ToString();
+    }
+#endif
 
     public static string Replace(this string source, string from, string to, int nums, StringComparison stringComparison)
     {
