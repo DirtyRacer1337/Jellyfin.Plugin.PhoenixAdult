@@ -48,7 +48,6 @@ namespace PhoenixAdult.Helpers.Utils
             CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
             {
                 MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
-                UserAgent = GetUserAgent(),
             };
 
             if (!Plugin.Instance.Configuration.DisableCaching)
