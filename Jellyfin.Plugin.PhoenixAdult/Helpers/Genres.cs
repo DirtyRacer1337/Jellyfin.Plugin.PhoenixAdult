@@ -47,9 +47,9 @@ namespace PhoenixAdult.Helpers
                     .Replace(" To ", " to ", StringComparison.OrdinalIgnoreCase)
                     .Trim();
 
-                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase))
+                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase) || genreName.Contains("/", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var genre in genreName.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var genre in genreName.Split(new char[] { ',', '/' }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         var splitedGenre = genre.Trim();
 
