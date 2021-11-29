@@ -155,7 +155,7 @@ namespace PhoenixAdult.Helpers
 
             if ((matched || !clearName.Contains(" ")) && !string.IsNullOrEmpty(clearSite))
             {
-                clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
+                clearName = clearName.Replace(clearSite, string.Empty, 1, StringComparison.OrdinalIgnoreCase);
             }
 
             clearName = string.Join(" ", clearName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
