@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -23,7 +24,16 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
+            var url = Helper.GetSearchBaseURL(siteNum) + $"/tour/sites/{Helper.GetSearchSiteName(siteNum).Replace(" ", string.Empty, StringComparison.OrdinalIgnoreCase)}/{searchTitle.Replace(" ", "_", StringComparison.OrdinalIgnoreCase)}/";
+            var sceneID = new List<string> { Helper.Encode(new Uri(url).AbsolutePath) };
+            var directResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+            if (directResult.Any())
+            {
+                result.AddRange(directResult);
+                return result;
+            }
+
+            url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
             var searchResults = data.SelectNodesSafe("//a[contains(@class, 'thumbnail')]");
