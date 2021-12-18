@@ -41,12 +41,12 @@ namespace PhoenixAdult.ScheduledTasks
 
                 if (token.Contains("."))
                 {
-                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]));
+                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]) ?? Array.Empty<byte>());
                     timestamp = (int)JObject.Parse(token)["exp"];
                 }
                 else
                 {
-                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token));
+                    token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token) ?? Array.Empty<byte>());
                     if (token.Contains("validUntil") && int.TryParse(token.Split("validUntil=")[1].Split("&")[0], out timestamp))
                     {
                     }

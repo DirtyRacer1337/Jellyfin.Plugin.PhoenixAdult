@@ -90,7 +90,7 @@ namespace PhoenixAdult.Helpers
             => Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
 
         public static string Decode(string base64Text)
-            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
+            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text) ?? Array.Empty<byte>());
 
         public static (int[] siteNum, string siteName) GetSiteFromTitle(string title)
         {

@@ -40,7 +40,7 @@ namespace PhoenixAdult.Sites
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],
-                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token));
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token) ?? Array.Empty<byte>());
 
                 if (res.Contains("validUntil") && int.TryParse(res.Split("validUntil=")[1].Split("&")[0], out var timestamp))
                 {
