@@ -16,6 +16,12 @@
                             <span>Disable Caching</span>
                         </label>
                     </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableSSLCheck" name="DisableSSLCheck" type="checkbox" is="emby-checkbox" />
+                            <span>Disable SSL Certificate Check</span>
+                        </label>
+                    </div>
                     <div class="inputContainer">
                         <label class="inputLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
                         <input id="FlareSolverrURL" name="FlareSolverrURL" type="text" is="emby-input" />
@@ -127,6 +133,7 @@
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#FlareSolverrURL').val(config.FlareSolverrURL).change();
                     $('#DisableCaching').prop('checked', config.DisableCaching);
+                    $('#DisableSSLCheck').prop('checked', config.DisableSSLCheck);
                     $('#ProxyEnable').prop('checked', config.ProxyEnable);
                     $('#ProxyHost').val(config.ProxyHost).change();
                     $('#ProxyPort').val(config.ProxyPort).change();
@@ -152,6 +159,7 @@
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.FlareSolverrURL = $('#FlareSolverrURL').val();
                     config.DisableCaching = $('#DisableCaching').prop('checked');
+                    config.DisableSSLCheck = $('#DisableSSLCheck').prop('checked');
                     config.ProxyEnable = $('#ProxyEnable').prop('checked');
                     config.ProxyHost = $('#ProxyHost').val();
                     config.ProxyPort = $('#ProxyPort').val();

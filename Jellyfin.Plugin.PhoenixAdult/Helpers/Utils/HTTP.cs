@@ -45,6 +45,11 @@ namespace PhoenixAdult.Helpers.Utils
                 Proxy = Proxy,
             };
 
+            if (Plugin.Instance.Configuration.DisableSSLCheck)
+            {
+                HttpHandler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, errors) => true;
+            }
+
             CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
             {
                 MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,

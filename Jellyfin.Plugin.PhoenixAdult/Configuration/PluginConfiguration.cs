@@ -33,6 +33,7 @@ namespace PhoenixAdult.Configuration
             this.DisableAnalytics = false;
 
             this.DisableCaching = false;
+            this.DisableSSLCheck = false;
 
             this.ProxyEnable = false;
             this.ProxyHost = string.Empty;
@@ -69,6 +70,8 @@ namespace PhoenixAdult.Configuration
         public bool DisableAnalytics { get; set; }
 
         public bool DisableCaching { get; set; }
+
+        public bool DisableSSLCheck { get; set; }
 
         public bool ProxyEnable { get; set; }
 
