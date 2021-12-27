@@ -15,7 +15,7 @@ namespace PhoenixAdult.Helpers
         {
             var cleanedGenres = new List<string>();
 
-            if (genresLink == null)
+            if (genresLink == null || Plugin.Instance.Configuration.DisableGenres)
             {
                 return cleanedGenres.ToArray();
             }

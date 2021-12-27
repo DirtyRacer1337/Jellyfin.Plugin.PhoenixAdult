@@ -50,6 +50,7 @@ namespace PhoenixAdult.Configuration
             this.MetadataAPIToken = string.Empty;
 
             this.DisableActors = false;
+            this.DisableGenres = false;
             this.DisableImageValidation = false;
             this.DisableImageSize = false;
             this.DisableAutoIdentify = false;
@@ -94,6 +95,8 @@ namespace PhoenixAdult.Configuration
         public string MetadataAPIToken { get; set; }
 
         public bool DisableActors { get; set; }
+
+        public bool DisableGenres { get; set; }
 
         public bool DisableImageValidation { get; set; }
 

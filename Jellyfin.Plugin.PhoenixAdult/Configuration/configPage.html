@@ -76,6 +76,12 @@
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescripton">
                         <label class="emby-checkbox-label">
+                            <input id="DisableGenres" name="DisableGenres" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Genres Saving to Metadata</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
                             <input id="DisableImageValidation" name="DisableImageValidation" type="checkbox" is="emby-checkbox" />
                             <span>Disable Image Validation</span>
                         </label>
@@ -144,6 +150,7 @@
                     $('#UseMetadataAPI').prop('checked', config.UseMetadataAPI);
                     $('#MetadataAPIToken').val(config.MetadataAPIToken).change();
                     $('#DisableActors').prop('checked', config.DisableActors);
+                    $('#DisableGenres').prop('checked', config.DisableGenres);
                     $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
                     $('#DisableImageSize').prop('checked', config.DisableImageSize);
                     $('#DisableAutoIdentify').prop('checked', config.DisableAutoIdentify);
@@ -170,6 +177,7 @@
                     config.MetadataAPIToken = $('#MetadataAPIToken').val();
                     config.UseMetadataAPI = $('#UseMetadataAPI').prop('checked');
                     config.DisableActors = $('#DisableActors').prop('checked');
+                    config.DisableGenres = $('#DisableGenres').prop('checked');
                     config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
                     config.DisableImageSize = $('#DisableImageSize').prop('checked');
                     config.DisableAutoIdentify = $('#DisableAutoIdentify').prop('checked');
