@@ -27,14 +27,14 @@ namespace PhoenixAdult.Sites
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-            var searchResults = data.SelectNodesSafe("//div[contains(@class, 'main-content-videos')]//div[contains(@class, 'card-video')]");
+            var searchResults = data.SelectNodesSafe("//div[@class='global-video-listing']//div[@class='global-video-card']");
             foreach (var searchResult in searchResults)
             {
-                var sceneURL = new Uri(searchResult.SelectSingleText(".//a/@href"));
+                var sceneURL = new Uri(searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@href"));
                 string curID = Helper.Encode(sceneURL.AbsolutePath),
-                    sceneName = searchResult.SelectSingleText(".//a/@aria-label"),
-                    sceneDate = searchResult.SelectSingleText(".//p[contains(@class, 'extra-info') and not(contains(@class, 'actors'))]"),
-                    scenePoster = searchResult.SelectSingleText(".//div[contains(@class, 'thumb')]/@data-bg");
+                    sceneName = searchResult.SelectSingleText(".//a[contains(@class, '-g-vc-title-url')]/@title"),
+                    sceneDate = searchResult.SelectSingleText(".//div[@class='-g-vc-item-date']"),
+                    scenePoster = searchResult.SelectSingleText(".//div[contains(@class, '-g-vc-thumb')]/@data-bg");
 
                 var res = new RemoteSearchResult
                 {
@@ -54,9 +54,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -80,6 +80,11 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='no-space transform-none']");
             result.Item.Overview = sceneData.SelectSingleText("//meta[@name='description']/@content");
             result.Item.AddStudio("Porndoe Premium");
+            var studio = sceneData.SelectSingleText("//div[@class='actors']/h2/a");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var dateNode = sceneData.SelectSingleText("//div[@class='h5 h5-published nowrap color-rgba255-06']");
             if (DateTime.TryParseExact(dateNode.Split("•").Last().Trim(), "MMM dd, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
@@ -95,19 +100,19 @@ namespace PhoenixAdult.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodesSafe("//span[@class='group inline']/a");
+            var actorsNode = sceneData.SelectNodesSafe("//div[@class='actors']//a[contains(@href, '/models/')]");
             foreach (var actorLink in actorsNode)
             {
                 var actorPageURL = actorLink.Attributes["href"].Value;
                 var actorDate = await HTML.ElementFromURL(actorPageURL, cancellationToken).ConfigureAwait(false);
 
-                var actorName = actorDate.SelectSingleText("//div[@data-item='c-13 r-11 m-c-15 / middle']/h1");
+                var actorName = actorLink.SelectSingleText(".//strong");
                 var res = new PersonInfo
                 {
                     Name = actorName,
                 };
 
-                var actorPhoto = actorDate.SelectSingleText("//div[@class='avatar']/picture[2]/img/@data-src");
+                var actorPhoto = actorDate.SelectSingleText("//div[@class='-api-poster-item']//img/@data-src");
                 if (!string.IsNullOrEmpty(actorPhoto))
                 {
                     if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))

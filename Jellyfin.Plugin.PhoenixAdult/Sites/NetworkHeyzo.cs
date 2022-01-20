@@ -76,9 +76,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -100,7 +100,6 @@ namespace PhoenixAdult.Sites
             result.Item.ExternalId = sceneURL;
 
             result.Item.Name = sceneData.SelectSingleText("//h1").Trim().Split("\n").First();
-            result.Item.AddStudio("Heyzo");
 
             foreach (var movieInfo in sceneData.SelectNodesSafe("//table[@class='movieInfo']//tr"))
             {

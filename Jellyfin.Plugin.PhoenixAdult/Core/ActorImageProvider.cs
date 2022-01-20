@@ -24,7 +24,7 @@ namespace PhoenixAdult
 {
     public class ActorImageProvider : IRemoteImageProvider
     {
-        public string Name => Plugin.Instance.Name + "Actor";
+        public string Name => Plugin.Instance.Name;
 
         public static async Task<List<RemoteImageInfo>> GetActorPhotos(string name, CancellationToken cancellationToken)
         {
@@ -67,7 +67,7 @@ namespace PhoenixAdult
             {
                 Logger.Error($"GetActorPhotos error: \"{e}\"");
 
-                await Analitycs.Send(name, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
+                await Analytics.Send(name, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -122,19 +122,19 @@ namespace PhoenixAdult
 
                     if (sceneID.ContainsKey(this.Name))
                     {
-                        var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+                        var provider = Helper.GetProviderBySiteID(siteNum[0]);
                         if (provider != null)
                         {
-                            var imgs = new List<RemoteImageInfo>();
+                            IEnumerable<RemoteImageInfo> imgs = new List<RemoteImageInfo>();
                             try
                             {
-                                imgs = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                                imgs = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
                             }
                             catch (Exception e)
                             {
                                 Logger.Error($"GetImages error: \"{e}\"");
 
-                                await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                                await Analytics.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
                             }
                             finally
                             {
@@ -172,7 +172,7 @@ namespace PhoenixAdult
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 #endif
         {
-            return new Provider(null, Provider.Http).GetImageResponse(url, cancellationToken);
+            return Helper.GetImageResponse(url, cancellationToken);
         }
 
         private static async Task<string> GetFromAdultDVDEmpire(string name, CancellationToken cancellationToken)

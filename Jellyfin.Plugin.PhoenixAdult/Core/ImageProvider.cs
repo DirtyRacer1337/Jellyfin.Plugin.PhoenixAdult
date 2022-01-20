@@ -40,7 +40,7 @@ namespace PhoenixAdult
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
 #endif
         {
-            var images = new List<RemoteImageInfo>();
+            IEnumerable<RemoteImageInfo> images = new List<RemoteImageInfo>();
 
             if (item == null)
             {
@@ -65,13 +65,13 @@ namespace PhoenixAdult
             {
                 try
                 {
-                    images = (List<RemoteImageInfo>)await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
+                    images = await provider.GetImages(siteNum, curID.Skip(2).ToArray(), item, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"GetImages error: \"{e}\"");
 
-                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                    await Analytics.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
                 }
 
                 images = await ImageHelper.GetImagesSizeAndValidate(images, cancellationToken).ConfigureAwait(false);
@@ -86,7 +86,7 @@ namespace PhoenixAdult
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 #endif
         {
-            return new Provider(null, Provider.Http).GetImageResponse(url, cancellationToken);
+            return Helper.GetImageResponse(url, cancellationToken);
         }
     }
 }

@@ -4,11 +4,11 @@ using MediaBrowser.Model.Logging;
 using Microsoft.Extensions.Logging;
 #endif
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Helpers
 {
     internal static class Logger
     {
-        private static ILogger Log { get; } = Provider.Log;
+        private static ILogger Log { get; } = Plugin.Log;
 
         public static void Info(string text)
         {

@@ -15,10 +15,7 @@ namespace PhoenixAdult
         public string Name => Plugin.Instance.Name + " ID";
 #else
         public string ProviderName => Plugin.Instance.Name + " ID";
-#endif
 
-#if __EMBY__
-#else
         public ExternalIdMediaType? Type => ExternalIdMediaType.Movie;
 #endif
 

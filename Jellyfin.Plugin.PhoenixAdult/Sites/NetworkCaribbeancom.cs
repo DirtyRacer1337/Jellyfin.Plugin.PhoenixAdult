@@ -90,9 +90,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -115,7 +115,6 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'heading')]//h1");
             result.Item.Overview = sceneData.SelectSingleText("//p[@itemprop='description']");
-            result.Item.AddStudio("Caribbeancom");
 
             var movieSpecNodes = sceneData.SelectNodesSafe("//li[@class='movie-spec' or @class='movie-detail__spec']");
             foreach (var movieSpec in movieSpecNodes)

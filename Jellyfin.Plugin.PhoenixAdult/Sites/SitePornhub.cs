@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -42,13 +43,13 @@ namespace PhoenixAdult.Sites
                 var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
                 var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
-                var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@_vkey]");
+                var searchResults = data.SelectNodesSafe("//ul[@id='videoSearchResult']/li[@data-video-vkey]");
                 foreach (var searchResult in searchResults)
                 {
                     var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + searchResult.SelectSingleText(".//a/@href"));
                     string curID = Helper.Encode(sceneURL.PathAndQuery),
                         sceneName = searchResult.SelectSingleText(".//span[@class='title']"),
-                        scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@thumb_url");
+                        scenePoster = searchResult.SelectSingleText(".//div[@class='phimage']//img/@data-thumb_url");
 
                     var res = new RemoteSearchResult
                     {
@@ -64,9 +65,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -83,21 +84,35 @@ namespace PhoenixAdult.Sites
                 sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
-            var sceneDataJSON = JObject.Parse(sceneData.SelectSingleText("//script[@type='application/ld+json']"));
+            var http = await HTTP.Request(sceneURL, HttpMethod.Post, cancellationToken).ConfigureAwait(false);
+            var sceneData = HTML.ElementFromStream(http.ContentStream);
+            var json = sceneData.SelectSingleText("//script[@type='application/ld+json']");
+            JObject sceneDataJSON = null;
+            if (!string.IsNullOrEmpty(json))
+            {
+                sceneDataJSON = JObject.Parse(json);
+            }
 
             result.Item.ExternalId = sceneURL;
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='title']");
             var studioName = sceneData.SelectSingleText("//div[@class='userInfo']//a");
-            result.Item.AddStudio(studioName);
+            result.Item.AddStudio("Pornhub");
 
-            var date = (string)sceneDataJSON["uploadDate"];
-            if (date != null)
+            if (!string.IsNullOrEmpty(studioName))
             {
-                if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                result.Item.AddStudio(studioName);
+            }
+
+            if (sceneDataJSON != null)
+            {
+                var date = (string)sceneDataJSON["uploadDate"];
+                if (date != null)
                 {
-                    result.Item.PremiereDate = sceneDateObj;
+                    if (DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
+                    {
+                        result.Item.PremiereDate = sceneDateObj;
+                    }
                 }
             }
 
@@ -140,7 +155,8 @@ namespace PhoenixAdult.Sites
                 sceneURL = Helper.GetSearchBaseURL(siteNum) + sceneURL;
             }
 
-            var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
+            var http = await HTTP.Request(sceneURL, HttpMethod.Post, cancellationToken).ConfigureAwait(false);
+            var sceneData = HTML.ElementFromStream(http.ContentStream);
 
             var img = sceneData.SelectSingleText("//div[@id='player']//img/@src");
             if (!string.IsNullOrEmpty(img))

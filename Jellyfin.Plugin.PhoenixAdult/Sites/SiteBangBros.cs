@@ -54,9 +54,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -80,6 +80,11 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//h1");
             result.Item.Overview = sceneData.SelectSingleText("//div[@class='vdoDesc']");
             result.Item.AddStudio("Bang Bros");
+            var studio = sceneData.SelectSingleText("//a[contains(@href, '/websites') and not(@class)]");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var dateNode = sceneData.SelectSingleText("//span[contains(@class, 'thmb_mr_2')]");
             if (DateTime.TryParseExact(dateNode, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

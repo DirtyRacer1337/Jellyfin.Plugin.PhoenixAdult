@@ -4,8 +4,13 @@
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)$(AssemblyName).dll" />
       <InputAssemblies Include="$(OutputPath)HtmlAgilityPack.dll" />
-      <InputAssemblies Include="$(OutputPath)Newtonsoft.Json.dll" Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'" />
       <InputAssemblies Include="$(OutputPath)FlareSolverrSharp.dll" />
+      <InputAssemblies Include="$(OutputPath)HttpClient.Caching.dll" />
+      <InputAssemblies Include="$(OutputPath)MihaZupan.HttpToSocks5Proxy.dll" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
+      <InputAssemblies Include="$(OutputPath)Newtonsoft.Json.dll" />
     </ItemGroup>
 
     <ILRepack

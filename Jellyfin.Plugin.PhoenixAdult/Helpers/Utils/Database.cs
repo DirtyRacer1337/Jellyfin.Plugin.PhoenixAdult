@@ -59,6 +59,10 @@ namespace PhoenixAdult.Helpers.Utils
         private static void Load(string fileName)
         {
             var encoding = new UTF8Encoding(false);
+            var serializer = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.None,
+            };
 
             var filePath = Path.Combine(DatabasePath, fileName);
             if (File.Exists(filePath))
@@ -67,15 +71,15 @@ namespace PhoenixAdult.Helpers.Utils
                 switch (fileName)
                 {
                     case "SiteList.json":
-                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data);
+                        SiteList = JsonConvert.DeserializeObject<SiteListStructure>(data, serializer);
                         break;
 
                     case "Actors.json":
-                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data);
+                        Actors = JsonConvert.DeserializeObject<ActorsStructure>(data, serializer);
                         break;
 
                     case "Genres.json":
-                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data);
+                        Genres = JsonConvert.DeserializeObject<GenresStructure>(data, serializer);
                         break;
 
                     default:

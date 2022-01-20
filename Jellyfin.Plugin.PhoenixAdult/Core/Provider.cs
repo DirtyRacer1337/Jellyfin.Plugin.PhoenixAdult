@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
@@ -13,41 +14,19 @@ using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
-using MediaBrowser.Model.Logging;
 #else
+using System.IO;
 using System.Net.Http;
-using Microsoft.Extensions.Logging;
 #endif
 
 namespace PhoenixAdult
 {
     public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
-#if __EMBY__
-        public Provider(ILogManager logger, IHttpClient http)
+        public Provider()
         {
-            if (logger != null)
-            {
-                Log = logger.GetLogger(this.Name);
-            }
-
-            Http = http;
-        }
-
-        public static IHttpClient Http { get; set; }
-#else
-        public Provider(ILogger<Provider> logger, IHttpClientFactory http)
-        {
-            Log = logger;
-            Http = http;
-
             Database.LoadAll();
         }
-
-        public static IHttpClientFactory Http { get; set; }
-#endif
-
-        public static ILogger Log { get; set; }
 
         public string Name => Plugin.Instance.Name;
 
@@ -55,15 +34,40 @@ namespace PhoenixAdult
         {
             var result = new List<RemoteSearchResult>();
 
-            if (searchInfo == null)
+            if (searchInfo == null || string.IsNullOrEmpty(searchInfo.Name))
             {
                 return result;
             }
 
             Logger.Info($"searchInfo.Name: {searchInfo.Name}");
 
-            var title = Helper.ReplaceAbbrieviation(searchInfo.Name);
-            var site = Helper.GetSiteFromTitle(title);
+            var title = string.Empty;
+            (int[] siteNum, string siteName) site = (null, null);
+
+#if __EMBY__
+#else
+            if (!string.IsNullOrEmpty(searchInfo.Path) && Plugin.Instance.Configuration.UseFilePath)
+            {
+                Logger.Info($"searchInfo.Path: {searchInfo.Path}");
+                var path = Path.Combine(Path.GetDirectoryName(searchInfo.Path), Path.GetFileNameWithoutExtension(searchInfo.Path));
+                foreach (var name in path.Split(Path.DirectorySeparatorChar).Reverse())
+                {
+                    title = $"{name} {title}";
+                    site = Helper.GetSiteFromTitle(name);
+                    if (site.siteNum != null)
+                    {
+                        break;
+                    }
+                }
+            }
+#endif
+
+            if (site.siteNum == null)
+            {
+                title = Helper.ReplaceAbbrieviation(searchInfo.Name);
+                site = Helper.GetSiteFromTitle(title);
+            }
+
             if (site.siteNum == null)
             {
                 string newTitle;
@@ -136,7 +140,7 @@ namespace PhoenixAdult
                 {
                     Logger.Error($"Search error: \"{e}\"");
 
-                    await Analitycs.Send(searchInfo.Name, site.siteNum, site.siteName, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analytics.Send(searchInfo.Name, site.siteNum, site.siteName, searchTitle, searchDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
                 if (result.Any())
@@ -161,7 +165,7 @@ namespace PhoenixAdult
                     }
                     else
                     {
-                        result = result.OrderByDescending(o => 100 - LevenshteinDistance.Calculate(searchTitle, o.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                        result = result.OrderByDescending(o => 100 - LevenshteinDistance.Calculate(searchTitle, Helper.GetClearTitle(o.Name), StringComparison.OrdinalIgnoreCase)).ToList();
                     }
                 }
             }
@@ -199,7 +203,7 @@ namespace PhoenixAdult
                 curID = externalID.Split('#');
             }
 
-            if (!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3)
+            if ((!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3) && !Plugin.Instance.Configuration.DisableAutoIdentify)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
@@ -234,20 +238,27 @@ namespace PhoenixAdult
             {
                 Logger.Info($"PhoenixAdult ID: {externalID}");
 
+                MetadataResult<BaseItem> res = null;
                 try
                 {
-                    result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
+                    res = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Update error: \"{e}\"");
 
-                    await Analitycs.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, premiereDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analytics.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), info.Name, premiereDateObj, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
-                if (!string.IsNullOrEmpty(result.Item.Name))
+                if (res != null)
                 {
                     result.HasMetadata = true;
+                    result.Item = (Movie)res.Item;
+                    result.People = res.People;
+                }
+
+                if (result.HasMetadata)
+                {
                     result.Item.OfficialRating = "XXX";
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
 
@@ -258,13 +269,18 @@ namespace PhoenixAdult
                         result.Item.Overview = HttpUtility.HtmlDecode(result.Item.Overview).Trim();
                     }
 
+                    result.Item.AddStudio(Helper.GetSearchSiteName(siteNum));
                     var newStudios = new List<string>();
                     foreach (var studio in result.Item.Studios)
                     {
                         var studioName = studio.Trim();
-                        studioName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(studioName);
 
-                        if (!newStudios.Contains(studioName))
+                        if (studioName.All(char.IsLower))
+                        {
+                            studioName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(studioName);
+                        }
+
+                        if (!newStudios.Contains(studioName, StringComparer.OrdinalIgnoreCase))
                         {
                             newStudios.Add(studioName);
                         }
@@ -304,23 +320,11 @@ namespace PhoenixAdult
 
 #if __EMBY__
         public Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
-        {
-            return Http.GetResponse(new HttpRequestOptions
-            {
-                CancellationToken = cancellationToken,
-                Url = url,
-                EnableDefaultUserAgent = false,
-                UserAgent = HTTP.GetUserAgent(),
-            });
-        }
 #else
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.TryAddWithoutValidation("User-Agent", HTTP.GetUserAgent());
-
-            return Http.CreateClient().SendAsync(request, cancellationToken);
-        }
 #endif
+        {
+            return Helper.GetImageResponse(url, cancellationToken);
+        }
     }
 }

@@ -10,6 +10,12 @@ using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers.Utils;
 
+#if __EMBY__
+using MediaBrowser.Common.Net;
+#else
+using System.Net.Http;
+#endif
+
 namespace PhoenixAdult.Helpers
 {
     internal static class Helper
@@ -84,7 +90,7 @@ namespace PhoenixAdult.Helpers
             => Base58.EncodePlain(Encoding.UTF8.GetBytes(text));
 
         public static string Decode(string base64Text)
-            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text));
+            => Encoding.UTF8.GetString(Base58.DecodePlain(base64Text) ?? Array.Empty<byte>());
 
         public static (int[] siteNum, string siteName) GetSiteFromTitle(string title)
         {
@@ -118,7 +124,7 @@ namespace PhoenixAdult.Helpers
             return result;
         }
 
-        public static string GetClearTitle(string title, string siteName)
+        public static string GetClearTitle(string title, string siteName = "")
         {
             if (string.IsNullOrEmpty(title))
             {
@@ -149,7 +155,7 @@ namespace PhoenixAdult.Helpers
 
             if ((matched || !clearName.Contains(" ")) && !string.IsNullOrEmpty(clearSite))
             {
-                clearName = clearName.Replace(clearSite, string.Empty, StringComparison.OrdinalIgnoreCase);
+                clearName = clearName.Replace(clearSite, string.Empty, 1, StringComparison.OrdinalIgnoreCase);
             }
 
             clearName = string.Join(" ", clearName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
@@ -177,6 +183,8 @@ namespace PhoenixAdult.Helpers
                     {
                         searchDate = searchDateObj.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                         searchTitle = Regex.Replace(searchTitle, regExRule.Key, string.Empty).Trim();
+
+                        searchTitle = string.Join(" ", searchTitle.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
 
                         searchData = (searchTitle, searchDateObj);
                         break;
@@ -216,16 +224,6 @@ namespace PhoenixAdult.Helpers
             return null;
         }
 
-        public static IProviderBaseActor GetActorProviderBySiteID(int siteID)
-        {
-            if (Database.SiteList.SiteIDList != null && Database.SiteList.SiteIDList.ContainsKey(siteID))
-            {
-                return GetActorBaseSiteByName(Database.SiteList.SiteIDList[siteID]);
-            }
-
-            return null;
-        }
-
         public static IProviderBase GetBaseSiteByName(string name)
         {
             name = $"{typeof(Plugin).Namespace}.Sites.{name}";
@@ -234,19 +232,6 @@ namespace PhoenixAdult.Helpers
             if (provider != null)
             {
                 return (IProviderBase)Activator.CreateInstance(provider);
-            }
-
-            return null;
-        }
-
-        public static IProviderBaseActor GetActorBaseSiteByName(string name)
-        {
-            name = $"{typeof(Plugin).Namespace}.Sites.{name}";
-            var provider = Type.GetType(name, false, true);
-
-            if (provider != null)
-            {
-                return (IProviderBaseActor)Activator.CreateInstance(provider);
             }
 
             return null;
@@ -299,6 +284,13 @@ namespace PhoenixAdult.Helpers
             {
                 searchTitle = $"JAV {splitedTitle[0]}-{splitedTitle[1]}";
             }
+            else
+            {
+                if (Plugin.Instance.Configuration.UseMetadataAPI && !string.IsNullOrEmpty(Plugin.Instance.Configuration.MetadataAPIToken))
+                {
+                    searchTitle = $"MetadataAPI {searchTitle}";
+                }
+            }
 
             return searchTitle;
         }
@@ -325,5 +317,26 @@ namespace PhoenixAdult.Helpers
                 return null;
             }
         }
+
+#if __EMBY__
+        public static Task<HttpResponseInfo> GetImageResponse(string url, CancellationToken cancellationToken)
+        {
+            return Plugin.Http.GetResponse(new HttpRequestOptions
+            {
+                CancellationToken = cancellationToken,
+                Url = url,
+                EnableDefaultUserAgent = false,
+                UserAgent = HTTP.GetUserAgent(),
+            });
+        }
+#else
+        public static Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.TryAddWithoutValidation("User-Agent", HTTP.GetUserAgent());
+
+            return Plugin.Http.CreateClient().SendAsync(request, cancellationToken);
+        }
+#endif
     }
 }

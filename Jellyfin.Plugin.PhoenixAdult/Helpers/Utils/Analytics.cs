@@ -9,11 +9,13 @@ using PhoenixAdult.Configuration;
 
 namespace PhoenixAdult.Helpers.Utils
 {
-    internal static class Analitycs
+    internal static class Analytics
     {
         public static readonly string LogsPath = Path.Combine(Plugin.Instance.DataFolderPath, "logs");
 
-        private static AnalitycsStructure AnalitycsData { get; set; }
+        private static AnalyticsStructure AnalyticsData { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "For future")]
 
         public static async Task Send(string request, int[] siteNum, string siteName, string searchTitle, DateTime? searchDate, string providerName, Exception e, CancellationToken cancellationToken)
         {
@@ -21,14 +23,14 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 if (!Directory.Exists(LogsPath))
                 {
-                    Logger.Info($"Creating analitycs directory \"{LogsPath}\"");
+                    Logger.Info($"Creating analytics directory \"{LogsPath}\"");
                     Directory.CreateDirectory(LogsPath);
                 }
 
                 var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}.json.gz";
                 fileName = Path.Combine(LogsPath, fileName);
 
-                AnalitycsData = new AnalitycsStructure
+                AnalyticsData = new AnalyticsStructure
                 {
                     User = new UserStructure
                     {
@@ -52,7 +54,7 @@ namespace PhoenixAdult.Helpers.Utils
                     },
                 };
 
-                var json = JsonConvert.SerializeObject(AnalitycsData, new JsonSerializerSettings
+                var json = JsonConvert.SerializeObject(AnalyticsData, new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                 });
@@ -66,7 +68,7 @@ namespace PhoenixAdult.Helpers.Utils
             }
         }
 
-        public struct AnalitycsStructure
+        public struct AnalyticsStructure
         {
             public UserStructure User { get; set; }
 

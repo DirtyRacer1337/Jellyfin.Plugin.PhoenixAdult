@@ -40,7 +40,7 @@ namespace PhoenixAdult.Sites
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],
-                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token));
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token) ?? Array.Empty<byte>());
 
                 if (res.Contains("validUntil") && int.TryParse(res.Split("validUntil=")[1].Split("&")[0], out var timestamp))
                 {
@@ -180,7 +180,7 @@ namespace PhoenixAdult.Sites
 
                     if (searchResult.ContainsKey("pictures"))
                     {
-                        var images = searchResult["pictures"].Where(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                        var images = searchResult["pictures"].Where(o => o.Type == JTokenType.Property);
                         if (images.Any())
                         {
                             res.ImageUrl = $"https://images-fame.gammacdn.com/movies/{(string)images.Last()}";
@@ -194,9 +194,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -249,6 +249,10 @@ namespace PhoenixAdult.Sites
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
             result.Item.AddStudio((string)sceneData["network_name"]);
+            if (sceneData.ContainsKey("studio_name"))
+            {
+                result.Item.AddStudio((string)sceneData["studio_name"]);
+            }
 
             if (DateTime.TryParseExact(sceneID[2], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))
             {
@@ -354,7 +358,7 @@ namespace PhoenixAdult.Sites
 
             if (sceneData.ContainsKey("pictures"))
             {
-                image = (string)sceneData["pictures"].Last(o => !o.ToString().Contains("resized", StringComparison.OrdinalIgnoreCase));
+                image = (string)sceneData["pictures"].Last(o => !o.ToString().Equals("resized", StringComparison.OrdinalIgnoreCase));
                 imageURL = $"https://images-fame.gammacdn.com/movies/{image}";
 
                 result.Add(new RemoteImageInfo

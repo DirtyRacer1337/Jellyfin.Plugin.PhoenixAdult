@@ -90,9 +90,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -119,6 +119,10 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["synopsis"];
             result.Item.AddStudio("Naughty America");
+            if (sceneData.ContainsKey("site"))
+            {
+                result.Item.AddStudio((string)sceneData["site"]);
+            }
 
             var sceneDateObj = DateTimeOffset.FromUnixTimeSeconds((long)sceneData["published_at"]);
             result.Item.PremiereDate = sceneDateObj.DateTime;

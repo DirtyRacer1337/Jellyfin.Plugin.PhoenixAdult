@@ -12,17 +12,14 @@ namespace PhoenixAdult
     public class ExternalIdActor : IExternalId
     {
 #if __EMBY__
-        public string Name => Plugin.Instance.Name + " ID Actor";
+        public string Name => Plugin.Instance.Name + " ID";
 #else
         public string ProviderName => Plugin.Instance.Name + " ID";
-#endif
 
-#if __EMBY__
-#else
         public ExternalIdMediaType? Type => ExternalIdMediaType.Person;
 #endif
 
-        public string Key => Plugin.Instance.Name + "Actor";
+        public string Key => Plugin.Instance.Name;
 
         public string UrlFormatString => null;
 

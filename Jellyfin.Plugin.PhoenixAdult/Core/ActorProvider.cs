@@ -22,13 +22,13 @@ namespace PhoenixAdult
 {
     public class ActorProvider : IRemoteMetadataProvider<Person, PersonLookupInfo>
     {
-        public string Name => Plugin.Instance.Name + "Actor";
+        public string Name => Plugin.Instance.Name;
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(PersonLookupInfo searchInfo, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
-            if (searchInfo == null)
+            if (searchInfo == null || searchInfo.ProviderIds.Any(o => !string.IsNullOrEmpty(o.Value)))
             {
                 return result;
             }
@@ -44,20 +44,30 @@ namespace PhoenixAdult
                 Logger.Info($"site: {site.siteNum[0]}:{site.siteNum[1]} ({site.siteName})");
                 Logger.Info($"actorName: {actorName}");
 
-                var provider = Helper.GetActorProviderBySiteID(site.siteNum[0]);
+                DateTime? searchDateObj = null;
+                if (searchInfo.PremiereDate.HasValue)
+                {
+#if __EMBY__
+                    searchDateObj = searchInfo.PremiereDate.Value.DateTime;
+#else
+                    searchDateObj = searchInfo.PremiereDate.Value;
+#endif
+                }
+
+                var provider = Helper.GetProviderBySiteID(site.siteNum[0]);
                 if (provider != null)
                 {
                     Logger.Info($"provider: {provider}");
 
                     try
                     {
-                        result = await provider.Search(site.siteNum, actorName, cancellationToken).ConfigureAwait(false);
+                        result = await provider.Search(site.siteNum, actorName, searchDateObj, cancellationToken).ConfigureAwait(false);
                     }
                     catch (Exception e)
                     {
                         Logger.Error($"Actor Search error: \"{e}\"");
 
-                        await Analitycs.Send(title, site.siteNum, site.siteName, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                        await Analytics.Send(title, site.siteNum, site.siteName, actorName, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                     }
 
                     if (result.Any())
@@ -98,7 +108,7 @@ namespace PhoenixAdult
                 curID = externalID.Split('#');
             }
 
-            if (!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3)
+            if ((!sceneID.ContainsKey(this.Name) || curID == null || curID.Length < 3) && !Plugin.Instance.Configuration.DisableAutoIdentify)
             {
                 var searchResults = await this.GetSearchResults(info, cancellationToken).ConfigureAwait(false);
                 if (searchResults.Any())
@@ -117,25 +127,31 @@ namespace PhoenixAdult
 
             var siteNum = new int[2] { int.Parse(curID[0], CultureInfo.InvariantCulture), int.Parse(curID[1], CultureInfo.InvariantCulture) };
 
-            var provider = Helper.GetActorProviderBySiteID(siteNum[0]);
+            var provider = Helper.GetProviderBySiteID(siteNum[0]);
             if (provider != null)
             {
                 Logger.Info($"PhoenixAdult Actor ID: {externalID}");
 
+                MetadataResult<BaseItem> res = null;
                 try
                 {
-                    result = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
+                    res = await provider.Update(siteNum, curID.Skip(2).ToArray(), cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Actor Update error: \"{e}\"");
 
-                    await Analitycs.Send(externalID, null, null, info.Name, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
+                    await Analytics.Send(externalID, null, null, info.Name, null, provider.ToString(), e, cancellationToken).ConfigureAwait(false);
                 }
 
-                if (!string.IsNullOrEmpty(result.Item.ExternalId))
+                if (res != null)
                 {
                     result.HasMetadata = true;
+                    result.Item = (Person)res.Item;
+                }
+
+                if (result.HasMetadata)
+                {
                     result.Item.ProviderIds.Update(this.Name, sceneID[this.Name]);
                     result.Item.ProviderIds.Update(this.Name + "URL", result.Item.ExternalId);
 
@@ -196,7 +212,7 @@ namespace PhoenixAdult
         public Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
 #endif
         {
-            return new Provider(null, Provider.Http).GetImageResponse(url, cancellationToken);
+            return Helper.GetImageResponse(url, cancellationToken);
         }
     }
 }

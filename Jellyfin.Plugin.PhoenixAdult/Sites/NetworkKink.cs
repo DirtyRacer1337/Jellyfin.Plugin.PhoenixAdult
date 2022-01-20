@@ -16,6 +16,50 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkKink : IProviderBase
     {
+        private static readonly IDictionary<string, string> ChannelsList = new Dictionary<string, string>
+        {
+            { "30minutesoftorment", "30 Minutes of Torment" },
+            { "boundgangbangs", "Bound Gangbangs" },
+            { "boundgods", "Bound Gods" },
+            { "boundinpublic", "Bound in Public" },
+            { "brutalsessions", "Brutal Sessions" },
+            { "buttmachineboys", "Butt Machine Boys" },
+            { "captivemale", "Captive Male" },
+            { "chantasbitches", "Chantas Bitches" },
+            { "devicebondage", "Device Bondage" },
+            { "divinebitches", "Divine Bitches" },
+            { "electrosluts", "Electrosluts" },
+            { "everythingbutt", "Everything Butt" },
+            { "familiestied", "Families Tied" },
+            { "fetishnetwork", "Fetish Network" },
+            { "fetishnetworkmale", "Fetish Network Male" },
+            { "filthyfemdom", "Filthy Femdom" },
+            { "footworship", "Foot Worship" },
+            { "fuckedandbound", "Fucked and Bound" },
+            { "fuckingmachines", "Fucking Machines" },
+            { "hardcoregangbang", "Hardcore Gangbang" },
+            { "hogtied", "Hogtied" },
+            { "kinkfeatures", "Kink Features" },
+            { "kinkuniversity", "Kink University" },
+            { "meninpain", "Men in Pain" },
+            { "menonedge", "Men on Edge" },
+            { "nakedkombat", "Naked Kombat" },
+            { "publicdisgrace", "Public Disgrace" },
+            { "sadisticrope", "Sadistic Rope" },
+            { "sexandsubmission", "Sex and Submission" },
+            { "sexualdisgrace", "Sexual Disgrace" },
+            { "straponsquad", "Strapon Squad" },
+            { "submissivex", "SubmissiveX" },
+            { "thetrainingofo", "The Training of O" },
+            { "theupperfloor", "The Upper Floor" },
+            { "tspussyhunters", "TS Pussy Hunters" },
+            { "tsseduction", "TS Seduction" },
+            { "ultimatesurrender", "Ultimate Surrender" },
+            { "waterbondage", "Water Bondage" },
+            { "whippedass", "Whipped Ass" },
+            { "wiredpussy", "Wired Pussy" },
+        };
+
         private readonly IDictionary<string, string> cookies = new Dictionary<string, string>
         {
             { "viewing-preferences", "straight%2Cgay" },
@@ -74,9 +118,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -100,6 +144,14 @@ namespace PhoenixAdult.Sites
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='shoot-title']/text()");
             result.Item.Overview = sceneData.SelectSingleText("//*[@class='description-text']");
             result.Item.AddStudio("Kink");
+            var channel = sceneData.SelectSingleText("//div[contains(@class, 'shoot-logo')]//a/@href").Split("/").Last();
+            if (!string.IsNullOrEmpty(channel))
+            {
+                if (ChannelsList.ContainsKey(channel))
+                {
+                    result.Item.AddStudio(ChannelsList[channel]);
+                }
+            }
 
             var sceneDate = sceneData.SelectSingleText("//span[@class='shoot-date']");
             if (DateTime.TryParseExact(sceneDate, "MMMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

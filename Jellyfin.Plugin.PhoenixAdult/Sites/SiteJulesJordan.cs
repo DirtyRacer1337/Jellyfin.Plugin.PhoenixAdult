@@ -73,9 +73,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -130,22 +130,28 @@ namespace PhoenixAdult.Sites
                 var actorPhotoNode = actorPage.SelectSingleNode("//img[contains(@class, 'model_bio_thumb')]");
                 if (actorPhotoNode != null)
                 {
-                    string actorPhoto;
+                    string actorPhoto = string.Empty;
                     if (actorPhotoNode.Attributes.Contains("src0_3x"))
                     {
                         actorPhoto = actorPhotoNode.Attributes["src0_3x"].Value;
                     }
                     else
                     {
-                        actorPhoto = actorPhotoNode.Attributes["src0"].Value;
+                        if (actorPhotoNode.Attributes.Contains("src0"))
+                        {
+                            actorPhoto = actorPhotoNode.Attributes["src0"].Value;
+                        }
                     }
 
-                    if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    if (!string.IsNullOrEmpty(actorPhoto))
                     {
-                        actorPhoto = Helper.GetSearchBaseURL(siteNum) + actorPhoto;
-                    }
+                        if (!actorPhoto.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            actorPhoto = Helper.GetSearchBaseURL(siteNum) + actorPhoto;
+                        }
 
-                    actor.ImageUrl = actorPhoto;
+                        actor.ImageUrl = actorPhoto;
+                    }
                 }
 
                 result.People.Add(actor);

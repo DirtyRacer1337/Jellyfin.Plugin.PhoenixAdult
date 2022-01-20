@@ -89,6 +89,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Tugjobs
   - Working Latinas
 + #### Bang! | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Blowpass | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Brazzers Network: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Asses In Public
   - Baby Got Boobs
@@ -98,6 +99,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Big Tits in Sports
   - Big Tits in Uniform
   - Big Wet Butts
+  - Brazzers Exxtra
   - Busty and Real
   - Busty Z
   - Butts and Blacks
@@ -105,7 +107,6 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Day With A Porn Star
   - Dirty Masseur
   - Doctor Adventures
-  - Exxtra
   - Hot and Mean
   - Hot Chicks Big Asses
   - Milfs Like It Big
@@ -121,7 +122,15 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### BurningAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Caribbeancom | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - CaribbeancomPR
++ #### Clips4Sale | Matching type: *[Exact](./manualsearch.md#exact-match)* - **StudioID with Title Search**
++ #### Data18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Deviante | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Erotic Spice
+  - Forgive Me Father
+  - Love Her Ass
+  - Pretty Dirty Teens
+  - Sex Working
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Dogfart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
@@ -176,7 +185,9 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - WebYoung
   - WeLikeGirls
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### HentaiPros | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Heyzo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Immoral Live | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
 + #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
   - GirlGirl
@@ -224,6 +235,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Kinky Spa | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### LegalPorno | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### ManyVids | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID, Date Add**
++ #### MetadataAPI | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - DoghouseDigital
   - RealityJunkies
@@ -235,21 +248,28 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Bi Empire
   - FamilySinners
   - Transsensual
++ #### Milfed | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Busted Babysitters
   - Don't Break Me
+  - Ebony Sex Tapes
   - Girls Gone Pink
   - I Know That Girl
-  - Latina Sextapes
+  - Latina Sex Tapes
   - Let's Try Anal
-  - Mofos
+  - Milfs Like It Black
   - Mofos B Sides
   - Mofos Lab
   - Pervs On Patrol
+  - Pornstar Vote
+  - Project RV
   - Public Pickups
   - Real Slut Party
   - Share My BF
-  - She's A Freak
+  - Shes a Freak
   - Stranded Teens
+  - The Sex Scout
++ #### Mommy Blows Best | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mylf Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **Date Add**
   - Anal Mom
   - Full Of JOI
@@ -278,6 +298,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Mylfwood
   - Shoplyfter Mylf
   - StayHomeMilf
++ #### Only Teen Blowjobs | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PornCZ | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* **Date Add**
   - Amateri Premium
   - Amateurs From Bohemia
@@ -482,6 +503,19 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Step Siblings Caught
   - Teacher Fucks Teens
   - That Sitcom Show
++ #### PornPortal | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 3dxstar Channel PornPortal
+  - Anal Channel PornPortal
+  - BBW Channel PornPortal
+  - Cosplay Channel PornPortal
+  - Ebony Channel PornPortal
+  - Latina Channel PornPortal
+  - Lesbian Channel PornPortal
+  - Milf Channel PornPortal
+  - RealityGang Channel PornPortal
+  - Stepfamily Channel PornPortal
+  - Teen Channel PornPortal
+  - VR Channel PornPortal
 + #### PropertySex | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PureTaboo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### R18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* - **SceneID (in form of JAVID)**
@@ -585,6 +619,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Thickumz
   - This Girl Sucks
   - Titty Attack
++ #### Throated | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Dane Jones
   - Fitness Rooms
@@ -607,6 +642,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Twistys
   - TwistysHard
   - WhenGirlsPlay
++ #### Why Not Bi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Wicked | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 
 ## Adding sites to this list
 When this plugin is inevitably updated to add or update a sites' types of searching, you can use the below markdown formatting in a PR to easily add the site in question here

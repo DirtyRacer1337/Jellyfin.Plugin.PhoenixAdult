@@ -78,9 +78,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -103,6 +103,11 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//h1[@class='watchpage-title']");
             result.Item.AddStudio("LegalPorno");
+            var studio = sceneData.SelectSingleText("//a[@class='watchpage-studioname']/text()");
+            if (!string.IsNullOrEmpty(studio))
+            {
+                result.Item.AddStudio(studio);
+            }
 
             var sceneDate = sceneData.SelectSingleText("//span[@class='scene-description__detail']//a");
             if (DateTime.TryParseExact(sceneDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var sceneDateObj))

@@ -10,18 +10,74 @@
                 <h1>PhoenixAdult</h1>
                 <p>This metadata agent helps fill Jellyfin/Emby with information for your adult videos by pulling from the original site.</p>
                 <form id="phoenixAdultConfigForm">
-                    <div class="inputContainer">
-                        <label class="inputeLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
-                        <input id="FlareSolverrURL" name="FlareSolverrURL" type="text" is="emby-input" />
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableCaching" name="DisableCaching" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Caching</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableSSLCheck" name="DisableSSLCheck" type="checkbox" is="emby-checkbox" />
+                            <span>Disable SSL Certificate Check</span>
+                        </label>
                     </div>
                     <div class="inputContainer">
-                        <label class="inputeLabel inputLabelUnfocused" for="DefaultSiteName">Default SiteName</label>
+                        <label class="inputLabel inputLabelUnfocused" for="FlareSolverrURL">FlareSolverr URL</label>
+                        <input id="FlareSolverrURL" name="FlareSolverrURL" type="text" is="emby-input" />
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="ProxyEnable" name="ProxyEnable" type="checkbox" is="emby-checkbox" />
+                            <span>Proxy Enable</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyHost">Proxy Host</label>
+                        <input id="ProxyHost" name="ProxyHost" type="text" is="emby-input" min="0" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyPort">Proxy Port</label>
+                        <input id="ProxyPort" name="ProxyPort" type="number" is="emby-input" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyLogin">Proxy Login</label>
+                        <input id="ProxyLogin" name="ProxyLogin" type="text" is="emby-input" />
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="ProxyPassword">Proxy Password</label>
+                        <input id="ProxyPassword" name="ProxyPassword" type="text" is="emby-input" />
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="UseFilePath" name="UseFilePath" type="checkbox" is="emby-checkbox" />
+                            <span>Use FilePath for matching</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="DefaultSiteName">Default SiteName</label>
                         <input id="DefaultSiteName" name="DefaultSiteName" type="text" is="emby-input" />
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="UseMetadataAPI" name="UseMetadataAPI" type="checkbox" is="emby-checkbox" />
+                            <span>Use MetadataAPI for not supported sites</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="MetadataAPIToken">MetadataAPI Token</label>
+                        <input id="MetadataAPIToken" name="MetadataAPIToken" type="text" is="emby-input" />
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescripton">
                         <label class="emby-checkbox-label">
                             <input id="DisableActors" name="DisableActors" type="checkbox" is="emby-checkbox" />
                             <span>Disable Actors Saving to Metadata</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableGenres" name="DisableGenres" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Genres Saving to Metadata</span>
                         </label>
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescripton">
@@ -34,6 +90,12 @@
                         <label class="emby-checkbox-label">
                             <input id="DisableImageSize" name="DisableImageSize" type="checkbox" is="emby-checkbox" />
                             <span>Disable Image Size</span>
+                        </label>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescripton">
+                        <label class="emby-checkbox-label">
+                            <input id="DisableAutoIdentify" name="DisableAutoIdentify" type="checkbox" is="emby-checkbox" />
+                            <span>Disable Auto Identify</span>
                         </label>
                     </div>
                     <div class="selectContainer">
@@ -76,10 +138,22 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     $('#FlareSolverrURL').val(config.FlareSolverrURL).change();
+                    $('#DisableCaching').prop('checked', config.DisableCaching);
+                    $('#DisableSSLCheck').prop('checked', config.DisableSSLCheck);
+                    $('#ProxyEnable').prop('checked', config.ProxyEnable);
+                    $('#ProxyHost').val(config.ProxyHost).change();
+                    $('#ProxyPort').val(config.ProxyPort).change();
+                    $('#ProxyLogin').val(config.ProxyLogin).change();
+                    $('#ProxyPassword').val(config.ProxyPassword).change();
+                    $('#UseFilePath').prop('checked', config.UseFilePath);
                     $('#DefaultSiteName').val(config.DefaultSiteName).change();
+                    $('#UseMetadataAPI').prop('checked', config.UseMetadataAPI);
+                    $('#MetadataAPIToken').val(config.MetadataAPIToken).change();
                     $('#DisableActors').prop('checked', config.DisableActors);
+                    $('#DisableGenres').prop('checked', config.DisableGenres);
                     $('#DisableImageValidation').prop('checked', config.DisableImageValidation);
                     $('#DisableImageSize').prop('checked', config.DisableImageSize);
+                    $('#DisableAutoIdentify').prop('checked', config.DisableAutoIdentify);
                     $('#PreferedActorNameSource').val(config.PreferedActorNameSource).change();
                     $('#JAVActorNamingStyle').val(config.JAVActorNamingStyle).change();
                     $('#GenresSortingStyle').val(config.GenresSortingStyle).change();
@@ -91,10 +165,22 @@
                 Dashboard.showLoadingMsg();
                 ApiClient.getPluginConfiguration(phoenixAdultConfig.pluginUniqueId).then(function (config) {
                     config.FlareSolverrURL = $('#FlareSolverrURL').val();
+                    config.DisableCaching = $('#DisableCaching').prop('checked');
+                    config.DisableSSLCheck = $('#DisableSSLCheck').prop('checked');
+                    config.ProxyEnable = $('#ProxyEnable').prop('checked');
+                    config.ProxyHost = $('#ProxyHost').val();
+                    config.ProxyPort = $('#ProxyPort').val();
+                    config.ProxyLogin = $('#ProxyLogin').val();
+                    config.ProxyPassword = $('#ProxyPassword').val();
+                    config.UseFilePath = $('#UseFilePath').prop('checked');
                     config.DefaultSiteName = $('#DefaultSiteName').val();
+                    config.MetadataAPIToken = $('#MetadataAPIToken').val();
+                    config.UseMetadataAPI = $('#UseMetadataAPI').prop('checked');
                     config.DisableActors = $('#DisableActors').prop('checked');
+                    config.DisableGenres = $('#DisableGenres').prop('checked');
                     config.DisableImageValidation = $('#DisableImageValidation').prop('checked');
                     config.DisableImageSize = $('#DisableImageSize').prop('checked');
+                    config.DisableAutoIdentify = $('#DisableAutoIdentify').prop('checked');
                     config.PreferedActorNameSource = $('#PreferedActorNameSource').val();
                     config.JAVActorNamingStyle = $('#JAVActorNamingStyle').val();
                     config.GenresSortingStyle = $('#GenresSortingStyle').val();

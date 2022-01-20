@@ -12,9 +12,9 @@ using PhoenixAdult.Helpers.Utils;
 
 namespace PhoenixAdult.Sites
 {
-    public class ActorFreeones : IProviderBaseActor
+    public class ActorFreeones : IProviderBase
     {
-        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string actorName, CancellationToken cancellationToken)
+        public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string actorName, DateTime? actorDate, CancellationToken cancellationToken)
         {
             var result = new List<RemoteSearchResult>();
 
@@ -23,14 +23,14 @@ namespace PhoenixAdult.Sites
 
             foreach (var actorNode in actorData.SelectNodesSafe("//div[contains(@class, 'grid-item')]"))
             {
-                var actorURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"{actorNode.SelectSingleText(".//a/@href")}/profile");
+                var actorURL = new Uri(Helper.GetSearchBaseURL(siteNum) + actorNode.SelectSingleText(".//a/@href").Replace("/feed", "/bio", StringComparison.OrdinalIgnoreCase));
                 string curID = Helper.Encode(actorURL.AbsolutePath),
                     name = actorNode.SelectSingleText(".//p/@title"),
                     imageURL = actorNode.SelectSingleText(".//img/@src");
 
                 var res = new RemoteSearchResult
                 {
-                    ProviderIds = { { Plugin.Instance.Name + "Actor", curID } },
+                    ProviderIds = { { Plugin.Instance.Name, curID } },
                     Name = name,
                     ImageUrl = imageURL,
                 };
@@ -41,9 +41,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Person>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Person>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Person(),
             };

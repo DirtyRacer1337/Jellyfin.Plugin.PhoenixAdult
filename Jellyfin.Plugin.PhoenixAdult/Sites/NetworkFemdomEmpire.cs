@@ -75,9 +75,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -100,8 +100,6 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//div[contains(@class, 'videoDetails')]//h3");
             result.Item.Overview = sceneData.SelectSingleText("//div[contains(@class, 'videoDetails')]//p");
-
-            result.Item.AddStudio("Femdom Empire");
 
             var dateNode = sceneData.SelectSingleText("//div[contains(@class, 'videoInfo')]//p");
             if (!string.IsNullOrEmpty(dateNode))

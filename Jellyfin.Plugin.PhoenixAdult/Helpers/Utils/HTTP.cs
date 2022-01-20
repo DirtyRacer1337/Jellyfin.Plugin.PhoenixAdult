@@ -9,6 +9,9 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using FlareSolverrSharp;
+using Microsoft.Extensions.Caching.Abstractions;
+using Microsoft.Extensions.Caching.InMemory;
+using MihaZupan;
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -16,24 +19,71 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
-            Http.Timeout = TimeSpan.FromSeconds(120);
+            if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
+            {
+                var proxy = new List<ProxyInfo>();
+
+                if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
+                {
+                    proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, Plugin.Instance.Configuration.ProxyPort));
+                }
+                else
+                {
+                    proxy.Add(new ProxyInfo(
+                        Plugin.Instance.Configuration.ProxyHost,
+                        Plugin.Instance.Configuration.ProxyPort,
+                        Plugin.Instance.Configuration.ProxyLogin,
+                        Plugin.Instance.Configuration.ProxyPassword));
+                }
+
+                Proxy = new HttpToSocks5Proxy(proxy.ToArray());
+            }
+
+            HttpHandler = new HttpClientHandler()
+            {
+                CookieContainer = CookieContainer,
+                Proxy = Proxy,
+            };
+
+            if (Plugin.Instance.Configuration.DisableSSLCheck)
+            {
+                HttpHandler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, errors) => true;
+            }
+
+            CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
+            {
+                MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
+            };
+
+            if (!Plugin.Instance.Configuration.DisableCaching)
+            {
+                Logger.Debug("Caching Enabled");
+                CacheHandler = new InMemoryCacheHandler(HttpHandler, CacheExpirationProvider.CreateSimple(TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(5)));
+                CloudflareHandler.InnerHandler = CacheHandler;
+            }
+            else
+            {
+                Logger.Debug("Caching Disabled");
+                CloudflareHandler.InnerHandler = HttpHandler;
+            }
+
+            Http = new HttpClient(CloudflareHandler)
+            {
+                Timeout = TimeSpan.FromSeconds(120),
+            };
         }
 
         private static CookieContainer CookieContainer { get; } = new CookieContainer();
 
-        private static HttpClientHandler HttpHandler { get; } = new HttpClientHandler()
-        {
-            CookieContainer = CookieContainer,
-        };
+        private static IWebProxy Proxy { get; set; }
 
-        private static ClearanceHandler CloudflareHandler { get; } = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
-        {
-            InnerHandler = HttpHandler,
-            MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
-            UserAgent = GetUserAgent(),
-        };
+        private static HttpClientHandler HttpHandler { get; set; }
 
-        private static HttpClient Http { get; } = new HttpClient(CloudflareHandler);
+        private static InMemoryCacheHandler CacheHandler { get; set; }
+
+        private static ClearanceHandler CloudflareHandler { get; set; }
+
+        private static HttpClient Http { get; set; }
 
         public static string GetUserAgent()
             => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
@@ -79,6 +129,11 @@ namespace PhoenixAdult.Helpers.Utils
                 }
             }
 
+            if (CacheHandler != null && request.RequestUri.AbsoluteUri == Plugin.Instance.Configuration.DatabaseUpdateURL)
+            {
+                CacheHandler.InvalidateCache(request.RequestUri);
+            }
+
             HttpResponseMessage response = null;
             try
             {
@@ -88,7 +143,7 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 Logger.Error($"Request error: {e.Message}");
 
-                await Analitycs.Send(url, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
+                await Analytics.Send(url, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
             }
 
             if (response != null)

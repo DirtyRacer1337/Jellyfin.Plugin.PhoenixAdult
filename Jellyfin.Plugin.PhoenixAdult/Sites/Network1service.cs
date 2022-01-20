@@ -38,7 +38,7 @@ namespace PhoenixAdult.Sites
             if (db.ContainsKey(keyName))
             {
                 string token = (string)db[keyName],
-                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]));
+                    res = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]) ?? Array.Empty<byte>());
 
                 if ((int)JObject.Parse(res)["exp"] > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                 {
@@ -173,9 +173,9 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        public async Task<MetadataResult<Movie>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
+        public async Task<MetadataResult<BaseItem>> Update(int[] siteNum, string[] sceneID, CancellationToken cancellationToken)
         {
-            var result = new MetadataResult<Movie>()
+            var result = new MetadataResult<BaseItem>()
             {
                 Item = new Movie(),
                 People = new List<PersonInfo>(),
@@ -208,14 +208,15 @@ namespace PhoenixAdult.Sites
             string domain = new Uri(Helper.GetSearchBaseURL(siteNum)).Host,
                 sceneTypeURL = sceneID[1];
 
-            if (sceneTypeURL.Equals("scene", StringComparison.OrdinalIgnoreCase))
+            switch (domain)
             {
-                switch (domain)
-                {
-                    case "www.brazzers.com":
+                case "www.brazzers.com":
+                    if (sceneTypeURL.Equals("serie", StringComparison.OrdinalIgnoreCase) || sceneTypeURL.Equals("scene", StringComparison.OrdinalIgnoreCase))
+                    {
                         sceneTypeURL = "video";
-                        break;
-                }
+                    }
+
+                    break;
             }
 
             var sceneURL = Helper.GetSearchBaseURL(siteNum) + $"/{sceneTypeURL}/{sceneID[0]}/0";
@@ -225,6 +226,13 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             result.Item.Overview = (string)sceneData["description"];
             result.Item.AddStudio((string)sceneData["brand"]);
+            if (sceneData.ContainsKey("collections") && sceneData["collections"].Type == JTokenType.Array)
+            {
+                foreach (var collection in sceneData["collections"])
+                {
+                    result.Item.AddStudio((string)collection["name"]);
+                }
+            }
 
             var sceneDateObj = (DateTime)sceneData["dateReleased"];
             result.Item.PremiereDate = sceneDateObj;

@@ -15,7 +15,7 @@ namespace PhoenixAdult.Helpers
         {
             var cleanedGenres = new List<string>();
 
-            if (genresLink == null)
+            if (genresLink == null || Plugin.Instance.Configuration.DisableGenres)
             {
                 return cleanedGenres.ToArray();
             }
@@ -47,9 +47,9 @@ namespace PhoenixAdult.Helpers
                     .Replace(" To ", " to ", StringComparison.OrdinalIgnoreCase)
                     .Trim();
 
-                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase))
+                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase) || genreName.Contains("/", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var genre in genreName.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    foreach (var genre in genreName.Split(new char[] { ',', '/' }, StringSplitOptions.RemoveEmptyEntries))
                     {
                         var splitedGenre = genre.Trim();
 
@@ -65,7 +65,8 @@ namespace PhoenixAdult.Helpers
             var newGenres = new List<string>();
             foreach (var genreLink in cleanedGenres)
             {
-                var genreName = Replace(genreLink, sceneName);
+                var genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreLink.ToLowerInvariant());
+                genreName = Replace(genreName, sceneName);
                 var genreNames = Split(genreName);
 
                 if (genreNames.Any())
@@ -73,7 +74,6 @@ namespace PhoenixAdult.Helpers
                     foreach (var genre in genreNames)
                     {
                         genreName = Replace(genre, sceneName);
-                        genreName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(genreName);
 
                         if (!string.IsNullOrEmpty(genreName) && !newGenres.Contains(genreName, StringComparer.OrdinalIgnoreCase))
                         {

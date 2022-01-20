@@ -24,37 +24,40 @@ namespace PhoenixAdult.ScheduledTasks
             await Task.Yield();
             progress?.Report(0);
 
-            var data = await HTTP.Request(Plugin.Instance.Configuration.DatabaseUpdateURL, cancellationToken).ConfigureAwait(false);
-            var json = JArray.Parse(data.Content);
-
             var db = new JObject();
             if (!string.IsNullOrEmpty(Plugin.Instance.Configuration.DatabaseHash))
             {
                 db = JObject.Parse(Plugin.Instance.Configuration.DatabaseHash);
             }
 
-            for (var i = 0; i < json.Count; i++)
+            var data = await HTTP.Request(Plugin.Instance.Configuration.DatabaseUpdateURL, cancellationToken).ConfigureAwait(false);
+            if (data.IsOK)
             {
-                var file = json[i];
+                var json = JArray.Parse(data.Content);
 
-                var url = (string)file["download_url"];
-                var fileName = (string)file["name"];
-                var sha = (string)file["sha"];
-                var type = (string)file["type"];
-
-                progress?.Report((double)i / json.Count * 100);
-
-                if (type == "file" && (!db.ContainsKey(fileName) || (string)db[fileName] != sha || !Database.IsExist(fileName)))
+                for (var i = 0; i < json.Count; i++)
                 {
-                    if (await Database.Download(url, fileName, cancellationToken).ConfigureAwait(false))
+                    var file = json[i];
+
+                    var url = (string)file["download_url"];
+                    var fileName = (string)file["name"];
+                    var sha = (string)file["sha"];
+                    var type = (string)file["type"];
+
+                    progress?.Report((double)i / json.Count * 100);
+
+                    if (type == "file" && (!db.ContainsKey(fileName) || (string)db[fileName] != sha || !Database.IsExist(fileName)))
                     {
-                        if (db.ContainsKey(fileName))
+                        if (await Database.Download(url, fileName, cancellationToken).ConfigureAwait(false))
                         {
-                            db[fileName] = sha;
-                        }
-                        else
-                        {
-                            db.Add(fileName, sha);
+                            if (db.ContainsKey(fileName))
+                            {
+                                db[fileName] = sha;
+                            }
+                            else
+                            {
+                                db.Add(fileName, sha);
+                            }
                         }
                     }
                 }
