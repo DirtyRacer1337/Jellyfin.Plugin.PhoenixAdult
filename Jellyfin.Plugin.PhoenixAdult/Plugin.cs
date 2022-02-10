@@ -5,6 +5,7 @@ using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 using PhoenixAdult.Configuration;
+using Sentry;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
@@ -39,6 +40,8 @@ namespace PhoenixAdult
             Log = logger;
             this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
 #endif
+
+            SentrySdk.Init(Instance.Configuration.SentryDSN);
         }
 
 #if __EMBY__

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PhoenixAdult.Configuration;
+using Sentry;
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -30,11 +31,18 @@ namespace PhoenixAdult.Helpers.Utils
                 var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}.json.gz";
                 fileName = Path.Combine(LogsPath, fileName);
 
+#if __EMBY__
+                var serverPlatform = "Emby";
+#else
+                var serverPlatform = "Jellyfin";
+#endif
+
                 AnalyticsData = new AnalyticsStructure
                 {
                     User = new UserStructure
                     {
                         DateTime = DateTime.UtcNow,
+                        ServerPlatform = serverPlatform,
                         PluginVersion = Plugin.Instance.Version.ToString(),
                         Options = Plugin.Instance.Configuration,
                     },
@@ -53,6 +61,27 @@ namespace PhoenixAdult.Helpers.Utils
                         Text = e.StackTrace,
                     },
                 };
+
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.User = new User()
+                    {
+                        Id = Plugin.Instance.Configuration.UID,
+                    };
+                    scope.Release = Plugin.Instance.Version.ToString();
+                    scope.Environment = serverPlatform;
+                    scope.Contexts["Options"] = Plugin.Instance.Configuration;
+                    scope.Contexts["Info"] = new InfoStructure
+                    {
+                        Request = request,
+                        SiteNum = siteNum != null ? $"{siteNum[0]}#{siteNum[1]}" : null,
+                        SiteName = siteName,
+                        SearchTitle = searchTitle,
+                        SearchDate = searchDate.HasValue ? searchDate.Value.ToString("yyyy-MM-dd") : null,
+                        ProviderName = providerName,
+                    };
+                });
+                SentrySdk.CaptureException(e);
 
                 var json = JsonConvert.SerializeObject(AnalyticsData, new JsonSerializerSettings
                 {
@@ -82,6 +111,8 @@ namespace PhoenixAdult.Helpers.Utils
             public string UID { get; set; }
 
             public DateTime DateTime { get; set; }
+
+            public string ServerPlatform { get; set; }
 
             public string PluginVersion { get; set; }
 

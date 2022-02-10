@@ -3,10 +3,11 @@
   <Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='Release.Emby'">
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)$(AssemblyName).dll" />
-      <InputAssemblies Include="$(OutputPath)HtmlAgilityPack.dll" />
       <InputAssemblies Include="$(OutputPath)FlareSolverrSharp.dll" />
+      <InputAssemblies Include="$(OutputPath)HtmlAgilityPack.dll" />
       <InputAssemblies Include="$(OutputPath)HttpClient.Caching.dll" />
       <InputAssemblies Include="$(OutputPath)MihaZupan.HttpToSocks5Proxy.dll" />
+      <InputAssemblies Include="$(OutputPath)Sentry.dll" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
