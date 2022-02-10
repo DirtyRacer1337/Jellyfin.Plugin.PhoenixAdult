@@ -32,9 +32,9 @@ namespace PhoenixAdult.Helpers.Utils
                 fileName = Path.Combine(LogsPath, fileName);
 
 #if __EMBY__
-                var serverPlatform = "Emby";
+                var pluginFullName = "Emby.Plugins.PhoenixAdult";
 #else
-                var serverPlatform = "Jellyfin";
+                var pluginFullName = "Jellyfin.Plugin.PhoenixAdult";
 #endif
 
                 AnalyticsData = new AnalyticsStructure
@@ -42,7 +42,7 @@ namespace PhoenixAdult.Helpers.Utils
                     User = new UserStructure
                     {
                         DateTime = DateTime.UtcNow,
-                        ServerPlatform = serverPlatform,
+                        ServerPlatform = pluginFullName,
                         PluginVersion = Plugin.Instance.Version.ToString(),
                         Options = Plugin.Instance.Configuration,
                     },
@@ -69,7 +69,7 @@ namespace PhoenixAdult.Helpers.Utils
                         Id = Plugin.Instance.Configuration.UID,
                     };
                     scope.Release = Plugin.Instance.Version.ToString();
-                    scope.Environment = serverPlatform;
+                    scope.Environment = pluginFullName;
                     scope.Contexts["Options"] = Plugin.Instance.Configuration;
                     scope.Contexts["Info"] = new InfoStructure
                     {
