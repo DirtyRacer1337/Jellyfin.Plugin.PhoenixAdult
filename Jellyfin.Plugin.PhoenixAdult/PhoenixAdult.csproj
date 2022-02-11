@@ -6,6 +6,9 @@
     <RootNamespace>PhoenixAdult</RootNamespace>
     <AssemblyVersion>10.7.0.0</AssemblyVersion>
     <FileVersion>10.7.0.0</FileVersion>
+    <InformationalVersion>10.7.0.0</InformationalVersion>
+    <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
+    <Copyright>© DirtyRacer</Copyright>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Configurations>Debug;Release;Release.Emby;Debug.Emby</Configurations>
   </PropertyGroup>

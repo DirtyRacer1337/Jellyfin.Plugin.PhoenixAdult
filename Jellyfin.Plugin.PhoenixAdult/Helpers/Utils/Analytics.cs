@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace PhoenixAdult.Helpers.Utils
                     {
                         DateTime = DateTime.UtcNow,
                         ServerPlatform = pluginFullName,
-                        PluginVersion = Plugin.Instance.Version.ToString(),
+                        PluginVersion = $"{Plugin.Instance.Version.ToString()} build {Helper.GetLinkerTime(Assembly.GetAssembly(typeof(Plugin)))}",
                         Options = Plugin.Instance.Configuration,
                     },
                     Info = new InfoStructure
