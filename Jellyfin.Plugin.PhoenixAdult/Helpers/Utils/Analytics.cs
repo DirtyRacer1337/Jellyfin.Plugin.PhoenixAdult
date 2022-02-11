@@ -71,15 +71,7 @@ namespace PhoenixAdult.Helpers.Utils
                     scope.Release = Plugin.Instance.Version.ToString();
                     scope.Environment = pluginFullName;
                     scope.Contexts["Options"] = Plugin.Instance.Configuration;
-                    scope.Contexts["Info"] = new InfoStructure
-                    {
-                        Request = request,
-                        SiteNum = siteNum != null ? $"{siteNum[0]}#{siteNum[1]}" : null,
-                        SiteName = siteName,
-                        SearchTitle = searchTitle,
-                        SearchDate = searchDate.HasValue ? searchDate.Value.ToString("yyyy-MM-dd") : null,
-                        ProviderName = providerName,
-                    };
+                    scope.Contexts["Info"] = AnalyticsData.Info;
                 });
                 SentrySdk.CaptureException(e);
 
