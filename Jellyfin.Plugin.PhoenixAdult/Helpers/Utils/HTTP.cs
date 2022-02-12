@@ -21,6 +21,7 @@ namespace PhoenixAdult.Helpers.Utils
         {
             if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
             {
+                Logger.Info("Proxy Enabled");
                 var proxy = new List<ProxyInfo>();
 
                 if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
