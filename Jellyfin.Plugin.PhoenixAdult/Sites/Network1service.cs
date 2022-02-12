@@ -49,8 +49,8 @@ namespace PhoenixAdult.Sites
             if (string.IsNullOrEmpty(result))
             {
                 var http = await HTTP.Request(Helper.GetSearchBaseURL(siteNum), HttpMethod.Head, cancellationToken).ConfigureAwait(false);
-                var instanceToken = http.Cookies.Where(o => o.Name == "instance_token");
-                if (!instanceToken.Any())
+                var instanceToken = http.Cookies?.Where(o => o.Name == "instance_token");
+                if (instanceToken == null || !instanceToken.Any())
                 {
                     return result;
                 }
