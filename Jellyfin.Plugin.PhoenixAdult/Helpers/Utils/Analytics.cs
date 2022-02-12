@@ -69,9 +69,9 @@ namespace PhoenixAdult.Helpers.Utils
                     {
                         Id = Plugin.Instance.Configuration.UID,
                     };
-                    scope.Release = Plugin.Instance.Version.ToString();
-                    scope.Environment = pluginFullName;
-                    scope.Contexts["Options"] = Plugin.Instance.Configuration;
+                    scope.Release = AnalyticsData.User.PluginVersion;
+                    scope.Environment = AnalyticsData.User.ServerPlatform;
+                    scope.Contexts["Options"] = AnalyticsData.User.Options;
                     scope.Contexts["Info"] = AnalyticsData.Info;
                 });
                 SentrySdk.CaptureException(e);
