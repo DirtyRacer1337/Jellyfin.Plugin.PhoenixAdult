@@ -67,7 +67,12 @@ namespace PhoenixAdult
             {
                 Logger.Error($"GetActorPhotos error: \"{e}\"");
 
-                await Analytics.Send(name, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
+                await Analytics.Send(
+                    new AnalyticsExeption
+                    {
+                        Request = name,
+                        Exception = e,
+                    }, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -134,7 +139,13 @@ namespace PhoenixAdult
                             {
                                 Logger.Error($"GetImages error: \"{e}\"");
 
-                                await Analytics.Send(string.Join("#", curID.Skip(2)), siteNum, Helper.GetSearchSiteName(siteNum), null, null, null, e, cancellationToken).ConfigureAwait(false);
+                                await Analytics.Send(
+                                    new AnalyticsExeption
+                                    {
+                                        Request = string.Join("#", curID.Skip(2)),
+                                        SiteNum = siteNum,
+                                        Exception = e,
+                                    }, cancellationToken).ConfigureAwait(false);
                             }
                             finally
                             {

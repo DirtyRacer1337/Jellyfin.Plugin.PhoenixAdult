@@ -48,7 +48,11 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 Logger.Error($"GetImagesSizeAndValidate error: \"{e}\"");
 
-                await Analytics.Send(null, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
+                await Analytics.Send(
+                    new AnalyticsExeption
+                    {
+                        Request = string.Join(" | ", cleanImages.Select(o => o.Url)),
+                    }, cancellationToken).ConfigureAwait(false);
             }
             finally
             {

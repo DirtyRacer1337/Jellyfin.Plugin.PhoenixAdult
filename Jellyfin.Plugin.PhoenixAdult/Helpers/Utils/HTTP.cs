@@ -144,7 +144,12 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 Logger.Error($"Request error: {e.Message}");
 
-                await Analytics.Send(url, null, null, null, null, null, e, cancellationToken).ConfigureAwait(false);
+                await Analytics.Send(
+                    new AnalyticsExeption
+                    {
+                        Request = url,
+                        Exception = e,
+                    }, cancellationToken).ConfigureAwait(false);
             }
 
             if (response != null)
