@@ -40,6 +40,11 @@ namespace PhoenixAdult.Sites
                 }
             }
 
+            if (string.IsNullOrEmpty(searchTitle))
+            {
+                return result;
+            }
+
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
             var data = await HTML.ElementFromURL(url, cancellationToken).ConfigureAwait(false);
 
