@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -21,6 +22,22 @@ namespace PhoenixAdult.Sites
             if (siteNum == null)
             {
                 return result;
+            }
+
+            var searchTitleSplit = searchTitle.Split(' ');
+            if (int.TryParse(searchTitleSplit.First(), out var id) && id > 100)
+            {
+                searchTitle = string.Join(" ", searchTitleSplit.Skip(1));
+                var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/{searchTitleSplit.First()}");
+                var sceneID = new List<string> { Helper.Encode(sceneURL.AbsolutePath) };
+
+                var searchResult = await Helper.GetSearchResultsFromUpdate(this, siteNum, sceneID.ToArray(), searchDate, cancellationToken).ConfigureAwait(false);
+                if (searchResult.Any())
+                {
+                    result.AddRange(searchResult);
+
+                    return result;
+                }
             }
 
             var url = Helper.GetSearchSearchURL(siteNum) + searchTitle;
