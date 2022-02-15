@@ -9,11 +9,11 @@
       <InputAssemblies Include="$(OutputPath)MihaZupan.HttpToSocks5Proxy.dll" />
     </ItemGroup>
 
-      <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
-          <InputAssemblies Include="$(OutputPath)Sentry.dll" />
-      </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
+        <InputAssemblies Include="$(OutputPath)Sentry.dll" />
+    </ItemGroup>
 
-      <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
+    <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
       <InputAssemblies Include="$(OutputPath)Newtonsoft.Json.dll" />
     </ItemGroup>
 

@@ -351,7 +351,7 @@ namespace PhoenixAdult.Helpers
                 var index = value.IndexOf(BuildVersionMetadataPrefix);
                 if (index > 0)
                 {
-                    value = value[(index + BuildVersionMetadataPrefix.Length) ..];
+                    value = value.Substring(index + BuildVersionMetadataPrefix.Length);
                     return DateTime.ParseExact(value, "yyyy-MM-ddTHH:mm:ss:fffZ", CultureInfo.InvariantCulture);
                 }
             }
