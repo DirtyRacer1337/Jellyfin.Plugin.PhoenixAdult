@@ -11,7 +11,6 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
-using Sentry;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;
@@ -26,7 +25,6 @@ namespace PhoenixAdult
     {
         public Provider()
         {
-            SentrySdk.Init(Plugin.Instance.Configuration.SentryDSN);
             Database.LoadAll();
         }
 

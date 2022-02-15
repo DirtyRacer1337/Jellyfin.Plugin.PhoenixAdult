@@ -12,6 +12,7 @@ using MediaBrowser.Model.Logging;
 #else
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
+using Sentry;
 #endif
 
 [assembly: CLSCompliant(false)]
@@ -38,6 +39,11 @@ namespace PhoenixAdult
 #else
             Log = logger;
             this.ConfigurationChanged += PluginConfiguration.ConfigurationChanged;
+
+            SentrySdk.Init(new SentryOptions
+            {
+                Dsn = Consts.SentryDSN,
+            });
 #endif
         }
 

@@ -30,7 +30,7 @@ namespace PhoenixAdult.ScheduledTasks
                 db = JObject.Parse(Plugin.Instance.Configuration.DatabaseHash);
             }
 
-            var data = await HTTP.Request(Plugin.Instance.Configuration.DatabaseUpdateURL, cancellationToken).ConfigureAwait(false);
+            var data = await HTTP.Request(Consts.DatabaseUpdateURL, cancellationToken).ConfigureAwait(false);
             if (data.IsOK)
             {
                 var json = JArray.Parse(data.Content);

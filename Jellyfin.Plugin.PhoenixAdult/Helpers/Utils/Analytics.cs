@@ -1,13 +1,16 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PhoenixAdult.Configuration;
+
+#if __EMBY__
+#else
 using Sentry;
+#endif
 
 namespace PhoenixAdult.Helpers.Utils
 {
@@ -48,19 +51,13 @@ namespace PhoenixAdult.Helpers.Utils
                 var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}.json.gz";
                 fileName = Path.Combine(LogsPath, fileName);
 
-#if __EMBY__
-                var pluginFullName = "Emby.Plugins.PhoenixAdult";
-#else
-                var pluginFullName = "Jellyfin.Plugin.PhoenixAdult";
-#endif
-
                 AnalyticsData = new AnalyticsStructure
                 {
                     User = new UserStructure
                     {
                         DateTime = DateTime.UtcNow,
-                        ServerPlatform = pluginFullName,
-                        PluginVersion = $"{Plugin.Instance.Version.ToString()} build {Helper.GetLinkerTime(Assembly.GetAssembly(typeof(Plugin)))}",
+                        ServerPlatform = Consts.PluginInstance,
+                        PluginVersion = Consts.PluginVersion,
                         Options = Plugin.Instance.Configuration,
                     },
                     Info = new InfoStructure
@@ -79,6 +76,8 @@ namespace PhoenixAdult.Helpers.Utils
                     },
                 };
 
+#if __EMBY__
+#else
                 SentrySdk.ConfigureScope(scope =>
                 {
                     scope.User = new User()
@@ -91,6 +90,7 @@ namespace PhoenixAdult.Helpers.Utils
                     scope.Contexts["Info"] = AnalyticsData.Info;
                 });
                 SentrySdk.CaptureException(exception.Exception);
+#endif
 
                 var json = JsonConvert.SerializeObject(AnalyticsData, new JsonSerializerSettings
                 {

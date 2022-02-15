@@ -25,9 +25,6 @@ namespace PhoenixAdult.Configuration
     {
         public PluginConfiguration()
         {
-            this.SentryDSN = "https://8379d0e7cc2c45d8b1b6928ab8ff84c0@o1140949.ingest.sentry.io/6198587";
-
-            this.DatabaseUpdateURL = "https://api.github.com/repos/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/contents/data";
             this.DatabaseHash = string.Empty;
             this.TokenStorage = string.Empty;
 
@@ -61,10 +58,6 @@ namespace PhoenixAdult.Configuration
             this.GenresSortingStyle = GenresSortingStyle.Alphabetical;
             this.PreferedActorNameSource = PreferedActorNameSource.LocalDatabase;
         }
-
-        public string SentryDSN { get; set; }
-
-        public string DatabaseUpdateURL { get; set; }
 
         public string DatabaseHash { get; set; }
 

@@ -130,7 +130,7 @@ namespace PhoenixAdult.Helpers.Utils
                 }
             }
 
-            if (CacheHandler != null && request.RequestUri.AbsoluteUri == Plugin.Instance.Configuration.DatabaseUpdateURL)
+            if (CacheHandler != null && request.RequestUri.AbsoluteUri == Consts.DatabaseUpdateURL)
             {
                 CacheHandler.InvalidateCache(request.RequestUri);
             }
