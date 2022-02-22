@@ -30,6 +30,7 @@ namespace PhoenixAdult.Configuration
 
             this.UID = Guid.NewGuid().ToString();
             this.DisableAnalytics = false;
+            this.EnableDebug = false;
 
             this.DisableCaching = false;
             this.DisableSSLCheck = false;
@@ -66,6 +67,8 @@ namespace PhoenixAdult.Configuration
         public string UID { get; set; }
 
         public bool DisableAnalytics { get; set; }
+
+        public bool EnableDebug { get; set; }
 
         public bool DisableCaching { get; set; }
 

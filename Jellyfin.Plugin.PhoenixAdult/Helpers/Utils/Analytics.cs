@@ -40,42 +40,33 @@ namespace PhoenixAdult.Helpers.Utils
 
         public static async Task Send(AnalyticsExeption exception, CancellationToken cancellationToken)
         {
+            AnalyticsData = new AnalyticsStructure
+            {
+                User = new UserStructure
+                {
+                    DateTime = DateTime.UtcNow,
+                    ServerPlatform = Consts.PluginInstance,
+                    PluginVersion = Consts.PluginVersion,
+                    Options = Plugin.Instance.Configuration,
+                },
+                Info = new InfoStructure
+                {
+                    Request = exception.Request,
+                    SiteNum = exception.SiteNum != null ? $"{exception.SiteNum[0]}#{exception.SiteNum[1]}" : null,
+                    SiteName = exception.SiteNum != null ? Helper.GetSearchSiteName(exception.SiteNum) : null,
+                    SearchTitle = exception.SearchTitle,
+                    SearchDate = exception.SearchDate.HasValue ? exception.SearchDate.Value.ToString("yyyy-MM-dd") : null,
+                    ProviderName = exception.ProviderName,
+                },
+                Error = new ErrorStructure
+                {
+                    Name = exception.Exception.Message,
+                    Text = exception.Exception.StackTrace,
+                },
+            };
+
             if (!Plugin.Instance.Configuration.DisableAnalytics)
             {
-                if (!Directory.Exists(LogsPath))
-                {
-                    Logger.Info($"Creating analytics directory \"{LogsPath}\"");
-                    Directory.CreateDirectory(LogsPath);
-                }
-
-                var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}.json.gz";
-                fileName = Path.Combine(LogsPath, fileName);
-
-                AnalyticsData = new AnalyticsStructure
-                {
-                    User = new UserStructure
-                    {
-                        DateTime = DateTime.UtcNow,
-                        ServerPlatform = Consts.PluginInstance,
-                        PluginVersion = Consts.PluginVersion,
-                        Options = Plugin.Instance.Configuration,
-                    },
-                    Info = new InfoStructure
-                    {
-                        Request = exception.Request,
-                        SiteNum = exception.SiteNum != null ? $"{exception.SiteNum[0]}#{exception.SiteNum[1]}" : null,
-                        SiteName = exception.SiteNum != null ? Helper.GetSearchSiteName(exception.SiteNum) : null,
-                        SearchTitle = exception.SearchTitle,
-                        SearchDate = exception.SearchDate.HasValue ? exception.SearchDate.Value.ToString("yyyy-MM-dd") : null,
-                        ProviderName = exception.ProviderName,
-                    },
-                    Error = new ErrorStructure
-                    {
-                        Name = exception.Exception.Message,
-                        Text = exception.Exception.StackTrace,
-                    },
-                };
-
 #if __EMBY__
 #else
                 SentrySdk.ConfigureScope(scope =>
@@ -91,6 +82,18 @@ namespace PhoenixAdult.Helpers.Utils
                 });
                 SentrySdk.CaptureException(exception.Exception);
 #endif
+            }
+
+            if (Plugin.Instance.Configuration.EnableDebug)
+            {
+                if (!Directory.Exists(LogsPath))
+                {
+                    Logger.Info($"Creating analytics directory \"{LogsPath}\"");
+                    Directory.CreateDirectory(LogsPath);
+                }
+
+                var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmssfffffff")}.json.gz";
+                fileName = Path.Combine(LogsPath, fileName);
 
                 var json = JsonConvert.SerializeObject(AnalyticsData, new JsonSerializerSettings
                 {
