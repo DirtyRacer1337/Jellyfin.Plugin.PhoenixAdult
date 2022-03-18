@@ -21,11 +21,11 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.dll ./Jellyfin.Plugin.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.pdb ./Jellyfin.Plugin.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.dll Jellyfin.Plugin.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: ./Jellyfin.Plugin.PhoenixAdult.pdb ./Jellyfin.Plugin.PhoenixAdult.dll
+          files: Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/Jellyfin.Plugin.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/Jellyfin.Plugin.PhoenixAdult.dll
           dest: Jellyfin.Plugin.PhoenixAdult.zip
 
       - uses: actions/upload-artifact@v2
@@ -50,7 +50,7 @@ jobs:
 
       - uses: vimtor/action-zip@v1
         with:
-          files: ./Emby.Plugins.PhoenixAdult.pdb ./Emby.Plugins.PhoenixAdult.dll
+          files: Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release.Emby/netstandard2.1/Emby.Plugins.PhoenixAdult.dll
           dest: Emby.Plugins.PhoenixAdult.zip
 
       - uses: actions/upload-artifact@v2
