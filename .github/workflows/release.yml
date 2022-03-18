@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - master
     tags: ["v*"]
     paths:
       - Jellyfin.Plugin.PhoenixAdult/**
