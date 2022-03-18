@@ -18,14 +18,14 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Build app for release
-        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -p:OutputPath=bin -property:Configuration=Debug
+        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -p:OutputPath=bin -property:Configuration=Release
 
       - name: Rename Files
-        run: ren bin/PhoenixAdult.dll ./Jellyfin.Plugin.PhoenixAdult.dll && ren bin/PhoenixAdult.pdb ./Jellyfin.Plugin.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdult/bin/PhoenixAdult.dll Jellyfin.Plugin.PhoenixAdult.dll && ren /Jellyfin.Plugin.PhoenixAdultbin/PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: ./Jellyfin.Plugin.PhoenixAdult.pdb ./Jellyfin.Plugin.PhoenixAdult.dll
+          files: Jellyfin.Plugin.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.dll
           dest: Jellyfin.Plugin.PhoenixAdult.zip
 
       - uses: actions/upload-artifact@v2
@@ -43,14 +43,14 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Build app for release
-        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -p:OutputPath=bin -property:Configuration=Debug.Emby
+        run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -p:OutputPath=bin -property:Configuration=Release.Emby
 
       - name: Rename Files
-        run: ren bin/PhoenixAdult.dll ./Emby.Plugins.PhoenixAdult.dll && ren bin/PhoenixAdult.pdb ./Emby.Plugins.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdult/bin/PhoenixAdult.dll Emby.Plugins.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/PhoenixAdult.pdb Emby.Plugins.PhoenixAdult.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: ./Emby.Plugins.PhoenixAdult.pdb ./Emby.Plugins.PhoenixAdult.dll
+          files: Emby.Plugins.PhoenixAdult.pdb Emby.Plugins.PhoenixAdult.dll
           dest: Emby.Plugins.PhoenixAdult.zip
 
       - uses: actions/upload-artifact@v2
