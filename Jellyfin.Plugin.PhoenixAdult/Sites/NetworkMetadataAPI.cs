@@ -187,6 +187,11 @@ namespace PhoenixAdult.Sites
             result.Add(new RemoteImageInfo
             {
                 Url = (string)sceneData["background"]["full"],
+                Type = ImageType.Primary,
+            });
+            result.Add(new RemoteImageInfo
+            {
+                Url = (string)sceneData["background"]["full"],
                 Type = ImageType.Backdrop,
             });
 
