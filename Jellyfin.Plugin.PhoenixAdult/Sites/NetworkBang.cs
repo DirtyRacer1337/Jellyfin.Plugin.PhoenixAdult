@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -12,6 +13,7 @@ using MediaBrowser.Model.Providers;
 using Newtonsoft.Json.Linq;
 using PhoenixAdult.Helpers;
 using PhoenixAdult.Helpers.Utils;
+using PhoenixAdult.Providers;
 
 namespace PhoenixAdult.Sites
 {
@@ -105,8 +107,7 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["hits"]["hits"].First;
 
-            // Don't know where get id
-            // result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{(string)sceneData["_type"]}/{(string)sceneData["_id"]}/";
+            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{this.ConvertIdentifier((string)sceneData["_id"])}/{(string)sceneData["_id"]}/";
             sceneData = (JObject)sceneData["_source"];
 
             result.Item.Name = (string)sceneData["name"];
@@ -170,6 +171,20 @@ namespace PhoenixAdult.Sites
             }
 
             return result;
+        }
+
+        private string ConvertIdentifier(string identifier)
+        {
+            var bin = this.StringToByteArray(identifier);
+            return Convert.ToBase64String(bin).Replace('+', '-').Replace('/', '_').Replace('=', ',');
+        }
+
+        private byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
         }
     }
 }
