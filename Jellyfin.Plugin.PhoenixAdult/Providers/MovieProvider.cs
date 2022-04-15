@@ -19,11 +19,11 @@ using System.IO;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Providers
 {
-    public class Provider : IRemoteMetadataProvider<Movie, MovieInfo>
+    public class MovieProvider : IRemoteMetadataProvider<Movie, MovieInfo>
     {
-        public Provider()
+        public MovieProvider()
         {
             Database.LoadAll();
         }

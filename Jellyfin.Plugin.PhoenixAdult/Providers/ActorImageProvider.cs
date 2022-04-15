@@ -20,7 +20,7 @@ using MediaBrowser.Model.Configuration;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Providers
 {
     public class ActorImageProvider : IRemoteImageProvider
     {

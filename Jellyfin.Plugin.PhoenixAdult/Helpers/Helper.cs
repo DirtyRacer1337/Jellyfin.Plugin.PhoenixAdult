@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using PhoenixAdult.Helpers.Utils;
+using PhoenixAdult.Sites;
 
 #if __EMBY__
 using MediaBrowser.Common.Net;

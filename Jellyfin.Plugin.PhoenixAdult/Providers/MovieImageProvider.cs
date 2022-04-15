@@ -19,9 +19,9 @@ using MediaBrowser.Model.Configuration;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Providers
 {
-    public class ImageProvider : IRemoteImageProvider
+    public class MovieImageProvider : IRemoteImageProvider
     {
         public string Name => Plugin.Instance.Name;
 

@@ -7,6 +7,7 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
+using PhoenixAdult.Providers;
 
 #if __EMBY__
 using MediaBrowser.Model.Configuration;
@@ -24,7 +25,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var provider = new Provider();
+            var provider = new MovieProvider();
             var siteList = new List<string> { "JAVLibrary", "R18" };
 
             foreach (var site in siteList)
@@ -59,7 +60,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var provider = new Provider();
+            var provider = new MovieProvider();
             var info = new MovieInfo();
             info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
 
@@ -78,7 +79,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var provider = new ImageProvider();
+            var provider = new MovieImageProvider();
             var info = new Movie();
             info.ProviderIds[Plugin.Instance.Name] = string.Join("#", sceneID);
 

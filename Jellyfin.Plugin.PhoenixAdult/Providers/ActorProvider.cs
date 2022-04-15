@@ -18,7 +18,7 @@ using MediaBrowser.Common.Net;
 using System.Net.Http;
 #endif
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Providers
 {
     public class ActorProvider : IRemoteMetadataProvider<Person, PersonLookupInfo>
     {

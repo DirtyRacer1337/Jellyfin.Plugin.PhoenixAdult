@@ -6,7 +6,7 @@ using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Providers;
 
-namespace PhoenixAdult
+namespace PhoenixAdult.Sites
 {
     internal interface IProviderBase
     {
