@@ -48,7 +48,7 @@ namespace PhoenixAdult.ScheduledTasks
                         item.Genres = genres;
 
 #if __EMBY__
-                        this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit);
+                        this.libraryManager.UpdateItem(item, item, ItemUpdateType.MetadataEdit, null);
 #else
                         await this.libraryManager.UpdateItemAsync(item, item, ItemUpdateType.MetadataEdit, cancellationToken).ConfigureAwait(false);
 #endif
