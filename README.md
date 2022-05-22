@@ -4,7 +4,7 @@ This metadata provider helps fill Jellyfin/Emby with information for your adult 
 
 [![GPL 2.0 License](https://img.shields.io/github/license/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](./LICENSE)
 [![Current Release](https://img.shields.io/github/release/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/latest)
-[![Build status](https://ci.appveyor.com/api/projects/status/f1wdscw8kdwg1lwi?svg=true)](https://ci.appveyor.com/project/DirtyRacer/jellyfin-plugin-phoenixadult)
+[![Build status](https://img.shields.io/github/workflow/status/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/Build)](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/tag/nightly)
 
 ------------
 
