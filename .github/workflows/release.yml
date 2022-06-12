@@ -21,11 +21,11 @@ jobs:
         run: MSBuild -t:Restore,Build -p:RestorePackagesConfig=true -property:Configuration=Release
 
       - name: Rename Files
-        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.dll Jellyfin.Plugin.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.pdb
+        run: ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/PhoenixAdult.dll Jellyfin.Plugin.PhoenixAdult.dll && ren Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult.pdb
 
       - uses: vimtor/action-zip@v1
         with:
-          files: Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/Jellyfin.Plugin.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release/net5.0/Jellyfin.Plugin.PhoenixAdult.dll
+          files: Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdult.pdb Jellyfin.Plugin.PhoenixAdult/bin/Release/net6.0/Jellyfin.Plugin.PhoenixAdult.dll
           dest: Jellyfin.Plugin.PhoenixAdult.zip
 
       - uses: actions/upload-artifact@v2
