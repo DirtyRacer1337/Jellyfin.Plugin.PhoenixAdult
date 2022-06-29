@@ -8,7 +8,7 @@ using MediaBrowser.Model.Providers;
 
 namespace PhoenixAdult.ExternalId
 {
-    public class Movie : IExternalId
+    public class MovieID : IExternalId
     {
 #if __EMBY__
         public string Name => Plugin.Instance.Name + " ID";
