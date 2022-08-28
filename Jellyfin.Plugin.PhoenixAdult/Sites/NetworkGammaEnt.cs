@@ -248,7 +248,13 @@ namespace PhoenixAdult.Sites
             result.Item.Name = (string)sceneData["title"];
             var description = (string)sceneData["description"];
             result.Item.Overview = description.Replace("</br>", "\n", StringComparison.OrdinalIgnoreCase);
-            result.Item.AddStudio((string)sceneData["network_name"]);
+
+            var network = (string)sceneData["network_name"];
+            if (network != null)
+            {
+                result.Item.AddStudio(network);
+            }
+
             if (sceneData.ContainsKey("studio_name"))
             {
                 result.Item.AddStudio((string)sceneData["studio_name"]);
