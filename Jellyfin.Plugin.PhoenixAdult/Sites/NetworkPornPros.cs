@@ -41,7 +41,7 @@ namespace PhoenixAdult.Sites
             var directURL = searchTitle
                 .Replace(" ", "-", StringComparison.OrdinalIgnoreCase)
                 .Replace("'", "-", StringComparison.OrdinalIgnoreCase);
-            if (int.TryParse(directURL.Substring(directURL.Length - 1, 1), out _) && directURL.Substring(directURL.Length - 2, 1) == "-")
+            if (int.TryParse(directURL.AsSpan(directURL.Length - 1, 1), out _) && directURL.Substring(directURL.Length - 2, 1) == "-")
             {
                 directURL = $"{directURL.Substring(0, directURL.Length - 1)}-{directURL.Substring(directURL.Length - 1, 1)}";
             }

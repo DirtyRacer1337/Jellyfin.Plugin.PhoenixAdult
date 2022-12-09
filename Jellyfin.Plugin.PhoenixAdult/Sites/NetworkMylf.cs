@@ -74,7 +74,7 @@ namespace PhoenixAdult.Sites
             }
 
             var directURL = searchTitle.Replace(" ", "-", StringComparison.OrdinalIgnoreCase).ToLowerInvariant();
-            if (!directURL.Contains("/", StringComparison.OrdinalIgnoreCase))
+            if (!directURL.Contains('/', StringComparison.OrdinalIgnoreCase))
             {
                 directURL = directURL.Replace("-", "/", 1, StringComparison.OrdinalIgnoreCase);
             }

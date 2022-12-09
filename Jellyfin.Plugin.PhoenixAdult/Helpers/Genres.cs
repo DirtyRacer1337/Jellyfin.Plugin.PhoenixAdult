@@ -47,7 +47,7 @@ namespace PhoenixAdult.Helpers
                     .Replace(" To ", " to ", StringComparison.OrdinalIgnoreCase)
                     .Trim();
 
-                if (genreName.Contains(",", StringComparison.OrdinalIgnoreCase) || genreName.Contains("/", StringComparison.OrdinalIgnoreCase))
+                if (genreName.Contains(',', StringComparison.OrdinalIgnoreCase) || genreName.Contains('/', StringComparison.OrdinalIgnoreCase))
                 {
                     foreach (var genre in genreName.Split(new char[] { ',', '/' }, StringSplitOptions.RemoveEmptyEntries))
                     {
@@ -150,7 +150,7 @@ namespace PhoenixAdult.Helpers
 
             if (!string.IsNullOrEmpty(sceneName))
             {
-                if (genreName.Contains(":", StringComparison.OrdinalIgnoreCase))
+                if (genreName.Contains(':', StringComparison.OrdinalIgnoreCase))
                 {
                     if (sceneName.Contains(genreName.Split(':').First(), StringComparison.OrdinalIgnoreCase))
                     {
@@ -158,7 +158,7 @@ namespace PhoenixAdult.Helpers
                     }
                 }
 
-                if (genreName.Contains("-", StringComparison.OrdinalIgnoreCase))
+                if (genreName.Contains('-', StringComparison.OrdinalIgnoreCase))
                 {
                     if (sceneName.Contains(genreName.Split('-').First(), StringComparison.OrdinalIgnoreCase))
                     {

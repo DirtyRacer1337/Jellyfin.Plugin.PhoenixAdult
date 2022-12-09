@@ -141,7 +141,7 @@ namespace PhoenixAdult.Sites
                 javID = sceneData.SelectSingleText("//dt[text()='Content ID:']/following-sibling::dd[1]");
             }
 
-            if (javID.Contains(" ", StringComparison.OrdinalIgnoreCase))
+            if (javID.Contains(' ', StringComparison.OrdinalIgnoreCase))
             {
                 javID = javID.Replace(" ", "-", StringComparison.OrdinalIgnoreCase);
             }
@@ -265,7 +265,7 @@ namespace PhoenixAdult.Sites
 
             foreach (var word in CensoredWords)
             {
-                if (!result.Contains("*", StringComparison.OrdinalIgnoreCase))
+                if (!result.Contains('*', StringComparison.OrdinalIgnoreCase))
                 {
                     break;
                 }

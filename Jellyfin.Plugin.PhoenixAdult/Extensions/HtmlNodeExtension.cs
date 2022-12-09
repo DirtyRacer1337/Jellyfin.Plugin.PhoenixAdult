@@ -41,10 +41,7 @@ internal static class HtmlNodeExtension
     {
         var nodes = source.SelectNodes(xpath);
 
-        if (nodes == null)
-        {
-            nodes = new HtmlNodeCollection(HtmlNode.CreateNode(string.Empty));
-        }
+        nodes ??= new HtmlNodeCollection(HtmlNode.CreateNode(string.Empty));
 
         return nodes;
     }

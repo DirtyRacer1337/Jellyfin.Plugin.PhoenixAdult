@@ -26,7 +26,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(" ", StringComparison.OrdinalIgnoreCase))
+            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(' ', StringComparison.OrdinalIgnoreCase))
             {
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/view_video.php?viewkey={searchTitle}");
                 var sceneID = new string[] { Helper.Encode(sceneURL.PathAndQuery) };

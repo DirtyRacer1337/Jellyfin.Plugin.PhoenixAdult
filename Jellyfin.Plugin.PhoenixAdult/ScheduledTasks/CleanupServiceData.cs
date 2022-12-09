@@ -43,7 +43,7 @@ namespace PhoenixAdult.ScheduledTasks
                 var token = (string)site.Value;
                 var timestamp = 0;
 
-                if (token.Contains("."))
+                if (token.Contains('.'))
                 {
                     token = Encoding.UTF8.GetString(Helper.ConvertFromBase64String(token.Split('.')[1]) ?? Array.Empty<byte>());
                     timestamp = (int)JObject.Parse(token)["exp"];

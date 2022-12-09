@@ -106,7 +106,7 @@ namespace PhoenixAdult.Sites
 
             sceneData = (JObject)sceneData["hits"]["hits"].First;
 
-            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{this.ConvertIdentifier((string)sceneData["_id"])}/{(string)sceneData["_id"]}/";
+            result.Item.ExternalId = Helper.GetSearchBaseURL(siteNum) + $"/{ConvertIdentifier((string)sceneData["_id"])}/{(string)sceneData["_id"]}/";
             sceneData = (JObject)sceneData["_source"];
 
             result.Item.Name = (string)sceneData["name"];
@@ -172,13 +172,13 @@ namespace PhoenixAdult.Sites
             return result;
         }
 
-        private string ConvertIdentifier(string identifier)
+        private static string ConvertIdentifier(string identifier)
         {
-            var bin = this.StringToByteArray(identifier);
+            var bin = StringToByteArray(identifier);
             return Convert.ToBase64String(bin).Replace('+', '-').Replace('/', '_').Replace('=', ',');
         }
 
-        private byte[] StringToByteArray(string hex)
+        private static byte[] StringToByteArray(string hex)
         {
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)

@@ -142,7 +142,7 @@ namespace PhoenixAdult.Helpers
             clearSite = Regex.Replace(clearSite, @"\W", string.Empty);
 
             var matched = false;
-            while (!string.IsNullOrEmpty(clearSite) && clearName.Contains(" ", StringComparison.OrdinalIgnoreCase))
+            while (!string.IsNullOrEmpty(clearSite) && clearName.Contains(' ', StringComparison.OrdinalIgnoreCase))
             {
                 if (clearName.StartsWith(clearSite, StringComparison.OrdinalIgnoreCase))
                 {
@@ -155,7 +155,7 @@ namespace PhoenixAdult.Helpers
                 }
             }
 
-            if ((matched || !clearName.Contains(" ")) && !string.IsNullOrEmpty(clearSite))
+            if ((matched || !clearName.Contains(' ')) && !string.IsNullOrEmpty(clearSite))
             {
                 clearName = clearName.Replace(clearSite, string.Empty, 1, StringComparison.OrdinalIgnoreCase);
             }
