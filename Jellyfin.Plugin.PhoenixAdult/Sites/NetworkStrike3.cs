@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Controller.Entities;
@@ -16,14 +18,18 @@ namespace PhoenixAdult.Sites
 {
     public class NetworkStrike3 : IProviderBase
     {
-        private readonly string searchQuery = "{{searchVideos(input:{{query:\"{0}\",site:{1},first:10}}){{edges{{node{{videoId,title,releaseDate,slug,images{{listing{{src}}}}}}}}}}}}";
-        private readonly string updateQuery = "{{findOneVideo(input:{{slug:\"{0}\",site:{1}}}){{videoId,title,description,releaseDate,models{{name,slug,images{{listing{{highdpi{{double}}}}}}}},directors{{name}},categories{{name}},carousel{{listing{{highdpi{{triple}}}}}}}}}}";
+        private readonly string searchVariables = "{{\"query\":\"{0}\",\"site\":\"{1}\",\"first\":10,\"skip\":0}}";
+        private readonly string searchQuery = @"query getSearchResults($query:String!,$site:Site!,$first:Int,$skip:Int){searchVideos(input:{query:$query,site:$site,first:$first,skip:$skip}){edges{node{videoId title releaseDate slug images{listing{src}}}}}}";
+        private readonly string updateVariables = "{{\"slug\":\"{0}\",\"site\":\"{1}\"}}";
+        private readonly string updateQuery = @"query getSearchResults($slug:String!,$site:Site!){findOneVideo(input:{slug:$slug,site:$site}){videoId title description releaseDate models{name slug images{listing{highdpi{double}}}}directors{name}categories{name}carousel{listing{highdpi{triple}}}}}";
 
-        public static async Task<JObject> GetDataFromAPI(string url, CancellationToken cancellationToken)
+        public static async Task<JObject> GetDataFromAPI(string url, string query, string variables, CancellationToken cancellationToken)
         {
             JObject json = null;
 
-            var http = await HTTP.Request(url, cancellationToken).ConfigureAwait(false);
+            var param = new StringContent($"{{\"query\":\"{query}\",\"variables\":{variables}}}", Encoding.UTF8, "application/json");
+            var http = await HTTP.Request(url, HttpMethod.Post, param, cancellationToken).ConfigureAwait(false);
+
             if (http.IsOK)
             {
                 json = (JObject)JObject.Parse(http.Content)["data"];
@@ -40,9 +46,9 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            var query = string.Format(this.searchQuery, searchTitle, Helper.GetSearchSiteName(siteNum).ToUpper());
-            var url = Helper.GetSearchSearchURL(siteNum) + $"?query={query}";
-            var searchResults = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var variables = string.Format(this.searchVariables, searchTitle, Helper.GetSearchSiteName(siteNum).ToUpper());
+            var url = Helper.GetSearchSearchURL(siteNum);
+            var searchResults = await GetDataFromAPI(url, this.searchQuery, variables, cancellationToken).ConfigureAwait(false);
             if (searchResults == null)
             {
                 return result;
@@ -85,9 +91,9 @@ namespace PhoenixAdult.Sites
 
             var sceneURL = Helper.Decode(sceneID[0]);
 
-            var query = string.Format(this.updateQuery, sceneURL, Helper.GetSearchSiteName(siteNum).ToUpper());
-            var url = Helper.GetSearchSearchURL(siteNum) + $"?query={query}";
-            var sceneData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var variables = string.Format(this.updateVariables, sceneURL, Helper.GetSearchSiteName(siteNum).ToUpper());
+            var url = Helper.GetSearchSearchURL(siteNum);
+            var sceneData = await GetDataFromAPI(url, this.updateQuery, variables, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
@@ -140,9 +146,9 @@ namespace PhoenixAdult.Sites
 
             var sceneURL = Helper.Decode(sceneID[0]);
 
-            var query = string.Format(this.updateQuery, sceneURL, Helper.GetSearchSiteName(siteNum).ToUpper());
-            var url = Helper.GetSearchSearchURL(siteNum) + $"?query={query}";
-            var sceneData = await GetDataFromAPI(url, cancellationToken).ConfigureAwait(false);
+            var variables = string.Format(this.updateVariables, sceneURL, Helper.GetSearchSiteName(siteNum).ToUpper());
+            var url = Helper.GetSearchSearchURL(siteNum);
+            var sceneData = await GetDataFromAPI(url, this.updateQuery, variables, cancellationToken).ConfigureAwait(false);
             if (sceneData == null)
             {
                 return result;
