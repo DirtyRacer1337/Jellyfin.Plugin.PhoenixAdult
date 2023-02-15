@@ -19,6 +19,11 @@ namespace PhoenixAdult.Helpers.Utils
     {
         static HTTP()
         {
+            CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
+            {
+                MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
+            };
+
             if (Plugin.Instance.Configuration.ProxyEnable && !string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyHost) && Plugin.Instance.Configuration.ProxyPort > 0)
             {
                 Logger.Info("Proxy Enabled");
@@ -27,6 +32,7 @@ namespace PhoenixAdult.Helpers.Utils
                 if (string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyLogin) || string.IsNullOrEmpty(Plugin.Instance.Configuration.ProxyPassword))
                 {
                     proxy.Add(new ProxyInfo(Plugin.Instance.Configuration.ProxyHost, Plugin.Instance.Configuration.ProxyPort));
+                    CloudflareHandler.ProxyUrl = $"socks5://{Plugin.Instance.Configuration.ProxyHost}:{Plugin.Instance.Configuration.ProxyPort}";
                 }
                 else
                 {
@@ -50,11 +56,6 @@ namespace PhoenixAdult.Helpers.Utils
             {
                 HttpHandler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, errors) => true;
             }
-
-            CloudflareHandler = new ClearanceHandler(Plugin.Instance.Configuration.FlareSolverrURL)
-            {
-                MaxTimeout = (int)TimeSpan.FromSeconds(120).TotalMilliseconds,
-            };
 
             if (!Plugin.Instance.Configuration.DisableCaching)
             {
