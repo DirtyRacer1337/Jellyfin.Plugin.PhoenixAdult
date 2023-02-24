@@ -51,8 +51,13 @@ namespace PhoenixAdult.Sites
                         var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/en/?v={searchResult.SelectSingleText(".//a/@id")}");
                         string curID = Helper.Encode(sceneURL.PathAndQuery),
                             sceneName = searchResult.SelectSingleText(".//div[@class='title']"),
-                            scenePoster = $"http:{searchResult.SelectSingleText(".//img/@src").Replace("ps.", "pl.", StringComparison.OrdinalIgnoreCase)}",
+                            scenePoster = $"{searchResult.SelectSingleText(".//img/@src").Replace("ps.", "pl.", StringComparison.OrdinalIgnoreCase)}",
                             javID = searchResult.SelectSingleText(".//div[@class='id']");
+
+                        if (!scenePoster.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            scenePoster = $"http:{scenePoster}";
+                        }
 
                         var res = new RemoteSearchResult
                         {
@@ -189,9 +194,14 @@ namespace PhoenixAdult.Sites
             var img = sceneData.SelectSingleText("//img[@id='video_jacket_img']/@src");
             if (!string.IsNullOrEmpty(img))
             {
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    img = $"http:{img}";
+                }
+
                 result.Add(new RemoteImageInfo
                 {
-                    Url = $"http:{img}",
+                    Url = img,
                     Type = ImageType.Primary,
                 });
             }
@@ -199,7 +209,11 @@ namespace PhoenixAdult.Sites
             var sceneImages = sceneData.SelectNodesSafe("//div[@class='previewthumbs']/img");
             foreach (var sceneImage in sceneImages)
             {
-                img = $"http:{sceneImage.Attributes["src"].Value.Replace("-", "jp-", StringComparison.OrdinalIgnoreCase)}";
+                img = $"{sceneImage.Attributes["src"].Value.Replace("-", "jp-", StringComparison.OrdinalIgnoreCase)}";
+                if (!img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                {
+                    img = $"http:{img}";
+                }
 
                 result.Add(new RemoteImageInfo
                 {
