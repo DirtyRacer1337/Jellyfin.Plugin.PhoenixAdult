@@ -198,6 +198,7 @@ namespace PhoenixAdult.Sites
                 {
                     img = $"http:{img}";
                 }
+
                 result.Add(new RemoteImageInfo
                 {
                     Url = img,
@@ -213,6 +214,7 @@ namespace PhoenixAdult.Sites
                 {
                     img = $"http:{img}";
                 }
+
                 result.Add(new RemoteImageInfo
                 {
                     Url = img,
