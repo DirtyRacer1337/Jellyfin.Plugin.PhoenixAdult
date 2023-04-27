@@ -6,32 +6,30 @@
 The above is a reference list. Please see [the manualsearch doc](./manualsearch.md) for how to use these further.
 # All supported networks and sites
 
-+ #### 21Naturals | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - 21Naturals
-  - 21FootArt
-  - 21EroticAnal
-+ #### 21Sextreme | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - DominatedGirls
-  - GrandpasFuckTeens
-  - LustyGrandmas
-  - TeachMeFisting
++ #### 21 Naturals | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 21 Foot Art
+  - 21 Erotic Anal
++ #### 21 Sextreme | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Dominated Girls
+  - Grandpas Fuck Teens
+  - Lusty Grandmas
+  - Teach Me Fisting
   - Zoliboy
-+ #### 21Sextury | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - AnalTeenAngels
-  - ButtPlays
-  - DeepthroatFrenzy
-  - DPFanatics
-  - FootsieBabes
++ #### 21 Sextury | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Anal Teen Angels
+  - Butt Plays
+  - Deepthroat Frenzy
+  - DP Fanatics
+  - Footsie Babes
   - Gapeland
-  - LezCuties
-  - PixandVideo
+  - Lez Cuties
+  - Pix and Video
 + #### Adult Time | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### AdultDVDEmpire | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - AdultEmpire
++ #### Adult DVD Empire | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - Adult Empire
 + #### Babes Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Babes
   - Babes Unleashed
-  - Black is Better
   - Elegant Anal
   - Office Obsession
   - Stepmom Lessons
@@ -51,12 +49,12 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Bangbros Clips
   - Big Mouthfuls
   - Big Tit Cream Pie
-  - Big Tits Round Asses
+  - Big Tits, Round Asses
   - BlowJob Fridays
   - Blowjob Ninjas
   - Boob Squad
   - Brown Bunnies
-  - Can He Score
+  - Can He Score?
   - Casting
   - Chongas
   - Colombia Fuck Fest
@@ -64,12 +62,12 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Dorm Invasion
   - Facial Fest
   - Fuck Team Five
-  - Glory Hole Loads
+  - Gloryhole Loads
   - Latina Rampage
   - Living With Anna
   - MILF Lessons
   - Magical Feet
-  - Milf Soup
+  - MILF Soup
   - MomIsHorny
   - Monsters of Cock
   - Mr Anal
@@ -80,7 +78,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Party of 3
   - Pawg
   - Penny Show
-  - Porn Star Spa
+  - Pornstar Spa
   - Power Munch
   - Public Bang
   - Slutty White Girls
@@ -91,7 +89,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### Bang! | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Blowpass | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Brazzers Network: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - Asses In Public
+  - Asses in Public
   - Baby Got Boobs
   - Big Butts Like It Big
   - Big Tits at School
@@ -104,12 +102,12 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Busty Z
   - Butts and Blacks
   - CFNM Clothed Female Male Nude
-  - Day With A Porn Star
+  - Day With a Pornstar
   - Dirty Masseur
   - Doctor Adventures
   - Hot and Mean
   - Hot Chicks Big Asses
-  - Milfs Like It Big
+  - MILFs Like It Big
   - Mommy Got Boobs
   - Moms in Control
   - Pornstars Like It Big
@@ -119,10 +117,10 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Teens Like It Big
   - Teens Like It Black
   - ZZ Series
-+ #### BurningAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Burning Angel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Caribbeancom | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - CaribbeancomPR
-+ #### Clips4Sale | Matching type: *[Exact](./manualsearch.md#exact-match)* - **StudioID with Title Search**
+  - Caribbeancom PR
++ #### Clips 4 Sale | Matching type: *[Exact](./manualsearch.md#exact-match)* - **StudioID with Title Search**
 + #### Data18 | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviant Hardcore | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Deviante | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
@@ -132,34 +130,34 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Pretty Dirty Teens
   - Sex Working
 + #### Devil's Film | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### DigitalPlayground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### Dogfart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
-  - BarbCummings
-  - BlackMeatWhiteFeet
-  - BlacksOnBlondes
-  - BlacksOnBoys
-  - BlacksOnCougars
-  - CandyMonroe
-  - CuckoldSessions
-  - CumBang
-  - DogfarBehindTheScenes
-  - GloryHole
-  - Gloryhole-Initiations
-  - GloryholesAndHandjobs
-  - InterracialBlowbang
-  - InterracialPickups
-  - KatieThomas
-  - RuthBlackwell
-  - SpringThomas
-  - TheMinion
-  - WatchingMyDaughterGoBlack
-  - WatchingMyMomGoBlack
-  - WeFuckBlackGirls
-  - WifeWriting
-  - ZebraGirls
++ #### Digital Playground | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Dog Fart | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Date Add**
+  - Barb Cummings
+  - Black Meat White Feet
+  - Blacks on Blondes
+  - Blacks on Boys
+  - Blacks on Cougars
+  - Candy Monroe
+  - Cuckold Sessions
+  - Cum Bang
+  - Dogfart Behind the Scenes
+  - Gloryhole
+  - Gloryhole Initiations
+  - Gloryholes And Handjobs
+  - Interracial Blowbang
+  - Interracial Pickups
+  - Katie Thomas
+  - Ruth Blackwell
+  - Spring Thomas
+  - The Minion
+  - Watching My Daughter Go Black
+  - Watching My Mom Go Black
+  - We Fuck Black Girls
+  - Wife Writing
+  - Zebra Girls
 + #### Erito | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### EvilAngel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### FakeHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Evil Angel | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Fake Hub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Fake Agent
   - Fake Agent UK
   - Fake Cop
@@ -174,81 +172,81 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### FamilyHookups | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### FemdomEmpire / Feminized | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Gender X | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### GirlfriendsFilms | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Girlfriends Films | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Girlsway | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - GirlCore
-  - GirlsTryAnal
-  - GirlswayOriginals
-  - MommysGirl
-  - MomsOnMoms
-  - SextapeLesbians
-  - WebYoung
-  - WeLikeGirls
+  - Girl Core
+  - Girls Try Anal
+  - Girlsway Originals
+  - Mommys Girl
+  - Moms on Moms
+  - Sextape Lesbians
+  - Web Young
+  - We Like Girls
 + #### Hegre | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### HentaiPros | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### Hentai Pros | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Heyzo | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Immoral Live | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### JAV (via JavLibrary) | *[Limited](./manualsearch.md#limited-search)* - **SceneID only** - **SceneID (in form of JAVID)**
-+ #### JulesJordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
-  - GirlGirl
-  - JulesJordan
-  - ManuelFerrara
-  - SpermSwallowers
-  - TheAssFactory
++ #### Jules Jordan Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*  **Movies Not Supported**
+  - Girl Girl
+  - Jules Jordan
+  - Manuel Ferrara
+  - Sperm Swallowers
+  - The Ass Factory
 + #### Kink Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - 30MinutesofTorment
-  - BoundGangBangs
-  - BoundGods
-  - BoundinPublic
-  - BrutalSessions
-  - ButtMachineBoys
-  - CaptiveMale (Twisted Factory Channel)
-  - ChantasBitches (Twisted Factory Channel)
-  - DeviceBondage
-  - DivineBitches
+  - 30 Minutes of Torment
+  - Bound Gangbangs
+  - Bound Gods
+  - Bound in Public
+  - Brutal Sessions
+  - Butt Machine Boys
+  - Captive Male (Twisted Factory Channel)
+  - Chantas Bitches (Twisted Factory Channel)
+  - Device Bondage
+  - Divine Bitches
   - Electrosluts
-  - EverythingButt
-  - FamiliesTied
+  - Everything Butt
+  - Families Tied
   - Filthy Femdom
-  - FootWorship
-  - FuckedandBound (Twisted Factory Channel)
-  - FuckingMachines
-  - HardcoreGangbang
+  - Foot Worship
+  - Fucked and Bound (Twisted Factory Channel)
+  - Fucking Machines
+  - Hardcore Gangbang
   - Hogtied
-  - KinkFeatures
-  - KinkUniversity
-  - MenInPain
-  - MenOnEdge
-  - NakedKombat
-  - PublicDisgrace
-  - SadisticRope
-  - SexAndSubmission
-  - SubmissiveX
-  - TSPussyHunters
-  - TSSeduction
-  - TheTrainingOfO
-  - TheUpperFloor
-  - UltimateSurrender
-  - WaterBondage
-  - WhippedAss
-  - WiredPussy
+  - Kink Features
+  - Kink University
+  - Men in Pain
+  - Men on Edge
+  - Naked Kombat
+  - Public Disgrace
+  - Sadistic Rope
+  - Sex and Submission
+  - Submissive X
+  - TS Pussy Hunters
+  - TS Seduction
+  - The Training of O
+  - The Upper Floor
+  - Ultimate Surrender
+  - Water Bondage
+  - Whipped Ass
+  - Wired Pussy
 + #### Kinky Spa | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### LegalPorno | Matching type: *[Limited](./manualsearch.md#limited-search)* - **Title only**
 + #### Look At Her Now | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### ManyVids | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID, Date Add**
 + #### MetadataAPI | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### MileHighNetwork | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - DoghouseDigital
-  - RealityJunkies
-  - SweetheartVideo
-  - SweetSinner
+  - Doghouse Digital
+  - Reality Junkies
+  - Sweet Heart Video
+  - Sweet Sinner
 + #### Other MileHighNetwork Sites | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - BellesaFilms
-  - BellesaHouse
+  - Bellesa Films
+  - Bellesa House
   - Bi Empire
-  - FamilySinners
+  - Family Sinners
   - Transsensual
-+ #### Milfed | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
++ #### MILFed | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Mofos Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Busted Babysitters
   - Don't Break Me
@@ -257,7 +255,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - I Know That Girl
   - Latina Sex Tapes
   - Let's Try Anal
-  - Milfs Like It Black
+  - MILFs Like It Black
   - Mofos B Sides
   - Mofos Lab
   - Pervs On Patrol
@@ -274,9 +272,9 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Anal Mom
   - Full Of JOI
   - Got Mylf
-  - Lone Milf
-  - Milf Body
-  - Milfty
+  - Lone MILF
+  - MILF Body
+  - MILFty
   - Mom Drips
   - Mylf
   - Mylf Of The Month
@@ -290,19 +288,106 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Mylf x Owen Gray
   - Mylf x SpankMonster
   - Mylf x Teamskeet
-  - MylfBlows
-  - MylfBoss
-  - MylfDom
+  - Mylf Blows
+  - Mylf Boss
+  - Mylf Dom
   - Mylfed
-  - Mylfselects
+  - Mylf Selects
   - Mylfwood
   - Shoplyfter Mylf
-  - StayHomeMilf
+  - Stay Home MILF
++ #### Naughty America Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
+  - 2 Chicks Same Time
+  - American Daydreams
+  - Anal College
+  - Asian 1 on 1
+  - Ass Masterpiece
+  - Big Cock Bully
+  - Diary of a MILF
+  - Diary of a Nanny
+  - Dirty Wives Club
+  - Fast Times
+  - Housewife 1 on 1
+  - I Have a Wife
+  - LA Sluts
+  - Latin Adultery
+  - Latina Stepmom
+  - Lesbian Girl on Girl
+  - Live Gym Cam
+  - Live Naughty MILF
+  - Live Naughty Nurse
+  - Live Naughty Secretary
+  - Live Naughty Student
+  - Live Naughty Teacher
+  - Live Party Girl
+  - MILF Sugar Babes Classic
+  - My Dads Hot Girlfriend
+  - My Daughters Hot Friend
+  - My First Sex Teacher
+  - My Friends Hot Girl
+  - My Friends Hot Mom
+  - My Girlfriends Busty Friend
+  - My Girl Loves Anal
+  - My Naughty Latin Maid
+  - My Naughty Massage
+  - My Sisters Hot Friend
+  - My Wife is My Pornstar
+  - My Wifes Hot Friend
+  - Naughty America
+  - Naughty Athletics
+  - Naughty Bookworms
+  - Naughty Country Girls
+  - Naughty Flipside
+  - Naughty Office
+  - Naughty Rich Girls
+  - Naughty Weddings
+  - Neighbor Affair
+  - Open Family
+  - Perfect Fucking Strangers Classic
+  - Seduced By A Cougar
+  - Show My BF
+  - Sleazy Stepdad
+  - Slut Stepmom
+  - Slut Stepsister
+  - SoCal Coeds
+  - Teens Love Cream
+  - The Passenger
+  - Tonights Girlfriend Class
+  - Watch Your Mom
+  - Watch Your Wife
+  - Wives on Vacation
++ #### Nubiles Porn Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID**
+  - Anilos
+  - Bad Teens Punished
+  - Bountyhunter Porn
+  - Bratty Sis
+  - Daddy's Lil Angel
+  - Deep Lush
+  - Detention Girls
+  - Driver XXX
+  - FamilySwapXXX
+  - GirlsOnlyPorn
+  - Hot Crazy Mess
+  - Moms Teach Sex
+  - My Family Pies
+  - NF Busty
+  - Nubile Films
+  - Nubiles
+  - Nubiles Casting
+  - Nubiles ET
+  - Nubiles Porn
+  - Nubiles Unscripted
+  - Petite Ballerinas Fucked
+  - Petite HD Porn
+  - Princess Cum
+  - Step Siblings Caught
+  - Teacher Fucks Teens
+  - That Sitcom Show
 + #### Only Teen Blowjobs | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### PornCZ | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)* **Date Add**
   - Amateri Premium
   - Amateurs From Bohemia
-  - Boys Fuck Milfs
+  - Boys Fuck MILFs
   - Chloe Lamour
   - Czech Anal Sex
   - Czech Bi Porn
@@ -378,131 +463,45 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - XXX Omas
   - XXX Shades
   - Xchimera
-+ #### PornPros Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
-  - 18YearsOld
-  - 40ozBounce
-  - CockCompetition
-  - CrueltyParty
-  - CumDisgrace
-  - CumshotSurprise
-  - DeepThroatLove
++ #### Porn Pros Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
+  - 18 Years Old
+  - 40oz Bounce
+  - Cock Competition
+  - Cruelty Party
+  - Cum Disgrace
+  - Cumshot Surprise
+  - Deepthroat Love
   - Disgraced18
   - EuroHumpers
-  - FreaksOfBoobs
-  - FreaksOfCock
-  - GirlCum
-  - JurassicCock
-  - MassageCreep
-  - MilfHumiliation
-  - PimpParade
-  - PornPros
-  - RealExGirlfriends
-  - ShadyPi
-  - SquirtDisgrace
-  - TeenBFF
+  - Freaks of Boobs
+  - Freaks of Cock
+  - Girl Cum
+  - Jurassic Cock
+  - Massage Creep
+  - MILF Humiliation
+  - Pimp Parade
+  - Porn Pros
+  - Real ExGirlfriends
+  - Shady PI
+  - Squirt Disgrace
+  - Teen BFF
 + #### Other PornPros Sites | Matching type: *[Exact](./manualsearch.md#exact-match)* - **Direct URL, Date Add**
+  - Anal 4K
   - Baeb
-  - CastingCouch-X
-  - Cum4K
-  - Exotic4k
-  - FantasyHD
+  - Casting Couch-X
+  - Cum 4K
+  - Exotic 4K
+  - Fantasy HD
   - Holed
   - Lubed
-  - MyVeryFirstTime
-  - NannySpy
-  - Passion-HD
+  - My Very First Time
+  - Nanny Spy
+  - Passion HD
   - POVD
-  - PureMature
-  - SpyFam
-  - Tiny4k
+  - Pure Mature
+  - Spy Fam
+  - Tiny 4K
 + #### Pornhub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-+ #### Naughty America Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - 2 Chicks Same Time
-  - American Daydreams
-  - Anal College
-  - Asian 1 on 1
-  - Ass Masterpiece
-  - Big Cock Bully
-  - Diary of a Milf
-  - Diary of a Nanny
-  - Dirty Wives Club
-  - Fast Times
-  - Housewife 1 on 1
-  - I have a Wife
-  - LA Sluts
-  - Latin Adultery
-  - Latina Stepmom
-  - Lesbian Girl on Girl
-  - Live Gym Cam
-  - Live Naughty Milf
-  - Live Naughty Nurse
-  - Live Naughty Secretary
-  - Live Naughty Student
-  - Live Naughty Teacher
-  - Live Party Girl
-  - Milf Sugar Babes Classic
-  - My Dads Hot Girlfriend
-  - My Daughters Hot Friend
-  - My First Sex Teacher
-  - My Friends Hot Girl
-  - My Friends Hot Mom
-  - My Girlfriends Busty Friend
-  - My Girl Loves Anal
-  - My Naughty Latin Maid
-  - My Naughty Massage
-  - My Sisters Hot Friend
-  - My Wife is My Pornstar
-  - My Wifes Hot Friend
-  - Naughty America
-  - Naughty Athletics
-  - Naughty Bookworms
-  - Naughty Country Girls
-  - Naughty Flipside
-  - Naughty Office
-  - Naughty Rich Girls
-  - Naughty Weddings
-  - Neighbor Affair
-  - Open Family
-  - Perfect Fucking Strangers Classic
-  - Seduced By A Cougar
-  - Show My BF
-  - Sleazy Stepdad
-  - Slut Stepmom
-  - Slut Stepsister
-  - SoCal Coeds
-  - Teens Love Cream
-  - The Passenger
-  - Tonights Girlfriend Class
-  - Watch Your Mom
-  - Watch Your Wife
-  - Wives on Vacation
-+ #### Nubiles Porn Network | Matching type: *[Exact](./manualsearch.md#exact-match)* - **SceneID**
-  - Anilos
-  - Bad Teens Punished
-  - Bountyhunter Porn
-  - Bratty Sis
-  - Daddy's Lil Angel
-  - Deep Lush
-  - Detention Girls
-  - Driver XXX
-  - FamilySwapXXX
-  - GirlsOnlyPorn
-  - Hot Crazy Mess
-  - Moms Teach Sex
-  - My Family Pies
-  - NF Busty
-  - Nubile Films
-  - Nubiles
-  - Nubiles Casting
-  - Nubiles ET
-  - Nubiles Porn
-  - Nubiles Unscripted
-  - Petite Ballerinas Fucked
-  - Petite HD Porn
-  - Princess Cum
-  - Step Siblings Caught
-  - Teacher Fucks Teens
-  - That Sitcom Show
 + #### PornPortal | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - 3dxstar Channel PornPortal
   - Anal Channel PornPortal
@@ -511,7 +510,7 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Ebony Channel PornPortal
   - Latina Channel PornPortal
   - Lesbian Channel PornPortal
-  - Milf Channel PornPortal
+  - MILF Channel PornPortal
   - RealityGang Channel PornPortal
   - Stepfamily Channel PornPortal
   - Teen Channel PornPortal
@@ -549,8 +548,8 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - In the VIP
   - Mike in Brazil
   - Mike's Apartment
-  - Milf Hunter
-  - Milf Next Door
+  - MILF Hunter
+  - MILF Next Door
   - Moms Bang Teens
   - Moms Lick Teens
   - Money Talks
@@ -579,16 +578,16 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Anal Mom
   - BBC Paradise
   - BFFs
-  - Badmilfs
+  - Bad MILFs
   - Black Valley Girls
-  - BraceFaced
+  - Brace Faced
   - CFNM Teens
-  - DadCrush
-  - DaughterSwap
+  - Dad Crush
+  - Daughter Swap
   - Dyked
-  - ExxxtraSmall
-  - FamilyStrokes
-  - FosterTapes
+  - Exxxtra Small
+  - Family Strokes
+  - Foster Tapes
   - Gingerpatch
   - Her Freshman Year
   - Innocent High
@@ -602,10 +601,10 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
   - Self Desire
   - She's New
   - Shoplyfter
-  - ShoplyfterMylf
+  - Shoplyfter Mylf
   - Sis Loves Me
   - Solo Interviews
-  - StepSiblings
+  - Step Siblings
   - Team Skeet Extras
   - Teen Curves
   - Teen JOI
@@ -623,25 +622,25 @@ The above is a reference list. Please see [the manualsearch doc](./manualsearch.
 + #### SexyHub | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Dane Jones
   - Fitness Rooms
-  - Girlfriends.xxx
+  - Girlfriends.XXX
   - Lesbea
   - Massage Rooms
   - MomXXX
 + #### She Will Cheat | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Strike3 Network | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
   - Blacked
-  - BlackedRaw
+  - Blacked Raw
   - Deeper
   - Tushy
-  - TushyRaw
+  - Tushy Raw
   - Vixen
 + #### TransAngels | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Twistys | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
-  - MomKnowsBest
-  - TurningTwistys
+  - Mom Knows Best
+  - Turning Twistys
   - Twistys
-  - TwistysHard
-  - WhenGirlsPlay
+  - Twistys Hard
+  - When Girls Play
 + #### Why Not Bi | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 + #### Wicked | Matching type: *[Enhanced](./manualsearch.md#enhanced-search)*
 
