@@ -136,7 +136,7 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var imgNode = sceneData.SelectNodesSafe("//img[contains(@id, 'player-overlay-image')]");
+            var imgNode = sceneData.SelectNodesSafe("//div[@id='img-slider']//img");
             foreach (var sceneImages in imgNode)
             {
                 result.Add(new RemoteImageInfo
