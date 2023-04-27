@@ -79,7 +79,6 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//h1");
             result.Item.Overview = sceneData.SelectSingleText("//div[@class='vdoDesc']");
-            result.Item.AddStudio("Bang Bros");
             var studio = sceneData.SelectSingleText("//a[contains(@href, '/websites') and not(@class)]");
             if (!string.IsNullOrEmpty(studio))
             {
