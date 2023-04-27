@@ -28,6 +28,7 @@ namespace PhoenixAdult.Sites
             { "GirlCum", new[] { "Orgasms", "Girl Orgasm", "Multiple Orgasms" } },
             { "PassionHD", new[] { "Hardcore" } },
             { "BBCPie", new[] { "Interracial", "BBC", "Creampie" } },
+            { "Anal4K", new[] { "Anal", "Anal Creampie" } },
         };
 
         public async Task<List<RemoteSearchResult>> Search(int[] siteNum, string searchTitle, DateTime? searchDate, CancellationToken cancellationToken)
