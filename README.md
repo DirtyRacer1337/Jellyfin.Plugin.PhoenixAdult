@@ -12,7 +12,7 @@ This metadata provider helps fill Jellyfin/Emby with information for your adult 
 - Repository (Jellyfin only):
   - Add to the list this URL `https://raw.githubusercontent.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/master/manifest.json`
 - Manual:
-  - Download Archive from [Latest Release](https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/latest)
+  - Download Archive from [Latest Release](https://github.com/gannictonn/Jellyfin.Plugin.PhoenixAdult/releases/latest)
   - Follow the [Instruction](https://jellyfin.org/docs/general/server/plugins/index.html)
 
 ## Features
