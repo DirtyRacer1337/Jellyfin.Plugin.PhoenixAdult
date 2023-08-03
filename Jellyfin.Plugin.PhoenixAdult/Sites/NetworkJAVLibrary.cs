@@ -131,7 +131,7 @@ namespace PhoenixAdult.Sites
             var studio = sceneData.SelectSingleText("//div[@id='video_maker']//td[@class='text']");
             if (!string.IsNullOrEmpty(studio))
             {
-                result.Item.AddStudio(studio);
+                result.Item.AddStudio(studio.Replace("&nbsp;", string.Empty).Trim());
             }
 
             var date = sceneData.SelectSingleText("//div[@id='video_date']//td[@class='text']");
