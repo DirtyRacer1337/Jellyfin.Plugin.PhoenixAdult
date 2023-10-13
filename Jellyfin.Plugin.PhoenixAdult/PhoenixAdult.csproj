@@ -48,12 +48,12 @@
     <PackageReference Include="Jellyfin.Controller" Version="10.8.11" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Sentry.AspNetCore" Version="3.40.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.7.9" />
-    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Debug.Emby'">
