@@ -47,7 +47,7 @@
   <ItemGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'">
     <PackageReference Include="Jellyfin.Controller" Version="10.8.12" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Sentry.AspNetCore" Version="3.41.1" />
+    <PackageReference Include="Sentry.AspNetCore" Version="3.41.2" />
     <PackageReference Include="SkiaSharp" Version="2.88.0" />
   </ItemGroup>
 
