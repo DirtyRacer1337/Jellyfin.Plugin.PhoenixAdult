@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug.Emby' or '$(Configuration)'=='Release.Emby'">
-    <PackageReference Include="MediaBrowser.Server.Core" Version="4.7.9" />
+    <PackageReference Include="MediaBrowser.Server.Core" Version="4.8.0.80" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
   </ItemGroup>
 
