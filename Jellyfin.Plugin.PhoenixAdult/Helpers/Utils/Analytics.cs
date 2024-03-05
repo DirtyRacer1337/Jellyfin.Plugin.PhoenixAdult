@@ -9,7 +9,7 @@ using PhoenixAdult.Configuration;
 
 #if __EMBY__
 #else
-using Sentry;
+//using Sentry;
 #endif
 
 namespace PhoenixAdult.Helpers.Utils
@@ -69,6 +69,7 @@ namespace PhoenixAdult.Helpers.Utils
             {
 #if __EMBY__
 #else
+                /*
                 SentrySdk.ConfigureScope(scope =>
                 {
                     scope.User = new User()
@@ -81,6 +82,7 @@ namespace PhoenixAdult.Helpers.Utils
                     scope.Contexts["Info"] = AnalyticsData.Info;
                 });
                 SentrySdk.CaptureException(exception.Exception);
+                */
 #endif
             }
 
