@@ -79,7 +79,6 @@ namespace PhoenixAdult.Sites
 
             result.Item.Name = sceneData.SelectSingleText("//h1");
             result.Item.Overview = sceneData.SelectSingleText("//div[@class='vdoDesc']");
-            result.Item.AddStudio("Bang Bros");
             var studio = sceneData.SelectSingleText("//a[contains(@href, '/websites') and not(@class)]");
             if (!string.IsNullOrEmpty(studio))
             {
@@ -137,7 +136,7 @@ namespace PhoenixAdult.Sites
 
             var sceneData = await HTML.ElementFromURL(sceneURL, cancellationToken).ConfigureAwait(false);
 
-            var imgNode = sceneData.SelectNodesSafe("//img[contains(@id, 'player-overlay-image')]");
+            var imgNode = sceneData.SelectNodesSafe("//div[@id='img-slider']//img");
             foreach (var sceneImages in imgNode)
             {
                 result.Add(new RemoteImageInfo
