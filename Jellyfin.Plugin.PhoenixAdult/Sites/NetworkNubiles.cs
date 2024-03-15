@@ -175,7 +175,7 @@ namespace PhoenixAdult.Sites
                 });
             }
 
-            var photoPageURL = "https://nubiles-porn.com/photo/gallery/" + sceneID[0];
+            var photoPageURL = "https://nubiles-porn.com/photoset/gallery" + sceneID[0];
             var photoPage = await HTML.ElementFromURL(photoPageURL, cancellationToken).ConfigureAwait(false);
             var sceneImages = photoPage.SelectNodesSafe("//div[@class='img-wrapper']//source[1]");
             foreach (var sceneImage in sceneImages)
