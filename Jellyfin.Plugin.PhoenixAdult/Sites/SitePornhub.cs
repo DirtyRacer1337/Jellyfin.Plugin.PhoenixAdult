@@ -26,7 +26,7 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            # Works with all IDs but sometimes does not work when you use both non-ph IDs and names
+            // Works with all IDs but sometimes does not work when you use both non-ph IDs and names
             if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase)
                     || searchTitle.StartsWith("1", StringComparison.OrdinalIgnoreCase)
                     || searchTitle.StartsWith("2", StringComparison.OrdinalIgnoreCase)
