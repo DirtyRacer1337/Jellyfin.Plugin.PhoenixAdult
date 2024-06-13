@@ -26,7 +26,19 @@ namespace PhoenixAdult.Sites
                 return result;
             }
 
-            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase) || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(' ', StringComparison.OrdinalIgnoreCase))
+            # Works with all IDs but sometimes does not work when you use both non-ph IDs and names
+            if ((searchTitle.StartsWith("ph", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("1", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("2", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("3", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("4", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("5", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("6", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("7", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("8", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("9", StringComparison.OrdinalIgnoreCase)
+                    || searchTitle.StartsWith("0", StringComparison.OrdinalIgnoreCase)
+                    || int.TryParse(searchTitle, out _)) && !searchTitle.Contains(' ', StringComparison.OrdinalIgnoreCase))
             {
                 var sceneURL = new Uri(Helper.GetSearchBaseURL(siteNum) + $"/view_video.php?viewkey={searchTitle}");
                 var sceneID = new string[] { Helper.Encode(sceneURL.PathAndQuery) };
