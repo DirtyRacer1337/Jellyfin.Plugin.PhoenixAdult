@@ -124,18 +124,18 @@ namespace PhoenixAdult.Sites
                 result.Item.AddGenre(genreName);
             }
 
-            var actorsNode = sceneData.SelectNodesSafe("//div[contains(@class, 'pornstarsWrapper')]/a");
-            foreach (var actorLink in actorsNode)
-            {
-                string actorName = actorLink.Attributes["data-mxptext"].Value,
-                        actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
+            // var actorsNode = sceneData.SelectNodesSafe("//div[contains(@class, 'pornstarsWrapper')]/a");
+            // foreach (var actorLink in actorsNode)
+            // {
+            //     string actorName = actorLink.Attributes["data-mxptext"].Value,
+            //             actorPhotoURL = actorLink.SelectSingleText(".//img[@class='avatar']/@src");
 
-                result.People.Add(new PersonInfo
-                {
-                    Name = actorName,
-                    ImageUrl = actorPhotoURL,
-                });
-            }
+            //     result.People.Add(new PersonInfo
+            //     {
+            //         Name = actorName,
+            //         ImageUrl = actorPhotoURL,
+            //     });
+            // }
 
             return result;
         }
