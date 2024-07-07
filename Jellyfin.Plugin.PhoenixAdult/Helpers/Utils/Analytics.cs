@@ -9,7 +9,7 @@ using PhoenixAdult.Configuration;
 
 #if __EMBY__
 #else
-//using Sentry;
+// using Sentry;
 #endif
 
 namespace PhoenixAdult.Helpers.Utils

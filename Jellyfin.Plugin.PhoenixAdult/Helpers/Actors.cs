@@ -11,7 +11,7 @@ using PhoenixAdult.Helpers.Utils;
 
 #if __EMBY__
 #else
-using MediaBrowser.Model.Entities;
+using Jellyfin.Data.Enums;
 #endif
 
 namespace PhoenixAdult.Helpers
@@ -44,9 +44,9 @@ namespace PhoenixAdult.Helpers
 
 #if __EMBY__
 #else
-                if (string.IsNullOrEmpty(newPeople.Type))
+                if (string.IsNullOrEmpty(newPeople.Type.ToString()))
                 {
-                    newPeople.Type = PersonType.Actor;
+                    newPeople.Type = PersonKind.Actor;
                 }
 #endif
                 if (!newPeoples.Any(o => o.Name == newPeople.Name))
