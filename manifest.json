@@ -12,7 +12,7 @@
                 "changelog": "Added Latest Jellyfin Support (10.8.0); Added Latest Emby Support (4.7); Minor Changes",
                 "targetAbi": "10.8.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.7.0.47/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2022-06-21 21:24:12",
+                "timestamp": "2022-06-21T21:24:12Z",
                 "version": "2.7.0.47"
             },
             {
@@ -20,7 +20,7 @@
                 "changelog": "Added Latest Emby Support (4.6); Added Socks5 Proxy Support; Minor Changes",
                 "targetAbi": "10.7.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.6.2.46/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-06-06 14:37:54",
+                "timestamp": "2021-06-06T14:37:54Z",
                 "version": "2.6.2.46"
             },  
             {
@@ -28,7 +28,7 @@
                 "changelog": "Added Clip4Sale Support; Added Creating Collections based on studios; Added HTTP Caching; Added Using Directory Name for Search; Fixed Emby tasks; Minor Changes",
                 "targetAbi": "10.7.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.6.1.45/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-05-10 08:28:55",
+                "timestamp": "2021-05-10T08:28:55Z",
                 "version": "2.6.1.45"
             },              
             {
@@ -36,14 +36,14 @@
                 "changelog": "Add NetworkAdultEmpire Support; Add NetworkMetadataAPI Support; Add using MetadataAPI for not supported sites; Add manual mode (Disable Auto Identify); Minor Changes",
                 "targetAbi": "10.7.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.5.2.44/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-04-08 21:50:00",
+                "timestamp": "2021-04-08T21:50:00Z",
                 "version": "2.5.2.44"
             },            {
                 "checksum": "98d92228803b48d36452533e5dc136a3",
                 "changelog": "Add 10.7.0 Support; Minor Change",
                 "targetAbi": "10.7.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.5.1.43/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-03-10 19:53:33",
+                "timestamp": "2021-03-10T19:53:33Z",
                 "version": "2.5.1.43"
             },
             {
@@ -51,7 +51,7 @@
                 "changelog": "Add NetworkStrike3 Support; Add FlareSolverr Support (CloudFlare bypass); Minor Change",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.4.2.42/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-02-04 10:47:33",
+                "timestamp": "2021-02-04T10:47:33Z",
                 "version": "2.4.2.42"
             },
             {
@@ -59,7 +59,7 @@
                 "changelog": "Removed Flurl.Http; Added Actor Provider; Added JAV Provider; Added Genre Soring Options; Added Actor Source Options; Added CrashDump Collecting; Added Token Saving for NetworkGammaEnt; Added Cleaning Expired Tokens; Changed Database Loading; Fixed Scene URL for Some Sites; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.4.1.41/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2021-01-05 20:27:58",
+                "timestamp": "2021-01-05T20:27:58Z",
                 "version": "2.4.1.41"
             },
             {
@@ -67,7 +67,7 @@
                 "changelog": "Fixed token update; Fixed Scene URL for Some Sites; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.6.40/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-12-04 16:32:55",
+                "timestamp": "2020-12-04T16:32:55Z",
                 "version": "2.3.6.40"
             },
             {
@@ -75,7 +75,7 @@
                 "changelog": "Added PornCZ Support; Added Token Saving for (Network1Service); Added Scene URL; Fixed Disable Actor; Fixed Naughty America; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.5.39/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-12-01 13:26:28",
+                "timestamp": "2020-12-01T13:26:28Z",
                 "version": "2.3.5.39"
             },
             {
@@ -83,7 +83,7 @@
                 "changelog": "Added Heyzo Support; Added DefaultSiteName; Added DisableImageValidation and DisableImageSize; Added Detection JAV Movie Code; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.4.38/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-11-27 04:26:56",
+                "timestamp": "2020-11-27T04:26:56Z",
                 "version": "2.3.4.38"
             },
             {
@@ -91,7 +91,7 @@
                 "changelog": "Minor changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.3.37/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-11-25 23:43:28",
+                "timestamp": "2020-11-25T23:43:28Z",
                 "version": "2.3.3.37"
             },
             {
@@ -99,7 +99,7 @@
                 "changelog": "Added Caribbeancom support; Minor changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.2.36/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-11-23 8:51:33",
+                "timestamp": "2020-11-23T8:51:33Z",
                 "version": "2.3.2.36"
             },
             {
@@ -107,7 +107,7 @@
                 "changelog": "Added JavLibrary support; Minor changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.3.1.35/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-11-21 10:06:37",
+                "timestamp": "2020-11-21T10:06:37Z",
                 "version": "2.3.1.35"
             },
             {
@@ -115,7 +115,7 @@
                 "changelog": "Added Hegre support; Added feature to disable actor saving (Issue #19); Added decensor for R18; Added javID to metadata for R18; Added genre based on actors count; Fixed Porndoe; Fixed JulesJordan GetImages; Minor changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.4.34/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-11-18 14:33:11",
+                "timestamp": "2020-11-18T14:33:11Z",
                 "version": "2.2.4.34"
             },
             {
@@ -123,7 +123,7 @@
                 "changelog": "Added Nublies support; Added Porndoe support; Added cleanup tasks; Improved image speed; Improved database update; Fixed JAV search scoring; Minor changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.3.33/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-10-25 16:54:16",
+                "timestamp": "2020-10-25T16:54:16Z",
                 "version": "2.2.3.33"
             },
             {
@@ -131,7 +131,7 @@
                 "changelog": "SiteList moved to database; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.2.32/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-10-01 15:54:30",
+                "timestamp": "2020-10-01T15:54:30Z",
                 "version": "2.2.2.32"
             },
             {
@@ -139,7 +139,7 @@
                 "changelog": "Added Pornhub Support; Added Database Feature; Removed FileName Stripping Detection (Not required since Jellyfin version 10.6.5); Fixed Google Search; Multiple Sites Fixes; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.2.1.31/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-09-29 12:45:11",
+                "timestamp": "2020-09-29T12:45:11Z",
                 "version": "2.2.1.31"
             },
             {
@@ -147,7 +147,7 @@
                 "changelog": "Disabled Actor Provider; Added Year Field; Added FileName Stripping Detection; Multiple Sites Fixes; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.1.2.30/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-08-02 02:12:22",
+                "timestamp": "2020-08-02T02:12:22Z",
                 "version": "2.1.2.30"
             },
             {
@@ -155,7 +155,7 @@
                 "changelog": "Combining Emby, Jellyfin, PhoenixAdult.NET plugin in one project; Added Actor Provider; Updated Brazzers; Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.1.2.29/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-28 05:12:17",
+                "timestamp": "2020-07-28T05:12:17Z",
                 "version": "2.1.2.29"
             },
             {
@@ -163,7 +163,7 @@
                 "changelog": "Updated PhoenixAdult.NET to 1.2.5",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.2.28/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-22 17:26:47",
+                "timestamp": "2020-07-22T17:26:47Z",
                 "version": "2.0.2.28"
             },
             {
@@ -171,7 +171,7 @@
                 "changelog": "Updated PhoenixAdult.NET to 1.2.4",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.2.27/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-22 15:47:35",
+                "timestamp": "2020-07-22T15:47:35Z",
                 "version": "2.0.2.27"
             },
             {
@@ -179,7 +179,7 @@
                 "changelog": "Added Studios Info",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.1.26/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-21 04:21:09",
+                "timestamp": "2020-07-21T04:21:09Z",
                 "version": "2.0.1.26"
             },
             {
@@ -187,7 +187,7 @@
                 "changelog": "Updated PhoenixAdult.NET to 1.1.3",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.1.25/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-21 03:49:09",
+                "timestamp": "2020-07-21T03:49:09Z",
                 "version": "2.0.1.25"
             },
             {
@@ -195,7 +195,7 @@
                 "changelog": "Updated PhoenixAdult.NET to 1.0.2 | Minor Changes",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.0.24/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-20 20:38:44",
+                "timestamp": "2020-07-20T20:38:44Z",
                 "version": "2.0.0.24"
             },
             {
@@ -203,7 +203,7 @@
                 "changelog": "Moved to PhoenixAdult.NET | Added Jellyfin 10.6.0.0 support",
                 "targetAbi": "10.6.0.0",
                 "sourceUrl": "https://github.com/DirtyRacer1337/Jellyfin.Plugin.PhoenixAdult/releases/download/2.0.0.23/Jellyfin.Plugin.PhoenixAdult.zip",
-                "timestamp": "2020-07-20 16:24:38",
+                "timestamp": "2020-07-20T16:24:38Z",
                 "version": "2.0.0.23"
             }
         ]
